@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { StyleSheet, Text, View,ActivityIndicator, FlatList, TouchableOpacity, Image, Button } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 
-import LineChart from './line-chart';
+import LineChart from '../helpers/line-chart';
 
 const LeftOpen = require('../assets/images/LeftOpen.png');
 const RightOpen = require('../assets/images/RightOpen.png');
