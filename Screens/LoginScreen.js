@@ -12,7 +12,7 @@ import {
 import React, {Component} from 'react';
 import {Styles} from '../Styles/styles';
 import AppColors from '../Styles/colors';
-import Strings from '../Strings';
+//import Strings from '../Strings';
 
 export default class LoginScreen extends Component {
     constructor(props) {
@@ -61,19 +61,16 @@ export default class LoginScreen extends Component {
                 <StatusBar barStyle="dark-content"/>
                 <SafeAreaView style={LoginStyles.mainView}>
                     <View style={LoginStyles.logoContainer}>
-                        <Image
-                            style={LoginStyles.logo}
-                            source={require('./assets/images/ApplicationLogo.png')}
-                        />
+
                     </View>
                     <View style={LoginStyles.contentContainer}>
                         <Text style={LoginStyles.doctorsLoginTitle}>
                             {this.state.isDoctorLogin ? 'Doctor\'s Login' : ''}
                         </Text>
-                        <Text style={LoginStyles.labelText}>{Strings.email}</Text>
+                        <Text style={LoginStyles.labelText}>email</Text>
                         <TextInput style={LoginStyles.loginFieldsTextInput}
                                    onChangeText={(event) => this.setState({email: event})}/>
-                        <Text style={LoginStyles.labelText}>{Strings.password}</Text>
+                        <Text style={LoginStyles.labelText}>email</Text>
                         <TextInput style={LoginStyles.loginFieldsTextInput}
                                    onChangeText={(event) => this.setState({password: event})}
                                    secureTextEntry={true}/>
@@ -82,13 +79,13 @@ export default class LoginScreen extends Component {
                             <TouchableOpacity
                                 style={Styles.smallButton}
                                 onPress={() => this.props.navigation.navigate('Register')}>
-                                <Text style={Styles.smallButtonText}>{Strings.signUp}</Text>
+                                <Text style={Styles.smallButtonText}>email</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={[Styles.smallButton, Styles.aProgressionButton]}
                                 onPress={() => this.login()}>
                                 <Text style={[Styles.smallButtonText, Styles.aProgressionText]}>
-                                    {Strings.login}
+                                    login
                                 </Text>
                             </TouchableOpacity>
                         </View>

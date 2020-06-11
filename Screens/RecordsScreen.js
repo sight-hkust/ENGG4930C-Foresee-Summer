@@ -12,9 +12,6 @@ import {
 import React, {Component} from 'react';
 import AppColors from '../Styles/colors';
 import {Styles} from '../Styles/styles';
-import Strings from '../Strings';
-
-//import {LineChart} from 'react-native-chart-kit';
 
 export default class RecordsScreen extends Component {
     componentDidMount() {
@@ -38,76 +35,11 @@ export default class RecordsScreen extends Component {
         };
     }
 
-    getUserData() {
-        /*
-        fetch('https://se69teeec9.execute-api.us-east-1.amazonaws.com/api/get_user_records?email=' + global.email + '&password=' + global.password)
-            .then((response) => response.json())
-            .then((json) => {
-                if (json.status === 'OK') {
-                    let records = json.records;
-                    let dates = [];
-                    let rightEyeData = [];
-                    let leftEyeData = [];
-                    for (let i = 0; i < records.length; i++) {
-                        let record = records[i];
-                        dates.push(parseInt(record.year));
-                        rightEyeData.push(parseFloat(record.right_eye_myopia));
-                        leftEyeData.push(parseFloat(record.left_eye_myopia));
-                    }
-                    this.createRecords(records);
-                    this.setState({
-                        dates: dates,
-                        rightEye: rightEyeData,
-                        leftEye: leftEyeData,
-                        records: records,
-                    });
-                } else {
-                    Alert.alert('A problem occurred!');
-                }
-            })
-            .catch((error) => {
-                Alert.alert('A problem occurred!');
-                console.error(error);
-            });
-            */
-    }
-
-
-    createRecords(records) {
-        let recordsView = [];
-        for (let i = 0; i < records.length; i++) {
-            let record = records[i];
-            recordsView.push(<View style={RecordsStyles.recordContainer}>
-                <Text style={RecordsStyles.recordText}>{record.month} / {record.year}</Text>
-                <View style={RecordsStyles.grayLine}/>
-            </View>);
-        }
-        this.setState({recordsView: recordsView});
-    }
-
+   
     render() {
         return (
             <View>
-                <StatusBar barStyle="dark-content"/>
-                <ScrollView style={RecordsStyles.mainView}
-                            contentContainerStyle={RecordsStyles.scrollViewContentContainer}>
-                    {this.state.dates.length > 0 ? <View>
-                        <Text>{Strings.leftEye}</Text>
-                        
-                        <Text>{Strings.rightEye}</Text>
-                        
-                    </View> : null}
-                    <Text>{Strings.records}</Text>
-                    {this.state.records.length > 0 ?
-                        this.state.recordsView
-                        : <Text>You currently don't have any records.</Text>}
-                    <View style={RecordsStyles.choicesContainer}>
-                        <TouchableOpacity style={RecordsStyles.choiceButton}
-                                          onPress={() => this.props.navigation.navigate('AddRecordScreen', {refreshRecords: () => this.getUserData()})}>
-                            <Text style={RecordsStyles.choiceText}>Import New Data</Text>
-                        </TouchableOpacity>
-                    </View>
-                </ScrollView>
+                <Text>Record</Text>
             </View>
         );
     }

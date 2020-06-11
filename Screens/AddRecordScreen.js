@@ -11,7 +11,7 @@ import {
 import React, {Component} from 'react';
 import AppColors from '../Styles/colors';
 import {Styles} from '../Styles/styles';
-import Strings from '../Strings';
+//import Strings from '../Strings';
 
 //import {LineChart} from 'react-native-chart-kit';
 
@@ -30,66 +30,14 @@ export default class AddRecordScreen extends Component {
         };
     }
 
-    addRecord() {
-        /*
-        fetch('https://se69teeec9.execute-api.us-east-1.amazonaws.com/api/create_record', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                email: global.email,
-                password: global.password,
-                left_eye_degree: this.state.leftEyeMyopia.toString(),
-                right_eye_degree: this.state.rightEyeMyopia.toString(),
-                month: this.state.month.toString(),
-                year: this.state.year.toString()
-            }),
-        })
-            .then(response => response.json())
-            .then(json => {
-                console.warn(json);
-                if (json.status === 'OK') {
-                    Alert.alert("Your record is added successfully!");
-                    this.props.route.params.refreshRecords();
-                    this.props.navigation.goBack();
-                } else {
-                    Alert.alert('A problem occurred!');
-                }
-            })
-            .catch(error => {
-                Alert.alert('A problem occurred!');
-                console.error(error);
-            });
-            */
-    }
+   
 
     render() {
         return (
             <View>
                 <StatusBar barStyle="dark-content"/>
                 <SafeAreaView style={AddRecordStyles.mainView}>
-                    <View style={AddRecordStyles.contentContainer}>
-                        <Text style={AddRecordStyles.labelText}>{Strings.rightEyeLabel}</Text>
-                        <TextInput style={AddRecordStyles.loginFieldsTextInput}
-                                   onChangeText={(event) => this.setState({rightEyeMyopia: event})}/>
-                        <Text style={AddRecordStyles.labelText}>{Strings.leftEyeLabel}</Text>
-                        <TextInput style={AddRecordStyles.loginFieldsTextInput}
-                                   onChangeText={(event) => this.setState({leftEyeMyopia: event})}/>
-                        <Text style={AddRecordStyles.labelText}>{Strings.monthOfTest}</Text>
-                        <TextInput style={AddRecordStyles.loginFieldsTextInput}
-                                   onChangeText={(event) => this.setState({month: event})}/>
-                        <Text style={AddRecordStyles.labelText}>{Strings.yearOfTest}</Text>
-                        <TextInput style={AddRecordStyles.loginFieldsTextInput}
-                                   onChangeText={(event) => this.setState({year: event})}/>
-
-                        <TouchableOpacity
-                            style={Styles.smallButton}
-                            onPress={() => this.addRecord()}>
-                            <Text style={Styles.smallButtonText}>{Strings.add}</Text>
-                        </TouchableOpacity>
-                    </View>
+                    <Text>add record screen</Text>
                 </SafeAreaView>
             </View>
         );

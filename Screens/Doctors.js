@@ -11,10 +11,9 @@ import {
 import React, {Component} from 'react';
 import AppColors from '../Styles/colors';
 import {Styles} from '../Styles/styles';
-import Sound from 'react-native-sound';
 
-const sound = new Sound('ForSee/assets/audio/eyeexercise1.mpeg', null, (error) => {
-});
+
+
 
 export default class GetEducated extends Component {
     constructor(props) {
