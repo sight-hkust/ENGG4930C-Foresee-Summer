@@ -79,7 +79,7 @@ export default class LoginScreen extends Component {
                             <TouchableOpacity
                                 style={Styles.smallButton}
                                 onPress={() => this.props.navigation.navigate('Register')}>
-                                <Text style={Styles.smallButtonText}>email</Text>
+                                <Text style={Styles.smallButtonText}>register</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
                                 style={[Styles.smallButton, Styles.aProgressionButton]}

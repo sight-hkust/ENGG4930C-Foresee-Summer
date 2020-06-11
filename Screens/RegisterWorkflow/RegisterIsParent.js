@@ -21,7 +21,7 @@ export default class RegisterIsParent extends Component {
             isParent: 0,
         });
     }
-
+    /*
     registerUser() {
         fetch(global.apiUrl + 'create_user', {
             method: 'POST',
@@ -53,7 +53,7 @@ export default class RegisterIsParent extends Component {
                 console.error(error);
             });
     }
-
+    */
     render() {
         return (
             <View>
@@ -62,12 +62,16 @@ export default class RegisterIsParent extends Component {
                     <Text style={Styles.registerTitle}>Are you a parent?</Text>
                     <TouchableOpacity
                         style={Styles.smallButton}
-                        onPress={() => this.setState({isParent: 0}, () => this.registerUser())}>
+                        //onPress={() => this.setState({isParent: 0}, () => this.registerUser())}
+                        onPress={()=>this.setState({isParent:0}, ()=>this.props.navigation.navigate('MainScreen', {}))}
+                        >
                         <Text style={RegisterNameStyles.buttonText}>No</Text>
                     </TouchableOpacity>
                     <TouchableOpacity
                         style={[Styles.smallButton, Styles.aProgressionButton, {marginTop: 20}]}
-                        onPress={() => this.setState({isParent: 1}, () => this.registerUser())}>
+                        //onPress={() => this.setState({isParent: 1}, () => this.registerUser())}
+                        onPress={()=>this.setState({isParent:1}, ()=>this.props.navigation.navigate('MainScreen', {}))}
+                        >
                         <Text
                             style={[
                                 Styles.smallButtonText,
