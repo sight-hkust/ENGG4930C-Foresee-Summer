@@ -6,7 +6,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {Formik} from 'formik';
 import moment from 'moment';
 import { TextInput } from 'react-native-gesture-handler';
-
+import {database} from '../constant/Config';
 
 export default class Form extends Component{
     constructor(props){
@@ -22,6 +22,7 @@ export default class Form extends Component{
                     }} 
                     onSubmit={(values)=>{
                         console.log(values);
+                        database.ref('users/001').set(values);
                         }}>
             {({handleSubmit,values,setFieldValue,handleChange})=>(  //onsumbit form, close the record screen and go back to record
                 <View>
