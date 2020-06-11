@@ -21,30 +21,34 @@ export default class Form extends Component{
                         L_SPH : "", Lsymbol:"+",
                         R_SPH : "", Rsymbol: "+",
                         L_VA : "", R_VA: "",
-                        L_CYL: "", R_CYL: "",
-                        L_Axis: "", R_Axis: "",
-                        PD : ""
+                        L_CYL: "0", R_CYL: "0",
+                        L_Axis: "0", R_Axis: "0",
+                        PD : "",
+                        L_Myopia:"" , R_Myopia:"" ,
+                        L_Hyperopia:"", R_Hyperopia :""
                     }} 
                     onSubmit={(values)=>{
-                        let data = {"L_SPH": "", "R_SPH": "",
+                        let data = {"L_Myopia": "0", "R_Myopia": "0",
+                                    "L_Hyperopia": "0", "R_Hyperopia": "0",
                                     "L_VA" : values.L_VA, "R_VA": values.R_VA,
                                     "L_CYL": values.L_CYL, "R_CYL": values.R_CYL,
                                     "L_Axis": values.L_Axis , "R_Axis": values.R_Axis,
                                      "PD": values.PD}
+                                     
                         if(values.Lsymbol === '+'){
-                            data.L_SPH = '+' + values.L_SPH
+                            data.L_Myopia = values.L_SPH
                             }
                         else{
-                            data.L_SPH = '-' + values.L_SPH
+                            data.L_Hyperopia = values.L_SPH
                             }
                         if(values.Rsymbol === '+'){
-                            data.R_SPH = '+' + values.R_SPH
+                            data.R_Myopia = values.R_SPH
                             }
                         else{
-                            data.R_SPH = '-' + values.R_SPH 
+                            data.R_Hyperopia =  values.R_SPH 
                             }            
                         console.log(values);
-                        database.ref('users/001/'+ values.date).set(data);
+                        database.ref('users/001/'+ values.date).set(data).catch((error)=>console.log(error));
                         }}>
             {({handleSubmit,values,setFieldValue,handleChange})=>(  //onsumbit form, close the record screen and go back to record
                 <View>
