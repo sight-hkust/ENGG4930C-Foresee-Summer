@@ -1,16 +1,10 @@
-import React from 'react'
-import {
-    StyleSheet,
-    Text,
-    View,
-    ScrollView,
-} from 'react-native';
+import React, { useState } from 'react'
+import { StyleSheet, Text, View, ScrollView } from 'react-native';
+import { Card, ListItem, Button, SearchBar } from 'react-native-elements'
+import Icon from 'react-native-vector-icons/FontAwesome';
 
 
-import {Styles} from '../Styles/styles';
-import { Card, ListItem, Button, Icon } from 'react-native-elements'
-
-const users = [
+const sampleUsers = [
     {
        name: 'VICTOR YIP',
        lastReserveDate: '30 - 5 - 2020'
@@ -46,17 +40,39 @@ const users = [
  
    ]
 
+/**
+ * For Local perfermance testing only. 
+ */
+function SearchPatient(key) {
+    const targetList = [];
+
+    sampleUsers.map((u, i) => {
+        if(u.name.includes(key)) {
+            targetList.push({name: u.name, lastReserveDate: u.lastReserveDate});
+        }
+    })
+
+    return targetList;
+}
 
 const ProfMainMenu = ({ route, navigation }) => {
+
+    const [searchContent, setSearchContent] = useState('');
+    const [patientList, setPatientList] = useState(sampleUsers);
+    const [searchingStatus, setSearchingStatus] = useState(false);
+
+
     return (
         <View style={DoctorsStyles.content}>
-            <Text style={{textAlign: 'center', fontSize: 40, paddingBottom: 40}}> 你好！黃醫生 </Text>
+            <Text style={{textAlign: 'center', fontSize: 35, paddingBottom: 40}}> 你好！黃醫生 </Text>
             <View style={{alignSelf: 'center'}}>
-            <Button title="搜索普通用戶" onclick={console.log('clicked')}/>
+            <Button 
+                title="搜索普通用戶" 
+                containerStyle={{width: 200}}
+                onPress={() => navigation.navigate('ProfSearchResultScreen')}/>
             </View>
             <Card containerStyle={{padding: 0}} >
             <View style={{
-      
                 flexDirection: 'row',
                 justifyContent: 'space-between',
             }}> 
@@ -67,16 +83,50 @@ const ProfMainMenu = ({ route, navigation }) => {
                         <Text style={{textAlign: "center", color: 'white', fontSize: 20}}>最近預約</Text>
                     </View>
             </View>
+            <SearchBar
+                placeholder="以姓名/病人編號/電話搜尋"
+                onChangeText={e => setSearchContent(e)}
+                value={searchContent}
+                lightTheme
+                containerStyle={{backgroundColor: 'transparent'}}
+                inputContainerStyle={{backgroundColor: 'transparent', height: 30}}
+                onSubmitEditing={() => {
+                    setSearchingStatus(true);
+                    setPatientList(SearchPatient(searchContent));
+                }}
+            />
+            {  
+                searchingStatus &&
+                <Button title=" 返回" type="clear"   
+                    icon={
+                        <Icon
+                        name="arrow-left"
+                        size={15}
+                        color="#2D89DD"
+                        />
+                    }
+                    onPress={() => {
+                        setPatientList(sampleUsers)
+                        setSearchingStatus(false);
+                    }}
+                />
+            }
             <ScrollView style={{height: 320}}>
                 {
-                    users.map((u, i) => {
+                    patientList.length == 0 ? 
+                        <Text style={{textAlign:'center'}}> No Results found </Text>
+                    :
+                    patientList.map((u, i) => {
                     return (
                     <ListItem 
                         key={i}
                         roundAvatar
                         title={u.name}
                         rightTitle={u.lastReserveDate}
-                        />
+                        onPress={() => {
+                            navigation.navigate('ProfPatientViewScreen')
+                        }}
+                    />
                     );
                     })
                 }
@@ -86,6 +136,8 @@ const ProfMainMenu = ({ route, navigation }) => {
         </View>        
     );
 }
+
+
 
 const DoctorsStyles = StyleSheet.create({
     content: {

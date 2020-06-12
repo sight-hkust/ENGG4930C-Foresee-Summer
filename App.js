@@ -22,6 +22,8 @@ import DoctorsScreen from './Screens/Doctors';
 
 import ProfMainMenu from './Screens/ProfMainMenu'
 import ProfCreateProfileScreen from './Screens/ProfCreateProfileScreen'
+import ProfPatientViewScreen from './Screens/ProfPatientViewScreen'
+import ProfSearchResultScreen from './Screens/ProfSearchResultScreen'
 
 const Stack = createStackNavigator();
 
@@ -55,6 +57,8 @@ function MyStack() {
                 <Stack.Screen name="DoctorsScreen" component={DoctorsScreen}/>
 
                 <Stack.Screen name="ProfCreateProfileScreen" component={ProfCreateProfileScreen}/>
+                <Stack.Screen name="ProfPatientViewScreen" component={ProfPatientViewScreen}/>
+                <Stack.Screen name="ProfSearchResultScreen" component={ProfSearchResultScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
     );
