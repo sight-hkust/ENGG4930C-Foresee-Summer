@@ -24,8 +24,8 @@ export default class Form extends Component{
                         L_CYL: "0", R_CYL: "0",
                         L_Axis: "0", R_Axis: "0",
                         PD : "0",
-                        L_Myopia:"" , R_Myopia:"" ,
-                        L_Hyperopia:"", R_Hyperopia :""
+                        L_Myopia:"0" , R_Myopia:"0" ,
+                        L_Hyperopia:"0", R_Hyperopia :"0"
                     }} 
                     onSubmit={(values)=>{
                         let data = {"L_Myopia": "0", "R_Myopia": "0",
@@ -49,6 +49,8 @@ export default class Form extends Component{
                             }            
                         //console.log(values);
                         database.ref('users/002/records/'+ values.date).set(data).catch((error)=>console.log(error));
+
+                        this.props.navigation.navigate('RecordsScreen')
                         }}>
             {({handleSubmit,values,setFieldValue,handleChange})=>(  //onsumbit form, close the record screen and go back to record
                 <View>

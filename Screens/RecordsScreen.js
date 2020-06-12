@@ -25,7 +25,8 @@ export default class Main extends Component{
       Leye: true,
       dates : [],
       ddlSelectedValue: '0',
-      ddlSelectedDate : '0'
+      ddlSelectedDate : '0',
+      username: ""
     }}
 
   
@@ -41,8 +42,8 @@ export default class Main extends Component{
     });
     
     database.ref('users/' + userid+'/info').once('value').then(snapshot=>{
-      var username = snapshot.val().name;
-      console.log(username);
+      this.setState({username: snapshot.val().name});
+      //console.log(username);
     })
 
       /*
@@ -74,7 +75,7 @@ export default class Main extends Component{
             <Button title="Record" onPress={pressHandler}/>
           </View>
           <View style={{paddingTop:10,paddingBottom:30, alignItems: 'center'}}>
-            <Text style={{fontSize: 24}}>Nagi's</Text>
+            <Text style={{fontSize: 24}}>{this.state.username}'s</Text>
             <DropDownPicker items = {dropdown_item} containerStyle={{height: 40, width: 150}} 
                             defaultValue={this.state.ddlSelectedValue} onChangeItem = {(item)=>this.setState({ddlSelectedValue: item.value})}/>
             
