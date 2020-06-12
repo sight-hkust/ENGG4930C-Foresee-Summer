@@ -47,8 +47,8 @@ export default class Form extends Component{
                         else{
                             data.R_Hyperopia =  values.R_SPH 
                             }            
-                        console.log(values);
-                        database.ref('users/001/'+ values.date).set(data).catch((error)=>console.log(error));
+                        //console.log(values);
+                        database.ref('users/002/records/'+ values.date).set(data).catch((error)=>console.log(error));
                         }}>
             {({handleSubmit,values,setFieldValue,handleChange})=>(  //onsumbit form, close the record screen and go back to record
                 <View>
