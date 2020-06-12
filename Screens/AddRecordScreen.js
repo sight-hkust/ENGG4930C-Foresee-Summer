@@ -20,10 +20,10 @@ export default class Form extends Component{
                         date:moment().format('YYYY-MM-DD'),
                         L_SPH : "", Lsymbol:"+",
                         R_SPH : "", Rsymbol: "+",
-                        L_VA : "", R_VA: "",
+                        L_VA : "0", R_VA: "0",
                         L_CYL: "0", R_CYL: "0",
                         L_Axis: "0", R_Axis: "0",
-                        PD : "",
+                        PD : "0",
                         L_Myopia:"" , R_Myopia:"" ,
                         L_Hyperopia:"", R_Hyperopia :""
                     }} 
@@ -34,7 +34,7 @@ export default class Form extends Component{
                                     "L_CYL": values.L_CYL, "R_CYL": values.R_CYL,
                                     "L_Axis": values.L_Axis , "R_Axis": values.R_Axis,
                                      "PD": values.PD}
-                                     
+
                         if(values.Lsymbol === '+'){
                             data.L_Myopia = values.L_SPH
                             }
