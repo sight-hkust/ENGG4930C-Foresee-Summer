@@ -59,15 +59,18 @@ const ProfCreateProfileScreen = ({ route, navigation }) => {
                     </View>
 
                     <Text>
-                        職業：
+                        <Text style={DoctorsStyles.title}> 職業 </Text>
+                        <TextInput onChangeText={handleChange('tel')} setFieldValue={setFieldValue} style={DoctorsStyles.input} keyboardType='numeric'/>
                     </Text>
 
                     <Text>
-                        家庭病史：
+                        <Text style={DoctorsStyles.title}> 家庭病史 </Text>
+                        <TextInput onChangeText={handleChange('tel')} setFieldValue={setFieldValue} style={DoctorsStyles.input} keyboardType='numeric'/>
                     </Text>
 
                     <Text>
-                        已知眼疾：
+                        <Text style={DoctorsStyles.title}> 已知眼疾 </Text>
+                        <TextInput onChangeText={handleChange('tel')} setFieldValue={setFieldValue} style={DoctorsStyles.input} keyboardType='numeric'/>
                     </Text>
                         
                     <View style={{paddingTop:24}}>
