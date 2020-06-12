@@ -9,19 +9,20 @@ import {
     View,
     Alert,
 } from 'react-native';
-import React, {Component} from 'react';
-import {Styles} from '../Styles/styles';
+import React, { Component } from 'react';
+import { Styles } from '../Styles/styles';
 import AppColors from '../Styles/colors';
+
 //import Strings from '../Strings';
 
 export default class LoginScreen extends Component {
     constructor(props) {
         super(props);
-        this.state = {isDoctorLogin: false, email: '', password: ''};
+        this.state = { isDoctorLogin: false, email: '', password: '' };
     }
 
     ChangeLoginState() {
-        this.setState({isDoctorLogin: !this.state.isDoctorLogin});
+        this.setState({ isDoctorLogin: !this.state.isDoctorLogin });
     }
 
     login() {
@@ -58,7 +59,7 @@ export default class LoginScreen extends Component {
     render() {
         return (
             <View>
-                <StatusBar barStyle="dark-content"/>
+                <StatusBar barStyle="dark-content" />
                 <SafeAreaView style={LoginStyles.mainView}>
                     <View style={LoginStyles.logoContainer}>
 
@@ -69,16 +70,19 @@ export default class LoginScreen extends Component {
                         </Text>
                         <Text style={LoginStyles.labelText}>email</Text>
                         <TextInput style={LoginStyles.loginFieldsTextInput}
-                                   onChangeText={(event) => this.setState({email: event})}/>
+                            onChangeText={(event) => this.setState({ email: event })} />
                         <Text style={LoginStyles.labelText}>email</Text>
                         <TextInput style={LoginStyles.loginFieldsTextInput}
-                                   onChangeText={(event) => this.setState({password: event})}
-                                   secureTextEntry={true}/>
+                            onChangeText={(event) => this.setState({ password: event })}
+                            secureTextEntry={true} />
 
                         <View style={LoginStyles.loginAndRegisterButtonContainer}>
                             <TouchableOpacity
                                 style={Styles.smallButton}
-                                onPress={() => this.props.navigation.navigate('Register')}>
+                                onPress={() => this.props.navigation.navigate(
+                                    'Register',
+                                    { screen: 'Register Options' }
+                                )}>
                                 <Text style={Styles.smallButtonText}>register</Text>
                             </TouchableOpacity>
                             <TouchableOpacity
