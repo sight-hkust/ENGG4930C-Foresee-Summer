@@ -20,6 +20,9 @@ import AskAnExpertScreen from './Screens/AskAnExpertScreen';
 import AddRecordScreen from './Screens/AddRecordScreen';
 import DoctorsScreen from './Screens/Doctors';
 
+import ProfMainMenu from './Screens/ProfMainMenu'
+import ProfCreateProfileScreen from './Screens/ProfCreateProfileScreen'
+
 const Stack = createStackNavigator();
 
 global.realName = '';
@@ -34,7 +37,7 @@ function MyStack() {
                 screenOptions={{
                     headerShown: false,
                 }}>
-                <Stack.Screen name="Login" component={LoginScreen}/>
+                <Stack.Screen name="Dmain" component={ProfMainMenu}/>
                 <Stack.Screen name="Register" component={RegisterChoiceScreen}/>
                 <Stack.Screen name="RegisterName" component={RegisterName}/>
                 <Stack.Screen name="RegisterEmail" component={RegisterEmail}/>
@@ -43,13 +46,15 @@ function MyStack() {
                 <Stack.Screen name="RegisterPhone" component={RegisterPhone}/>
                 <Stack.Screen name="RegisterIsParent" component={RegisterIsParent}/>
 
-                <Stack.Screen name="MainScreen" component={MainScreen}/>
+                <Stack.Screen name="MainScreen" component={ProfMainMenu}/>
                 <Stack.Screen name="RecordsScreen" component={RecordsScreen}/>
                 <Stack.Screen name="GetEducatedScreen" component={GetEducatedScreen}/>
                 <Stack.Screen name="ArticleDetailScreen" component={ArticleDetailScreen}/>
                 <Stack.Screen name="AskAnExpertScreen" component={AskAnExpertScreen}/>
                 <Stack.Screen name="AddRecordScreen" component={AddRecordScreen}/>
                 <Stack.Screen name="DoctorsScreen" component={DoctorsScreen}/>
+
+                <Stack.Screen name="ProfCreateProfileScreen" component={ProfCreateProfileScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

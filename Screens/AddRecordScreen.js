@@ -12,7 +12,10 @@ export default class Form extends Component{
         super(props);
 
     }
+
     render(){
+
+    const { isProfessional, professional_id, patient_id } = this.props.route.params;
 
     return(
         <View style={styles.container}>
@@ -48,7 +51,12 @@ export default class Form extends Component{
                             data.R_Hyperopia =  values.R_SPH 
                             }            
                         console.log(values);
-                        database.ref('users/001/'+ values.date).set(data).catch((error)=>console.log(error));
+                        
+                        if(isProfessional) {
+                            database.ref('professionals/' + professional_id + '/patients/' + patient_id + '/records/' + values.date).set(data).catch((error)=>console.log(error));
+                        }else{
+                            database.ref('users/001/'+ values.date).set(data).catch((error)=>console.log(error));
+                        }
                         }}>
             {({handleSubmit,values,setFieldValue,handleChange})=>(  //onsumbit form, close the record screen and go back to record
                 <View>
