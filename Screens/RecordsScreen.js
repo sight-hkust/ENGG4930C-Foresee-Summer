@@ -30,12 +30,10 @@ export default class Main extends Component{
 
   componentDidMount(){
       
-      database.ref('users/001/2020-06-11').on('value', (database)=>{
-          console.log(database.toJSON());
-          
-          this.setState({data : database.toJSON()});
-          
+      database.ref('users/001/2020-06-02').on('value', (database)=>{
+        this.setState({data : database.toJSON()});
       });
+
 
       /*
     fetch('https://raw.githubusercontent.com/norangai/hkcovid19/master/eye-record.json?token=AF6UXQGH2GQIRMXFV2UAPGS64OEPE')
@@ -52,8 +50,9 @@ export default class Main extends Component{
 
   render(){
     const data = this.state.data;
-    //const isLoading = this.state.isLoading;
     
+    let dateArray = Object.keys(data);
+    console.log(dateArray);
     let dropdown_item = [{label:'Myopia data', value:'0'},{label:'Hyperopia data',value:'1'},{label:'Astigmatism data',value:'2'}];
 
     const pressHandler = ()=>{
@@ -79,8 +78,7 @@ export default class Main extends Component{
           
 
           <View style={styles.container}>
-                <RenderContent isLeft={this.state.Leye} ddlValue={this.state.ddlSelectedValue} data={this.state.data}/>
-                <Text> eye SPH: {this.state.Leye? data.L_SPH:data.R_SPH}</Text>
+                <RenderContent isLeft={this.state.Leye} ddlValue={this.state.ddlSelectedValue} data={data}/>
                
           </View>
           <View style={styles.container}>
