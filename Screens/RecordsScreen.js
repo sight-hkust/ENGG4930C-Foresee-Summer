@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View,ActivityIndicator, FlatList, TouchableOpacity, Image, Button, DatePickerAndroid } from 'react-native';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image, Button, DatePickerAndroid } from 'react-native';
 import DropDownPicker from 'react-native-dropdown-picker';
 import {database} from '../constant/Config';
 import LineChart from '../helpers/line-chart';
@@ -15,6 +15,7 @@ function TutorialButton(){
     </TouchableOpacity> 
   );
 }
+
 
 
 export default class Main extends Component{

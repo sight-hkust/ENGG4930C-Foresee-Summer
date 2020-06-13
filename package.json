@@ -30,7 +30,8 @@
     "react-native-spin-picker": "0.0.2",
     "react-native-stack": "^1.0.0-alpha11",
     "react-native-svg": "11.0.1",
-    "react-native-web": "~0.11.7"
+    "react-native-web": "~0.11.7",
+    "yup": "^0.29.1"
   },
   "devDependencies": {
     "babel-preset-expo": "~8.1.0",
