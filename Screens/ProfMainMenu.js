@@ -6,7 +6,7 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import { database } from '../constant/Config';
 
 /**
- * For Local perfermance testing only. 
+ * For Local Search. 
  */
 function SearchPatient(key, referenceList) {
     const targetList = [];
@@ -34,7 +34,7 @@ const ProfMainMenu = ({ route, navigation }) => {
         database.ref('professionals/M001/patients/').once('value', snap => {
             let patients = []
             snap.forEach(child => {
-                patients.push({name: child.val()['info']['name'], lastReserveDate: Object.keys(child.val()['records']).slice(-1)[0]});
+                patients.push({name: child.val()['info']['name'], lastReserveDate: child.val()['records']!= null? Object.keys(child.val()['records']).slice(-1)[0] : null});
             })
             setPatientList(patients);
             setOriginalList(patients);
@@ -116,7 +116,7 @@ const ProfMainMenu = ({ route, navigation }) => {
                     }
                 </ScrollView>
                 </Card>
-                <Button style={{ paddingTop : 30}} title="創建普通用戶" type="clear" onPress={() => navigation.navigate('ProfCreateProfileScreen')}/>
+                <Button style={{ paddingTop : 30}} title="創建普通用戶" type="clear" onPress={() => navigation.navigate('Register', { screen: 'Registration Form', params: {isProfessional : true}})}/>
             </View>
             }
         </View>        

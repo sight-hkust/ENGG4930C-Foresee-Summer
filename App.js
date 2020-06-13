@@ -26,7 +26,6 @@ import DoctorsScreen from './Screens/Doctors';
 
 
 import ProfMainMenu from './Screens/ProfMainMenu'
-import ProfCreateProfileScreen from './Screens/ProfCreateProfileScreen'
 import ProfPatientViewScreen from './Screens/ProfPatientViewScreen'
 import ProfSearchResultScreen from './Screens/ProfSearchResultScreen'
 
@@ -44,7 +43,7 @@ function MyStack() {
                 screenOptions={{
                     headerShown: false,
                 }}
-                initialRouteName="Register"
+                //initialRouteName="Register"
             >
                 <Stack.Screen name="Dmain" component={ProfMainMenu} />
                 <Stack.Screen name="Register" component={Register} />
@@ -62,8 +61,6 @@ function MyStack() {
                 <Stack.Screen name="AskAnExpertScreen" component={AskAnExpertScreen} />
                 <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} />
                 <Stack.Screen name="DoctorsScreen" component={DoctorsScreen} />
-
-                <Stack.Screen name="ProfCreateProfileScreen" component={ProfCreateProfileScreen}/>
                 <Stack.Screen name="ProfPatientViewScreen" component={ProfPatientViewScreen}/>
                 <Stack.Screen name="ProfSearchResultScreen" component={ProfSearchResultScreen}/>
             </Stack.Navigator>

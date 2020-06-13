@@ -50,9 +50,44 @@ const SignupSchema = Yup.object().shape({
                 })
 })
 
-const writeUserData = ({ uid, values }) => {
+const ProfSignupSchema = Yup.object().shape({
+    name: Yup.string().required('請輸入姓名'),
+    birthYearsAndMonths: Yup.string().required('請輸入出生年份和月份'),
+    email: Yup.string().email('電郵地址無效，請以有效格式輸入電郵(例如：foresee@gmail.com)').required('請輸入電郵地址'),
+    phone: Yup.number().typeError('請輸入數字').required('請輸入聯絡電話').test('len', '請輸入有效的電話號碼(8位數字)',
+        val => val.toString().length === 8),
+    job: Yup.string().required('請輸入職業')
+})
+
+const writeUserData = ({ uid, values, isProfessional }) => {
     console.log(uid)
-    database.ref('/users/' + uid)
+    if(isProfessional) {
+        database.ref('/users/' + uid)
+        .set({
+            uid: uid,
+            name: values.name,
+            email: values.email,
+            age: Math.abs(moment(values.birthYearsAndMonths).diff(moment(), "years")),
+            phone: values.phone,
+            job: values.job,
+            history: values.history,
+            disease: values.disease
+        })
+
+        database.ref('professionals/M001/patients/' + uid + '/info')
+        .set({
+            uid: uid,
+            name: values.name,
+            email: values.email,
+            age: Math.abs(moment(values.birthYearsAndMonths).diff(moment(), "years")),
+            phone: values.phone,
+            job: values.job,
+            history: values.history,
+            disease: values.disease
+        })
+        
+    } else {
+        database.ref('/users/' + uid)
         .set({
             uid: uid,
             name: values.name,
@@ -60,17 +95,26 @@ const writeUserData = ({ uid, values }) => {
             age: Math.abs(moment(values.birthYearsAndMonths).diff(moment(), "years")),
             phone: values.phone,
         })
+    }
 }
 
 
-const createAccount = (values) => {
-    auth.createUserWithEmailAndPassword(values.email, values.password).then(function (userCreds) {
-        const uid = userCreds.user.uid;
-        writeUserData({ uid, values });
-    }).catch(error => {
-        console.log(error.code, error.message);
-    })
-
+const createAccount = (values, isProfessional) => {
+    if(isProfessional) {
+        auth.createUserWithEmailAndPassword(values.email, "NoPassword").then(function (userCreds) {
+            const uid = userCreds.user.uid;
+            writeUserData({ uid, values, isProfessional });
+        }).catch(error => {
+            console.log(error.code, error.message);
+        })
+    } else {
+        auth.createUserWithEmailAndPassword(values.email, values.password).then(function (userCreds) {
+            const uid = userCreds.user.uid;
+            writeUserData({ uid, values });
+        }).catch(error => {
+            console.log(error.code, error.message);
+        })
+    }
 }
 
 const FieldWrapper = ({ textWrapperStyle = {}, children, label, formikKey, formikProps, }) => {
@@ -99,6 +143,21 @@ const StyledInput = ({ textWrapperStyle, label, formikKey, formikProps, ...rest 
     )
 }
 
+const StyledInputArea = ({ textWrapperStyle, label, formikKey, formikProps, ...rest }) => {
+
+    return (
+        <FieldWrapper textWrapperStyle={textWrapperStyle} label={label} formikKey={formikKey} formikProps={formikProps}>
+            <TextInput
+                style={Styles.formTextInputArea}
+                onChangeText={formikProps.handleChange(formikKey)}
+                onBlur={formikProps.handleBlur(formikKey)}
+                {...rest}
+                numberOfLines={5}
+            />
+        </FieldWrapper>
+    )
+}
+
 const StyledDatePicker = ({ textWrapperStyle, value, showDatePicker, label, formikKey, formikProps }) => {
     return (
         <FieldWrapper textWrapperStyle={textWrapperStyle} label={label} formikKey={formikKey} formikProps={formikProps}>
@@ -114,7 +173,6 @@ const StyledDatePicker = ({ textWrapperStyle, value, showDatePicker, label, form
 
 export const RegisterForm = ({ navigation, route }) => {
 
-
     return (
         <>
             <Formik
@@ -124,16 +182,19 @@ export const RegisterForm = ({ navigation, route }) => {
                     email: '',
                     password: '',
                     confirmPassword: '',
-                    phone: ''
+                    phone: '',
+                    job: '',
+                    history: '',
+                    disease: '',
                 }}
-                onSubmit={(values) => createAccount(values)}
-                validationSchema={SignupSchema}
+                onSubmit={(values) => createAccount(values, route.params?.isProfessional)}
+                validationSchema={ProfSignupSchema}
                 validateOnBlur={false}
                 validateOnChange={false}
             >
                 {formikProps => (
                     <>
-                        <PatientRegisterForm formikProps={formikProps} />
+                        <PatientRegisterForm formikProps={formikProps} isProfessional={route.params?.isProfessional}/>
                         <Button onPress={formikProps.handleSubmit} style={{ width: ScreenHeight * 0.2 }} title='提交' />
                     </>
                 )}
@@ -141,7 +202,7 @@ export const RegisterForm = ({ navigation, route }) => {
         </>)
 }
 
-const PatientRegisterForm = ({ formikProps }) => {
+const PatientRegisterForm = ({ formikProps, isProfessional }) => {
 
     const { setFieldValue, values } = formikProps;
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -186,18 +247,40 @@ const PatientRegisterForm = ({ formikProps }) => {
                 formikProps={formikProps}
                 keyboardType={'numeric'}
             />
-            <StyledInput
-                label="密碼"
-                formikKey="password"
-                formikProps={formikProps}
-                secureTextEntry={true}
-            />
-            <StyledInput
-                label="確認密碼"
-                formikKey="confirmPassword"
-                formikProps={formikProps}
-                secureTextEntry={true}
-            />
+            {   isProfessional?
+                <View>
+                    <StyledInput
+                        label="職業"
+                        formikKey="job"
+                        formikProps={formikProps}
+                    />
+                    <StyledInputArea
+                        label="家庭病史"
+                        formikKey="history"
+                        formikProps={formikProps}
+                    />
+                    <StyledInputArea
+                        label="已知眼疾"
+                        formikKey="disease"
+                        formikProps={formikProps}
+                    />
+                </View>
+                :
+                <View>
+                <StyledInput
+                    label="密碼"
+                    formikKey="password"
+                    formikProps={formikProps}
+                    secureTextEntry={true}
+                />
+                <StyledInput
+                    label="確認密碼"
+                    formikKey="confirmPassword"
+                    formikProps={formikProps}
+                    secureTextEntry={true}
+                />
+                </View>
+            }
             <DateTimePickerModal
                 isVisible={isDatePickerVisible}
                 mode='date'
