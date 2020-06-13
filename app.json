@@ -26,7 +26,7 @@
       "bundleIdentifier": "ios"
     },
     "android": {
-      "package": "android"
+      "package": "com.android"
     },
     "entryPoint": "node_modules/expo/AppEntry.js"
   }
