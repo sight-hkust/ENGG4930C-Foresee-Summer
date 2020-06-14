@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image, Button, DatePickerAndroid } from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
+import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image, Button } from 'react-native';
 import {database} from '../constant/Config';
 import LineChart from '../helpers/line-chart';
 
@@ -44,43 +43,46 @@ export default class Main extends Component{
     
     database.ref('users/' + userid+'/info').once('value').then(snapshot=>{
       this.setState({username: snapshot.val().name});
-      //console.log(username);
     })
 
-      /*
-    fetch('https://raw.githubusercontent.com/norangai/hkcovid19/master/eye-record.json?token=AF6UXQGH2GQIRMXFV2UAPGS64OEPE')
-      .then((response) => response.json())
-      .then((json) => {
-        this.setState({ data: json });
-      })
-      .catch((error) => console.error(error))
-      .finally(() => {
-        this.setState({ isLoading: false });
-      });
-      */
+
   }
 
   render(){
     const data = this.state.data;
-    //console.log(this.state.dates);
-    let dropdown_item = [{label:'Myopia data', value:'0'},{label:'Hyperopia data',value:'1'},{label:'Astigmatism data',value:'2'}];
+    
     const pressHandler = ()=>{
       this.props.navigation.navigate('AddRecordScreen')
     }
-    //if (!isLoading){
+    
       
         return(
-          <>
+        <>
           <View>
             <TutorialButton/>
-            <Button title="Record" onPress={pressHandler}/>
+            <Button title="輸入數據" onPress={pressHandler}/>
           </View>
+
           <View style={{paddingTop:10,paddingBottom:30, alignItems: 'center'}}>
-            <Text style={{fontSize: 24}}>{this.state.username}'s</Text>
-            <DropDownPicker items = {dropdown_item} containerStyle={{height: 40, width: 150}} 
-                            defaultValue={this.state.ddlSelectedValue} onChangeItem = {(item)=>this.setState({ddlSelectedValue: item.value})}/>
+            <Text style={{fontSize: 24}}>{this.state.username}</Text>
+          </View>
+          
+          <View style={{flexDirection:'row', justifyContent:'space-around'}}>
+            <TouchableOpacity onPress={()=> this.setState({ddlSelectedValue:'1' })} >
+              <Text>遠視</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={()=> this.setState({ddlSelectedValue:'0' })} >
+              <Text>近視</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity onPress={()=> this.setState({ddlSelectedValue:'2' })} >
+              <Text>散光</Text>
+            </TouchableOpacity>
+            
             
           </View>
+
             <TouchableOpacity  activeOpacity= {0.8} style={{paddingRight: 25, paddingTop:15}} onPress={()=> this.setState({ Leye: !this.state.Leye})}> 
               <Image source={this.state.Leye? LeftOpen : RightOpen}/>
             </TouchableOpacity> 
@@ -95,6 +97,7 @@ export default class Main extends Component{
             <RenderContent isLeft={this.state.Leye} ddlValue={this.state.ddlSelectedValue} data={data} selectedDate={this.state.ddlSelectedDate} />
               
           </View>
+
           <View style={styles.container}>
               <LineChart data={{
                   labels: [],
@@ -107,87 +110,141 @@ export default class Main extends Component{
               
           </View>
           
-          </>
+        </>
         )
-      
-    //}
-    //else{
-    //  return <ActivityIndicator/>
-    //}
+
   }
 }
 
 export const RenderContent = props => {
     const{ isLeft, ddlValue, data, selectedDate} = props;
-    //const data = this.state.data;
-    //const selectedDate = this.state.ddlSelectedDate;
-    //const selectedDate = "2020-05-15"
+
     if(data == null){
       return(
-        <Text>No data to display</Text>
+        <Text>暫無數據</Text>
         );
     }
-    //console.log(data[date]);
+    
     switch(ddlValue){
         case '0':
             if(isLeft){
                 if(data[selectedDate].L_Myopia!="0"){
-                    return<Text>Left Myopia: {data[selectedDate].L_Myopia}</Text>
+                    return(
+                    <View>
+                      <Text>左眼近視度數: {data[selectedDate].L_Myopia}</Text>
+                      <RenderWarning degree={data[selectedDate].L_Myopia} refractive={'M'}/>
+                    </View>
+                    )
                 }
                 else{
-                    return<Text>Your Left eye dont have Myopia!</Text>
+                    return<Text>你的左眼沒有近視</Text>
                 }
             }
             else{
                 if(data[selectedDate].R_Myopia!="0"){
-                    return<Text>Right Myopia: {data[selectedDate].R_Myopia}</Text>
-                }
+                  return(
+                  <View>
+                    <Text>右眼近視度數: {data[selectedDate].R_Myopia}</Text>
+                    <RenderWarning degree={data[selectedDate].R_Myopia} refractive={'M'}/>
+                  </View>
+                  )}
                 else{
-                    return<Text>You right eye dont have Myopia!</Text>
+                    return<Text>你的右眼沒有近視</Text>
                 }                
             }
-        break;
+        
         case '1':
             if(isLeft){
                 if(data[selectedDate].L_Hyperopia!="0"){
-                    return<Text>Left Hyperopia: {data[selectedDate].L_Hyperopia}</Text>
-                }
+                  return(
+                  <View>
+                    <Text>左眼遠視度數: {data[selectedDate].L_Hyperopia}</Text>
+                    <RenderWarning degree={data[selectedDate].L_Hyperopia} refractive={'H'}/>
+                  </View>
+                  )}
                 else{
-                    return<Text>Your Left eye dont have Hyperopia!</Text>
+                    return<Text>你的左眼沒有遠視</Text>
                 }
             }
             else{
                 if(data[selectedDate].R_Hyperopia!="0"){
-                    return<Text>Right Hyperopia: {data[selectedDate].R_Hyperopia}</Text>
-                }
+                    return(
+                    <View>
+                      <Text>右眼遠視度數: {data[selectedDate].R_Hyperopia}</Text>
+                      <RenderWarning degree={data[selectedDate].R_Hyperopia} refractive={'H'}/>
+                    </View>
+                    )}
                 else{
-                    return<Text>You right eye dont have Hyperopia!</Text>
+                    return<Text>你的右眼沒有遠視</Text>
                 }                
             }
-        break;
+        
         case '2':
             if(isLeft){
                 if(data[selectedDate].L_CYL!="0"){
-                    return<Text>Left Astigmatism: {data[selectedDate].L_CYL}</Text>
-                }
+                    return(
+                      <View>
+                    <Text>左眼散光度數: {data[selectedDate].L_CYL}</Text>
+                    <RenderWarning degree={data[selectedDate].L_CYL} refractive={'A'}/>
+                      </View>
+                    )}
                 else{
-                    return<Text>Your Left eye dont have Astigmatism!</Text>
+                    return<Text>你的左眼沒有散光</Text>
                 }
             }
             else{
                 if(data[selectedDate].R_CYL!="0"){
-                    return(<Text>Right Astigmatism: {data[selectedDate].R_CYL}</Text>)
-                
-                }
+                    return(
+                    <View>
+                      <Text>右眼散光度數: {data[selectedDate].R_CYL}</Text>
+                      <RenderWarning degree={data[selectedDate].R_CYL} refractive={'A'}/>
+                    </View>
+                    )}
                 else{
-                    return<Text>You right eye dont have Astigmatism!</Text>
+                    return<Text>你的右眼沒有散光</Text>
                 }                
             }
-        break;       
+              
     }
 }
 
+export const RenderWarning = props=>{
+  const {degree, refractive} = props;
+  switch(refractive){
+    case 'M':
+      if(degree<300){
+        return(<Text>你有很淺的近視</Text>)
+      }
+      else if(degree<575){
+        return(<Text>你有中度近視</Text>)
+      }
+      else{
+        return(<Text>你有深近視</Text>)
+      }
+  
+    case 'H':
+      if(degree<200){
+        return(<Text>你有很淺的遠視</Text>)
+      }
+      else if(degree<500){
+        return(<Text>你有中度遠視</Text>)
+      }
+      else {
+        return(<Text>你有深遠視</Text>)
+      }
+    case 'A':
+      if(degree<75){
+        return(<Text>你有很淺的散光</Text>)
+      }
+      else if(degree<175){
+        return(<Text>你有中度散光</Text>)
+      }
+      else{
+        return(<Text>你有深散光</Text>)
+      }
 
+  }
+}
 
 const styles = StyleSheet.create({
   container: {
