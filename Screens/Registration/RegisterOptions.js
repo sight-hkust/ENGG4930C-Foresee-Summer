@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import React, { Component } from 'react';
-import { Styles } from "../../../Styles/styles";
+import { Styles } from "../../Styles/styles";
 class RegisterOptions extends Component {
   render() {
     return (
@@ -30,7 +30,7 @@ class RegisterOptions extends Component {
 
             <TouchableOpacity
               onPress={() =>
-                this.props.navigation.navigate('Registration Form')
+                this.props.navigation.navigate('Registration Form', { isProfessional: false })
               }
               style={RegisterChoiceStyles.choiceButton}>
               <Text style={RegisterChoiceStyles.choiceText}>Patient</Text>

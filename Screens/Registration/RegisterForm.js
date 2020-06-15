@@ -1,116 +1,126 @@
 import React, { useState } from "react";
 import { View, TextInput, Button, Text } from "react-native"
 import { Formik } from "formik";
-import { auth, database } from "../../../constant/Config";
-import * as Yup from "yup"
+import { auth, database } from "../../constant/Config";
+import { object, string, number, isValid } from "yup"
 import { ScrollView } from "react-native-gesture-handler";
-import { Styles } from "../../../Styles/styles";
-import { ScreenHeight } from "../../../constant/Constant";
+import { Styles } from "../../Styles/styles";
+import { ScreenHeight } from "../../constant/Constant";
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
+import AppColors from "../../Styles/colors";
 
-const SignupSchema = Yup.object().shape({
-    name: Yup.string().required('請輸入姓名'),
-    birthYearsAndMonths: Yup.string().required('請輸入出生年份和月份'),
-    email: Yup.string().email('電郵地址無效，請以有效格式輸入電郵(例如：foresee@gmail.com)').required('請輸入電郵地址'),
-    phone: Yup.number().typeError('請輸入數字').required('請輸入聯絡電話').test('len', '請輸入有效的電話號碼(8位數字)',
-        val => val.toString().length === 8),
-    password:
-        Yup.string()
-            .label('Password').required('請輸入密碼')
-            .min(7, 'Password must be at least 7 characters.')
-            .max(16, 'The accound system can contain up to 16 characters.'),
+const SignupSchema = object().shape({
+    name: string().required('請輸入姓名'),
+    birthYearsAndMonths: string().required('請輸入出生年份和月份'),
+    email: string().email('電郵地址無效，請以有效格式輸入電郵(例如：foresee@gmail.com)').required('請輸入電郵地址'),
+    phone: number().typeError('請輸入數字').required('請輸入聯絡電話').test('len', '請輸入有效的電話號碼(8位數字)',
+        val => {
+            if (val !== null && val !== undefined) {
+                return val.toString().length === 8;
+            }
+            else
+                return true;
+        }),
+    password: string()
+        .label('Password').required('請輸入密碼')
+        .test('password-length', '密碼需為 8-16個符號：包含一個數字(0-9)，一個小寫英文(a-z)，及一個大寫字母(A-Z)', val => {
+            if (val !== null && val !== undefined) {
+                passwordSchemaHasError = !(val.length >= 8 && val.length <= 16)
+                console.log(passwordSchemaHasError);
+                return !passwordSchemaHasError
+            }
+        }),
     confirmPassword:
-        /*  Yup.string().when(
-             'password', {
-             is: true,
-             then: Yup.string()
-                 .label('Confirm Password')
-                 .required('Required')
-                 .test('passwords-match', 'Please make sure your passwords match.',
-                     function (value) {
-                         console.log(this.parent)
-                         return this.parent.password && this.parent.password === value;
-                     }),
-             otherwise: Yup.string()
-                 .label('Confirm Password')
-                 .required('Required')
-                 .test('passwords-empty', 'Please fill in password.',
-                     function () {
-                         return this.parent.password;
-                     })
-         }) */
-        Yup.string()
-            .label('Confirm Password')
-            .required('請輸入確認密碼')
-            .test('passwords-match', 'Please make sure your passwords match.',
-                function (value) {
-                    console.log(this.parent)
-                    return this.parent.password && this.parent.password === value;
-                })
-})
-
-const ProfSignupSchema = Yup.object().shape({
-    name: Yup.string().required('請輸入姓名'),
-    birthYearsAndMonths: Yup.string().required('請輸入出生年份和月份'),
-    email: Yup.string().email('電郵地址無效，請以有效格式輸入電郵(例如：foresee@gmail.com)').required('請輸入電郵地址'),
-    phone: Yup.number().typeError('請輸入數字').required('請輸入聯絡電話').test('len', '請輸入有效的電話號碼(8位數字)',
-        val => val.toString().length === 8),
-    job: Yup.string().required('請輸入職業')
-})
-
-const writeUserData = ({ uid, values, isProfessional }) => {
-    console.log(uid)
-    if(isProfessional) {
-        database.ref('/users/' + uid)
-        .set({
-            uid: uid,
-            name: values.name,
-            email: values.email,
-            age: Math.abs(moment(values.birthYearsAndMonths).diff(moment(), "years")),
-            phone: values.phone,
-            job: values.job,
-            history: values.history,
-            disease: values.disease
+        string().when(
+            'password', {
+            is: (val) => (val === undefined || val === null),
+            then: null,
+            otherwise: string()
+                .label('Confirm Password')
+                .required('請輸入確認密碼')
+                .test('passwords-match', '密碼與確認密碼不相同',
+                    function (value) {
+                        return this.parent.password && this.parent.password === value;
+                    })
         })
+    /* string()
+        .label('Confirm Password')
+        .required('請輸入確認密碼')
+        .test('passwords-match', 'Please make sure your passwords match.',
+            function (value) {
+                console.log(this.parent)
+                return this.parent.password && this.parent.password === value;
+            }) */
+})
+
+const ProfSignupSchema = object().shape({
+    name: string().required('請輸入姓名'),
+    birthYearsAndMonths: string().required('請輸入出生年份和月份'),
+    email: string().email('電郵地址無效，請以有效格式輸入電郵(例如：foresee@gmail.com)').required('請輸入電郵地址'),
+    phone: number().typeError('請輸入數字').required('請輸入聯絡電話').test('len', '電話號碼需為8位數字)',
+        val => {
+            if (val !== null && val !== undefined) {
+                return val.toString().length === 8;
+            }
+            else
+                return true;
+        }),
+    job: string().required('請輸入職業')
+})
+
+const writeUserData = ({ uid, values, isProfessional, navigation }) => {
+    if (isProfessional) {
+        database.ref('/users/' + uid)
+            .set({
+                uid: uid,
+                name: values.name,
+                email: values.email,
+                age: Math.abs(moment(values.birthYearsAndMonths).diff(moment(), "years")),
+                phone: values.phone,
+                job: values.job,
+                history: values.history,
+                disease: values.disease
+            })
 
         database.ref('professionals/M001/patients/' + uid + '/info')
-        .set({
-            uid: uid,
-            name: values.name,
-            email: values.email,
-            age: Math.abs(moment(values.birthYearsAndMonths).diff(moment(), "years")),
-            phone: values.phone,
-            job: values.job,
-            history: values.history,
-            disease: values.disease
-        })
-        
+            .set({
+                uid: uid,
+                name: values.name,
+                email: values.email,
+                age: Math.abs(moment(values.birthYearsAndMonths).diff(moment(), "years")),
+                phone: values.phone,
+                job: values.job,
+                history: values.history,
+                disease: values.disease
+            })
+
     } else {
         database.ref('/users/' + uid)
-        .set({
-            uid: uid,
-            name: values.name,
-            email: values.email,
-            age: Math.abs(moment(values.birthYearsAndMonths).diff(moment(), "years")),
-            phone: values.phone,
-        })
+            .set({
+                uid: uid,
+                name: values.name,
+                email: values.email,
+                age: Math.abs(moment(values.birthYearsAndMonths).diff(moment(), "years")),
+                phone: values.phone,
+            })
     }
+    navigation.navigate('MainScreen');
 }
 
 
-const createAccount = (values, isProfessional) => {
-    if(isProfessional) {
+const createAccount = (isProfessional, values, navigation) => {
+    if (isProfessional) {
         auth.createUserWithEmailAndPassword(values.email, "NoPassword").then(function (userCreds) {
             const uid = userCreds.user.uid;
-            writeUserData({ uid, values, isProfessional });
+            writeUserData({ uid, values, isProfessional, navigation });
         }).catch(error => {
             console.log(error.code, error.message);
         })
     } else {
         auth.createUserWithEmailAndPassword(values.email, values.password).then(function (userCreds) {
             const uid = userCreds.user.uid;
-            writeUserData({ uid, values });
+            writeUserData({ uid, values, navigation });
         }).catch(error => {
             console.log(error.code, error.message);
         })
@@ -122,8 +132,8 @@ const FieldWrapper = ({ textWrapperStyle = {}, children, label, formikKey, formi
         <View style={[Styles.formFieldWrapper, textWrapperStyle]}>
             <Text>{label}</Text>
             {children}
-            <Text style={{ color: 'red' }}>
-                {formikProps.touched[formikKey] && formikProps.errors[formikKey]}
+            <Text style={{ color: AppColors.errorMessage }}>
+                {formikProps.errors[formikKey]}
             </Text>
         </View>
     )
@@ -172,13 +182,14 @@ const StyledDatePicker = ({ textWrapperStyle, value, showDatePicker, label, form
 
 
 export const RegisterForm = ({ navigation, route }) => {
-
+    const { isProfessional } = route.params;
+    console.log("isProfessional?", isProfessional);
     return (
         <>
             <Formik
                 initialValues={{
                     name: '',
-                    birthYearsAndMonths: '1989-06-04',
+                    birthYearsAndMonths: '2003-01-01',
                     email: '',
                     password: '',
                     confirmPassword: '',
@@ -187,14 +198,14 @@ export const RegisterForm = ({ navigation, route }) => {
                     history: '',
                     disease: '',
                 }}
-                onSubmit={(values) => createAccount(values, route.params?.isProfessional)}
-                validationSchema={ProfSignupSchema}
+                onSubmit={(values) => createAccount(route.params.isProfessional, values, navigation)}
+                validationSchema={isProfessional ? ProfSignupSchema : SignupSchema}
                 validateOnBlur={false}
                 validateOnChange={false}
             >
                 {formikProps => (
                     <>
-                        <PatientRegisterForm formikProps={formikProps} isProfessional={route.params?.isProfessional}/>
+                        <PatientRegisterForm formikProps={formikProps} isProfessional={route.params?.isProfessional} />
                         <Button onPress={formikProps.handleSubmit} style={{ width: ScreenHeight * 0.2 }} title='提交' />
                     </>
                 )}
@@ -216,8 +227,8 @@ const PatientRegisterForm = ({ formikProps, isProfessional }) => {
     }
 
     const handleConfirm = date => {
-        setFieldValue('birthYearsAndMonths', moment(date).format('YYYY-MM-DD'));
         hideDatePicker();
+        setFieldValue('birthYearsAndMonths', moment(date).format('YYYY-MM-DD'));
     }
 
     return (
@@ -247,7 +258,7 @@ const PatientRegisterForm = ({ formikProps, isProfessional }) => {
                 formikProps={formikProps}
                 keyboardType={'numeric'}
             />
-            {   isProfessional?
+            {isProfessional ?
                 <View>
                     <StyledInput
                         label="職業"
@@ -267,18 +278,18 @@ const PatientRegisterForm = ({ formikProps, isProfessional }) => {
                 </View>
                 :
                 <View>
-                <StyledInput
-                    label="密碼"
-                    formikKey="password"
-                    formikProps={formikProps}
-                    secureTextEntry={true}
-                />
-                <StyledInput
-                    label="確認密碼"
-                    formikKey="confirmPassword"
-                    formikProps={formikProps}
-                    secureTextEntry={true}
-                />
+                    <StyledInput
+                        label="密碼"
+                        formikKey="password"
+                        formikProps={formikProps}
+                        secureTextEntry={true}
+                    />
+                    <StyledInput
+                        label="確認密碼"
+                        formikKey="confirmPassword"
+                        formikProps={formikProps}
+                        secureTextEntry={true}
+                    />
                 </View>
             }
             <DateTimePickerModal

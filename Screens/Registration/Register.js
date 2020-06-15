@@ -2,8 +2,8 @@
 import React, { Component } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import RegisterOptions from './RegisterOptions';
-import { Styles } from '../../../Styles/styles';
-import AppColors from '../../../Styles/colors';
+import { Styles } from '../../Styles/styles';
+import AppColors from '../../Styles/colors';
 import { RegisterForm } from './RegisterForm';
 
 const RegistrationStack = createStackNavigator();
@@ -12,7 +12,7 @@ const RegistrationStack = createStackNavigator();
 function Register() {
     return (
         <RegistrationStack.Navigator
-            initialRouteName="RegisterOptions"
+            initialRouteName="Register Options"
         >
             <RegistrationStack.Screen
                 name='Registration Form'
@@ -23,7 +23,7 @@ function Register() {
                     headerTintColor: AppColors.headerTintWhite,
                     headerTitleStyle: Styles.headerTitleStyle,
                 }}
-                initialParams={{}} />
+                />
             <RegistrationStack.Screen name='Register Options' component={RegisterOptions} />
         </RegistrationStack.Navigator>
     )
