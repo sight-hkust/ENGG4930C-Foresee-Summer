@@ -15,8 +15,6 @@ function TutorialButton(){
   );
 }
 
-
-
 export default class Main extends Component{
   constructor(props){
     super(props);
@@ -44,13 +42,12 @@ export default class Main extends Component{
     database.ref('users/' + userid+'/info').once('value').then(snapshot=>{
       this.setState({username: snapshot.val().name});
     })
-
-
   }
 
   render(){
     const data = this.state.data;
-    
+    GetDataPoint(dataArr = data, dateArr = this.state.dates ,refractive = this.state.ddlSelectedValue ,isLeft= this.state.Leye);
+
     const pressHandler = ()=>{
       this.props.navigation.navigate('AddRecordScreen')
     }
@@ -99,14 +96,11 @@ export default class Main extends Component{
           </View>
 
           <View style={styles.container}>
-              <LineChart data={{
-                  labels: [],
-                  datasets:[
-                    {
-                      data:[100,290,150,175,100]
+              <LineChart data={
+                  [250,250,275]
                     }
-                  ]
-                }}/>
+                  
+                />
               
           </View>
           
@@ -152,7 +146,7 @@ export const RenderContent = props => {
                     return<Text>你的右眼沒有近視</Text>
                 }                
             }
-        
+        break;
         case '1':
             if(isLeft){
                 if(data[selectedDate].L_Hyperopia!="0"){
@@ -246,13 +240,37 @@ export const RenderWarning = props=>{
   }
 }
 
+export const GetDataPoint = props=>{
+  const {dataArr,dateArr,refractive,isLeft} = props;
+  const output = [];
+  switch(refractive){
+    case 'M':
+      for (const date in dateArr){
+        output.push (isLeft? dataArr[date].L_Myopia : dataArr[date].R_Myopia);
+      }
+      break;
+    case 'H':
+      for (const date in dateArr){
+        output.push (isLeft? dataArr[date].L_Hyperopia : dataArr[date].R_Hyperopia);
+      }
+      break;
+    case 'A':
+        for (const date in dateArr){
+          output.push (isLeft? dataArr[date].L_CYL : dataArr[date].R_CYL);
+        }
+        break;
+  } 
+  console.log(output)
+  return output;
+}
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
-    padding: 40
+    padding: 10
   },
 
 
