@@ -61,5 +61,12 @@ export const Styles = StyleSheet.create({
     borderColor: 'grey',
     height: 40,
     borderRadius: 3,
-  }
+  },  
+  formTextInputArea: {
+    marginTop: ScreenHeight * 0.01,
+    paddingHorizontal: ScreenWidth * 0.02,
+    borderWidth: 0.7,
+    borderColor: 'grey',
+    borderRadius: 3,
+  },
 });
