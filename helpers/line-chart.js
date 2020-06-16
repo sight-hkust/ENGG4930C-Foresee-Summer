@@ -1,38 +1,46 @@
 import React from 'react';
 import { View, StyleSheet,Dimensions } from 'react-native';
-import Svg, { Defs,Stop, Circle, Rect,G,Path, LinearGradient } from 'react-native-svg';
-import {scaleLinear} from 'd3-scale';
+import Svg, { Defs,Stop, Circle, Rect,G,Path, LinearGradient,Text } from 'react-native-svg';
+import {scaleLinear,scaleTime} from 'd3-scale';
+import moment from 'moment';
+
 export default class LineChart extends React.Component {
-  calcScaler = (max,min) => {
-      return max - min || 1;
-      //||1 to avoid divide by 0
-  };
 
-  calcHeight = (val, data, height) => {
-    const max = Math.max(...data);
-    const min = Math.min(...data);
-    //start from zero: remove "-min"
-    return height * ((val - min) / this.calcScaler(max,min));
+  x_scale = (val,dateArr,paddingRight,width) => {
+    const x = scaleTime()
+    .domain([moment(dateArr[0], 'YYYY-MM-DD').toDate(), moment(dateArr[dateArr.length-1], 'YYYY-MM-DD').toDate()])
+    .range([paddingRight, width-paddingRight])
     
-  };
+    return(x(val));
+  }
 
-  renderStop = (data,width,paddingRight)=>{
+  y_scale = (val,data,height,paddingTop ) => {
+    const min = Math.min(...data);
+    const max = Math.max(...data);
+    const y = scaleLinear()
+    .domain([min,max])
+    .range([height, 0]);
+    return(Math.floor((( y(val)) / 4) * 3 + paddingTop));
+  }
+
+  renderStop = (data,dateArr,width,paddingRight)=>{
     const colourScale = scaleLinear()
     .domain([0,325,600])
     .range(["#9AFF98","#FFE353","#FE7171"]);
 
     const offsetScale = scaleLinear()
-    .domain([0,width])
+    .domain([paddingRight,width-paddingRight])
     .range([0,1]);
 
     const output = [];
-    data.forEach((item,index)=>{
-      
+    dateArr.forEach((item,index)=>{
+      //console.log(offsetScale(this.x_scale(moment(item, 'YYYY-MM-DD').toDate(), dateArr,paddingRight,width)))
+      console.log((data[index]))
       output.push(
         <Stop
           key={index}
-          offset = {offsetScale(paddingRight/2 + (index * (width - paddingRight)) / (data.length-1))}
-          stopColor = {colourScale(item)}
+          offset = {offsetScale(this.x_scale(moment(item, 'YYYY-MM-DD').toDate(), dateArr,paddingRight,width))}
+          stopColor = {colourScale(data[index])}
         />
       )
     })
@@ -40,7 +48,7 @@ export default class LineChart extends React.Component {
   }
 
   renderDefs = config=>{
-    const {width,data,paddingRight} = config;
+    const {dateArr,width,data,paddingRight} = config;
     
     return(
       <Defs>
@@ -52,26 +60,21 @@ export default class LineChart extends React.Component {
           y2={0}
           gradientUnits="userSpaceOnUse"
         >
-        {this.renderStop(data,width,paddingRight)}
+        {this.renderStop(data,dateArr,width,paddingRight)}
         </LinearGradient>
       </Defs>
     )
   }
 
   getLinePoints = (datas, config) => {
-    const { width, height,paddingRight, paddingTop } = config;
-    //function to calculate x position
-    const x = i =>
-      Math.floor(
-        paddingRight/2 + (i * (width - paddingRight)) / (datas.length-1)
-      );
+    const {  dateArr, width, height,paddingRight, paddingTop } = config;
 
-    const baseHeight = height;
+    const x = i => {
+      return this.x_scale(moment(dateArr[i], 'YYYY-MM-DD').toDate(), dateArr,paddingRight, width);
+    }
 
-    //function to calculate y position
     const y = i => {
-      const yHeight = this.calcHeight(datas[i], datas, height);
-      return Math.floor(((baseHeight - yHeight) / 4) * 3 + paddingTop);
+      return this.y_scale(datas[i],datas,height,paddingTop);
     };
 
     return [`M${x(0)},220 V${y(0)}`]
@@ -104,6 +107,7 @@ export default class LineChart extends React.Component {
   renderDots = config=>{
     const {
       data,
+      dateArr,
       width,
       height,
       paddingTop,
@@ -112,12 +116,14 @@ export default class LineChart extends React.Component {
 
     const baseHeight = height;
     const output = [];
-    config.data.forEach((item, index)=>{
+    config.dateArr.forEach((item, index)=>{
       
-      const cx = paddingRight/2 + (index * (width - paddingRight)) / (data.length-1);
-      const cy = ((baseHeight - this.calcHeight(item, data, height)) / 4) * 3 + paddingTop;
+      //const cx = paddingRight/2 + (index * (width - paddingRight)) / (data.length-1);
+      const cx = this.x_scale(moment(item, 'YYYY-MM-DD').toDate(), dateArr,paddingRight,width);
+      const cy = this.y_scale(data[index], data, height,paddingTop);
       
       output.push(
+        <>
         <Circle
           key={index}
           cx = {cx}
@@ -126,6 +132,8 @@ export default class LineChart extends React.Component {
           fill="#fff"
           opacity='0.8'
           />
+          <Text x={cx} y={cy+25} textAnchor="middle" fill="black">{item}</Text>
+        </>
       );
         })
       return output;
@@ -134,7 +142,7 @@ export default class LineChart extends React.Component {
 
   render() {
     const{
-      data
+      data, dateArr
     } = this.props;
     return (
       <View >
@@ -146,7 +154,8 @@ export default class LineChart extends React.Component {
               this.renderDefs({
                 width: Dimensions.get("window").width,
                 data: data,
-                paddingRight: 20
+                paddingRight: 20,
+                dateArr: dateArr
               })
             }
           </G>
@@ -155,6 +164,7 @@ export default class LineChart extends React.Component {
               width:Dimensions.get("window").width,
               height:"220",
               data: data,
+              dateArr: dateArr,
               paddingRight: 20,
               paddingTop: 10
             })}
@@ -165,6 +175,7 @@ export default class LineChart extends React.Component {
               width: Dimensions.get("window").width,
               height: "220",
               data: data,
+              dateArr:dateArr,
               paddingRight: 20,
               paddingTop: 10
             })

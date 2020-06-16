@@ -78,7 +78,7 @@ export default class LoginScreen extends Component {
                         <View style={LoginStyles.loginAndRegisterButtonContainer}>
                             <TouchableOpacity
                                 style={Styles.smallButton}
-                                onPress={() => this.props.navigation.navigate('Register')}>
+                                onPress={() => this.props.navigation.navigate('RecordsScreen')}>
                                 <Text style={Styles.smallButtonText}>register</Text>
                             </TouchableOpacity>
                             <TouchableOpacity

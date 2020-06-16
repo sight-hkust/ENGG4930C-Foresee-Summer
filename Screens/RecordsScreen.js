@@ -30,23 +30,27 @@ export default class Main extends Component{
   
   componentDidMount(){
       const userid = '002';
-      database.ref('users/'+ userid +'/records').on('value', (snapshot)=>{
+    database.ref('users/'+ userid ).on('value', (snapshot)=>{
         var tempDate = [];
 
-        for(var key in snapshot.val()){
+        for(var key in snapshot.child("records").val()){
           tempDate.push(key);
         }
-        this.setState({data : snapshot.toJSON(), dates: tempDate, ddlSelectedDate: tempDate[0]});
+
+        var tempName = snapshot.child("info/name").val();
+       
+        this.setState({data : snapshot.child("records").toJSON(), 
+                      dates: tempDate,
+                      ddlSelectedDate: tempDate[0],
+                      username: tempName
+                      });
     });
     
-    database.ref('users/' + userid+'/info').once('value').then(snapshot=>{
-      this.setState({username: snapshot.val().name});
-    })
   }
+
 
   render(){
     const data = this.state.data;
-    GetDataPoint(dataArr = data, dateArr = this.state.dates ,refractive = this.state.ddlSelectedValue ,isLeft= this.state.Leye);
 
     const pressHandler = ()=>{
       this.props.navigation.navigate('AddRecordScreen')
@@ -85,23 +89,21 @@ export default class Main extends Component{
             </TouchableOpacity> 
 
           <View style={styles.container}>
-            
+            <View style={{flexDirection: 'row'}}>
+              <Button title="last" />
+              <Button title="next" />
+            </View>
             <FlatList
                 data={this.state.dates}
                 renderItem={({item})=> <Button title={item} onPress={()=>this.setState({ddlSelectedDate: item})}/>}
                 keyExtractor={item => item }
             />
             <RenderContent isLeft={this.state.Leye} ddlValue={this.state.ddlSelectedValue} data={data} selectedDate={this.state.ddlSelectedDate} />
-              
+            
           </View>
-
+          
           <View style={styles.container}>
-              <LineChart data={
-                  [250,250,275]
-                    }
-                  
-                />
-              
+            <RenderLineChart dataArr={data} dateArr={this.state.dates} refractive={'0'} isLeft={true}/>
           </View>
           
         </>
@@ -240,28 +242,59 @@ export const RenderWarning = props=>{
   }
 }
 
-export const GetDataPoint = props=>{
+export const RenderLineChart = props=>{
   const {dataArr,dateArr,refractive,isLeft} = props;
-  const output = [];
+
+  if(dataArr == null){
+    return(
+      <Text>暫無數據</Text>
+      );
+  }
+
+  var output = [];
   switch(refractive){
-    case 'M':
-      for (const date in dateArr){
+    case '0':{
+      
+      for (const date of dateArr){
         output.push (isLeft? dataArr[date].L_Myopia : dataArr[date].R_Myopia);
       }
       break;
-    case 'H':
-      for (const date in dateArr){
+      //return output;
+    }
+  
+    case '1':{
+      for (const date of dateArr){
         output.push (isLeft? dataArr[date].L_Hyperopia : dataArr[date].R_Hyperopia);
       }
       break;
-    case 'A':
-        for (const date in dateArr){
+      //return output;
+    }
+    case '2':{
+        for (const date of dateArr){
           output.push (isLeft? dataArr[date].L_CYL : dataArr[date].R_CYL);
         }
         break;
+        //return output;
+    }
   } 
-  console.log(output)
-  return output;
+  //console.log(output);
+  if(output.length>0){
+    return(
+      <LineChart data={output} dateArr={dateArr} />
+      );
+  }
+  else{
+    return(null);
+  }
+}
+
+export const RenderDateButton = props=>{
+  const {dataArr,dateArr} = props;
+
+  if(dataArr == null){
+    return(null);
+  }
+
 }
 
 const styles = StyleSheet.create({
