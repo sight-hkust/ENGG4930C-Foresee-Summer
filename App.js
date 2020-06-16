@@ -1,10 +1,8 @@
 import 'react-native-gesture-handler';
 import React from 'react';
 
-import { NavigationContainer } from '@react-navigation/native';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-
-import Register from "./Screens/Registration/Register";
 
 import GetEducatedScreen from './Screens/GetEducated';
 import RecordsScreen from './Screens/RecordsScreen';
@@ -17,6 +15,7 @@ import DoctorsScreen from './Screens/Doctors';
 import ProfMainMenu from './Screens/ProfMainMenu'
 import ProfPatientViewScreen from './Screens/ProfPatientViewScreen'
 import ProfSearchResultScreen from './Screens/ProfSearchResultScreen'
+import Register from './src/components/Registration/Register';
 
 const Stack = createStackNavigator();
 
@@ -24,6 +23,7 @@ global.realName = '';
 global.email = '';
 global.password = '';
 global.apiUrl = '';
+
 
 function MyStack() {
     return (
@@ -43,8 +43,8 @@ function MyStack() {
                 <Stack.Screen name="AskAnExpertScreen" component={AskAnExpertScreen} />
                 <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} />
                 <Stack.Screen name="DoctorsScreen" component={DoctorsScreen} />
-                <Stack.Screen name="ProfPatientViewScreen" component={ProfPatientViewScreen}/>
-                <Stack.Screen name="ProfSearchResultScreen" component={ProfSearchResultScreen}/>
+                <Stack.Screen name="ProfPatientViewScreen" component={ProfPatientViewScreen} />
+                <Stack.Screen name="ProfSearchResultScreen" component={ProfSearchResultScreen} />
             </Stack.Navigator>
         </NavigationContainer>
     );
