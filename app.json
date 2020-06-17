@@ -28,6 +28,15 @@
     "android": {
       "package": "com.android"
     },
-    "entryPoint": "node_modules/expo/AppEntry.js"
+    "entryPoint": "node_modules/expo/AppEntry.js",
+    "packagerOpts": {
+      "config": "metro.config.js",
+      "sourceExts": [
+        "js",
+        "jsx",
+        "svg",
+        "svgx"
+      ]
+    }
   }
 }

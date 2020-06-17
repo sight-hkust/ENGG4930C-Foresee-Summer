@@ -59,7 +59,6 @@ export default class LoginScreen extends Component {
     render() {
         return (
             <View>
-                <StatusBar barStyle="dark-content" />
                 <SafeAreaView style={LoginStyles.mainView}>
                     <View style={LoginStyles.logoContainer}>
 

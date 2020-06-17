@@ -47,7 +47,7 @@ export const Styles = StyleSheet.create({
     backgroundColor: '#2D89DD',
   },
   headerTitleStyle: {
-    textAlign: "center",
+    /* textAlign: "center", */
     fontWeight: '500',
   },
   formFieldWrapper: {
@@ -61,7 +61,7 @@ export const Styles = StyleSheet.create({
     borderColor: 'grey',
     height: 40,
     borderRadius: 3,
-  },  
+  },
   formTextInputArea: {
     marginTop: ScreenHeight * 0.01,
     paddingHorizontal: ScreenWidth * 0.02,
@@ -69,4 +69,5 @@ export const Styles = StyleSheet.create({
     borderColor: 'grey',
     borderRadius: 3,
   },
+
 });
