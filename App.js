@@ -4,7 +4,8 @@ import { Image } from 'react-native'
 
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+
 
 import WelcomeScreen from './Screens/WelcomeScreen'
 import LoginScreen from './Screens/LoginScreen';
@@ -24,7 +25,7 @@ import { Register } from './src/components/Registration/Register';
 import MainScreen from './Screens/MainScreen';
 
 const Stack = createStackNavigator();
-const Tab = createBottomTabNavigator();
+const Tab = createMaterialBottomTabNavigator();
 
 const Icon = require('./assets/images/Icon_solid.png');
 
@@ -108,41 +109,19 @@ export default class Main extends Component {
       
       return (
           <NavigationContainer >
-            <Tab.Navigator tabBarOptions={{
-                activeTintColor: '#e91e63', 
-                style: {      
-                    backgroundColor:'transparent',
-                },
-                tabStyle: {
-                    backgroundColor:'transparent',
-                    color: 'red'
-                }, 
-                labelStyle: {
-                    backgroundColor:'transparent',
-                    color: 'red'
-                },
-      
-                removeClippedSubviews: true,
-                indicatorStyle: {
-                    backgroundColor:'transparent',
-                    color: 'red'
-                },
-                inactiveBackgroundColor: 'transparent'
-
-            
-            }}    
-            >
+            <Tab.Navigator 
+                initialRouteName="User"
+                shifting={false}
+                barStyle={{ backgroundColor: 'tomato'}}
+                activeColor='#694fad'
+                inactiveColor="white"
+                >
               <Tab.Screen name="User" component={UserScreen} />
               <Tab.Screen name="Prof" component={ProfessionalScreen} />
-              <Tab.Screen name="Vin" component={ProfPatientViewScreen}               
-                options={{
-                tabBarIcon: ({ color, size }) => (
-                    <Image source={Icon} style={{width: 60, height: 60, marginBottom: 150}}/>
-                    ),
-                }}/>
+              <Tab.Screen name="PatientView" component={ProfPatientViewScreen} />
               <Tab.Screen name="login&reg" component={LoginAndRegisterScreen} />
               <Tab.Screen name="+record" component={AddRecordScreen} initialParams={{isProfessional: false}}/>
-              {/* <Tab.Screen name="record" component={RecordsScreen} initialParams={{isProfessional: false}}/>        */}
+              <Tab.Screen name="record" component={RecordsScreen} initialParams={{isProfessional: false}}/>
             </Tab.Navigator>
           </NavigationContainer>
       );

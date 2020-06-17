@@ -24,6 +24,8 @@ export default class MainScreen extends Component {
             userName: 'John Smith',
             isModalVisible: false,
         };
+
+        this.toggleModal = this.toggleModal.bind(this)
     }
 
     componentDidMount() {
@@ -58,33 +60,39 @@ export default class MainScreen extends Component {
                     </TouchableOpacity>
                     </View>
 
-                    <BottomModal isVisible={this.state.isModalVisible}>
+                    <BottomModal isVisible={this.state.isModalVisible} toggleModal={this.toggleModal}>
                         <View style={{alignSelf: 'center', width: '30%', height: 4, backgroundColor:'#1772A6'}}></View>
                         <Grid>
-                            <Row>
+                            <Row style={{marginBottom: 20}}>
+                                <Col style={{alignItems: 'center', justifyContent: 'center'}}>
+                                        <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#2D9CDB'}}>護眼學堂</Text>
+                                </Col>
+                            </Row>
+                            
+                            <Row style={{marginBottom: 40}}>
                                 <Col style={{alignItems: 'center', justifyContent: 'center'}}>
                                     <TouchableOpacity onPress={()=>this.toggleModal()}>
-                                        <Image style={MainStyles.menuButton} source={require('../assets/images/icon_small.png')} />
+                                        <Image style={MainStyles.menuButton} source={require('../assets/images/Articles_bright.png')} />
                                         <Text style={MainStyles.modalText}>Achievement</Text>
                                     </TouchableOpacity>
                                 </Col>
                                 <Col style={{alignItems: 'center', justifyContent: 'center'}}>
                                     <TouchableOpacity onPress={()=>this.toggleModal()}>
-                                        <Image style={MainStyles.menuButton} source={require('../assets/images/icon_small.png')} />
+                                        <Image style={MainStyles.menuButton} source={require('../assets/images/Qna_bright.png')} />
                                         <Text style={MainStyles.modalText}>Exercise</Text>
                                     </TouchableOpacity>
                                 </Col>
                             </Row>
-                            <Row>
+                            <Row style={{marginBottom: 20}}>
                             <Col style={{alignItems: 'center', justifyContent: 'center'}}>
                                     <TouchableOpacity onPress={()=>this.toggleModal()}>
-                                        <Image style={MainStyles.menuButton} source={require('../assets/images/icon_small.png')} />
+                                        <Image style={MainStyles.menuButton} source={require('../assets/images/Exercise_bright.png')} />
                                         <Text style={MainStyles.modalText}>Read More</Text>
                                     </TouchableOpacity>
                                 </Col>
                                 <Col style={{alignItems: 'center', justifyContent: 'center'}}>
                                     <TouchableOpacity onPress={()=>this.toggleModal()}>
-                                        <Image style={MainStyles.menuButton} source={require('../assets/images/icon_small.png')} />
+                                        <Image style={MainStyles.menuButton} source={require('../assets/images/Achievement_bright.png')} />
                                         <Text style={MainStyles.modalText}>Rewards</Text>
                                     </TouchableOpacity>
                                 </Col>
@@ -109,7 +117,6 @@ const MainStyles = StyleSheet.create({
     mainView: {
         alignItems: 'center',
         height: '100%',
-        backgroundColor: 'red'
     },
     buttonContainer: {
         flexDirection: 'row',

@@ -6,17 +6,14 @@ import {
 } from 'react-native';
 import Modal from 'react-native-modal';
 
+
 export default class BottomModal extends Component {
     constructor(props) {
         super(props)
 
         this.state = {
-            isVisible : this.props.isVisible == null? false : this.props.isVisible,  
+            isVisible : false,  
         }
-    }
-
-    toggleVisible = () => {
-        this.setState({isVisible: !this.state.isVisible});
     }
 
     render() {
@@ -25,8 +22,11 @@ export default class BottomModal extends Component {
                 isVisible={this.props.isVisible} 
                 onSwipeComplete={()=>{
                     this.close;
-                    this.toggleVisible()
-                }}        
+                    if(this.props.toggleModal() != null) {
+                        this.props.toggleModal()
+                    }
+                    this.setState({isVisible: false})
+                }}
                 swipeDirection={['down']}
                 style={{ justifyContent: 'flex-end', margin: 0,}}
             >
