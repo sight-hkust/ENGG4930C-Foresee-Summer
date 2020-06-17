@@ -4,6 +4,7 @@ import React from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 
+import WelcomeScreen from './Screens/WelcomeScreen'
 import LoginScreen from './Screens/LoginScreen';
 
 import Register from "./src/components/RegisterForm/Register";
@@ -45,7 +46,8 @@ function MyStack() {
                 }}
                 //initialRouteName="Register"
             >
-                <Stack.Screen name="Dmain" component={ProfMainMenu} />
+                <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
+                <Stack.Screen name="Login" component={LoginScreen}/>
                 <Stack.Screen name="Register" component={Register} />
                 <Stack.Screen name="RegisterName" component={RegisterName} />
                 <Stack.Screen name="RegisterEmail" component={RegisterEmail} />
@@ -54,7 +56,7 @@ function MyStack() {
                 <Stack.Screen name="RegisterPhone" component={RegisterPhone} />
                 <Stack.Screen name="RegisterIsParent" component={RegisterIsParent} />
 
-                <Stack.Screen name="MainScreen" component={ProfMainMenu} />
+                <Stack.Screen name="MainScreen" component={MainScreen} />
                 <Stack.Screen name="RecordsScreen" component={RecordsScreen} />
                 <Stack.Screen name="GetEducatedScreen" component={GetEducatedScreen} />
                 <Stack.Screen name="ArticleDetailScreen" component={ArticleDetailScreen} />
