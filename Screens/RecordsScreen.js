@@ -6,14 +6,10 @@ import LineChart from '../helpers/line-chart';
 const LeftOpen = require('../assets/images/LeftOpen.png');
 const RightOpen = require('../assets/images/RightOpen.png');
 const Tutorial = require('../assets/images/Tutorial.png');
+const Profile = require('../assets/images/Profile.png');
+const BackArrow = require('../assets/images/BackArrow.png');
+const NextArrow = require('../assets/images/NextArrow.png');
 
-function TutorialButton(){
-  return(
-    <TouchableOpacity > 
-       <Image source={Tutorial}/>
-    </TouchableOpacity> 
-  );
-}
 
 export default class Main extends Component{
   constructor(props){
@@ -27,7 +23,6 @@ export default class Main extends Component{
       ddlSelectedDate : '0',
       username: ""
     }}
-
   
   componentDidMount(){
       const userid = '002';
@@ -49,7 +44,6 @@ export default class Main extends Component{
     });
     
   }
-
 
   render(){
     const data = this.state.data;
@@ -76,52 +70,64 @@ export default class Main extends Component{
     }
       
         return(
-        <>
-          <View>
-            <TutorialButton/>
-            <Button title="輸入數據" onPress={pressHandler}/>
+        <View style={RecordScreenStyle.background}>
+          <View style={RecordScreenStyle.header}>
+            <TouchableOpacity>
+              <Image source={Profile}/>
+            </TouchableOpacity>
+            <TouchableOpacity>
+              <Image source={Profile}/>
+            </TouchableOpacity>
           </View>
 
-          <View style={{paddingTop:10,paddingBottom:30, alignItems: 'center'}}>
-            <Text style={{fontSize: 24}}>{this.state.username}</Text>
-          </View>
-          
-          <View style={{flexDirection:'row', justifyContent:'space-around'}}>
-            <TouchableOpacity onPress={()=> this.setState({ddlSelectedValue:'1' })} >
-              <Text>遠視</Text>
-            </TouchableOpacity>
+          <Text style={RecordScreenStyle.title}>視力趨勢</Text>
 
-            <TouchableOpacity onPress={()=> this.setState({ddlSelectedValue:'0' })} >
-              <Text>近視</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity onPress={()=> this.setState({ddlSelectedValue:'2' })} >
-              <Text>散光</Text>
-            </TouchableOpacity>
+          <View style={RecordScreenStyle.secondaryContainer}>
             
+            <View style={RecordScreenStyle.refractiveMenu}>
+              <TouchableOpacity onPress={()=> this.setState({ddlSelectedValue:'1'})}>
+                <Text style={(this.state.ddlSelectedValue=='1')?RecordScreenStyle.selectedMenuText:RecordScreenStyle.unselectedMenuText}>遠視</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={()=> this.setState({ddlSelectedValue:'0'})}>
+                <Text style={(this.state.ddlSelectedValue=='0')?RecordScreenStyle.selectedMenuText:RecordScreenStyle.unselectedMenuText}>近視</Text>
+              </TouchableOpacity>
+
+              <TouchableOpacity onPress={()=> this.setState({ddlSelectedValue:'2'})}>
+                <Text style={(this.state.ddlSelectedValue=='2')?RecordScreenStyle.selectedMenuText:RecordScreenStyle.unselectedMenuText}>散光</Text>
+              </TouchableOpacity>
+            </View>
             
-          </View>
-
-            <TouchableOpacity  activeOpacity= {0.8} style={{paddingRight: 25, paddingTop:15}} onPress={()=> this.setState({ Leye: !this.state.Leye})}> 
-              <Image source={this.state.Leye? LeftOpen : RightOpen}/>
-            </TouchableOpacity> 
-
-          <View style={styles.container}>
-            <View>
-              <Button title="next" onPress={GetNext}/>
-              <Button title="back" onPress={GetBack}/>
-              <Text>Date: {this.state.ddlSelectedDate}</Text>
+            <View style={RecordScreenStyle.eyesButton}>
+              <TouchableOpacity  activeOpacity= {0.8} onPress={()=> this.setState({ Leye: !this.state.Leye})}> 
+                <Image source={this.state.Leye? LeftOpen : RightOpen}/>
+              </TouchableOpacity> 
             </View>
 
-            <RenderContent isLeft={this.state.Leye} ddlValue={this.state.ddlSelectedValue} data={data} selectedDate={this.state.ddlSelectedDate} />
+            <View style={RecordScreenStyle.datesButton}>
+                <TouchableOpacity onPress={GetBack}>
+                  <Image source={BackArrow} />
+                </TouchableOpacity>
+
+                <TouchableOpacity onPress={GetNext}>
+                  <Image source={NextArrow} />
+                </TouchableOpacity>
+            </View>
+
+            <View style={RecordScreenStyle.content}>
+              <Text >日期: {this.state.ddlSelectedDate}</Text>
+              <RenderContent isLeft={this.state.Leye} ddlValue={this.state.ddlSelectedValue} data={data} selectedDate={this.state.ddlSelectedDate} />
+            </View>
+
+            <View style={RecordScreenStyle.addRecordButton}>
+              <Button title="輸入數據" onPress={pressHandler}/>
+            </View>
             
+            <View>
+              <RenderLineChart dataArr={data} dateArr={this.state.dates} refractive={this.state.ddlSelectedValue} isLeft={this.state.Leye} selectedIndex={this.state.index}/>
+            </View>
           </View>
-          
-          <View style={styles.container}>
-            <RenderLineChart dataArr={data} dateArr={this.state.dates} refractive={this.state.ddlSelectedValue} isLeft={this.state.Leye} selectedIndex={this.state.index}/>
-          </View>
-          
-        </>
+        </View>
         )
 
   }
@@ -274,7 +280,6 @@ export const RenderLineChart = props=>{
         output.push (isLeft? dataArr[date].L_Myopia : dataArr[date].R_Myopia);
       }
       break;
-      //return output;
     }
   
     case '1':{
@@ -282,17 +287,15 @@ export const RenderLineChart = props=>{
         output.push (isLeft? dataArr[date].L_Hyperopia : dataArr[date].R_Hyperopia);
       }
       break;
-      //return output;
     }
     case '2':{
         for (const date of dateArr){
           output.push (isLeft? dataArr[date].L_CYL : dataArr[date].R_CYL);
         }
         break;
-        //return output;
     }
   } 
-  //console.log(output);
+
   if(output.length>0){
     return(
       <LineChart data={output} dateArr={dateArr} selectedIndex={selectedIndex}/>
@@ -304,10 +307,7 @@ export const RenderLineChart = props=>{
 }
 
 
-
-
-
-const styles = StyleSheet.create({
+const RecordScreenStyle = StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#fff',
@@ -315,6 +315,80 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 10
   },
+  background: {
+    height:"100%",
+    backgroundColor: '#24559E',
+  },
+  title: {
+    fontSize:30,
+    paddingLeft: 18,
+    color: "white"
+  },
+  header: {
+    paddingTop:25,
+    marginRight:18,
+    marginLeft:18,
+    flexDirection:'row',
+    justifyContent: 'space-between',
+    paddingBottom: 10
+  },
+  secondaryContainer:{
+    marginTop:20,
+    marginLeft:10,
+    marginRight:10,
+    height: "100%",
+    backgroundColor: "white",
+    borderTopLeftRadius: 16,
+    borderTopRightRadius: 16,
+  },
+  refractiveMenu:{
+    paddingTop: 30,
+    flexDirection:'row', 
+    justifyContent:'space-around',
+  },
+  selectedMenuText:{
+    fontSize: 15,
+    color:"#FFFFFF",
+    paddingLeft:11,
+    paddingRight:11,
+    paddingTop:6,
+    paddingBottom: 6,
+    backgroundColor:"#80A4EB",
+    borderRadius: 8,
 
+  },
+  unselectedMenuText:{
+    fontSize: 15,
+    color:"#24559E",
+    paddingLeft:10,
+    paddingRight:10,
+    paddingTop:5,
+    paddingBottom: 5,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 8,
+    borderWidth:1,
+    borderColor: "#80A4EB"
 
+  },
+  eyesButton:{
+    paddingLeft: 70 ,
+    paddingBottom:10,
+    paddingTop:10,
+  },
+  datesButton:{
+    flexDirection:'row',
+    justifyContent:'space-around',
+    padding: 15
+  },
+  content:{
+    paddingTop:5,
+    paddingBottom: 5,
+    alignItems: 'center',
+  },
+  addRecordButton:{
+    paddingTop:15,
+    paddingBottom:15,
+    paddingLeft:100,
+    paddingRight: 100
+  }
 });

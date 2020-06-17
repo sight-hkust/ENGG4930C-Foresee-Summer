@@ -14,7 +14,7 @@ export default class LineChart extends React.Component {
     return(x(val));
   }
 
-  y_scale = (val,data,height,paddingTop ) => {
+  y_scale = (val,data,height,paddingTop) => {
     const min = Math.min(...data);
     const max = Math.max(...data);
     const y = scaleLinear()
@@ -34,8 +34,6 @@ export default class LineChart extends React.Component {
 
     const output = [];
     dateArr.forEach((item,index)=>{
-      //console.log(offsetScale(this.x_scale(moment(item, 'YYYY-MM-DD').toDate(), dateArr,paddingRight,width)))
-      //console.log((data[index]))
       output.push(
         <Stop
           key={index}
@@ -129,9 +127,11 @@ export default class LineChart extends React.Component {
           key={index}
           cx = {cx}
           cy = {cy}
-          r="8"
-          fill={index===selectedIndex? "blue": "white"}
-          opacity='0.8'
+          r="6"
+          stroke="#2D9CDB"
+          strokeWidth="1"
+          fill={index===selectedIndex? "#2D9CDB": "white"}
+          opacity={index===selectedIndex? "1": "0.72"}
           />
           <Text x={cx} y={cy+25} textAnchor="middle" fill="black">{item}</Text>
         </>
@@ -140,16 +140,15 @@ export default class LineChart extends React.Component {
       return output;
   };
 
-
   render() {
     const{
       data, dateArr,selectedIndex
     } = this.props;
     return (
       <View >
-        <Svg height="220" width= {Dimensions.get("window").width}>
+        <Svg height="220" width= {Dimensions.get("window").width - 20}>
           <Rect 
-            width="100%" height="220" fill="salmon" />
+            width="100%" height="100%" fill="#fff" />
           <G>
             {
               this.renderDefs({
@@ -188,6 +187,5 @@ export default class LineChart extends React.Component {
       </View>
     );
  }
-
 }
 
