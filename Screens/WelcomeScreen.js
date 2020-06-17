@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, ScrollView, ActivityIndicator, Image  } from 'react-native';
 import { Card, ListItem, Button } from 'react-native-elements'
 
-const Icon = require('../assets/images/Icon.png');
+const Icon = require('../assets/images/icon_small.png');
 
 const WelcomeScreen = ({ route, navigation }) => {
 

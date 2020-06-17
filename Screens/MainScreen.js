@@ -54,7 +54,7 @@ export default class MainScreen extends Component {
                     <Text style={MainStyles.helpText}>What can we do for you?</Text>
                     <View style={MainStyles.choicesContainer}>
                     <TouchableOpacity onPress={()=>this.toggleModal()}>
-                        <Image style={MainStyles.menuButton} source={require('../assets/images/Icon.png')} />
+                        <Image style={MainStyles.menuButton} source={require('../assets/images/icon_small.png')} />
                     </TouchableOpacity>
                     </View>
 
@@ -64,13 +64,13 @@ export default class MainScreen extends Component {
                             <Row>
                                 <Col style={{alignItems: 'center', justifyContent: 'center'}}>
                                     <TouchableOpacity onPress={()=>console.log()}>
-                                        <Image style={MainStyles.menuButton} source={require('../assets/images/Icon.png')} />
+                                        <Image style={MainStyles.menuButton} source={require('../assets/images/icon_small.png')} />
                                         <Text style={MainStyles.modalText}>Achievement</Text>
                                     </TouchableOpacity>
                                 </Col>
                                 <Col style={{alignItems: 'center', justifyContent: 'center'}}>
                                     <TouchableOpacity onPress={()=>this.toggleModal()}>
-                                        <Image style={MainStyles.menuButton} source={require('../assets/images/Icon.png')} />
+                                        <Image style={MainStyles.menuButton} source={require('../assets/images/icon_small.png')} />
                                         <Text style={MainStyles.modalText}>Exercise</Text>
                                     </TouchableOpacity>
                                 </Col>
@@ -78,13 +78,13 @@ export default class MainScreen extends Component {
                             <Row>
                             <Col style={{alignItems: 'center', justifyContent: 'center'}}>
                                     <TouchableOpacity onPress={()=>this.toggleModal()}>
-                                        <Image style={MainStyles.menuButton} source={require('../assets/images/Icon.png')} />
+                                        <Image style={MainStyles.menuButton} source={require('../assets/images/icon_small.png')} />
                                         <Text style={MainStyles.modalText}>Read More</Text>
                                     </TouchableOpacity>
                                 </Col>
                                 <Col style={{alignItems: 'center', justifyContent: 'center'}}>
                                     <TouchableOpacity onPress={()=>this.toggleModal()}>
-                                        <Image style={MainStyles.menuButton} source={require('../assets/images/Icon.png')} />
+                                        <Image style={MainStyles.menuButton} source={require('../assets/images/icon_small.png')} />
                                         <Text style={MainStyles.modalText}>Rewards</Text>
                                     </TouchableOpacity>
                                 </Col>

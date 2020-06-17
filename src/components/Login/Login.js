@@ -90,7 +90,7 @@ export const Login = ({ navigation, route }) => {
 
     auth.onAuthStateChanged((user) => {
         if (user) {
-            navigation.navigate('Dmain')
+            navigation.navigate('MainScreen')
         }
     })
 
