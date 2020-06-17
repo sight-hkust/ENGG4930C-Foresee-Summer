@@ -44,7 +44,7 @@ const MainStyles = StyleSheet.create({
     content: {
         backgroundColor: 'white',
         padding: 20,
-        height: 300,
+        height: 350,
         borderRadius: 20,
         width: '100%',    
     },

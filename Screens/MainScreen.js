@@ -22,7 +22,7 @@ export default class MainScreen extends Component {
         this.state = {
             isProfessional: false,
             userName: 'John Smith',
-            isModalVisible: true,
+            isModalVisible: false,
         };
     }
 
@@ -63,7 +63,7 @@ export default class MainScreen extends Component {
                         <Grid>
                             <Row>
                                 <Col style={{alignItems: 'center', justifyContent: 'center'}}>
-                                    <TouchableOpacity onPress={()=>console.log()}>
+                                    <TouchableOpacity onPress={()=>this.toggleModal()}>
                                         <Image style={MainStyles.menuButton} source={require('../assets/images/icon_small.png')} />
                                         <Text style={MainStyles.modalText}>Achievement</Text>
                                     </TouchableOpacity>
@@ -89,6 +89,13 @@ export default class MainScreen extends Component {
                                     </TouchableOpacity>
                                 </Col>
                             </Row>
+                            <Row>
+                            <Col style={{alignItems: 'center', justifyContent: 'center'}}>
+                                    <TouchableOpacity onPress={()=>this.toggleModal()}>
+                                        <Image style={MainStyles.menuButton} source={require('../assets/images/icon_small.png')} />
+                                    </TouchableOpacity>
+                                </Col>
+                            </Row>
                         </Grid>
                     </BottomModal>
                     
@@ -102,6 +109,7 @@ const MainStyles = StyleSheet.create({
     mainView: {
         alignItems: 'center',
         height: '100%',
+        backgroundColor: 'red'
     },
     buttonContainer: {
         flexDirection: 'row',
