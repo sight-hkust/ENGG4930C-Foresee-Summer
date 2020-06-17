@@ -1,5 +1,6 @@
-import {StyleSheet} from 'react-native';
+import { StyleSheet } from 'react-native';
 import AppColors from './colors';
+import { ScreenWidth, ScreenHeight } from '../constant/Constant';
 
 export const Styles = StyleSheet.create({
   horizontalButtonContainer: {
@@ -41,5 +42,31 @@ export const Styles = StyleSheet.create({
     fontSize: 12,
     textAlign: 'center',
     width: '70%',
+  },
+  headerStyle: {
+    backgroundColor: '#2D89DD',
+  },
+  headerTitleStyle: {
+    textAlign: "center",
+    fontWeight: '500',
+  },
+  formFieldWrapper: {
+    marginHorizontal: ScreenWidth * 0.1,
+    marginVertical: ScreenHeight * 0.007,
+  },
+  formTextInput: {
+    marginTop: ScreenHeight * 0.01,
+    paddingHorizontal: ScreenWidth * 0.02,
+    borderWidth: 0.7,
+    borderColor: 'grey',
+    height: 40,
+    borderRadius: 3,
+  },  
+  formTextInputArea: {
+    marginTop: ScreenHeight * 0.01,
+    paddingHorizontal: ScreenWidth * 0.02,
+    borderWidth: 0.7,
+    borderColor: 'grey',
+    borderRadius: 3,
   },
 });
