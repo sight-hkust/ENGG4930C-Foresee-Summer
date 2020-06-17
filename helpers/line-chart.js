@@ -35,7 +35,7 @@ export default class LineChart extends React.Component {
     const output = [];
     dateArr.forEach((item,index)=>{
       //console.log(offsetScale(this.x_scale(moment(item, 'YYYY-MM-DD').toDate(), dateArr,paddingRight,width)))
-      console.log((data[index]))
+      //console.log((data[index]))
       output.push(
         <Stop
           key={index}
@@ -108,13 +108,14 @@ export default class LineChart extends React.Component {
     const {
       data,
       dateArr,
+      selectedIndex,
       width,
       height,
       paddingTop,
       paddingRight
     }=config;
 
-    const baseHeight = height;
+    //const baseHeight = height;
     const output = [];
     config.dateArr.forEach((item, index)=>{
       
@@ -129,7 +130,7 @@ export default class LineChart extends React.Component {
           cx = {cx}
           cy = {cy}
           r="8"
-          fill="#fff"
+          fill={index===selectedIndex? "blue": "white"}
           opacity='0.8'
           />
           <Text x={cx} y={cy+25} textAnchor="middle" fill="black">{item}</Text>
@@ -142,7 +143,7 @@ export default class LineChart extends React.Component {
 
   render() {
     const{
-      data, dateArr
+      data, dateArr,selectedIndex
     } = this.props;
     return (
       <View >
@@ -176,6 +177,7 @@ export default class LineChart extends React.Component {
               height: "220",
               data: data,
               dateArr:dateArr,
+              selectedIndex:selectedIndex,
               paddingRight: 20,
               paddingTop: 10
             })

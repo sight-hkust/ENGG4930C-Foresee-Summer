@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useState } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image, Button } from 'react-native';
 import {database} from '../constant/Config';
 import LineChart from '../helpers/line-chart';
@@ -23,6 +23,7 @@ export default class Main extends Component{
       Leye: true,
       dates : [],
       ddlSelectedValue: '0',
+      index: '0',
       ddlSelectedDate : '0',
       username: ""
     }}
@@ -42,7 +43,8 @@ export default class Main extends Component{
         this.setState({data : snapshot.child("records").toJSON(), 
                       dates: tempDate,
                       ddlSelectedDate: tempDate[0],
-                      username: tempName
+                      username: tempName,
+                      index: 0
                       });
     });
     
@@ -55,7 +57,23 @@ export default class Main extends Component{
     const pressHandler = ()=>{
       this.props.navigation.navigate('AddRecordScreen')
     }
-    
+    const GetNext = ()=>{
+      const length = this.state.dates.length;
+      const value = (this.state.index+1) % length;
+      //console.log('value',value)
+      this.setState({index: value, ddlSelectedDate: this.state.dates[value]});
+      //console.log('press',this.state.index)
+    }
+    const GetBack =()=>{
+      if(this.state.index == 0){
+        const length = this.state.dates.length - 1 ;
+        this.setState({index:length, ddlSelectedDate:this.state.dates[length]});
+      }
+      else{
+        const value = this.state.index;
+        this.setState({index:value-1, ddlSelectedDate:this.state.dates[value-1]});
+      }
+    }
       
         return(
         <>
@@ -89,21 +107,18 @@ export default class Main extends Component{
             </TouchableOpacity> 
 
           <View style={styles.container}>
-            <View style={{flexDirection: 'row'}}>
-              <Button title="last" />
-              <Button title="next" />
+            <View>
+              <Button title="next" onPress={GetNext}/>
+              <Button title="back" onPress={GetBack}/>
+              <Text>Date: {this.state.ddlSelectedDate}</Text>
             </View>
-            <FlatList
-                data={this.state.dates}
-                renderItem={({item})=> <Button title={item} onPress={()=>this.setState({ddlSelectedDate: item})}/>}
-                keyExtractor={item => item }
-            />
+
             <RenderContent isLeft={this.state.Leye} ddlValue={this.state.ddlSelectedValue} data={data} selectedDate={this.state.ddlSelectedDate} />
             
           </View>
           
           <View style={styles.container}>
-            <RenderLineChart dataArr={data} dateArr={this.state.dates} refractive={'0'} isLeft={true}/>
+            <RenderLineChart dataArr={data} dateArr={this.state.dates} refractive={this.state.ddlSelectedValue} isLeft={this.state.Leye} selectedIndex={this.state.index}/>
           </View>
           
         </>
@@ -243,7 +258,7 @@ export const RenderWarning = props=>{
 }
 
 export const RenderLineChart = props=>{
-  const {dataArr,dateArr,refractive,isLeft} = props;
+  const {dataArr,dateArr,refractive,isLeft,selectedIndex} = props;
 
   if(dataArr == null){
     return(
@@ -280,7 +295,7 @@ export const RenderLineChart = props=>{
   //console.log(output);
   if(output.length>0){
     return(
-      <LineChart data={output} dateArr={dateArr} />
+      <LineChart data={output} dateArr={dateArr} selectedIndex={selectedIndex}/>
       );
   }
   else{
@@ -288,14 +303,9 @@ export const RenderLineChart = props=>{
   }
 }
 
-export const RenderDateButton = props=>{
-  const {dataArr,dateArr} = props;
 
-  if(dataArr == null){
-    return(null);
-  }
 
-}
+
 
 const styles = StyleSheet.create({
   container: {
