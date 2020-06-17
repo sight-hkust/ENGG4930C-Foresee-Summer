@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { View, Button } from "react-native"
 import { Formik } from "formik";
-import { auth, database } from '../src/config/config';
+import { auth, database } from "../../../../constant/Config";
 import { ScrollView } from "react-native-gesture-handler";
 import { ScreenHeight } from "../../../../constant/Constant";
 import DateTimePickerModal from 'react-native-modal-datetime-picker';

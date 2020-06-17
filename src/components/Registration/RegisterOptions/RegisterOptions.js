@@ -28,28 +28,26 @@ class RegisterOptions extends Component {
           <Logo />
           <View style={styles.optionsContainer}>
             <Text style={styles.title}>你的角色是什麼？</Text>
-            <Button
-              type={"outline"}
-              buttonStyle={[styles.button, { marginTop: ScreenHeight * 0.06 }]}
-              titleStyle={styles.buttonTitle}
-              title={'眼科專業人員'}
-              onPress={() =>
-                this.props.navigation.navigate('Professional Register', {
-                  isProfessional: true,
-                })}
-            />
-            <Button
-              type={"outline"}
-              buttonStyle={styles.button}
-              titleStyle={styles.buttonTitle}
-              title={'普通用戶'}
-              onPress={
-                () =>
-                  this.props.navigation.navigate('Patient Register', {
-                    isProfessional: false,
-                  })
-              }
-            />
+            <TouchableOpacity onPress={() =>
+              this.props.navigation.navigate('Professional Register', {
+                isProfessional: true,
+              })}>
+              <View style={[styles.button, { marginTop: ScreenHeight * 0.06 }]}>
+                <Text style={styles.buttonTitle}>
+                  眼科專業人員
+                  </Text>
+              </View>
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() =>
+              this.props.navigation.navigate('Patient Register', {
+                isProfessional: false,
+              })}>
+              <View style={[styles.button]}>
+                <Text style={styles.buttonTitle}>
+                  普通用戶
+                  </Text>
+              </View>
+            </TouchableOpacity>
           </View>
         </LinearGradient>
       </SafeAreaView>

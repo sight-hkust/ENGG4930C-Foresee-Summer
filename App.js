@@ -15,7 +15,8 @@ import DoctorsScreen from './Screens/Doctors';
 import ProfMainMenu from './Screens/ProfMainMenu'
 import ProfPatientViewScreen from './Screens/ProfPatientViewScreen'
 import ProfSearchResultScreen from './Screens/ProfSearchResultScreen'
-import Register from './src/components/Registration/Register';
+import { Login } from './src/components/Login/Login';
+import { Register } from './src/components/Registration/Register';
 
 const Stack = createStackNavigator();
 
@@ -32,9 +33,10 @@ function MyStack() {
                 screenOptions={{
                     headerShown: false,
                 }}
-                initialRouteName="Register"
+                initialRouteName="Login"
             >
                 <Stack.Screen name="Dmain" component={ProfMainMenu} />
+                <Stack.Screen name="Login" component={Login} />
                 <Stack.Screen name="Register" component={Register} />
                 <Stack.Screen name="MainScreen" component={ProfMainMenu} />
                 <Stack.Screen name="RecordsScreen" component={RecordsScreen} />

@@ -39,7 +39,6 @@ const StyledInputArea = ({ textWrapperStyle, label, formikKey, formikProps, ...r
                 onChangeText={formikProps.handleChange(formikKey)}
                 onBlur={formikProps.handleBlur(formikKey)}
                 {...rest}
-
             />
         </FieldWrapper>
     )

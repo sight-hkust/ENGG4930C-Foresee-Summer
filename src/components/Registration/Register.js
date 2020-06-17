@@ -5,14 +5,23 @@ import RegisterOptions from './RegisterOptions/RegisterOptions';
 import { Styles } from '../../../Styles/styles';
 import AppColors from '../../../Styles/colors';
 import { RegistrationForm } from './RegistrationForm/RegistrationForm';
+import { RegisterMehtod } from './RegisterOptions/RegisterMethod';
 
 const RegistrationStack = createStackNavigator();
 
-
-function Register() {
+export const Register = (props) => {
     return (
         <RegistrationStack.Navigator
             initialRouteName="Register Options">
+            <RegistrationStack.Screen
+                name='Register Method'
+                component={RegisterMehtod}
+                options={{ headerShown: false }}
+            />
+            <RegistrationStack.Screen name='Register Options'
+                component={RegisterOptions}
+                options={{ headerShown: false }}
+            />
             <RegistrationStack.Screen
                 name='Patient Register'
                 component={RegistrationForm}
@@ -23,7 +32,6 @@ function Register() {
                     headerTitleStyle: Styles.headerTitleStyle,
                 }}
             />
-
             <RegistrationStack.Screen
                 name='Professional Register'
                 component={RegistrationForm}
@@ -34,13 +42,7 @@ function Register() {
                     headerTitleStyle: Styles.headerTitleStyle,
                 }}
             />
-            <RegistrationStack.Screen name='Register Options'
-                component={RegisterOptions}
-                options={{ headerShown: false }}
-            />
         </RegistrationStack.Navigator>
     )
 }
 
-
-export default Register;

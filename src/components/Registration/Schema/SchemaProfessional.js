@@ -15,13 +15,8 @@ export const SchemaProfessional = object().shape({
         }),
     password: string()
         .label('Password').required('請輸入密碼')
-        .test('password-length', '密碼需為 8-16個符號：包含一個數字(0-9)，一個小寫英文(a-z)，及一個大寫字母(A-Z)', val => {
-            if (val !== null && val !== undefined) {
-                passwordSchemaHasError = !(val.length >= 8 && val.length <= 16)
-                console.log(passwordSchemaHasError);
-                return !passwordSchemaHasError
-            }
-        }),
+        .matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.{8,})/,
+            '密碼需為8-16個符號，包含一個數字(0-9)、一個小寫英文(a-z)及一個大寫字母(a-z)'),
     confirmPassword:
         string().when(
             'password', {

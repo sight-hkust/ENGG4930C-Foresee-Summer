@@ -22,10 +22,13 @@ export const styles = StyleSheet.create({
     button: {
         margin: ScreenHeight * 0.03,
         borderColor: 'white',
-        borderRadius: 30,
+        borderRadius: ScreenWidth * 0.07,
         borderWidth: 1,
         width: ScreenWidth * 0.45,
-        height: ScreenHeight * 0.07
+        height: ScreenHeight * 0.07,
+        shadowRadius: ScreenWidth * 0.07,
+        justifyContent: 'center',
+        alignItems: 'center',
     },
     buttonTitle: {
         color: 'white',

@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Formik } from "formik";
-import { Button, View } from "react-native";
+import { Button, View, Keyboard } from "react-native";
 import { ScreenHeight } from "../../../../constant/Constant";
 import { SchemaPatient } from "../Schema/SchemaPatient";
 import { SchemaProfessional } from "../Schema/SchemaProfessional";
@@ -9,6 +9,7 @@ import { StyledInput, StyledDatePicker } from "./StyledInput";
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 import { createAccount } from "../RegisterAction";
+import { Input } from "react-native-elements";
 
 export const RegistrationForm = ({ navigation, route }) => {
     const { isProfessional, establishedByProfessional } = route.params;
@@ -35,7 +36,11 @@ export const RegistrationForm = ({ navigation, route }) => {
                 {formikProps => (
                     <>
                         <FormDetails formikProps={formikProps} isProfessional={isProfessional} />
-                        <Button onPress={formikProps.handleSubmit} style={{ width: ScreenHeight * 0.2 }} title='提交' />
+                        <Button onPress={
+                            () => {
+                                Keyboard.dismiss()
+                                formikProps.handleSubmit()
+                            }} style={{ width: ScreenHeight * 0.2 }} title='提交' />
                     </>
                 )}
             </Formik >
