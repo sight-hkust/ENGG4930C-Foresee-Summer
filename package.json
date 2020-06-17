@@ -21,6 +21,8 @@
     "@react-native-community/masked-view": "0.1.6",
     "@react-navigation/native": "^5.5.1",
     "@react-navigation/stack": "^5.5.1",
+    "d3-scale": "^3.2.1",
+  
     "firebase": "^7.15.0",
     "formik": "^2.1.4",
     "moment": "^2.26.0",
@@ -32,7 +34,11 @@
     "react-native-safe-area-context": "0.7.3",
     "react-native-spin-picker": "0.0.2",
     "react-native-stack": "^1.0.0-alpha11",
-    "react-native-svg": "11.0.1"
+    "react-native-svg": "11.0.1",
+    
+    "react-redux": "^7.2.0",
+    "redux": "^4.0.5",
+    "yup": "^0.29.1"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
