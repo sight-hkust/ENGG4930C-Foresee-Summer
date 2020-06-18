@@ -290,66 +290,7 @@ export const AxisInput = props=>{
 
     }
 
-/*
-export class CYLInput extends Component {
-    constructor(props){
-        super(props)
-        this.state = {isenabled: false};
-    }
-    render(){
-        
-        return(
-            <View style={{paddingBottom:5}}>
-            <Text>Input {this.props.isLeft? "O.D." : "O.S."} CYL</Text>
-            <View style={{flexDirection:'row', paddingBottom:12}}>
-                <DropDownPicker        
-                    items = {[
-                        {label: '+', value: '+'},
-                        {label:'-', value:'-'}
-                    ]}
-                    containerStyle={{height: 40, width: 50}}
-                    defaultValue = '+'
-                    onChangeItem = {item=>{
-                                    if(this.props.isLeft){this.props.setFieldValue('L_CYLsymbol',item.label)}
-                                    else{this.props.setFieldValue('R_CYLsymbol',item.label)}
-                                    }}
-                    dropDownStyle={{backgroundColor: '#fafafa', height:85, width:50}}      
-                />
-                <TextInput  onChangeText ={ (text) => {this.props.handleChange(this.props.isLeft? 'L_CYL':'R_CYL');
-                                                       if(text>0){this.setState({isenabled:true})}
-                                                        else{this.setState({isenabled:false})}}}
-                            keyboardType='numeric'
-                            style={{backgroundColor:'white', borderColor:'lightgray', borderWidth:1, width:75, textAlign:'center'}}/>
-            </View>
-                
-                    
-        </View>
-        );
-    }
 
-} 
-
-export const AxisInput = props=>{
-    const{ handleChange, isLeft, isenabled} = props;
-
-    if(isenabled){
-        return(
-        
-            <View style={{paddingBottom:5}}>
-            <Text>Input {isLeft? "O.D." : "O.S."} Axis</Text>
-                <TextInput onChangeText={ handleChange(isLeft? 'L_Axis':'R_Axis')}
-                            keyboardType='numeric'
-                            style={{backgroundColor:'white', borderColor:'lightgray', borderWidth:1, width:75, textAlign:'center'}}/>
-            
-        </View>
-        );
-    }
-    else{
-        return null;
-    }
-
-} 
-*/
 const styles = StyleSheet.create({
     container: {
         flex: 1,
