@@ -95,10 +95,9 @@ export default class LineChart extends React.Component {
       .concat(
         datas.slice(0, -1).map((_, i) => {
           const x_mid = (x(i) + x(i + 1)) / 2;
-          const cp_x1 = (x_mid + x(i)) / 2;
           return (
-            `Q ${cp_x1}, ${y(i)}, ${x(i + 1)}, ${y(i + 1)}` 
-          );
+              `Q ${x_mid}, ${y(i)}, ${x(i + 1)}, ${y(i + 1)}` 
+            );
         })
       )
       .join(" ");
