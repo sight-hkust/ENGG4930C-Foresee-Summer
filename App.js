@@ -1,5 +1,5 @@
 import 'react-native-gesture-handler';
-import React, {Component} from 'react';
+import React, { Component } from 'react';
 import { Image } from 'react-native'
 
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
@@ -23,6 +23,7 @@ import ProfSearchResultScreen from './Screens/ProfSearchResultScreen'
 import { Login } from './src/components/Login/Login';
 import { Register } from './src/components/Registration/Register';
 import MainScreen from './Screens/MainScreen';
+import { Profile } from './src/components/Profile/Profile';
 
 const Stack = createStackNavigator();
 const Tab = createMaterialBottomTabNavigator();
@@ -34,96 +35,72 @@ global.email = '';
 global.password = '';
 global.apiUrl = '';
 
-
-// function MyStack() {
-//     return (
-//         <NavigationContainer>
-//             <Stack.Navigator
-//                 screenOptions={{
-//                     headerShown: false,
-//                 }}
-//             >
-//                 <Stack.Screen name="WelcomeScreen" component={WelcomeScreen} />
-//                 <Stack.Screen name="Login" component={Login} />
-//                 <Stack.Screen name="Register" component={Register} />
-//                 <Stack.Screen name="MainScreen" component={MainScreen} />
-//                 <Stack.Screen name="RecordsScreen" component={RecordsScreen} />
-//                 <Stack.Screen name="GetEducatedScreen" component={GetEducatedScreen} />
-//                 <Stack.Screen name="ArticleDetailScreen" component={ArticleDetailScreen} />
-//                 <Stack.Screen name="AskAnExpertScreen" component={AskAnExpertScreen} />
-//                 <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} />
-//                 <Stack.Screen name="DoctorsScreen" component={DoctorsScreen} />
-//             </Stack.Navigator>
-//         </NavigationContainer>
-//     );
-// }
-
-
 /** Login & Register Stacks */
 function LoginAndRegisterScreen({ navigation, route }) {
-    const Stack = createStackNavigator();
-    return (
-      <Stack.Navigator headerMode="none">
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Register" component={Register} />
-      </Stack.Navigator>
-    );
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator headerMode="none">
+      <Stack.Screen name="Login" component={Login} />
+      <Stack.Screen name="Register" component={Register} />
+      <Stack.Screen name="Profile" component={Profile} />
+    </Stack.Navigator>
+  );
 }
 
 /** Normal User Screens */
 function UserScreen({ navigation, route }) {
-    const Stack = createStackNavigator();
-    return (
-      <Stack.Navigator headerMode="none">
-            <Stack.Screen name="MainScreen" component={MainScreen} initialParams={{isProfessional: true}}/>
-            <Stack.Screen name="RecordsScreen" component={RecordsScreen} />
-            <Stack.Screen name="GetEducatedScreen" component={GetEducatedScreen} />
-            <Stack.Screen name="ArticleDetailScreen" component={ArticleDetailScreen} />
-            <Stack.Screen name="AskAnExpertScreen" component={AskAnExpertScreen} />
-            <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} />
-            <Stack.Screen name="DoctorsScreen" component={DoctorsScreen} />
-      </Stack.Navigator>
-    );
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator headerMode="none">
+      <Stack.Screen name="MainScreen" component={MainScreen} initialParams={{ isProfessional: true }} />
+      <Stack.Screen name="RecordsScreen" component={RecordsScreen} />
+      <Stack.Screen name="GetEducatedScreen" component={GetEducatedScreen} />
+      <Stack.Screen name="ArticleDetailScreen" component={ArticleDetailScreen} />
+      <Stack.Screen name="AskAnExpertScreen" component={AskAnExpertScreen} />
+      <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} />
+      <Stack.Screen name="DoctorsScreen" component={DoctorsScreen} />
+    </Stack.Navigator>
+  );
 }
 
 /** Professional User Screen */
 function ProfessionalScreen({ navigation, route }) {
-    const Stack = createStackNavigator();
-    return (
-      <Stack.Navigator headerMode="none">
-            <Stack.Screen name="ProfMainMenu" component={ProfMainMenu} />
-            <Stack.Screen name="ProfPatientViewScreen" component={ProfPatientViewScreen} />
-            <Stack.Screen name="ProfSearchResultScreen" component={ProfSearchResultScreen} />
-      </Stack.Navigator>
-    );
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator headerMode="none">
+      <Stack.Screen name="ProfMainMenu" component={ProfMainMenu} />
+      <Stack.Screen name="ProfPatientViewScreen" component={ProfPatientViewScreen} />
+      <Stack.Screen name="ProfSearchResultScreen" component={ProfSearchResultScreen} />
+    </Stack.Navigator>
+  );
 }
-  
+
 
 export default class Main extends Component {
 
-    constructor(props) {
-      super(props)
-    }
-
-    render() {
-      
-      return (
-          <NavigationContainer >
-            <Tab.Navigator 
-                initialRouteName="User"
-                shifting={false}
-                barStyle={{ backgroundColor: 'tomato'}}
-                activeColor='#694fad'
-                inactiveColor="white"
-                >
-              <Tab.Screen name="User" component={UserScreen} />
-              <Tab.Screen name="Prof" component={ProfessionalScreen} />
-              <Tab.Screen name="PatientView" component={ProfPatientViewScreen} />
-              <Tab.Screen name="login&reg" component={LoginAndRegisterScreen} />
-              <Tab.Screen name="+record" component={AddRecordScreen} initialParams={{isProfessional: false}}/>
-              <Tab.Screen name="record" component={RecordsScreen} initialParams={{isProfessional: false}}/>
-            </Tab.Navigator>
-          </NavigationContainer>
-      );
-    }
+  constructor(props) {
+    super(props)
   }
+
+  render() {
+
+    return (
+      <NavigationContainer >
+        <Tab.Navigator
+          initialRouteName="User"
+          shifting={false}
+          barStyle={{ backgroundColor: 'tomato' }}
+          activeColor='#694fad'
+          inactiveColor="white"
+        >
+          <Tab.Screen name="User" component={UserScreen} />
+          <Tab.Screen name="Prof" component={ProfessionalScreen} />
+          <Tab.Screen name="PatientView" component={ProfPatientViewScreen} />
+          <Tab.Screen name="login&reg" component={LoginAndRegisterScreen} />
+          <Tab.Screen name="+record" component={AddRecordScreen} initialParams={{ isProfessional: false }} />
+          <Tab.Screen name="record" component={RecordsScreen} initialParams={{ isProfessional: false }} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    );
+  }
+}
