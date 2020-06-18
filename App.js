@@ -118,7 +118,6 @@ export default class Main extends Component {
                 >
               <Tab.Screen name="User" component={UserScreen} />
               <Tab.Screen name="Prof" component={ProfessionalScreen} />
-              <Tab.Screen name="PatientView" component={ProfPatientViewScreen} />
               <Tab.Screen name="login&reg" component={LoginAndRegisterScreen} />
               <Tab.Screen name="+record" component={AddRecordScreen} initialParams={{isProfessional: false}}/>
               <Tab.Screen name="record" component={RecordsScreen} initialParams={{isProfessional: false}}/>

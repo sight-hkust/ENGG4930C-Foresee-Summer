@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, FlatList, Dimensions } from 'react-native';
-
-const screenWidth = Dimensions.get('screen').width
+import { ScreenWidth, ScreenHeight, FontScale } from '../constant/Constant';
+import { RouterAction } from 'react-native-stack';
+import { database } from '../src/config/config';
 
 const sampleUser = {
     name: 'Jake Ki',
@@ -55,6 +56,11 @@ export default class ProfPatientViewScreen extends Component {
     }
 
     render() {
+
+        const { key } = this.props.route.params;
+
+        //const user = database.ref('professionals/M001/patients/' + key).once('value', snap => {snap.val();});
+
         return (
             <>
                 <View style={styles.fullscreen}>
@@ -64,6 +70,8 @@ export default class ProfPatientViewScreen extends Component {
                         <Text style={styles.text}>職業: {sampleUser.job}</Text>
                         <Text style={styles.text}>家庭病史: {sampleUser.history}</Text>
                         <Text style={styles.text}>已知眼疾: {sampleUser.disease}</Text>
+
+
                     </View>
                     <View style={[styles.container, 
                             {flex: 2, 
@@ -164,17 +172,17 @@ const styles = StyleSheet.create({
         fontSize: 15
     },
     smallCircle: {
-        width: screenWidth * 0.075,
-        height: screenWidth * 0.075,
-        borderRadius: screenWidth * 0.0375,
+        width: ScreenWidth * 0.075,
+        height: ScreenWidth * 0.075,
+        borderRadius: ScreenWidth * 0.0375,
         backgroundColor: 'rgba(255, 255, 255, 0.6)',
         borderWidth: 1,
         borderColor: 'rgba(86, 204, 242, 0.6)'
     },
     bigCircle: {
-        width: screenWidth * 0.1,
-        height: screenWidth * 0.1,
-        borderRadius: screenWidth * 0.05,
+        width: ScreenWidth * 0.1,
+        height: ScreenWidth * 0.1,
+        borderRadius: ScreenWidth * 0.05,
         backgroundColor: 'white',
         borderWidth: 1,
         borderColor: '#56CCF2'

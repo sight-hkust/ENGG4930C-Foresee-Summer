@@ -13,7 +13,7 @@ function SearchPatient(key, referenceList) {
 
     referenceList.map((u, i) => {
         if(u.name.includes(key)) {
-            targetList.push({name: u.name, lastReserveDate: u.lastReserveDate});
+            targetList.push({name: u.name, lastReserveDate: u.lastReserveDate, key: u.key});
         }
     })
 
@@ -34,7 +34,7 @@ const ProfMainMenu = ({ route, navigation }) => {
         database.ref('professionals/M001/patients/').once('value', snap => {
             let patients = []
             snap.forEach(child => {
-                patients.push({name: child.val()['info']['name'], lastReserveDate: child.val()['records']!= null? Object.keys(child.val()['records']).slice(-1)[0] : null});
+                patients.push({name: child.val()['info']['name'], lastReserveDate: child.val()['records']!= null? Object.keys(child.val()['records']).slice(-1)[0] : null, key: child.key});
             })
             setPatientList(patients);
             setOriginalList(patients);
@@ -108,7 +108,7 @@ const ProfMainMenu = ({ route, navigation }) => {
                             title={u.name}
                             rightTitle={u.lastReserveDate}
                             onPress={() => {
-                                navigation.navigate('ProfPatientViewScreen')
+                                navigation.navigate('ProfPatientViewScreen', {key: u.key})
                             }}
                         />
                         );
