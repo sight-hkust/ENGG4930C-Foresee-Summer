@@ -59,7 +59,10 @@ export default class Form extends Component{
     constructor(props){
         super(props);
     }
+
     render(){
+
+    const { isProfessional, professional_id, patient_id } = this.props.route.params;
 
     return(
         <ScrollView>
@@ -96,9 +99,14 @@ export default class Form extends Component{
                         else{
                             data.R_Myopia =  parseInt(values.R_SPH)
                             }            
-                        database.ref('users/002/records/'+ values.date).set(data).catch((error)=>console.log(error));
+                        console.log(values);
                         
-                        this.props.navigation.navigate('RecordsScreen')
+                        if(isProfessional) {
+                            database.ref('professionals/' + professional_id + '/patients/' + patient_id + '/records/' + values.date).set(data).catch((error)=>console.log(error));
+                        }else{
+                            database.ref('users/001/records/'+ values.date).set(data).catch((error)=>console.log(error));
+                            this.props.navigation.navigate('RecordsScreen')
+                        }
                         }}>
 
             {({handleSubmit,values,setFieldValue,handleChange, errors})=>(  

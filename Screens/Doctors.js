@@ -10,7 +10,6 @@ import {
 } from 'react-native';
 import React, {Component} from 'react';
 import AppColors from '../Styles/colors';
-import {Styles} from '../Styles/styles';
 
 
 
