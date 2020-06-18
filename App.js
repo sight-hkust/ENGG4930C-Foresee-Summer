@@ -89,15 +89,16 @@ export default class Main extends Component {
         <Tab.Navigator
           initialRouteName="User"
           shifting={false}
-          barStyle={{ backgroundColor: 'tomato' }}
+          barStyle={{ backgroundColor: '#2D9CDB' }}
           activeColor='#694fad'
           inactiveColor="white"
         >
-          <Tab.Screen name="User" component={UserScreen} />
+          {/* <Tab.Screen name="User" component={UserScreen} /> */}
           <Tab.Screen name="Prof" component={ProfessionalScreen} />
-          <Tab.Screen name="PatientView" component={ProfPatientViewScreen} />
-          <Tab.Screen name="login&reg" component={LoginAndRegisterScreen} />
-          <Tab.Screen name="+record" component={AddRecordScreen} initialParams={{ isProfessional: false }} />
+          <Tab.Screen name="Patient
+          View" component={ProfPatientViewScreen} />
+          <Tab.Screen name="Registration" component={LoginAndRegisterScreen} />
+          <Tab.Screen name="Add Record" component={AddRecordScreen} initialParams={{ isProfessional: false }} />
           <Tab.Screen name="record" component={RecordsScreen} initialParams={{ isProfessional: false }} />
         </Tab.Navigator>
       </NavigationContainer>
