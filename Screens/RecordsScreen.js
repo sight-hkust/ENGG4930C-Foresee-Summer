@@ -1,12 +1,6 @@
-<<<<<<< HEAD
-import React, { Component, useState } from 'react';
-import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image, Button } from 'react-native';
-import {database} from '../src/config/config';
-=======
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, Button } from 'react-native';
 import {database} from '../constant/Config';
->>>>>>> nora
 import LineChart from '../helpers/line-chart';
 import {LinearGradient} from 'expo-linear-gradient';
 
