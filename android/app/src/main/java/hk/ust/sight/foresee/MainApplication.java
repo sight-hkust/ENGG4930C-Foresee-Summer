@@ -1,4 +1,4 @@
-package android;
+package hk.ust.sight.foresee;
 
 import android.app.Application;
 import android.content.Context;
@@ -10,7 +10,7 @@ import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-import android.generated.BasePackageList;
+import hk.ust.sight.foresee.generated.BasePackageList;
 
 import org.unimodules.adapters.react.ReactAdapterPackage;
 import org.unimodules.adapters.react.ModuleRegistryAdapter;
@@ -21,6 +21,7 @@ import expo.modules.constants.ConstantsPackage;
 import expo.modules.permissions.PermissionsPackage;
 import expo.modules.filesystem.FileSystemPackage;
 import expo.modules.updates.UpdatesController;
+import hk.ust.sight.foresee.BuildConfig;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;

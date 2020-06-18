@@ -1,4 +1,4 @@
-package android;
+package hk.ust.sight.foresee;
 
 import android.os.Bundle;
 

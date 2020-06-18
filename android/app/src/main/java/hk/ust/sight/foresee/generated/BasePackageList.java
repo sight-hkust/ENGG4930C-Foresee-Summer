@@ -1,4 +1,4 @@
-package android.generated;
+package hk.ust.sight.foresee.generated;
 
 import java.util.Arrays;
 import java.util.List;
