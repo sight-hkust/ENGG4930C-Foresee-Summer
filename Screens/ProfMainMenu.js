@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 import { StyleSheet, Text, View, ScrollView, ActivityIndicator } from 'react-native';
 import { Card, ListItem, Button, SearchBar } from 'react-native-elements'
 import Icon from 'react-native-vector-icons/FontAwesome';
+import { database } from '../src/config/config';
 
-import { database } from '../constant/Config';
 
 /**
  * For Local Search. 

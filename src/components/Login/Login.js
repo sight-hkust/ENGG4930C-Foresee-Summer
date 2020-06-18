@@ -19,7 +19,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import FonistoIcon from 'react-native-vector-icons/Fontisto';
 import Logo from '../Logo/Logo';
 import TextFieldBorder from '../../../assets/images/TextFieldBorder.png'
-import { auth } from '../../../constant/Config';
+import { auth } from '../../config/config';
 
 
 const StyledInput = ({ placeholder, icon, defaultValue, setValue }) => {

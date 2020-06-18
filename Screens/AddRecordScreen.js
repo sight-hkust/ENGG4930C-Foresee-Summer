@@ -5,7 +5,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {Formik} from 'formik';
 import moment from 'moment';
 import { TextInput } from 'react-native-gesture-handler';
-import {database} from '../constant/Config';
+import {database} from '../src/config/config';
 import {number, object,string} from 'yup';
 
 

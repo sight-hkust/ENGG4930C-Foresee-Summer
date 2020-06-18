@@ -1,6 +1,6 @@
 import React, { Component, useState } from 'react';
 import { StyleSheet, Text, View, FlatList, TouchableOpacity, Image, Button } from 'react-native';
-import {database} from '../constant/Config';
+import {database} from '../src/config/config';
 import LineChart from '../helpers/line-chart';
 
 const LeftOpen = require('../assets/images/LeftOpen.png');
