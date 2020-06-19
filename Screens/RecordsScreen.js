@@ -10,6 +10,8 @@ const BackArrow = require('../assets/images/BackArrow.png');
 const NextArrow = require('../assets/images/NextArrow.png');
 const Setting = require('../assets/images/setting.png')
 
+const patient_id = '004';
+
 export default class Main extends Component{
   constructor(props){
     super(props);
@@ -24,14 +26,14 @@ export default class Main extends Component{
     }}
   
   componentDidMount(){
-      const userid = '002';
-    database.ref('users/'+ userid ).on('value', (snapshot)=>{
+      
+    database.ref('users/'+ patient_id ).on('value', (snapshot)=>{
         var tempDate = [];
 
         for(var key in snapshot.child("records").val()){
           tempDate.push(key);
         }
-
+        
         var tempName = snapshot.child("info/name").val();
        
         this.setState({data : snapshot.child("records").toJSON(), 
@@ -48,14 +50,14 @@ export default class Main extends Component{
     const data = this.state.data;
 
     const pressHandler = ()=>{
-      this.props.navigation.navigate('AddRecordScreen' ,{isProfessional: false})
+      this.props.navigation.navigate("AddRecordScreen" ,{isProfessional: false,professional_id: -1, patient_id: patient_id})
     }
     const GetNext = ()=>{
       const length = this.state.dates.length;
       const value = (this.state.index+1) % length;
-      //console.log('value',value)
+
       this.setState({index: value, ddlSelectedDate: this.state.dates[value]});
-      //console.log('press',this.state.index)
+
     }
     const GetBack =()=>{
       if(this.state.index == 0){
@@ -108,28 +110,30 @@ export default class Main extends Component{
               <View style={RecordScreenStyle.linechart}>
                 <RenderLineChart dataArr={data} dateArr={this.state.dates} refractive={this.state.ddlSelectedValue} isLeft={this.state.Leye} selectedIndex={this.state.index}/>
               
-              <View style={RecordScreenStyle.contentContainer}>
-                <View style={RecordScreenStyle.eyesButton}>
-                  <TouchableOpacity  activeOpacity= {0.8} onPress={()=> this.setState({ Leye: !this.state.Leye})}> 
-                    <Image source={this.state.Leye? LeftOpen : RightOpen}/>
-                  </TouchableOpacity> 
-                </View>
+              {(data != null) &&
+                <View style={ RecordScreenStyle.contentContainer}>
+                  <View style={RecordScreenStyle.eyesButton}>
+                    <TouchableOpacity  activeOpacity= {0.8} onPress={()=> this.setState({ Leye: !this.state.Leye})}> 
+                      <Image source={this.state.Leye? LeftOpen : RightOpen}/>
+                    </TouchableOpacity> 
+                  </View>
 
-                <View style={RecordScreenStyle.datesButton}>
-                  <TouchableOpacity onPress={GetBack}>
-                    <Image source={BackArrow} />
-                  </TouchableOpacity>
-                  <Text style={RecordScreenStyle.dateText}>{this.state.ddlSelectedDate}</Text>
-                  <TouchableOpacity onPress={GetNext}>
-                    <Image source={NextArrow} />
-                  </TouchableOpacity>
-                </View>
+                  <View style={RecordScreenStyle.datesButton}>
+                    <TouchableOpacity onPress={GetBack}>
+                      <Image source={BackArrow} />
+                    </TouchableOpacity>
+                    <Text style={RecordScreenStyle.dateText}>{this.state.ddlSelectedDate}</Text>
+                    <TouchableOpacity onPress={GetNext}>
+                      <Image source={NextArrow} />
+                    </TouchableOpacity>
+                  </View>
 
-                <View style={RecordScreenStyle.content}>
-                  <RenderContent isLeft={this.state.Leye} ddlValue={this.state.ddlSelectedValue} data={data} selectedDate={this.state.ddlSelectedDate} index={this.state.index} dateArr={this.state.dates} />
-                </View>
-
+                  <View style={RecordScreenStyle.content}>
+                    <RenderContent isLeft={this.state.Leye} ddlValue={this.state.ddlSelectedValue} data={data} selectedDate={this.state.ddlSelectedDate} index={this.state.index} dateArr={this.state.dates} />
+                  </View>
               </View>
+              }
+
                 
                 <View style={RecordScreenStyle.addRecordButton}>
                   <Button title="輸入數據" onPress={pressHandler}/>
@@ -341,7 +345,7 @@ export const RenderLineChart = props=>{
 
   if(dataArr == null){
     return(
-      <Text>暫無數據</Text>
+      <Text style={RecordScreenStyle.noDataText}>暫無數據，請按“+”輸入資料</Text>
       );
   }
 
@@ -440,7 +444,7 @@ const RecordScreenStyle = StyleSheet.create({
     borderRadius: 20,
     marginLeft:40,
     marginRight:40,
-    marginTop:200,
+    marginTop:210,
     paddingBottom:10,
   },
   eyesButton:{
@@ -489,5 +493,11 @@ const RecordScreenStyle = StyleSheet.create({
   },
   linechart:{
     height:"100%"
+  },
+  noDataText:{
+    fontSize:25,
+    textAlign: 'center',
+    color: "white",
+    paddingTop: 175,
   }
 });

@@ -93,10 +93,9 @@ export default class Main extends Component {
           activeColor='#694fad'
           inactiveColor="white"
         >
-          {/* <Tab.Screen name="User" component={UserScreen} /> */}
           <Tab.Screen name="Prof" component={ProfessionalScreen} />
-          <Tab.Screen name="Patient
-          View" component={ProfPatientViewScreen} />
+          <Tab.Screen name="User" component={UserScreen} />
+          <Tab.Screen name="PatientView" component={ProfPatientViewScreen} />
           <Tab.Screen name="Registration" component={LoginAndRegisterScreen} />
           <Tab.Screen name="Add Record" component={AddRecordScreen} initialParams={{ isProfessional: false }} />
           <Tab.Screen name="record" component={RecordsScreen} initialParams={{ isProfessional: false }} />
