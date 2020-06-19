@@ -2,17 +2,26 @@ import React from "react";
 import { ScreenHeight, ScreenWidth, FontScale } from "../constant/Constant"
 import TextFieldBorder from '../assets/images/TextFieldBorder.png'
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons'
-const { View, TextInput, StyleSheet, ImageBackground } = require("react-native")
+import AppColors from "../Styles/colors";
+const { View, TextInput, StyleSheet, ImageBackground, Text } = require("react-native")
 
 
 const iconDefault = <MaterialCommunityIcon name='eye' size={30} color={'white'} />
 
-export const StyledInput = ({ placeholder, icon, defaultValue, setValue }) => {
+export const StyledInput = ({
+    containerStyle,
+    placeholder,
+    icon,
+    defaultValue,
+    setValue,
+    formikProps,
+    formikKey,
+    ...rest }) => {
     return (
         <>
             <ImageBackground
                 source={TextFieldBorder}
-                style={styles.textFieldBorder}
+                style={[styles.textFieldBorder, containerStyle]}
                 resizeMethod="resize"
                 resizeMode="contain">
                 <View style={styles.textInputContainer}>
@@ -23,10 +32,13 @@ export const StyledInput = ({ placeholder, icon, defaultValue, setValue }) => {
                         placeholder={placeholder}
                         placeholderTextColor={'white'}
                         defaultValue={defaultValue}
-                        onChangeText={value => setValue(value)}
+                        onChangeText={value => { formikProps && formikKey ? formikProps.handleChange(formikKey) : setValue(value) }}
+                        {...rest}
                     />
-
                 </View>
+                <Text style={styles.errorMessage}>
+                    {formikProps && formikProps.errors[formikKey] ? '* ' + formikProps.errors[formikKey] : null}
+                </Text>
             </ImageBackground>
         </>
     )
@@ -34,27 +46,34 @@ export const StyledInput = ({ placeholder, icon, defaultValue, setValue }) => {
 
 const styles = StyleSheet.create({
     textFieldBorder: {
-        width: ScreenWidth * 0.6,
+        width: ScreenWidth * 0.7,
         height: ScreenHeight * 0.1,
         marginBottom: ScreenHeight * 0.02
     },
     textInputContainer: {
         flexDirection: "row",
         borderColor: '#FFFFFF',
-        /* borderBottomWidth: 1,
-        borderRightWidth: 0.5, */
         paddingBottom: ScreenHeight * 0.01,
-        marginBottom: ScreenHeight * 0.05,
     },
     textInputIcon: {
-        flex: 2,
+        flex: 1,
         alignItems: 'center',
     },
     textInputField: {
         flex: 5,
+        textAlign: 'center',
         textAlignVertical: 'center',
-        fontSize: FontScale * 20,
+        fontSize: FontScale * 18,
         color: "#fff",
         fontFamily: 'Roboto',
+        paddingRight: ScreenWidth * 0.02,
     },
+    errorMessage: {
+        paddingTop: ScreenWidth * 0.01,
+        paddingLeft: ScreenWidth * 0.08,
+        textAlign: 'center',
+        fontSize: FontScale * 15,
+        fontWeight: '700',
+        color: '#FFFFFF'
+    }
 })
