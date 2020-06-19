@@ -10,6 +10,7 @@ export const styles = StyleSheet.create({
         borderWidth: 1,
         marginBottom: 30,
     },
+<<<<<<< Updated upstream
     logoContainer: {
         flex: 2,
         justifyContent: 'flex-end',
@@ -100,6 +101,11 @@ export const styles = StyleSheet.create({
         color: '#2D9CDB',
         fontSize: FontScale * 20,
         fontFamily: 'Roboto',
+=======
+    content: {
+        marginTop: ScreenHeight * 0.15,
+        marginHorizontal: ScreenWidth * 0.15,
+>>>>>>> Stashed changes
     },
     registrationNav: {
         flexDirection: "row",

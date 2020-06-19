@@ -56,4 +56,4 @@ const StyledDatePicker = ({ textWrapperStyle, value, showDatePicker, label, form
     )
 }
 
-export {StyledInput, StyledInputArea, StyledDatePicker}
+export { StyledInput, StyledInputArea, StyledDatePicker }

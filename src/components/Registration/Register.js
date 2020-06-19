@@ -23,24 +23,9 @@ export const Register = (props) => {
                 options={{ headerShown: false }}
             />
             <RegistrationStack.Screen
-                name='Patient Register'
+                name='Register'
                 component={RegistrationForm}
-                options={{
-                    title: '建立帳戶',
-                    headerStyle: Styles.headerStyle,
-                    headerTintColor: AppColors.headerTintWhite,
-                    headerTitleStyle: Styles.headerTitleStyle,
-                }}
-            />
-            <RegistrationStack.Screen
-                name='Professional Register'
-                component={RegistrationForm}
-                options={{
-                    title: '建立專業帳戶',
-                    headerStyle: Styles.headerStyle,
-                    headerTintColor: AppColors.headerTintWhite,
-                    headerTitleStyle: Styles.headerTitleStyle,
-                }}
+                options={{ headerShown: false }}
             />
         </RegistrationStack.Navigator>
     )

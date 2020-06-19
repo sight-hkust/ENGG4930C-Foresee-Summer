@@ -2,10 +2,8 @@ import { StyleSheet } from "react-native";
 import { FontScale, ScreenWidth, ScreenHeight } from "../../../../constant/Constant";
 
 export const styles = StyleSheet.create({
-    mainView: {
-        alignItems: 'center',
-        width: '100%',
-        marginHorizontal: ScreenWidth * 0.2
+    content: {
+        marginTop: ScreenHeight * 0.15,
     },
     optionsContainer: {
         marginTop: ScreenHeight * 0.1,
