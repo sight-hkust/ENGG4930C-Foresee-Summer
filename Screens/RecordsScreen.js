@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, Button } from 'react-native';
-import {database} from '../constant/Config';
+import { database } from '../src/config/config';
 import LineChart from '../helpers/line-chart';
 import {LinearGradient} from 'expo-linear-gradient';
 

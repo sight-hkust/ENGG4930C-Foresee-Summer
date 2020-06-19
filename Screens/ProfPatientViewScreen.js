@@ -4,14 +4,6 @@ import { ScreenWidth, ScreenHeight, FontScale } from '../constant/Constant';
 import { RouterAction } from 'react-native-stack';
 import { database } from '../src/config/config';
 
-const sampleUser = {
-    name: 'Jake Ki',
-    age: 31,
-    job: 'Student',
-    history: 'IQ 200',
-    disease: 'None',
-}
-
 const dates = [
     {
         year: 2015
@@ -52,26 +44,30 @@ function YearButton({item}) {
 export default class ProfPatientViewScreen extends Component {
     constructor(props) {
         super(props);
-        
+        this.state = {
+            patient: []
+        }
+    }
+
+    componentDidMount() {
+        const { key } = this.props.route.params;
+        database.ref('professionals/M001/patients/' + key + '/info').once('value', (snapshot) => {
+            this.setState({patient: snapshot.val()});
+        });
     }
 
     render() {
-
-        const { key } = this.props.route.params;
-
-        //const user = database.ref('professionals/M001/patients/' + key).once('value', snap => {snap.val();});
+        const patient = this.state.patient;
 
         return (
             <>
                 <View style={styles.fullscreen}>
                     <View style={[styles.container, {backgroundColor: 'white'}]}>
-                        <Text style={[styles.text, {fontSize: 30, color: '#000000'}]}>{sampleUser.name}</Text>
-                        <Text style={styles.text}>年齡: {sampleUser.age}</Text>
-                        <Text style={styles.text}>職業: {sampleUser.job}</Text>
-                        <Text style={styles.text}>家庭病史: {sampleUser.history}</Text>
-                        <Text style={styles.text}>已知眼疾: {sampleUser.disease}</Text>
-
-
+                        <Text style={[styles.text, {fontSize: 30, color: '#000000'}]}>{patient.name}</Text>
+                        <Text style={styles.text}>年齡: {patient.age}</Text>
+                        <Text style={styles.text}>職業: {patient.job}</Text>
+                        <Text style={styles.text}>家庭病史: {patient.history}</Text>
+                        <Text style={styles.text}>已知眼疾: {patient.disease}</Text>
                     </View>
                     <View style={[styles.container, 
                             {flex: 2, 
