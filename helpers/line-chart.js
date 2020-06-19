@@ -9,7 +9,7 @@ export default class LineChart extends React.Component {
   x_scale = (val,dateArr,paddingRight,width) => {
     const x = scaleTime()
     .domain([moment(dateArr[0], 'YYYY-MM-DD').toDate(), moment(dateArr[dateArr.length-1], 'YYYY-MM-DD').toDate()])
-    .range([paddingRight/2, width-(paddingRight*1.5)])
+    .range([paddingRight/2 +25, width-(paddingRight*1.5) -25])
     
     return(x(val));
   }
@@ -18,8 +18,8 @@ export default class LineChart extends React.Component {
     //const min = Math.min(...data);
     //const max = Math.max(...data);
     const y = scaleLinear()
-    .domain([0,700])
-    .range([165, 10]);
+    .domain([0,800])
+    .range([180, 10]);
     return(Math.floor((( y(val)) / 4) * 3 + paddingTop));
   }
 
@@ -90,14 +90,14 @@ export default class LineChart extends React.Component {
     const y = i => {
       return this.y_scale(datas[i],datas,height,paddingTop);
     };
-
-    return [`M${x(0)},750 V${y(0)}`]
+    const startingPoint = paddingTop/2;
+    return [`M${startingPoint},750 V${y(0)}`]
       .concat(
         datas.slice(0, -1).map((_, i) => {
           const x_mid = (x(i) + x(i + 1)) / 2;
-          const cp_x1 = (x_mid + x(i)) / 2;
+          
           return (
-            `Q ${cp_x1}, ${y(i)}, ${x(i + 1)}, ${y(i + 1)}` 
+            `Q ${x_mid}, ${y(i)}, ${x(i + 1)}, ${y(i + 1)}` 
           );
         })
       )
@@ -106,10 +106,11 @@ export default class LineChart extends React.Component {
 
   renderLine = config=>{
       const result = this.getLinePoints(config.data, config);
+      const lastPoint = config.width - (config.paddingRight*1.5) 
       return(
         <Path
           key={Math.random()}
-          d={result.concat('V750')}
+          d={result.concat(`H${lastPoint} V750`)}
           fill="url(#fillGradient)"
           stroke="none"
           strokewidth="0"/>
@@ -155,18 +156,18 @@ export default class LineChart extends React.Component {
           <Text 
             x={cx} 
             y={cy+30} 
-            textAnchor={index===firstIndex? 'start':index === lastIndex? "end":"middle"} 
-            fill="white"
-            fontSize='18'
+            textAnchor="middle"
+            fill="black"
+            fontSize='19'
             fontWeight='bold'>
               {moment(item).format('YYYY')}
           </Text>
           <Text 
             x={cx} 
             y={cy+45} 
-            textAnchor={index===firstIndex? 'start':index === lastIndex? "end":"middle"} 
+            textAnchor="middle"
             fontSize='14'
-            fill={index===selectedIndex? "white": "none"}>
+            fill={index===selectedIndex? "black": "none"}>
               {moment(item).format('D[/]M')}
           </Text>
         </>

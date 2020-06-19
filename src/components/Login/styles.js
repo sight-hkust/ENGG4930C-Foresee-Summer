@@ -66,25 +66,6 @@ export const styles = StyleSheet.create({
         marginTop: ScreenWidth * 0.2,
         marginHorizontal: ScreenWidth * 0.2,
     },
-    textFieldBorder: {
-        width: ScreenWidth * 0.6,
-        height: ScreenHeight * 0.1,
-        marginBottom: ScreenHeight * 0.02
-    },
-    textInputContainer: {
-        flexDirection: "row",
-    },
-    textInputIcon: {
-        flex: 2,
-        alignItems: 'center',
-    },
-    textInputField: {
-        flex: 5,
-        textAlignVertical: 'center',
-        fontSize: FontScale * 20,
-        color: "#fff",
-        fontFamily: 'Roboto',
-    },
     submitButton: {
         justifyContent: 'center',
         backgroundColor: "#FFFFFF",

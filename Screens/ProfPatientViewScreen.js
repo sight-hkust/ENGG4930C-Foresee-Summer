@@ -1,14 +1,17 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, FlatList, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, Dimensions,Image } from 'react-native';
+
+import Placeholder from '../assets/images/Placeholder.png'; //<-----Only placeholder, DELETE LATER
+import Placeholder2 from '../assets/images/Placeholder2.png'; //<-----Only placeholder, DELETE LATER
 
 const screenWidth = Dimensions.get('screen').width
 
 const sampleUser = {
-    name: 'Jake Ki',
-    age: 31,
-    job: 'Student',
-    history: 'IQ 200',
-    disease: 'None',
+    name: '陳大文',
+    age: 8,
+    job: '學生',
+    history: '沒有',
+    disease: '沒有',
 }
 
 const dates = [
@@ -71,9 +74,15 @@ export default class ProfPatientViewScreen extends Component {
                             paddingHorizontal: 30}]}>
                         <View style={{height: 60}}/>
                         <View style={[styles.boxes, {flex: 6}]}>
+                            <View style={{marginTop:25, alignItems:'center'}}>
+                                <Image source={Placeholder2}/>
+                                <Image source={Placeholder}/>
+                            </View>
 
                         </View>
-                        <View style={{height: 10}}/>
+
+                        <View style={{height:10}}/>
+                        
                         <View style={ 
                                 {backgroundColor: 'transparent', 
                                 flexDirection: 'row',

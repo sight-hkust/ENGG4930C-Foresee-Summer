@@ -5,17 +5,18 @@ import { ScreenHeight } from "../../../../constant/Constant";
 import { SchemaPatient } from "../Schema/SchemaPatient";
 import { SchemaProfessional } from "../Schema/SchemaProfessional";
 import { ScrollView } from "react-native-gesture-handler";
-import { StyledInput, StyledDatePicker } from "./StyledInput";
+import { StyledDatePicker, StyledInput } from "./StyledInput";
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment';
 import { createAccount } from "../RegisterAction";
 import { Input } from "react-native-elements";
+import { LinearGradientBackground } from "../../../../Utils/LinearGradientBackground";
 
 export const RegistrationForm = ({ navigation, route }) => {
     const { isProfessional, establishedByProfessional } = route.params;
     console.log("isProfessional?", isProfessional);
     return (
-        <>
+        <LinearGradientBackground>
             <Formik
                 initialValues={{
                     name: '',
@@ -44,7 +45,7 @@ export const RegistrationForm = ({ navigation, route }) => {
                     </>
                 )}
             </Formik >
-        </>)
+        </LinearGradientBackground>)
 }
 
 const FormDetails = ({ formikProps, isProfessional }) => {
@@ -66,54 +67,57 @@ const FormDetails = ({ formikProps, isProfessional }) => {
     }
 
     return (
-        <ScrollView style={{ backgroundColor: 'white' }}>
-            <StyledInput
-                textWrapperStyle={{ marginTop: ScreenHeight * 0.07 }}
-                label="姓名(全名)"
-                formikKey="name"
-                formikProps={formikProps}
-                autoFocus={false}
-            />
-            {isProfessional ?
-                null : <StyledDatePicker
-                    label="出生年份"
-                    showDatePicker={showDatePicker}
-                    formikKey="birthYearsAndMonths"
-                    value={values.birthYearsAndMonths}
-                    formikProps={formikProps}
-                />}
-            <StyledInput
-                label="電子郵件"
-                formikKey="email"
-                formikProps={formikProps}
-            />
-            <StyledInput
-                label="電話號碼"
-                formikKey="phone"
-                formikProps={formikProps}
-                keyboardType={'numeric'}
-            />
-            <View>
+
+        <>
+            <ScrollView style={{ backgroundColor: 'white' }}>
                 <StyledInput
-                    label="密碼"
-                    formikKey="password"
+                    textWrapperStyle={{ marginTop: ScreenHeight * 0.07 }}
+                    label="姓名(全名)"
+                    formikKey="name"
                     formikProps={formikProps}
-                    secureTextEntry={true}
+                    autoFocus={false}
+                />
+                {isProfessional ?
+                    null : <StyledDatePicker
+                        label="出生年份"
+                        showDatePicker={showDatePicker}
+                        formikKey="birthYearsAndMonths"
+                        value={values.birthYearsAndMonths}
+                        formikProps={formikProps}
+                    />}
+                <StyledInput
+                    label="電子郵件"
+                    formikKey="email"
+                    formikProps={formikProps}
                 />
                 <StyledInput
-                    label="確認密碼"
-                    formikKey="confirmPassword"
+                    label="電話號碼"
+                    formikKey="phone"
                     formikProps={formikProps}
-                    secureTextEntry={true}
+                    keyboardType={'numeric'}
                 />
-            </View>
-            <DateTimePickerModal
-                isVisible={isDatePickerVisible}
-                mode='date'
-                onConfirm={handleConfirm}
-                onCancel={hideDatePicker}
-                date={moment().toDate()}
-            />
-        </ScrollView>
+                <View>
+                    <StyledInput
+                        label="密碼"
+                        formikKey="password"
+                        formikProps={formikProps}
+                        secureTextEntry={true}
+                    />
+                    <StyledInput
+                        label="確認密碼"
+                        formikKey="confirmPassword"
+                        formikProps={formikProps}
+                        secureTextEntry={true}
+                    />
+                </View>
+                <DateTimePickerModal
+                    isVisible={isDatePickerVisible}
+                    mode='date'
+                    onConfirm={handleConfirm}
+                    onCancel={hideDatePicker}
+                    date={moment().toDate()}
+                />
+            </ScrollView>
+        </>
     )
 }
