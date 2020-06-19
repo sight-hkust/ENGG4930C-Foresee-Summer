@@ -9,14 +9,13 @@ export default class LineChart extends React.Component {
   x_scale = (val,dateArr,paddingRight,width) => {
     const x = scaleTime()
     .domain([moment(dateArr[0], 'YYYY-MM-DD').toDate(), moment(dateArr[dateArr.length-1], 'YYYY-MM-DD').toDate()])
-    .range([paddingRight/2, width-(paddingRight*1.5)])
+    .range([paddingRight/2 + 25, width-(paddingRight*1.5)])
     
     return(x(val));
   }
 
   y_scale = (val,data,height,paddingTop) => {
-    //const min = Math.min(...data);
-    //const max = Math.max(...data);
+
     const y = scaleLinear()
     .domain([0,700])
     .range([165, 10]);
@@ -90,11 +89,12 @@ export default class LineChart extends React.Component {
     const y = i => {
       return this.y_scale(datas[i],datas,height,paddingTop);
     };
-
-    return [`M${x(0)},750 V${y(0)}`]
+    const initialmp = (x(0)+x(1))/2;
+    return [`M${(paddingTop)/2},750 V${y(0)} Q ${initialmp}, ${y(0)}, ${x(1)}, ${y(1)}`]
       .concat(
         datas.slice(0, -1).map((_, i) => {
           const x_mid = (x(i) + x(i + 1)) / 2;
+
           return (
               `Q ${x_mid}, ${y(i)}, ${x(i + 1)}, ${y(i + 1)}` 
             );

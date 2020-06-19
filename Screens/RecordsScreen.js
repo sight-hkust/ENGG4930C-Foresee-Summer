@@ -73,9 +73,9 @@ export default class Main extends Component{
         <View style={RecordScreenStyle.background}>
           
           <LinearGradient
-            colors={['#1872a7','#4e74c9','#a278ff']}
+            colors={['#1872a7','#5a74d1','#a676ff']}
             start={[0, 0.9]}
-            end={[1, 0]}
+            end={[1, 0.1]}
             locations={[0, 0.5, 1]}
             style={{
               height: '100%',
