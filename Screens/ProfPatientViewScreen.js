@@ -1,15 +1,8 @@
 import React, {Component} from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, FlatList, Dimensions } from 'react-native';
-
-const screenWidth = Dimensions.get('screen').width
-
-const sampleUser = {
-    name: 'Jake Ki',
-    age: 31,
-    job: 'Student',
-    history: 'IQ 200',
-    disease: 'None',
-}
+import { ScreenWidth, ScreenHeight, FontScale } from '../constant/Constant';
+import { RouterAction } from 'react-native-stack';
+import { database } from '../src/config/config';
 
 const dates = [
     {
@@ -51,19 +44,30 @@ function YearButton({item}) {
 export default class ProfPatientViewScreen extends Component {
     constructor(props) {
         super(props);
-        
+        this.state = {
+            patient: []
+        }
+    }
+
+    componentDidMount() {
+        const { key } = this.props.route.params;
+        database.ref('professionals/M001/patients/' + key + '/info').once('value', (snapshot) => {
+            this.setState({patient: snapshot.val()});
+        });
     }
 
     render() {
+        const patient = this.state.patient;
+
         return (
             <>
                 <View style={styles.fullscreen}>
                     <View style={[styles.container, {backgroundColor: 'white'}]}>
-                        <Text style={[styles.text, {fontSize: 30, color: '#000000'}]}>{sampleUser.name}</Text>
-                        <Text style={styles.text}>年齡: {sampleUser.age}</Text>
-                        <Text style={styles.text}>職業: {sampleUser.job}</Text>
-                        <Text style={styles.text}>家庭病史: {sampleUser.history}</Text>
-                        <Text style={styles.text}>已知眼疾: {sampleUser.disease}</Text>
+                        <Text style={[styles.text, {fontSize: 30, color: '#000000'}]}>{patient.name}</Text>
+                        <Text style={styles.text}>年齡: {patient.age}</Text>
+                        <Text style={styles.text}>職業: {patient.job}</Text>
+                        <Text style={styles.text}>家庭病史: {patient.history}</Text>
+                        <Text style={styles.text}>已知眼疾: {patient.disease}</Text>
                     </View>
                     <View style={[styles.container, 
                             {flex: 2, 
@@ -71,9 +75,15 @@ export default class ProfPatientViewScreen extends Component {
                             paddingHorizontal: 30}]}>
                         <View style={{height: 60}}/>
                         <View style={[styles.boxes, {flex: 6}]}>
+                            <View style={{marginTop:25, alignItems:'center'}}>
+                                <Image source={Placeholder2}/>
+                                <Image source={Placeholder}/>
+                            </View>
 
                         </View>
-                        <View style={{height: 10}}/>
+
+                        <View style={{height:10}}/>
+                        
                         <View style={ 
                                 {backgroundColor: 'transparent', 
                                 flexDirection: 'row',
@@ -164,17 +174,17 @@ const styles = StyleSheet.create({
         fontSize: 15
     },
     smallCircle: {
-        width: screenWidth * 0.075,
-        height: screenWidth * 0.075,
-        borderRadius: screenWidth * 0.0375,
+        width: ScreenWidth * 0.075,
+        height: ScreenWidth * 0.075,
+        borderRadius: ScreenWidth * 0.0375,
         backgroundColor: 'rgba(255, 255, 255, 0.6)',
         borderWidth: 1,
         borderColor: 'rgba(86, 204, 242, 0.6)'
     },
     bigCircle: {
-        width: screenWidth * 0.1,
-        height: screenWidth * 0.1,
-        borderRadius: screenWidth * 0.05,
+        width: ScreenWidth * 0.1,
+        height: ScreenWidth * 0.1,
+        borderRadius: ScreenWidth * 0.05,
         backgroundColor: 'white',
         borderWidth: 1,
         borderColor: '#56CCF2'

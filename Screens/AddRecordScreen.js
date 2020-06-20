@@ -1,13 +1,15 @@
 import React, { Component ,useState} from 'react';
-import { StyleSheet, Text, View, Button,ScrollView,Modal } from 'react-native';
-import DropDownPicker from 'react-native-dropdown-picker';
+import { StyleSheet, Text, View, Button,ScrollView,TouchableOpacity,Image } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {Formik} from 'formik';
 import moment from 'moment';
 import { TextInput } from 'react-native-gesture-handler';
-import {database} from '../constant/Config';
+import {database} from '../src/config/config';
 import {number, object,string} from 'yup';
+import {LinearGradient} from 'expo-linear-gradient';
 
+const Setting = require('../assets/images/setting.png')
+const DropDown = require('../assets/images/DropDown.png');
 
 const ReviewSchema = object({
     L_SPH: string().required('此項必填')
@@ -65,9 +67,26 @@ export default class Form extends Component{
     const { isProfessional, professional_id, patient_id } = this.props.route.params;
 
     return(
+        <View style={AddRecordScreen.background}>
+        <LinearGradient
+            colors={['#1872a7','#5a74d1','#a676ff']}
+            start={[0, 0.9]}
+            end={[1, 0.1]}
+            locations={[0, 0.5, 1]}
+            style={{
+              height: '100%',
+            }}
+          >
         <ScrollView>
-        <View style={styles.container}>
-            <Formik initialValues={{
+
+        <View style={AddRecordScreen.header}>
+            <Text style={AddRecordScreen.title}>新增資料</Text>
+            <TouchableOpacity>
+              <Image source={Setting}/>
+            </TouchableOpacity>
+        </View>
+
+        <Formik initialValues={{
                         date:moment().format('YYYY-MM-DD'),
                         L_SPH : "", Lsymbol:"+",
                         R_SPH : "", Rsymbol: "+",
@@ -104,46 +123,45 @@ export default class Form extends Component{
                         if(isProfessional) {
                             database.ref('professionals/' + professional_id + '/patients/' + patient_id + '/records/' + values.date).set(data).catch((error)=>console.log(error));
                         }else{
-                            database.ref('users/001/records/'+ values.date).set(data).catch((error)=>console.log(error));
+                            database.ref('users/'+ patient_id +'/records/'+ values.date).set(data).catch((error)=>console.log(error));
                             this.props.navigation.navigate('RecordsScreen')
                         }
                         }}>
 
             {({handleSubmit,values,setFieldValue,handleChange, errors})=>(  
-                <View>
-                    <View>
-                        
-                        <DateSelect values={values} setFieldValue={setFieldValue}/>
+                <View style={AddRecordScreen.formContainer}>
                     
-                        <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft = {true}/>
-                        <Text style={styles.errortext}>{errors.L_SPH}</Text>
-                        <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft = {false}/>
-                        <Text style={styles.errortext}>{errors.R_SPH}</Text>
+                    <DateSelect values={values} setFieldValue={setFieldValue}/>
+                    
+                    <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft = {true} error={errors.L_SPH}/>
+                    <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft = {false} error={errors.R_SPH}/>
 
-                        <CYLInput handleChange={handleChange}  setFieldValue={setFieldValue} isLeft={true} errorA={errors.L_CYL} errorB={errors.L_Axis}/>
-                        <CYLInput handleChange={handleChange}  setFieldValue={setFieldValue} isLeft={false} errorA={errors.R_CYL} errorB={errors.R_Axis}/>
+                    <CYLInput handleChange={handleChange}  setFieldValue={setFieldValue} isLeft={true} errorA={errors.L_CYL} errorB={errors.L_Axis}/>
+                    <CYLInput handleChange={handleChange}  setFieldValue={setFieldValue} isLeft={false} errorA={errors.R_CYL} errorB={errors.R_Axis}/>
 
-                        <VAInput handleChange={handleChange} isLeft={true}/>
-                        <Text style={styles.errortext}>{errors.L_VA}</Text>
-                        <VAInput handleChange={handleChange} isLeft={false}/>
-                        <Text style={styles.errortext}>{errors.R_VA}</Text>
+                    <VAInput handleChange={handleChange} isLeft={true}/>
+                    <Text style={AddRecordScreen.errortext}>{errors.L_VA}</Text>
+                    <VAInput handleChange={handleChange} isLeft={false}/>
+                    <Text style={AddRecordScreen.errortext}>{errors.R_VA}</Text>
 
                         
-                        <PDInput handleChange={handleChange}/>
-                        <Text style={styles.errortext}>{errors.PD}</Text>
-                        <View style={{paddingTop:24}}>
+                    <PDInput handleChange={handleChange}/>
+                    <Text style={AddRecordScreen.errortext}>{errors.PD}</Text>
+                    <View style={{paddingTop:24}}>
 
-                        <Button title='提交' color='lightpink' onPress={handleSubmit} disabled={Object.keys(errors).length>0}/> 
+                    <Button title='提交' style={AddRecordScreen.submitButton} onPress={handleSubmit} disabled={Object.keys(errors).length>0}/> 
 
-                        </View>
                     </View>
+                    
                     
                 </View>
             )}
 
-            </Formik>
-        </View>
+        </Formik>
+        
         </ScrollView>
+        </LinearGradient>
+        </View>
         )
     }
 }
@@ -167,9 +185,19 @@ export const DateSelect = props => {
     };
   
     return (
-      <View style={{paddingBottom:12}}>
-        <Text>請輸入日期</Text>
-        <Button onPress={showDatePicker} title={moment(values.date).format('YYYY-MM-DD')}/>
+      <View>
+        <Text style={AddRecordScreen.questionText}>日期</Text>
+
+        <View >
+            <TouchableOpacity onPress={showDatePicker} style={AddRecordScreen.answerContainer}>
+                <View style={AddRecordScreen.dropDownButton}>
+                    <Image source={DropDown} />
+                </View>
+                <Text style={AddRecordScreen.answerText}>{moment(values.date).format('YYYY-MM-DD')}</Text>
+            </TouchableOpacity>
+            
+        </View>
+
         <DateTimePickerModal
           isVisible={isDatePickerVisible}
           mode="date"
@@ -184,83 +212,50 @@ export const DateSelect = props => {
   }
 
 export const SPHInput = props=>{
-    const{ handleChange,setFieldValue, isLeft} = props;
-    
+    const{ handleChange,setFieldValue, isLeft,error} = props;
+    const [symbol, Togglesymbol] = useState(true);  //true = positive
     return(
-        <View style={{paddingBottom:5}}>
-        <Text>請輸入 {isLeft? "左眼的(O.S.)" : "右眼的(O.D.)"} 球面度數(SPH) (e.g. 125)</Text>
-        <View style={{flexDirection:'row', paddingBottom:12}}>
-            <DropDownPicker        
-                    items = {[
-                        {label: '+', value: '+'},
-                        {label:'-', value:'-'}
-                    ]}
-                    containerStyle={{height: 40, width: 50}}
-                    defaultValue = '+'
-                    onChangeItem = {item=>{
-                                    if(isLeft){setFieldValue('Lsymbol',item.label)}
-                                    else{setFieldValue('Rsymbol',item.label)}
-                                    }}
-                    dropDownStyle={{backgroundColor: '#fafafa', height:85, width:50}}      
-                />
+    <View>
+        <Text style={AddRecordScreen.questionText}>請輸入{isLeft? "左眼的(O.S.)" : "右眼的(O.D.)"}球面度數(SPH) (e.g. 125)</Text>
+        <Text style={AddRecordScreen.errortext}>{error}</Text>
+        <View style={AddRecordScreen.answerContainer}>
+            <TouchableOpacity style={AddRecordScreen.answerContainer} onPress={()=>Togglesymbol(!symbol)}>
+                <View style={AddRecordScreen.dropDownButton}>
+                <Image source={DropDown}/>
+                </View>
+                <Text style={AddRecordScreen.answerText}>{symbol? "+" : "-"}</Text>
+            </TouchableOpacity>
             <TextInput onChangeText={ handleChange(isLeft? 'L_SPH':'R_SPH')}
                         keyboardType='numeric'
-                        style={{backgroundColor:'white', borderColor:'lightgray', borderWidth:1, width:75, textAlign:'center'}}/>
+                        style={AddRecordScreen.answerInputBox}/>
         </View>
     </View>
     );
 } 
-
-export const PDInput = props=>{
-    const{ handleChange} = props;
-    
-    return(
-    <View style={{paddingBottom:5}}>
-        <Text>請輸入兩眼瞳孔距離(Pupillary Distance)(mm)</Text>
-        <TextInput onChangeText={ handleChange('PD')}
-                keyboardType='numeric'
-                style={{backgroundColor:'white', borderColor:'lightgray', borderWidth:1, width:75, textAlign:'center'}}/>
-    </View>
-    );
-} 
-
-export const VAInput = props=>{
-    const{ handleChange, isLeft} = props;
-    
-    return(
-        <View style={{paddingBottom:5}}>
-        <Text>請輸入{isLeft? "左眼的(O.S.)" : "右眼的(O.D.)"}視力(VA)</Text>
-        
-            
-            <TextInput onChangeText={ handleChange(isLeft? 'L_VA':'R_VA')}
-                        keyboardType='numeric'
-                        style={{backgroundColor:'white', borderColor:'lightgray', borderWidth:1, width:75, textAlign:'center'}}/>
-        
-    </View>
-    );
-} 
-
 
 export const CYLInput = props=>{
     const{ handleChange,setFieldValue, isLeft, errorA, errorB} = props;
     const [isable, setIsable] = useState(false);
     return(
-        <View style={{paddingBottom:5}}>
-        <Text>請輸入{isLeft? "左眼的(O.S.)" : "右眼的(O.D.)"}散光度數(CYL) (e.g. 125)</Text>
-        <View style={{flexDirection:'row', paddingBottom:5}}>
-            <Text>-</Text>
+        <View>
+            <Text style={AddRecordScreen.questionText}>請輸入{isLeft? "左眼的(O.S.)" : "右眼的(O.D.)"}散光度數(CYL) (e.g. 125)</Text>
+            <Text style={AddRecordScreen.errortext}>{errorA}</Text>
+            <View style={AddRecordScreen.answerContainer}>
+                <Text style={AddRecordScreen.answerText}>-</Text>
             
-            <TextInput onChangeText={text=>{
+                <TextInput onChangeText={text=>{
                                     if(isLeft){
                                         setFieldValue('L_CYL',text); 
                                         if(text>0){setIsable(true)}else{setIsable(false)}}
-                                    else{setFieldValue('R_CYL',text)}
+                                    else{
+                                        setFieldValue('R_CYL',text);
+                                        if(text>0){setIsable(true)}else{setIsable(false)}}
                                     }}
                         keyboardType='numeric'
-                        style={{backgroundColor:'white', borderColor:'lightgray', borderWidth:1, width:75, textAlign:'center'}}/>
+                        style={AddRecordScreen.answerInputBox}/>
         </View>
         <View>
-            <Text style={styles.errortext}>{errorA}</Text>
+            
             {isable && (
                 <AxisInput handleChange={handleChange} isLeft={isLeft} error={errorB}/>
             )}
@@ -274,91 +269,142 @@ export const CYLInput = props=>{
 
 export const AxisInput = props=>{
     const{ handleChange, isLeft, error} = props;
-    
         return(
-
-        <View style={{paddingBottom:5}}>
-            <Text>請輸入 {isLeft? "左眼的(O.S.)" : "右眼的(O.D.)"} 散光軸度(Axis)</Text>
-                <TextInput onChangeText={ 
+        <View >
+            <Text style={AddRecordScreen.questionText}>請輸入{isLeft? "左眼的(O.S.)" : "右眼的(O.D.)"}散光軸度(Axis)</Text>
+            <Text style={AddRecordScreen.errortext}>{error}</Text>
+            <TextInput onChangeText={ 
                                         handleChange(isLeft? 'L_Axis':'R_Axis')
                                         }
                             keyboardType='numeric'
-                            style={{backgroundColor:'white', borderColor:'lightgray', borderWidth:1, width:75, textAlign:'center'}}/>
-            <Text style={styles.errortext}>{error}</Text>
-        </View>
-        );
-
-    }
-
-/*
-export class CYLInput extends Component {
-    constructor(props){
-        super(props)
-        this.state = {isenabled: false};
-    }
-    render(){
-        
-        return(
-            <View style={{paddingBottom:5}}>
-            <Text>Input {this.props.isLeft? "O.D." : "O.S."} CYL</Text>
-            <View style={{flexDirection:'row', paddingBottom:12}}>
-                <DropDownPicker        
-                    items = {[
-                        {label: '+', value: '+'},
-                        {label:'-', value:'-'}
-                    ]}
-                    containerStyle={{height: 40, width: 50}}
-                    defaultValue = '+'
-                    onChangeItem = {item=>{
-                                    if(this.props.isLeft){this.props.setFieldValue('L_CYLsymbol',item.label)}
-                                    else{this.props.setFieldValue('R_CYLsymbol',item.label)}
-                                    }}
-                    dropDownStyle={{backgroundColor: '#fafafa', height:85, width:50}}      
-                />
-                <TextInput  onChangeText ={ (text) => {this.props.handleChange(this.props.isLeft? 'L_CYL':'R_CYL');
-                                                       if(text>0){this.setState({isenabled:true})}
-                                                        else{this.setState({isenabled:false})}}}
-                            keyboardType='numeric'
-                            style={{backgroundColor:'white', borderColor:'lightgray', borderWidth:1, width:75, textAlign:'center'}}/>
-            </View>
-                
-                    
+                            style={AddRecordScreen.answerInputBox}/>
         </View>
         );
     }
 
-} 
-
-export const AxisInput = props=>{
-    const{ handleChange, isLeft, isenabled} = props;
-
-    if(isenabled){
+export const VAInput = props=>{
+        const{ handleChange, isLeft} = props;
         return(
-        
-            <View style={{paddingBottom:5}}>
-            <Text>Input {isLeft? "O.D." : "O.S."} Axis</Text>
-                <TextInput onChangeText={ handleChange(isLeft? 'L_Axis':'R_Axis')}
+            <View>
+            <Text style={AddRecordScreen.questionText}>請輸入{isLeft? "左眼的(O.S.)" : "右眼的(O.D.)"}視力(VA)(e.g. 1.0)</Text>
+            <TextInput onChangeText={ handleChange(isLeft? 'L_VA':'R_VA')}
                             keyboardType='numeric'
-                            style={{backgroundColor:'white', borderColor:'lightgray', borderWidth:1, width:75, textAlign:'center'}}/>
+                            style={AddRecordScreen.answerInputBox}/>
             
         </View>
         );
-    }
-    else{
-        return null;
-    }
+    } 
+    
+export const PDInput = props=>{
+        const{ handleChange} = props;
+        
+        return(
+        <View>
+            <Text style={AddRecordScreen.questionText}>請輸入兩眼瞳孔距離(Pupillary Distance)(mm)</Text>
+            <TextInput onChangeText={ handleChange('PD')}
+                    keyboardType='numeric'
+                    style={AddRecordScreen.answerInputBox}/>
+        </View>
+        );
+    } 
 
-} 
-*/
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-      justifyContent: 'center',
-      padding: 30,
-      backgroundColor: 'powderblue'
-    },  
+const AddRecordScreen = StyleSheet.create({
+    background: {
+        height:"100%",
+        backgroundColor: 'white',
+    },
+    header:{
+        paddingTop:25,
+        marginRight:18,
+        marginLeft:18,
+        flexDirection:'row',
+        justifyContent: 'space-between',
+    },
+    title:{
+        fontSize:30,
+        color: "white",
+        fontWeight: '600',   
+    },
+    formContainer:{
+        paddingLeft: 35,
+        paddingRight: 35,
+        paddingTop: 30,
+    },
+    questionText:{
+        color: "white",
+        fontSize:18,
+        paddingTop:20,
+        paddingBottom: 10,
+    },
+    answerContainer:{
+        flexDirection:'row',
+    },
+    answerText:{
+        textAlign:'center',
+        paddingLeft: 10,
+        paddingRight: 10,
+        paddingBottom: 2,
+        color:"white",
+        fontSize: 18,
+        borderBottomWidth:1.5,
+        borderRightWidth:1.5,
+        borderColor:"white",
+        marginRight:15,
+        fontWeight:'bold'
+    },
+    answerInputBox:{
+        width: 70,
+        textAlign:'center',
+        paddingLeft: 15,
+        paddingRight: 15,
+        paddingBottom: 2,
+        paddingTop:0,
+        color:"white",
+        fontSize: 18,
+        borderBottomWidth:1.5,
+        borderRightWidth:1.5,
+        borderColor:"white",
+        marginRight:15,
+    },
+    dropDownButton:{
+        paddingTop:10,
+        paddingLeft: 5,
+        marginRight:15,
+    },
+    dropDownMenu:{
+        backgroundColor: "white",
+        height: 85,
+        width: 50,
+    },
+    innerDropDown:{
+        paddingTop:0,
+        paddingBottom:2,
+        paddingLeft:15,
+        paddingRight:15,
+        backgroundColor: "transparent",
+        borderTopRightRadius:0,
+        borderBottomRightRadius:0,
+        borderBottomLeftRadius:0,
+        borderLeftWidth:0,
+        borderTopWidth: 0,
+        borderRightWidth: 1.5,
+        borderBottomWidth:1.5,
+    },
+    outterDropDown:{
+        height:30,
+        marginRight: 15,
+    },
+    labelStyle:{
+        color: "white",
+        fontWeight:'bold',
+        fontSize:25,
+    },
     errortext: {
-        fontSize: 12,
-        color: 'red'
+        fontSize: 14,
+        color: '#9AFF98',
+        paddingBottom:5,
+    },
+    submitButton:{
+        color: 'red',
     }
   });

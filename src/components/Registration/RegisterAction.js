@@ -1,4 +1,4 @@
-import { auth, database } from "../../../constant/Config";
+import { auth, database } from "../../config/config";
 import moment from 'moment';
 const writeUserData = ({ uid, values, isProfessional, navigation, establishedByProfessional = false }) => {
     if (isProfessional) {
