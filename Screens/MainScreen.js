@@ -7,7 +7,8 @@ import {
     TouchableOpacity,
     TextInput,
     Button,
-    Image
+    Image,
+    Dimensions
 } from 'react-native';
 import React, {Component} from 'react';
 import AppColors from '../Styles/colors';
@@ -15,6 +16,11 @@ import {Styles} from '../Styles/styles';
 import { Col, Row, Grid } from "react-native-easy-grid";
 
 import BottomModal from '../Utils/BottomModal'
+import { LinearGradientBackground } from '../Utils/LinearGradientBackground'
+import  MenuScreen  from '../Utils/MenuScreen'
+
+const windowHeight = Dimensions.get('window').height - 45;
+const windowWidth = Dimensions.get('window').width;
 
 export default class MainScreen extends Component {
     constructor(props) {
@@ -47,67 +53,9 @@ export default class MainScreen extends Component {
 
     render() {
         return (
-            <View>
-                <StatusBar barStyle="dark-content"/>
-                <SafeAreaView style={MainStyles.mainView}>
-                    <Text style={Styles.registerTitle}>
-                        {'Hello, ' + global.realName}
-                    </Text>
-                    <Text style={MainStyles.helpText}>What can we do for you?</Text>
-                    <View style={MainStyles.choicesContainer}>
-                    <TouchableOpacity onPress={()=>this.toggleModal()}>
-                        <Image style={MainStyles.menuButton} source={require('../assets/images/icon_small.png')} />
-                    </TouchableOpacity>
-                    </View>
 
-                    <BottomModal isVisible={this.state.isModalVisible} toggleModal={this.toggleModal}>
-                        <View style={{alignSelf: 'center', width: '30%', height: 4, backgroundColor:'#1772A6'}}></View>
-                        <Grid>
-                            <Row style={{marginBottom: 20}}>
-                                <Col style={{alignItems: 'center', justifyContent: 'center'}}>
-                                        <Text style={{ fontSize: 30, fontWeight: 'bold', color: '#2D9CDB'}}>護眼學堂</Text>
-                                </Col>
-                            </Row>
-                            
-                            <Row style={{marginBottom: 40}}>
-                                <Col style={{alignItems: 'center', justifyContent: 'center'}}>
-                                    <TouchableOpacity onPress={()=>this.toggleModal()}>
-                                        <Image style={MainStyles.menuButton} source={require('../assets/images/Articles_bright.png')} />
-                                        <Text style={MainStyles.modalText}>Achievement</Text>
-                                    </TouchableOpacity>
-                                </Col>
-                                <Col style={{alignItems: 'center', justifyContent: 'center'}}>
-                                    <TouchableOpacity onPress={()=>this.toggleModal()}>
-                                        <Image style={MainStyles.menuButton} source={require('../assets/images/Qna_bright.png')} />
-                                        <Text style={MainStyles.modalText}>Exercise</Text>
-                                    </TouchableOpacity>
-                                </Col>
-                            </Row>
-                            <Row style={{marginBottom: 20}}>
-                            <Col style={{alignItems: 'center', justifyContent: 'center'}}>
-                                    <TouchableOpacity onPress={()=>this.toggleModal()}>
-                                        <Image style={MainStyles.menuButton} source={require('../assets/images/Exercise_bright.png')} />
-                                        <Text style={MainStyles.modalText}>Read More</Text>
-                                    </TouchableOpacity>
-                                </Col>
-                                <Col style={{alignItems: 'center', justifyContent: 'center'}}>
-                                    <TouchableOpacity onPress={()=>this.toggleModal()}>
-                                        <Image style={MainStyles.menuButton} source={require('../assets/images/Achievement_bright.png')} />
-                                        <Text style={MainStyles.modalText}>Rewards</Text>
-                                    </TouchableOpacity>
-                                </Col>
-                            </Row>
-                            <Row>
-                            <Col style={{alignItems: 'center', justifyContent: 'center'}}>
-                                    <TouchableOpacity onPress={()=>this.toggleModal()}>
-                                        <Image style={MainStyles.menuButton} source={require('../assets/images/icon_small.png')} />
-                                    </TouchableOpacity>
-                                </Col>
-                            </Row>
-                        </Grid>
-                    </BottomModal>
-                    
-                </SafeAreaView>
+            <View>
+                <MenuScreen/>
             </View>
         );
     }
@@ -180,9 +128,14 @@ const MainStyles = StyleSheet.create({
         marginTop: -10,
         fontWeight: 'bold',
     },
-    menuButton: {
+    mainButton: {
         width: 60,
         height: 60,
+        alignSelf: 'center',
+    },
+    menuButton: {
+        width: 40,
+        height: 40,
         alignSelf: 'center'
     },
     content: {
