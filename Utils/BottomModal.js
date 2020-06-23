@@ -29,7 +29,7 @@ export default class BottomModal extends Component {
                 swipeDirection={['down']}
                 style={{ justifyContent: 'flex-end', margin: 0,}}
             >
-            <View style={MainStyles.content}>
+            <View style={{...MainStyles.content, ...this.props.style}}>
                 {this.props.children}
             </View>
         </Modal>

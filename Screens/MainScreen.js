@@ -18,6 +18,8 @@ import { Col, Row, Grid } from "react-native-easy-grid";
 import BottomModal from '../Utils/BottomModal'
 import { LinearGradientBackground } from '../Utils/LinearGradientBackground'
 import  MenuScreen  from '../Utils/MenuScreen'
+import PostQuestionScreen from '../src/components/AskAnExpert/PostQuestionScreen'
+import AskAnExpertMainScreen from '../src/components/AskAnExpert/AskAnExpertMainScreen'
 
 const windowHeight = Dimensions.get('window').height - 45;
 const windowWidth = Dimensions.get('window').width;
@@ -53,10 +55,7 @@ export default class MainScreen extends Component {
 
     render() {
         return (
-
-            <View>
-                <MenuScreen/>
-            </View>
+            <AskAnExpertMainScreen/>
         );
     }
 }
@@ -150,4 +149,23 @@ const MainStyles = StyleSheet.create({
         fontSize: 16
     } 
 
+});
+
+
+const styles = StyleSheet.create({
+    container: {
+        marginTop: 20
+    },
+    title: {
+        fontSize: 30
+    },
+    subtitle: {
+        fontSize: 25
+    },
+    roundedInput: {
+
+    },
+    roundedInputArea: {
+
+    }
 });
