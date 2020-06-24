@@ -144,7 +144,7 @@ export default class LineChart extends React.Component {
       const cx = this.x_scale(moment(item, 'YYYY-MM-DD').toDate(), dateArr,paddingRight,width);
       const cy = this.y_scale(data[index], data, height,paddingTop);
       
-      console.log(lastIndex);
+      //console.log(lastIndex);
       output.push(
         <>
         <Circle
