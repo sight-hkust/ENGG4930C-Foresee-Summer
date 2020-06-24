@@ -1,10 +1,8 @@
 import 'react-native-gesture-handler';
 import React, { Component } from 'react';
-import { Image } from 'react-native'
 
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 
 import GetEducatedScreen from './Screens/GetEducated';
@@ -24,7 +22,6 @@ import MainScreen from './Screens/MainScreen';
 import { Profile } from './src/components/Profile/Profile';
 
 const Tab = createStackNavigator();
-//const Tab = createMaterialBottomTabNavigator();
 
 const Icon = require('./assets/images/Icon_solid.png');
 
@@ -66,10 +63,10 @@ function Education({ navigation, route }) {
   const Stack = createStackNavigator();
   return (
     <Stack.Navigator headerMode="none">
-      
+
       <Stack.Screen name="GetEducatedScreen" component={GetEducatedScreen} />
       <Stack.Screen name="ArticleDetailScreen" component={ArticleDetailScreen} />
-      
+
     </Stack.Navigator>
   );
 }
@@ -79,10 +76,10 @@ function Education({ navigation, route }) {
 function ProfessionalScreen({ navigation, route }) {
   const Stack = createStackNavigator();
   return (
-    <Stack.Navigator headerMode="none">
+    <Stack.Navigator headerMode="none" >
       <Stack.Screen name="ProfMainMenu" component={ProfMainMenu} />
       <Stack.Screen name="ProfPatientViewScreen" component={ProfPatientViewScreen} />
-      <Stack.Screen name="ProfSearchResultScreen" component={ProfSearchResultScreen} /> 
+      <Stack.Screen name="ProfSearchResultScreen" component={ProfSearchResultScreen} />
       <Stack.Screen name="Register" component={Register} />
     </Stack.Navigator>
   );
@@ -100,22 +97,20 @@ export default class Main extends Component {
     return (
       <NavigationContainer >
         <Tab.Navigator
-          initialRouteName="login"
           shifting={false}
           barStyle={{ backgroundColor: 'tomato' }}
           activeColor='#694fad'
           inactiveColor="white"
           headerMode="none"
+          initialRouteName="Login"
         >
-          
           <Tab.Screen name="User" component={UserScreen} />
           <Tab.Screen name="Prof" component={ProfessionalScreen} />
           <Tab.Screen name="Login" component={LoginAndRegisterScreen} />
           <Tab.Screen name="+record" component={AddRecordScreen} initialParams={{ isProfessional: false }} />
           <Tab.Screen name="record" component={RecordsScreen} initialParams={{ isProfessional: false }} />
-          <Tab.Screen name="article" component={GetEducatedScreen}/>
-          <Tab.Screen name="article details" component={ArticleDetailScreen}/>
-
+          <Tab.Screen name="article" component={GetEducatedScreen} />
+          <Tab.Screen name="article details" component={ArticleDetailScreen} />
         </Tab.Navigator>
       </NavigationContainer>
     );

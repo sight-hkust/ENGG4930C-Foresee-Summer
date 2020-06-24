@@ -236,7 +236,7 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient }) => {
                         title={'本人同意提供個人資料\n予眼科專家參考'} /> : null}
 
                 <RoundButton
-                    containerStyle={{ marginBottom: ScreenHeight * 0.2 }}
+                    buttonStyle={{ marginBottom: ScreenHeight * 0.2 }}
                     title='提交' onPress={() => {
                         Keyboard.dismiss()
                         console.log(formikProps.errors);

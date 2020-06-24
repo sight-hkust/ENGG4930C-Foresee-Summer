@@ -42,7 +42,6 @@ const writeUserData = ({ uid = null, values, isProfessional, navigation, registe
         }
 
     }
-    navigation.navigate('MainScreen');
 }
 
 
@@ -58,6 +57,7 @@ export const createAccount = ({ values, navigation, isProfessional, registerPati
             console.log('values.email', values.email);
             auth.createUserWithEmailAndPassword(values.email, "NoPassword").then(function (userCreds) {
                 const uid = userCreds.user.uid;
+                navigation.navigate('Profile');
                 writeUserData({ uid, values, navigation, isProfessional, registerPatient });
             }).catch(error => {
                 console.log(error.code, error.message);
@@ -65,7 +65,7 @@ export const createAccount = ({ values, navigation, isProfessional, registerPati
         } else {
             auth.createUserWithEmailAndPassword(values.email, values.password).then(function (userCreds) {
                 const uid = userCreds.user.uid;
-                navigation.navigate('Login')
+                navigation.navigate('Profile');
                 writeUserData({ uid, values, navigation, isProfessional });
             }).catch(error => {
                 console.log(error.code, error.message);
@@ -74,7 +74,7 @@ export const createAccount = ({ values, navigation, isProfessional, registerPati
     } else {
         auth.createUserWithEmailAndPassword(values.email, values.password).then(function (userCreds) {
             const uid = userCreds.user.uid;
-            navigation.navigate('Login')
+            navigation.navigate('Profile');
             writeUserData({ uid, values, navigation, isProfessional });
         }).catch(error => {
             console.log(error.code, error.message);

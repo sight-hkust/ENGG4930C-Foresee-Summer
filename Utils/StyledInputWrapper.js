@@ -13,7 +13,7 @@ export const StyledInputWrapper = ({
     hideEmbeddedErrorMessage,
 }) => {
     return (
-        <View style={[styles.content, (hideEmbeddedErrorMessage ? { height: ScreenHeight * 0.1 } : { height: ScreenHeight * 0.1 }), containerStyle]} >
+        <View style={[styles.content, (hideEmbeddedErrorMessage ? { height: ScreenHeight * 0.07 } : { height: ScreenHeight * 0.1 }), containerStyle]} >
             <View style={styles.textInputBorder}>
                 <View style={styles.textInputContainer}>
                     <View style={styles.textInputIcon}>
