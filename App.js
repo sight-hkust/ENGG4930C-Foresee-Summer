@@ -15,6 +15,7 @@ import ArticleDetailScreen from './Screens/ArticleDetail';
 import AskAnExpertScreen from './Screens/AskAnExpertScreen';
 import AddRecordScreen from './Screens/AddRecordScreen';
 import DoctorsScreen from './Screens/Doctors';
+import EyeExercise from './Screens/EyeExercise';
 
 
 import ProfMainMenu from './Screens/ProfMainMenu'
@@ -59,6 +60,7 @@ function UserScreen({ navigation, route }) {
       <Stack.Screen name="AskAnExpertScreen" component={AskAnExpertScreen} />
       <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} />
       <Stack.Screen name="DoctorsScreen" component={DoctorsScreen} />
+      <Stack.Screen name="EyeExercise" component={EyeExercise} />
     </Stack.Navigator>
   );
 }
@@ -98,6 +100,7 @@ export default class Main extends Component {
           <Tab.Screen name="login&reg" component={LoginAndRegisterScreen} />
           <Tab.Screen name="+record" component={AddRecordScreen} initialParams={{ isProfessional: false }} />
           <Tab.Screen name="record" component={RecordsScreen} initialParams={{ isProfessional: false }} />
+          <Tab.Screen name="exercise" component={EyeExercise} />
         </Tab.Navigator>
       </NavigationContainer>
     );
