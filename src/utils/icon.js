@@ -4,9 +4,9 @@ import FeatherIcon from 'react-native-vector-icons/Feather'
 export const emailIcon = <MaterialCommunityIcon
         name='email-outline'
         color='#FFFFFF'
-        size={32} />
+        size={34} />
 
 export const keyIcon = <FeatherIcon
-    name='key'
-    color='#FFFFFF'
-    size={32} />
+        name='key'
+        color='#FFFFFF'
+        size={34} />

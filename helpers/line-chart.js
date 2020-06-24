@@ -90,8 +90,11 @@ export default class LineChart extends React.Component {
     const y = i => {
       return this.y_scale(datas[i],datas,height,paddingTop);
     };
-    const startingPoint = paddingTop/2;
-    return [`M${startingPoint},750 V${y(0)}`]
+    const startingPoint = 2;
+    const verticalPoint = y(0) + 25;
+    const horizontalLine = config.width - (config.paddingRight);
+    const lastPoint = y(dateArr.length-1);
+    return [`M${startingPoint},750 V${verticalPoint} Q ${startingPoint}, ${y(0)}, ${x(0)}, ${y(0)} `]
       .concat(
         datas.slice(0, -1).map((_, i) => {
           const x_mid = (x(i) + x(i + 1)) / 2;
@@ -101,16 +104,17 @@ export default class LineChart extends React.Component {
           );
         })
       )
-      .join(" ");
+      .join(" ")
+      .concat(`Q ${horizontalLine}, ${lastPoint}, ${horizontalLine}, ${lastPoint+25}  V750 `);
   };
 
   renderLine = config=>{
       const result = this.getLinePoints(config.data, config);
-      const lastPoint = config.width - (config.paddingRight*1.5) 
+      
       return(
         <Path
           key={Math.random()}
-          d={result.concat(`H${lastPoint} V750`)}
+          d={result}
           fill="url(#fillGradient)"
           stroke="none"
           strokewidth="0"/>

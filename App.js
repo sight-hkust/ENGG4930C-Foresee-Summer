@@ -61,6 +61,20 @@ function UserScreen({ navigation, route }) {
   );
 }
 
+//Article list and detailed article
+function Education({ navigation, route }) {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator headerMode="none">
+      
+      <Stack.Screen name="GetEducatedScreen" component={GetEducatedScreen} />
+      <Stack.Screen name="ArticleDetailScreen" component={ArticleDetailScreen} />
+      
+    </Stack.Navigator>
+  );
+}
+
+
 /** Professional User Screen */
 function ProfessionalScreen({ navigation, route }) {
   const Stack = createStackNavigator();
@@ -99,6 +113,9 @@ export default class Main extends Component {
           <Tab.Screen name="Login" component={LoginAndRegisterScreen} />
           <Tab.Screen name="+record" component={AddRecordScreen} initialParams={{ isProfessional: false }} />
           <Tab.Screen name="record" component={RecordsScreen} initialParams={{ isProfessional: false }} />
+          <Tab.Screen name="article" component={GetEducatedScreen}/>
+          <Tab.Screen name="article details" component={ArticleDetailScreen}/>
+
         </Tab.Navigator>
       </NavigationContainer>
     );

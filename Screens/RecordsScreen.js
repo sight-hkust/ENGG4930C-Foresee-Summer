@@ -1,8 +1,11 @@
 import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image, Button } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
 import { database } from '../src/config/config';
 import LineChart from '../helpers/line-chart';
 import {LinearGradient} from 'expo-linear-gradient';
+import {Button} from 'react-native-elements';
+import {Icon} from 'react-native-elements'
+
 
 const LeftOpen = require('../assets/images/LeftOpen.png');
 const RightOpen = require('../assets/images/RightOpen.png');
@@ -10,7 +13,7 @@ const BackArrow = require('../assets/images/BackArrow.png');
 const NextArrow = require('../assets/images/NextArrow.png');
 const Setting = require('../assets/images/setting.png')
 
-const patient_id = '004';
+const patient_id = '002';
 
 export default class Main extends Component{
   constructor(props){
@@ -38,9 +41,9 @@ export default class Main extends Component{
        
         this.setState({data : snapshot.child("records").toJSON(), 
                       dates: tempDate,
-                      ddlSelectedDate: tempDate[0],
+                      ddlSelectedDate: tempDate[tempDate.length-1],
                       username: tempName,
-                      index: 0
+                      index: tempDate.length-1
                       });
     });
     
@@ -134,9 +137,25 @@ export default class Main extends Component{
               </View>
               }
 
-                
                 <View style={RecordScreenStyle.addRecordButton}>
-                  <Button title="輸入數據" onPress={pressHandler}/>
+                  {data!=null &&
+                    <Button icon={<Icon name="dehaze" size={22} color="#2D9CDB"/>}  
+                      buttonStyle={{backgroundColor:'white', width:40,height:40,borderRadius:24, paddingLeft:0,paddingRight:0}}
+                      containerStyle={{paddingTop:5}}
+                    /> 
+                  }
+
+                  <Button icon={<Icon name="add" size={25} color="#2D9CDB"/>} onPress={pressHandler} 
+                  buttonStyle={{backgroundColor:'white', width:48,height:48,borderRadius:24, paddingLeft:0,paddingRight:0}}
+                  />
+
+                  {data!=null &&
+                    <Button icon={<Icon name="eyeglass" type="simple-line-icon" size={22} color="#2D9CDB"/>} onPress={pressHandler} 
+                      buttonStyle={{backgroundColor:'white', width:40,height:40,borderRadius:24, paddingLeft:0,paddingRight:0}}
+                      containerStyle={{paddingTop:5}}
+                    />                 
+                  }
+
                 </View>
             
             </View>
@@ -149,7 +168,7 @@ export default class Main extends Component{
 }
 
 export const RenderContent = props => {
-    const{ isLeft, ddlValue, data, selectedDate,index,dateArr} = props;
+    const{ isLeft, ddlValue, data, selectedDate} = props;
 
     if(data == null){
       return(
@@ -444,7 +463,7 @@ const RecordScreenStyle = StyleSheet.create({
     borderRadius: 20,
     marginLeft:40,
     marginRight:40,
-    marginTop:210,
+    marginTop:190,
     paddingBottom:10,
   },
   eyesButton:{
@@ -486,10 +505,12 @@ const RecordScreenStyle = StyleSheet.create({
     textAlign:'center',
   },
   addRecordButton:{
+    flexDirection:'row',
+    justifyContent:'space-around',
     paddingTop:15,
     paddingBottom:15,
-    paddingLeft:100,
-    paddingRight: 100
+    paddingLeft:50,
+    paddingRight:50
   },
   linechart:{
     height:"100%"

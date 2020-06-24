@@ -54,14 +54,16 @@ export const Login = ({ navigation, route }) => {
                             placeholder='電子郵件'
                             icon={emailIcon}
                             defaultValue={emailInput}
-                            setValue={setEmailInput} />
+                            setValue={setEmailInput}
+                            hideEmbeddedErrorMessage={true} />
                         <StyledInput
                             containerStyle={{ height: 50 }}
                             placeholder='密碼'
                             icon={keyIcon}
                             defaultValue={passwordInput}
                             setValue={setPasswordInput}
-                            secureTextEntry={true} />
+                            secureTextEntry={true}
+                            hideEmbeddedErrorMessage />
                     </View>
                     <RoundButton title={'登入'} onPress={handleSubmit} />
                     <View style={styles.registrationNav}>

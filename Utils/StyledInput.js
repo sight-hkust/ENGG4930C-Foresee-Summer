@@ -14,7 +14,7 @@ export const StyledInput = ({
     setValue,
     formikProps,
     formikKey,
-    hideDefaultErrorMessage,
+    hideEmbeddedErrorMessage,
     ...rest }) => {
     return (
         <StyledInputWrapper
@@ -22,7 +22,7 @@ export const StyledInput = ({
             icon={icon}
             formikKey={formikKey}
             formikProps={formikProps}
-            hideDefaultErrorMessage={hideDefaultErrorMessage}
+            hideEmbeddedErrorMessage={hideEmbeddedErrorMessage}
         >
             <TextInput style={[styles.textInputField, inputFieldStyle]}
                 placeholder={placeholder}
@@ -40,7 +40,7 @@ export const StyledInput = ({
 
 const styles = StyleSheet.create({
     textInputField: {
-        flex: 6,
+        flex: 5,
         textAlign: 'center',
         textAlignVertical: 'center',
         fontSize: FontScale * 18,

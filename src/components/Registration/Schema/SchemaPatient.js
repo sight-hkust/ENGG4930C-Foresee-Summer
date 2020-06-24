@@ -1,4 +1,4 @@
-import { object, string, number} from "yup"
+import { object, string, number, bool } from "yup"
 export const SchemaPatient = object().shape({
     firstname: string().required('請輸入姓名'),
     lastname: string().required('請輸入姓名'),
@@ -33,6 +33,5 @@ export const SchemaPatient = object().shape({
                     function (value) {
                         return this.parent.password && this.parent.password === value;
                     })
-        })
-
+        }),
 })

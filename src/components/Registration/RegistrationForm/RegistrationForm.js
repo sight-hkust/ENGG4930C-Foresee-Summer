@@ -21,6 +21,7 @@ import { StyledMultiLinesInput } from "../../../../Utils/StyledMultiLinesInput";
 import { SchemaRegisterPatient } from "../Schema/SchemaRegisterPatient";
 import { DialogPicker, StyledDialogPicker } from "../../../../Utils/StyledDialogPicker";
 import { Portal, Dialog, Provider, List } from "react-native-paper";
+import { CheckBox } from "react-native-elements";
 
 export const RegistrationForm = ({ navigation, route }) => {
     const { isProfessional, registerPatient } = route.params;
@@ -40,6 +41,7 @@ export const RegistrationForm = ({ navigation, route }) => {
                     role: '',
                     history: '',
                     disease: '',
+                    allowedSearch: false,
                 }}
                 onSubmit={(values) => {
                     isProfessional && registerPatient ?
@@ -65,6 +67,7 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient }) => {
     const { setFieldValue, values } = formikProps;
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [isDialogVisible, setDialogVisibility] = useState(false);
+    const [allowedSearch, setAllowedSearch] = useState(false);
 
     const _showDatePicker = () => setDatePickerVisibility(true);
 
@@ -82,6 +85,10 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient }) => {
     const handleDialogOption = (value) => {
         _hideDialog();
         setFieldValue('role', value)
+    }
+
+    const toggleCheckbox = () => {
+        setFieldValue('allowedSearch', !values.allowedSearch)
     }
 
     const roleList = [
@@ -114,7 +121,7 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient }) => {
                         formikProps={formikProps}
                         formikKey="lastname"
                         inputFieldStyle={{ flex: 3 }}
-                        hideDefaultErrorMessage
+                        hideEmbeddedErrorMessage
                     />
                     <StyledInput
                         containerStyle={{ flex: 1 }}
@@ -122,7 +129,7 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient }) => {
                         formikProps={formikProps}
                         formikKey="firstname"
                         inputFieldStyle={{ flex: 3 }}
-                        hideDefaultErrorMessage
+                        hideEmbeddedErrorMessage
                     />
                 </View>
                 <View>
@@ -160,6 +167,7 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient }) => {
                     />}
 
                 <StyledInput
+                    containerStyle={{ height: 'auto' }}
                     placeholder={'電子郵件'}
                     icon={emailIcon}
                     formikProps={formikProps}
@@ -208,6 +216,25 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient }) => {
                             secureTextEntry
                         />
                     </>}
+                {!isProfessional ?
+                    <CheckBox
+                        containerStyle={{
+                            backgroundColor: 'transparent',
+                            borderWidth: 0,
+                        }}
+                        textStyle={{
+                            textAlign: "left",
+                            fontSize: FontScale * 15,
+                            color: '#FFFFFF'
+                        }}
+                        checkedColor={'#FFFFFF'}
+                        uncheckedColor={'#E3E3E3'}
+                        fontFamily='Roboto'
+                        checked={values.allowedSearch}
+                        onPress={toggleCheckbox}
+                        center
+                        title={'本人同意提供個人資料\n予眼科專家參考'} /> : null}
+
                 <RoundButton
                     containerStyle={{ marginBottom: ScreenHeight * 0.2 }}
                     title='提交' onPress={() => {

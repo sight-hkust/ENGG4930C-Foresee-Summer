@@ -16,7 +16,7 @@ export const StyledDialogPicker = ({
     handleDialogOption,
     value,
     list,
-    hideDefaultErrorMessage,
+    hideEmbeddedErrorMessage,
     ...rest
 }) => {
     return (
@@ -26,7 +26,7 @@ export const StyledDialogPicker = ({
                 icon={icon}
                 formikKey={formikKey}
                 formikProps={formikProps}
-                hideDefaultErrorMessage={hideDefaultErrorMessage}
+                hideEmbeddedErrorMessage={hideEmbeddedErrorMessage}
             >
                 <View style={styles.pickerContainer}>
                     <TouchableOpacity onPress={showDialog}>

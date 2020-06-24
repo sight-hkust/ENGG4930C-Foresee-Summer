@@ -39,7 +39,7 @@ const faq_list = [
         answer: '身兼三軍統帥的蔡英文總統形容，今次試飛成功，締造了歷史性一刻，是台灣航太產業一個里程碑。蔡英文政府上台以來，一直強調要國防自主。勇鷹號由空軍、中科院及台中漢翔公司在2017年2月開始研發，總經費達到686億新台幣，其中逾一半經費的訂單來自台灣。',
         prof_name: '蔡英文',
         prof_title: '三軍統帥'
-    },    
+    },
     {
         post_id: '4',
         question_title: '創辦人劉強東屢涉桃色新聞',
@@ -71,7 +71,7 @@ const faq_list = [
         answer: '身兼三軍統帥的蔡英文總統形容，今次試飛成功，締造了歷史性一刻，是台灣航太產業一個里程碑。蔡英文政府上台以來，一直強調要國防自主。勇鷹號由空軍、中科院及台中漢翔公司在2017年2月開始研發，總經費達到686億新台幣，其中逾一半經費的訂單來自台灣。',
         prof_name: '蔡英文',
         prof_title: '三軍統帥'
-    },    
+    },
     {
         post_id: '4',
         question_title: '創辦人劉強東屢涉桃色新聞',
@@ -103,7 +103,7 @@ const faq_list = [
         answer: '身兼三軍統帥的蔡英文總統形容，今次試飛成功，締造了歷史性一刻，是台灣航太產業一個里程碑。蔡英文政府上台以來，一直強調要國防自主。勇鷹號由空軍、中科院及台中漢翔公司在2017年2月開始研發，總經費達到686億新台幣，其中逾一半經費的訂單來自台灣。',
         prof_name: '蔡英文',
         prof_title: '三軍統帥'
-    },    
+    },
     {
         post_id: '4',
         question_title: '創辦人劉強東屢涉桃色新聞',
@@ -119,70 +119,70 @@ const faq_list = [
 const AskAnExpertMainScreen = ({ route, navigation }) => {
 
     let RGB = [20, 52, 101];
-    
+
     const IncreaseFadingEffect = () => {
-        if(RGB[0] + 13 <= 80) {
+        if (RGB[0] + 13 <= 80) {
             RGB[0] += 6.5;
         }
 
-        if(RGB[1] + 36 <= 180){
+        if (RGB[1] + 36 <= 180) {
             RGB[1] += 18;
         }
 
-        if(RGB[2] + 27 <= 203) {
+        if (RGB[2] + 27 <= 203) {
             RGB[2] += 13.5
         }
     }
-    
+
     return (
-        <MenuScreen menuContainer={{height: 30, }}>
+        <MenuScreen menuContainer={{ height: 30, }}>
             <View style={styles.container}>
-            <Text style={{fontWeight: 'bold',fontSize: 30, color: 'white', alignSelf: 'baseline', left: 30, marginBottom: ScreenHeight * 0.03 }}>
-                專家解答
+                <Text style={{ fontWeight: 'bold', fontSize: 30, color: 'white', alignSelf: 'baseline', left: 30, marginBottom: ScreenHeight * 0.03 }}>
+                    專家解答
             </Text>
 
-            <View style={{width: ScreenWidth, zIndex: 10,}}>
-                <Text style={{color: 'white', fontWeight: 'bold', fontSize: 25, marginLeft: ScreenWidth * 0.05 + 23}}>熱門</Text>
+                <View style={{ width: ScreenWidth, zIndex: 10, }}>
+                    <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 25, marginLeft: ScreenWidth * 0.05 + 23 }}>熱門</Text>
 
-                <FlatList
-                    data={faq_list}
-                    horizontal={true}
-                    renderItem={({ item, key }) => (
-                        <HotQuestionCard faq={item} RGB={RGB} IncreaseFadingEffect={IncreaseFadingEffect}/>
-                    )}
-                    keyExtractor={item => item.id}
-                    style={{marginTop: 26, height: 180}}
-                    showsHorizontalScrollIndicator={false}
-                >
-                </FlatList>
-            </View>
+                    <FlatList
+                        data={faq_list}
+                        horizontal={true}
+                        renderItem={({ item, key }) => (
+                            <HotQuestionCard faq={item} RGB={RGB} IncreaseFadingEffect={IncreaseFadingEffect} />
+                        )}
+                        keyExtractor={item => item.id}
+                        style={{ marginTop: 26, height: 180 }}
+                        showsHorizontalScrollIndicator={false}
+                    >
+                    </FlatList>
+                </View>
 
-            <View style={styles.background}>
-                <Grid style={{marginTop: 91}}>
-                    <Col style={{position: 'absolute', left: 23}}>
-                        <Text style={{color: '#24559E', fontWeight: 'bold', fontSize: 25}}> 最新</Text>
-                    </Col>
-                    <Col style={{position: 'absolute', right: 23}}>
-                    <Icon
-                        size={35}
-                        name='edit'
-                        type='feather'
-                        color="black"
-                    />
-                    </Col>
+                <View style={styles.background}>
+                    <Grid style={{ marginTop: 91 }}>
+                        <Col style={{ position: 'absolute', left: 23 }}>
+                            <Text style={{ color: '#24559E', fontWeight: 'bold', fontSize: 25 }}> 最新</Text>
+                        </Col>
+                        <Col style={{ position: 'absolute', right: 23 }}>
+                            <Icon
+                                size={35}
+                                name='edit'
+                                type='feather'
+                                color="black"
+                            />
+                        </Col>
 
-                </Grid>
-                <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={true}>
-                    {
-                        faq_list.map(item => {
-                            return(
-                                <MiniQuestionCard faq={item} />
-                            );
-                        })
-                    }
-                </ScrollView>
+                    </Grid>
+                    <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={true}>
+                        {
+                            faq_list.map(item => {
+                                return (
+                                    <MiniQuestionCard faq={item} />
+                                );
+                            })
+                        }
+                    </ScrollView>
 
-            </View>
+                </View>
             </View>
         </MenuScreen>
     );
@@ -196,19 +196,21 @@ export const MiniQuestionCard = (props) => {
         setIsVisible(!isVisible)
     }
 
-    return(
-        <View style={{shadowColor: '#000000',
-        shadowColor: '#000',
-        shadowOffset: { width: 5, height: 5},
-        shadowOpacity: 0.3,
-        shadowRadius: 3,}}>  
-            <TouchableOpacity style={{backgroundColor: 'white', borderRadius: 30, height: 110, alignItems: 'center', marginBottom: 15}} onPress={toggleModal}>
-                <View style={{paddingLeft: 20, paddingRight: 11, paddingTop: 20}}>
-                    <Text style={{fontSize: 17, color: '#1772A6', fontWeight: 'bold', paddingBottom: 10}}>問。{props.faq.question_title}</Text>
-                    <Text style={{fontSize: 14, color: '#2D9CDB'}}>{props.faq.question_content.substring(0, 35)} . . . . .</Text>
+    return (
+        <View style={{
+            shadowColor: '#000000',
+            shadowColor: '#000',
+            shadowOffset: { width: 5, height: 5 },
+            shadowOpacity: 0.3,
+            shadowRadius: 3,
+        }}>
+            <TouchableOpacity style={{ backgroundColor: 'white', borderRadius: 30, height: 110, alignItems: 'center', marginBottom: 15 }} onPress={toggleModal}>
+                <View style={{ paddingLeft: 20, paddingRight: 11, paddingTop: 20 }}>
+                    <Text style={{ fontSize: 17, color: '#1772A6', fontWeight: 'bold', paddingBottom: 10 }}>問。{props.faq.question_title}</Text>
+                    <Text style={{ fontSize: 14, color: '#2D9CDB' }}>{props.faq.question_content.substring(0, 35)} . . . . .</Text>
                 </View>
             </TouchableOpacity>
-            <QuestionCard isVisible={isVisible} toggleModal={toggleModal} faq={props.faq}/>
+            <QuestionCard isVisible={isVisible} toggleModal={toggleModal} faq={props.faq} />
         </View>
     );
 }
@@ -217,34 +219,34 @@ export const QuestionCard = (props) => {
 
     const [bookmarked, setBookmarked] = useState(false);
 
-    return(
-        <BottomModal isVisible={props.isVisible} toggleModal={props.toggleModal} style={{backgroundColor: 'rgb(225, 237, 255)', height: 670}}>
-            <View style={{backgroundColor: '#1772A6', height: 4, width: 70, alignSelf: 'center', marginBottom: 40}}/>
-            <View style={{backgroundColor: 'white', borderRadius: 30, height: 270, alignItems: 'center', marginBottom: 25}}>
-                <View style={{padding: 20}}>
-                <Text style={{fontSize: 25, color: '#24559E', fontWeight: 'bold', paddingBottom: 40}}>問。{"\n"}{props.faq.question_title}</Text>
+    return (
+        <BottomModal isVisible={props.isVisible} toggleModal={props.toggleModal} style={{ backgroundColor: 'rgb(225, 237, 255)', height: 670 }}>
+            <View style={{ backgroundColor: '#1772A6', height: 4, width: 70, alignSelf: 'center', marginBottom: 40 }} />
+            <View style={{ backgroundColor: 'white', borderRadius: 30, height: 270, alignItems: 'center', marginBottom: 25 }}>
+                <View style={{ padding: 20 }}>
+                    <Text style={{ fontSize: 25, color: '#24559E', fontWeight: 'bold', paddingBottom: 40 }}>問。{"\n"}{props.faq.question_title}</Text>
                     <ScrollView>
-                        <Text style={{fontSize: 18, color: '#2D9CDB'}}>{props.faq.question_content}</Text>
+                        <Text style={{ fontSize: 18, color: '#2D9CDB' }}>{props.faq.question_content}</Text>
                     </ScrollView>
                 </View>
             </View>
-            <View style={{backgroundColor: 'white', borderRadius: 30, height: 270, alignItems: 'center', marginBottom: 15}}>
-                <View style={{padding: 20}}>
-                <Icon
-                    containerStyle={{position: 'absolute', right: 30, top: 30, zIndex: 3}}
-                    name={!bookmarked?'bookmark':'bookmark-alt'}
-                    type='fontisto'
-                    size={45}
-                    color={bookmarked?'orange':'black'}
-                    onPress={()=>setBookmarked(!bookmarked)}
+            <View style={{ backgroundColor: 'white', borderRadius: 30, height: 270, alignItems: 'center', marginBottom: 15 }}>
+                <View style={{ padding: 20 }}>
+                    <Icon
+                        containerStyle={{ position: 'absolute', right: 30, top: 30, zIndex: 3 }}
+                        name={!bookmarked ? 'bookmark' : 'bookmark-alt'}
+                        type='fontisto'
+                        size={45}
+                        color={bookmarked ? 'orange' : 'black'}
+                        onPress={() => setBookmarked(!bookmarked)}
                     />
-                    <Text style={{fontSize: 25, color: '#24559E', fontWeight: 'bold', paddingBottom: 40}}>答。{'\n'}{props.faq.prof_name}
-                        <Text style={{fontSize: 15, color: '#24559E', fontWeight: 'normal'}}>
+                    <Text style={{ fontSize: 25, color: '#24559E', fontWeight: 'bold', paddingBottom: 40 }}>答。{'\n'}{props.faq.prof_name}
+                        <Text style={{ fontSize: 15, color: '#24559E', fontWeight: 'normal' }}>
                             {" "}{props.faq.prof_title}
                         </Text>
                     </Text>
-                    <ScrollView style={{zIndex: 10}}>
-                        <Text style={{fontSize: 18, color: '#2D9CDB'}}>{props.faq.answer}</Text>
+                    <ScrollView style={{ zIndex: 10 }}>
+                        <Text style={{ fontSize: 18, color: '#2D9CDB' }}>{props.faq.answer}</Text>
                     </ScrollView>
                 </View>
             </View>
@@ -260,25 +262,25 @@ export const HotQuestionCard = (props) => {
         setIsVisible(!isVisible)
     }
 
-    console.log('wtf')
-
     return (
-        <View style={{shadowColor: '#000000',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 10},
-        shadowOpacity: 0.3,
-        shadowRadius: 5,}}>
-        <View style={{width: 140,height: 140, borderRadius: 30, overflow: 'hidden', marginRight: 20}}>
-            {
-                props.IncreaseFadingEffect()
-            }
-            <TouchableOpacity onPress={toggleModal}>
-            <LinearGradientBackground colors={[`rgb(${props.RGB[0]},${props.RGB[1]},${props.RGB[2]})`, `rgb(${props.RGB[0] + 6.5},${props.RGB[1] + 18.5},${props.RGB[2] + 13})`]} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]}>
-                <Text style={{fontSize: 20, fontWeight:'bold', color: 'white', marginTop: 20, marginLeft: 12, marginRight: 12}}> {props.faq.question_title} </Text>
-            </LinearGradientBackground>
-            </TouchableOpacity>
-        </View>
-            <QuestionCard isVisible={isVisible} toggleModal={toggleModal} faq={props.faq}/>
+        <View style={{
+            shadowColor: '#000000',
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 10 },
+            shadowOpacity: 0.3,
+            shadowRadius: 5,
+        }}>
+            <View style={{ width: 140, height: 140, borderRadius: 30, overflow: 'hidden', marginRight: 20 }}>
+                {
+                    props.IncreaseFadingEffect()
+                }
+                <TouchableOpacity onPress={toggleModal}>
+                    <LinearGradientBackground colors={[`rgb(${props.RGB[0]},${props.RGB[1]},${props.RGB[2]})`, `rgb(${props.RGB[0] + 6.5},${props.RGB[1] + 18.5},${props.RGB[2] + 13})`]} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]}>
+                        <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white', marginTop: 20, marginLeft: 12, marginRight: 12 }}> {props.faq.question_title} </Text>
+                    </LinearGradientBackground>
+                </TouchableOpacity>
+            </View>
+            <QuestionCard isVisible={isVisible} toggleModal={toggleModal} faq={props.faq} />
         </View>
     );
 }

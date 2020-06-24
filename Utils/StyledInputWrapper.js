@@ -10,10 +10,10 @@ export const StyledInputWrapper = ({
     children,
     formikProps,
     formikKey,
-    hideDefaultErrorMessage,
+    hideEmbeddedErrorMessage,
 }) => {
     return (
-        <View style={[styles.content, { height: hideDefaultErrorMessage ? 'auto' : ScreenHeight * 0.1 }, containerStyle]} >
+        <View style={[styles.content, (hideEmbeddedErrorMessage ? { height: ScreenHeight * 0.1 } : { height: ScreenHeight * 0.1 }), containerStyle]} >
             <View style={styles.textInputBorder}>
                 <View style={styles.textInputContainer}>
                     <View style={styles.textInputIcon}>
@@ -26,7 +26,7 @@ export const StyledInputWrapper = ({
                     <View style={{ flex: 1, borderRightColor: "#FFFFFF", borderRightWidth: 1 }}></View>
                 </View>
             </View>
-            {!hideDefaultErrorMessage && <View style={styles.errorMessageContainer}>
+            {!hideEmbeddedErrorMessage && <View style={styles.errorMessageContainer}>
                 <Text style={styles.errorMessage}>
                     {formikProps && formikProps.errors[formikKey] ? '* ' + formikProps.errors[formikKey] : null}
                 </Text>
@@ -47,14 +47,15 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         paddingLeft: ScreenWidth * 0.01,
     },
-    textInputIcon: {
-        flex: 1,
-        alignItems: 'center',
-    },
     textInputContainer: {
         flex: 50,
         flexDirection: "row",
         paddingBottom: ScreenHeight * 0.01,
+    },
+    textInputIcon: {
+        flex: 1,
+        alignSelf: 'center',
+        alignItems: 'center',
     },
     errorMessageContainer: {
         flex: 1,

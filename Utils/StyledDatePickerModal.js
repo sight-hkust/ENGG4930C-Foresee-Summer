@@ -15,7 +15,7 @@ export const StyledDatePickerModal = ({
     formikProps,
     showDatePicker,
     value,
-    hideDefaultErrorMessage,
+    hideEmbeddedErrorMessage,
     ...rest }) => {
     return (
         <StyledInputWrapper
@@ -23,7 +23,7 @@ export const StyledDatePickerModal = ({
             icon={icon}
             formikKey={formikKey}
             formikProps={formikProps}
-            hideDefaultErrorMessage={hideDefaultErrorMessage}
+            hideEmbeddedErrorMessage={hideEmbeddedErrorMessage}
         >
             <Text
                 style={styles.textField}
