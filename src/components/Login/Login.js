@@ -22,7 +22,7 @@ export const Login = ({ navigation, route }) => {
     useEffect(() => {
         auth.onAuthStateChanged((user) => {
             if (user) {
-                navigation.navigate('Profile')
+                navigation.navigate('MainScreen')
             }
         })
     })

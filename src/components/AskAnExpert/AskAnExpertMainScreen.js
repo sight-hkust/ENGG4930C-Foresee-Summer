@@ -124,48 +124,48 @@ const AskAnExpertMainScreen = ({ route, navigation }) => {
                     專家解答
             </Text>
 
-            <View style={{width: ScreenWidth, zIndex: 10,}}>
-                <Text style={{color: 'white', fontWeight: 'bold', fontSize: 25, marginLeft: ScreenWidth * 0.05 + 23}}>熱門</Text>
-                <FlatList
-                    data={faq_list}
-                    horizontal={true}
-                    renderItem={({ item }) => {
-                        hotTopicCounter++;
-                        return(
-                            <HotQuestionCard faq={item} key={item.id} counter={hotTopicCounter - 1} />
-                        );
-                    }}
-                    keyExtractor={item => item.id}
-                    style={{marginTop: 26, height: 180}}
-                    showsHorizontalScrollIndicator={false}
-                >
-                </FlatList>
-            </View>
-            
-            <View style={styles.background}>
-                <Grid style={{marginTop: 91}}>
-                    <Col style={{position: 'absolute', left: 23}}>
-                        <Text style={{color: '#24559E', fontWeight: 'bold', fontSize: 25}}> 最新</Text>
-                    </Col>
-                    <Col style={{position: 'absolute', right: 23}}>
-                    <Icon
-                        size={35}
-                        name='edit'
-                        type='feather'
-                        color="black"
-                    />
-                    </Col>
-                </Grid>
-
-                <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={true}>
-                    {
-                        faq_list.map(item => {
-                            return(
-                                <MiniQuestionCard faq={item} />
+                <View style={{ width: ScreenWidth, zIndex: 10, }}>
+                    <Text style={{ color: 'white', fontWeight: 'bold', fontSize: 25, marginLeft: ScreenWidth * 0.05 + 23 }}>熱門</Text>
+                    <FlatList
+                        data={faq_list}
+                        horizontal={true}
+                        renderItem={({ item }) => {
+                            hotTopicCounter++;
+                            return (
+                                <HotQuestionCard faq={item} key={item.id} counter={hotTopicCounter - 1} />
                             );
-                        })
-                    }
-                </ScrollView>
+                        }}
+                        keyExtractor={item => item.id}
+                        style={{ marginTop: 26, height: 180 }}
+                        showsHorizontalScrollIndicator={false}
+                    >
+                    </FlatList>
+                </View>
+
+                <View style={styles.background}>
+                    <Grid style={{ marginTop: 91 }}>
+                        <Col style={{ position: 'absolute', left: 23 }}>
+                            <Text style={{ color: '#24559E', fontWeight: 'bold', fontSize: 25 }}> 最新</Text>
+                        </Col>
+                        <Col style={{ position: 'absolute', right: 23 }}>
+                            <Icon
+                                size={35}
+                                name='edit'
+                                type='feather'
+                                color="black"
+                            />
+                        </Col>
+                    </Grid>
+
+                    <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={true}>
+                        {
+                            faq_list.map(item => {
+                                return (
+                                    <MiniQuestionCard faq={item} />
+                                );
+                            })
+                        }
+                    </ScrollView>
 
                 </View>
             </View>
@@ -242,7 +242,7 @@ export const QuestionCard = (props) => {
 export const HotQuestionCard = (props) => {
 
     const RGB = [20, 52, 101];
-    
+
     const [isVisible, setIsVisible] = useState(false);
 
     const toggleModal = () => {
@@ -250,17 +250,20 @@ export const HotQuestionCard = (props) => {
     }
 
     return (
-        <View style={{shadowColor: '#000000',
-        shadowColor: '#000',
-        shadowOffset: { width: 0, height: 10},
-        shadowOpacity: 0.3,
-        shadowRadius: 5,}}>
-        <View style={{width: 140,height: 140, borderRadius: 30, overflow: 'hidden', marginRight: 20}}>
-            <TouchableOpacity onPress={toggleModal}>
-            <LinearGradientBackground colors={[`rgb(${RGB[0] + props.counter * 6.5 },${RGB[1] + props.counter * 18 }, ${RGB[2] + props.counter * 13.5 })`, `rgb(${RGB[0] + props.counter * 6.5 },${RGB[1] + props.counter * 18 }, ${RGB[2] + props.counter * 13.5 })`]} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]}>
-                <Text style={{fontSize: 20, fontWeight:'bold', color: 'white', marginTop: 20, marginLeft: 12, marginRight: 12}}> {props.faq.question_title} </Text>
-            </LinearGradientBackground>
-            </TouchableOpacity>
+        <View style={{
+            shadowColor: '#000000',
+            shadowColor: '#000',
+            shadowOffset: { width: 0, height: 10 },
+            shadowOpacity: 0.3,
+            shadowRadius: 5,
+        }}>
+            <View style={{ width: 140, height: 140, borderRadius: 30, overflow: 'hidden', marginRight: 20 }}>
+                <TouchableOpacity onPress={toggleModal}>
+                    <LinearGradientBackground colors={[`rgb(${RGB[0] + props.counter * 6.5},${RGB[1] + props.counter * 18}, ${RGB[2] + props.counter * 13.5})`, `rgb(${RGB[0] + props.counter * 6.5},${RGB[1] + props.counter * 18}, ${RGB[2] + props.counter * 13.5})`]} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]}>
+                        <Text style={{ fontSize: 20, fontWeight: 'bold', color: 'white', marginTop: 20, marginLeft: 12, marginRight: 12 }}> {props.faq.question_title} </Text>
+                    </LinearGradientBackground>
+                </TouchableOpacity>
+            </View>
         </View>
     );
 }
