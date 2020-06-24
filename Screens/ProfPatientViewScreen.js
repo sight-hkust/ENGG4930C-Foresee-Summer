@@ -111,23 +111,23 @@ export default class ProfPatientViewScreen extends Component {
                                     </Row>
                                     <Row>
                                         <Col style={styles.container}><Text style={styles.gridHeader}>SPH:</Text></Col>
-                                        <Col style={styles.container}><Text style={styles.gridText}>{curRecord.L_SPH}</Text></Col>
                                         <Col style={styles.container}><Text style={styles.gridText}>{curRecord.R_SPH}</Text></Col>
+                                        <Col style={styles.container}><Text style={styles.gridText}>{curRecord.L_SPH}</Text></Col>
                                     </Row>
                                     <Row>
                                         <Col style={styles.container}><Text style={styles.gridHeader}>CYL:</Text></Col>
-                                        <Col style={styles.container}><Text style={styles.gridText}>{curRecord.L_CYL}</Text></Col>
                                         <Col style={styles.container}><Text style={styles.gridText}>{curRecord.R_CYL}</Text></Col>
+                                        <Col style={styles.container}><Text style={styles.gridText}>{curRecord.L_CYL}</Text></Col>
                                     </Row>
                                     <Row>
                                         <Col style={styles.container}><Text style={styles.gridHeader}>AXIS:</Text></Col>
-                                        <Col style={styles.container}><Text style={styles.gridText}>{curRecord.L_Axis}</Text></Col>
                                         <Col style={styles.container}><Text style={styles.gridText}>{curRecord.R_Axis}</Text></Col>
+                                        <Col style={styles.container}><Text style={styles.gridText}>{curRecord.L_Axis}</Text></Col>
                                     </Row>
                                     <Row>
                                         <Col style={styles.container}><Text style={styles.gridHeader}>VA:</Text></Col>
-                                        <Col style={styles.container}><Text style={styles.gridText}>{curRecord.L_VA}</Text></Col>
                                         <Col style={styles.container}><Text style={styles.gridText}>{curRecord.R_VA}</Text></Col>
+                                        <Col style={styles.container}><Text style={styles.gridText}>{curRecord.L_VA}</Text></Col>
                                     </Row>
                                     <Row>
                                         <Col style={styles.container}><Text style={styles.gridHeader}>PD:</Text></Col>
