@@ -1,129 +1,202 @@
 import {
-    SafeAreaView,
-    StatusBar,
-    StyleSheet,
-    Text,
-    View,
-    TouchableOpacity,
-    TextInput,
-    ScrollView,
+    SafeAreaView,StyleSheet,Text,View,TouchableOpacity,ScrollView,FlatList,Image, Dimensions
 } from 'react-native';
 import React, {Component} from 'react';
-import AppColors from '../Styles/colors';
-import {Styles} from '../Styles/styles';
-//import Sound from 'react-native-sound';
-/*
-const sound = new Sound('ForSee/assets/audio/eyeexercise1.mpeg', null, (error) => {
-});
-*/
+import { database } from '../src/config/config';
+import { LinearGradient } from 'expo-linear-gradient';
+
+const Setting = require('../assets/images/setting.png')
+
+
 export default class GetEducated extends Component {
     constructor(props) {
         super(props);
-        this.state = {};
+        this.state={
+            data:[],
+            topArticle:""
+        }
     }
 
-    componentDidMount() {
-        this.setState({});
+    componentDidMount(){
+        database.ref("contents/articles").orderByChild("article_id").limitToFirst(3).once("value",(snapshot)=>{
+            var temp = [];
+            //console.log(snapshot.toJSON());
+            snapshot.forEach((childSnapshot)=>{
+                var childData = childSnapshot.val();
+                //console.log(childData);
+                temp.push(childData);
+                this.setState({data: temp})
+            })
+        })
+        database.ref("contents/articles").orderByChild("isTop").equalTo(true).once("value",(snapshot)=>{
+            var temp = [];
+            //console.log(snapshot.toJSON());
+            snapshot.forEach((childSnapshot)=>{
+                var childData = childSnapshot.val();
+                console.log(childData);
+                this.setState({topArticle: childData})
+            })
+        })
     }
-
 
     render() {
         return (
-            <View>
-                <StatusBar barStyle="dark-content"/>
-                <Text style={GetEducatedStyles.helpText}>What do you want to learn today?</Text>
-                <ScrollView style={GetEducatedStyles.mainView}>
-                    <View style={[GetEducatedStyles.card, {height: 130}]}>
-                        <Text style={[GetEducatedStyles.articleTitle]}>Eye Exercise</Text>
-                        <Text>Please use earphones.</Text>
-                        <TouchableOpacity style={[GetEducatedStyles.articleText,
-                            {backgroundColor: "orange", width: 80, alignItems: 'center',padding: 10, borderRadius: 10, marginTop: 5}]}
-                            >
-                            <Text>Listen</Text>
-                        </TouchableOpacity>
-                    </View>
-                    <TouchableOpacity style={GetEducatedStyles.card} onPress={() => this.props.navigation.navigate("ArticleDetailScreen", {index: 0})}>
-                        <Text style={GetEducatedStyles.articleTitle}>Recipe</Text>
-                        <Text style={GetEducatedStyles.articleText}>護眼食譜 忌廉汁菠菜煙三文魚意粉 ...</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={GetEducatedStyles.card} onPress={() => this.props.navigation.navigate("ArticleDetailScreen", {index: 1})}>
-                        <Text style={GetEducatedStyles.articleTitle}>Article</Text>
-                        <Text style={GetEducatedStyles.articleText}>錯誤使用電子螢幕的問題
-                            你知道如果錯誤使用電子螢幕，除了加深近視之外，還會引起其他眼睛問題，例如電腦視覺綜合症（ＣＶＳ）嗎？...</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={GetEducatedStyles.card} onPress={() => this.props.navigation.navigate("ArticleDetailScreen", {index: 2})}>
-                        <Text style={GetEducatedStyles.articleTitle}>Article</Text>
-                        <Text style={GetEducatedStyles.articleText}>你知道近視是甚麼嗎? 近視是指視覺成像提前聚焦在視網膜前，導致看遠方的物體會模糊不清，
-                            因為並非所有的畫面都會模糊不清，所以許多人並不會立即去檢查。...</Text>
-                    </TouchableOpacity>
-                </ScrollView>
+            
+        <View style={{backgroundColor:"#E1EDFF",height:'100%'}}>
+            <View style={GetEducatedScreen.headerContainer}>  
+            <LinearGradient
+                colors={['#1872a7','#5a74d1','#a676ff']}
+                start={[0, 0.9]}
+                end={[1, 0.1]}
+                locations={[0, 0.5, 1]}
+                style={{
+                height: '100%',
+                }}
+            >
+            </LinearGradient>
             </View>
+            <View>
+               <View style={GetEducatedScreen.header}>
+                    <Text style={GetEducatedScreen.title}>護眼秘笈</Text>
+                    <TouchableOpacity>
+                        <Image source={Setting}/>
+                    </TouchableOpacity>
+                </View>
+                
+                <View style={GetEducatedScreen.topArticleContainer}>
+                    <Image
+                        source = {{uri: this.state.topArticle.image}}
+                        style={GetEducatedScreen.topArticleImage}
+                    />
+                    <Text style={GetEducatedScreen.topArticleText}>{this.state.topArticle.subject}</Text>
+                </View>
+
+                <View style={GetEducatedScreen.articleListContainer}>
+                    <FlatList
+                        data={this.state.data}
+                        renderItem={({item})=> <Item item={item}/> }
+                        keyExtractor={item=>item.article_id}
+                    />
+                </View>
+            </View>
+        </View>
         );
     }
 }
 
-const GetEducatedStyles = StyleSheet.create({
-    mainView: {
-        marginHorizontal: 20,
-        padding: 20,
-        height: '80%'
+function Item({item}){
+    const pressHandler=()=>{
+        this.props.navigation.navigate("ArticleDetailScreen")
+    }
+    return(
+        <TouchableOpacity onPress={pressHandler}>
+        <View style={GetEducatedScreen.articleItem}>
+        
+            <View>
+            <Image 
+                source = {{uri: item.image}}
+                style = {GetEducatedScreen.itemImage}
+            />
+            </View>
+            <View>
+                <View>
+                <Text style={GetEducatedScreen.articleSubject}>{item.subject}</Text>
+                <Text style={GetEducatedScreen.articleDate}>{item.date}</Text>
+                <Text style={GetEducatedScreen.articleAbstract}>{item.abstract}</Text>
+                </View>
+                
+            </View>
+        </View>
+        </TouchableOpacity>
+    );
+} 
+
+const GetEducatedScreen = StyleSheet.create({
+    header: {
+        paddingTop:25,
+        marginRight:18,
+        marginLeft:18,
+        flexDirection:'row',
+        justifyContent: 'space-between',
+    }, 
+    title: {
+        fontSize:30,
+        color: "white",
+        fontWeight: '600',
+      },
+    headerContainer:{
+        overflow:'hidden',
+        borderBottomLeftRadius:35,
+        borderBottomRightRadius:35,
+        position:'absolute',
+        height:210,
+        width: Dimensions.get("window").width, 
     },
-    card: {
-        width: '100%',
-        height: 200,
-        backgroundColor: '#FFFFFF',
-        shadowOffset: {width: 5, height: 5},
-        shadowColor: 'black',
-        shadowOpacity: 0.1,
-        padding: 20,
-        borderRadius: 20,
-        marginBottom: 20
+    topArticleContainer:{
+        marginTop:40,
+        marginBottom:15,
     },
-    articleTitle: {
-        fontSize: 24,
-        marginBottom: 10,
+    articleListContainer:{
+        marginTop:5,
+        marginLeft:30,
+        marginRight:30,
     },
-    articleText: {
-        fontSize: 14,
+    articleItem:{
+        flexDirection:'row',
+        marginTop:20,
+
     },
-    buttonContainer: {
-        flexDirection: 'row',
-        width: '100%',
-        justifyContent: 'space-around',
+    itemImage:{
+        width:85,
+        height:85,
+        borderRadius:10,
+        marginRight:25,
     },
-    button: {
-        borderWidth: 2,
-        width: '40%',
-        height: 50,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 10,
-        borderColor: 'gray',
+    articleSubject:{
+        width:210,
+        flexWrap:'wrap',
+        fontWeight:'bold',
+        fontSize:18,
+        color:"#24559E",
+
     },
-    buttonText: {
-        fontSize: 24,
-        color: 'gray',
-        fontWeight: 'bold',
+    articleDate: {
+        fontSize:12,
+        color:'#1772A6', 
+        paddingBottom:5,
+        paddingTop:2
     },
-    nextButton: {
-        borderColor: AppColors.primaryDark,
+    articleAbstract: {
+        width:200,
+        flexWrap:'wrap',
+        fontSize:14,
+        color:"#2D9CDB",
+        paddingRight:10,
+        paddingBottom:10,
+        borderBottomWidth:1,
+        borderColor:"#24559E"
     },
-    nextText: {
-        color: AppColors.primaryDark,
+    topArticleImage:{
+        width:300,
+        height:180,
+        marginLeft:30,
+        marginRight:30,
+        borderRadius:14
     },
-    choiceText: {
-        fontSize: 24,
-        color: 'gray',
-        fontWeight: 'bold',
+    topArticleText:{
+        position:'absolute',
+        top:130,
+        paddingLeft:20,
+        paddingTop:7,
+        left:30,
+        width: 300,
+        height:50,
+        borderBottomLeftRadius:14,
+        borderBottomRightRadius:14,
+        fontSize:24,
+        fontWeight:'bold',
+        color:"white",
+        backgroundColor:"rgba(0, 0, 0, 0.4)"
     },
-    helpText: {
-        textAlign: 'left',
-        width: '80%',
-        color: 'gray',
-        fontSize: 32,
-        marginBottom: 10,
-        marginTop: 60,
-        marginLeft: 20,
-        fontWeight: 'bold',
-    },
+
 });
