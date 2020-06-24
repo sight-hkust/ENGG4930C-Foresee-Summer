@@ -120,7 +120,7 @@ export default class Form extends Component{
                         else{
                             data.R_Myopia =  parseInt(values.R_SPH)
                             }            
-                        console.log(values);
+                        //console.log(values);
                         
                         if(isProfessional) {
                             database.ref('professionals/' + professional_id + '/patients/' + patient_id + '/records/' + values.date).set(data).catch((error)=>console.log(error));

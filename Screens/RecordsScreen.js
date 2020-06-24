@@ -1,5 +1,5 @@
-import React, { Component } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, Image } from 'react-native';
+import React, { Component, useState } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Image,Modal } from 'react-native';
 import { database } from '../src/config/config';
 import LineChart from '../helpers/line-chart';
 import {LinearGradient} from 'expo-linear-gradient';
@@ -12,8 +12,8 @@ const RightOpen = require('../assets/images/RightOpen.png');
 const BackArrow = require('../assets/images/BackArrow.png');
 const NextArrow = require('../assets/images/NextArrow.png');
 const Setting = require('../assets/images/setting.png')
-
-const patient_id = '002';
+   
+const patient_id = '001';
 
 export default class Main extends Component{
   constructor(props){
@@ -25,7 +25,8 @@ export default class Main extends Component{
       ddlSelectedValue: '0',
       index: '0',
       ddlSelectedDate : '0',
-      username: ""
+      username: "",
+      isModalVisible: false,
     }}
   
   componentDidMount(){
@@ -77,6 +78,10 @@ export default class Main extends Component{
           
         <View style={RecordScreenStyle.background}>
           
+          {this.state.isModalVisible &&
+              <RenderModal data={data}/>
+          }
+
           <LinearGradient
             colors={['#1872a7','#5a74d1','#a676ff']}
             start={[0, 0.9]}
@@ -165,6 +170,21 @@ export default class Main extends Component{
         )
 
   }
+}
+
+export const RenderModal = props=>{
+  const {data} = props;
+  const [visible, setvisible] = useState(true);
+
+  return(
+    <Modal
+      
+    >
+      <View>
+        <Text>Hello</Text>
+      </View>
+    </Modal>
+  );
 }
 
 export const RenderContent = props => {
@@ -401,7 +421,6 @@ export const RenderLineChart = props=>{
   }
 }
 
-
 const RecordScreenStyle = StyleSheet.create({
 
   background: {
@@ -422,7 +441,7 @@ const RecordScreenStyle = StyleSheet.create({
     
   },
   secondaryContainer:{
-    marginTop:20,
+    marginTop:10,
     marginLeft:10,
     marginRight:10,
     height: "100%",
@@ -463,19 +482,19 @@ const RecordScreenStyle = StyleSheet.create({
     borderRadius: 20,
     marginLeft:40,
     marginRight:40,
-    marginTop:190,
+    marginTop:200,
     paddingBottom:10,
   },
   eyesButton:{
-    paddingLeft: 40 ,
-    paddingBottom:10,
-    paddingTop:15,
+    paddingLeft: 13 ,
+    paddingBottom:3,
+    paddingTop:5,
   },
   datesButton:{
     flexDirection:'row',
     paddingLeft:40,
     paddingTop:8,
-    paddingBottom: 5
+    paddingBottom: 3
   },
   dateText:{
     color: "#2D9CDB",
@@ -500,6 +519,8 @@ const RecordScreenStyle = StyleSheet.create({
     fontSize: 16
   },
   warningText:{
+    marginLeft:10,
+    marginRight:10,
     fontSize: 16,
     color: "#FE7171",
     textAlign:'center',

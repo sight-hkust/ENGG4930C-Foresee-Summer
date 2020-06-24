@@ -17,6 +17,8 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 
 //TODO: STOP VID WHEN LEAVE THE SCREEN!!
 
+//const { article_id } = this.props.route.params;
+
 export default class ArticleDetail extends Component {
     constructor(props) {
         super(props);
@@ -26,11 +28,12 @@ export default class ArticleDetail extends Component {
             playbackObject: null,
             volume: 1.0,
             isBuffering: false,
-            article_id: '004', //this.route.param
+            article_id: '003', //this.props.route.params.article_id then remove from state
             content:"",
             subject:"",
             image: null,
-            video:null,
+            audio: null,
+            video: null,
             isVid: false,
         };
     }
@@ -60,7 +63,7 @@ export default class ArticleDetail extends Component {
 
     fullscreencontrol = event=>{
         if(event.fullscreenUpdate == 0){
-            console.log("jet")
+            
             ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE)
         } 
         if(event.fullscreenUpdate == 3){
@@ -70,11 +73,11 @@ export default class ArticleDetail extends Component {
     }
 
     async getAudio (){
-        const {play,volume,image} = this.state
+        const {play,volume,audio} = this.state
     
         try{
             const playbackObject = new Audio.Sound()
-            const source = {uri: image}
+            const source = {uri: audio}
             
             const status={
                 shouldPlay: play,
@@ -93,8 +96,7 @@ export default class ArticleDetail extends Component {
         }
     
 
-    async componentDidMount() {
-        
+    componentDidMount() {
 
         database.ref("contents/articles").orderByChild("article_id").equalTo(this.state.article_id).once("value",(snapshot)=>{
             snapshot.forEach((childSnapshot)=>{
@@ -111,15 +113,13 @@ export default class ArticleDetail extends Component {
                         subject: childData.subject,
                         isVid: childData.isVid,
                         image: childData.image,
+                        audio: childData.audio
                         })
-                }
+                    this.getAudio();
+                    }
             })
         })
 
-        if(!this.state.isVid){
-            this.getAudio()
-        }
-        
     }
 
     render() {
@@ -179,7 +179,7 @@ export default class ArticleDetail extends Component {
     }
 }
 
-const ArticleDetailScreen = StyleSheet.create({
+const ArticleDetailStyles = StyleSheet.create({
     articleSubject:{
         position: 'absolute',
         top: 210,

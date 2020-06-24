@@ -44,4 +44,6 @@ target 'foresee' do
   # react-native-cli autolinking
   use_native_modules!
 
+  pod 'react-native-orientation', :path => '../node_modules/react-native-orientation'
+
 end

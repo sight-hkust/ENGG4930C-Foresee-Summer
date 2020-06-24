@@ -66,6 +66,20 @@ function UserScreen({ navigation, route }) {
   );
 }
 
+//Article list and detailed article
+function Education({ navigation, route }) {
+  const Stack = createStackNavigator();
+  return (
+    <Stack.Navigator headerMode="none">
+      
+      <Stack.Screen name="GetEducatedScreen" component={GetEducatedScreen} />
+      <Stack.Screen name="ArticleDetailScreen" component={ArticleDetailScreen} />
+      
+    </Stack.Navigator>
+  );
+}
+
+
 /** Professional User Screen */
 function ProfessionalScreen({ navigation, route }) {
   const Stack = createStackNavigator();
