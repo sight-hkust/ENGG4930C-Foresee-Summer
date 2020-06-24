@@ -74,7 +74,8 @@ export default class GetEducated extends Component {
                 <View style={GetEducatedScreen.articleListContainer}>
                     <FlatList
                         data={this.state.data}
-                        renderItem={({item})=> <Item item={item}/> }
+                        renderItem={({item})=> <Item item={item} navigation={this.props.navigation}/> }
+
                         keyExtractor={item=>item.article_id}
                     />
                 </View>
@@ -84,9 +85,9 @@ export default class GetEducated extends Component {
     }
 }
 
-function Item({item}){
+function Item({item, navigation}){
     const pressHandler=()=>{
-        this.props.navigation.navigate("ArticleDetailScreen")
+        navigation.navigate("ArticleDetailScreen")
     }
     return(
         <TouchableOpacity onPress={pressHandler}>

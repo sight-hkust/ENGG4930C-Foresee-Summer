@@ -227,3 +227,4 @@ const ArticleDetailScreen = StyleSheet.create({
     }
 
 });
+
