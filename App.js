@@ -23,8 +23,8 @@ import { Register } from './src/components/Registration/Register';
 import MainScreen from './Screens/MainScreen';
 import { Profile } from './src/components/Profile/Profile';
 
-const Stack = createStackNavigator();
-const Tab = createMaterialBottomTabNavigator();
+const Tab = createStackNavigator();
+//const Tab = createMaterialBottomTabNavigator();
 
 const Icon = require('./assets/images/Icon_solid.png');
 
@@ -86,12 +86,14 @@ export default class Main extends Component {
     return (
       <NavigationContainer >
         <Tab.Navigator
-          initialRouteName="User"
+          initialRouteName="login"
           shifting={false}
           barStyle={{ backgroundColor: 'tomato' }}
           activeColor='#694fad'
           inactiveColor="white"
+          headerMode="none"
         >
+          
           <Tab.Screen name="User" component={UserScreen} />
           <Tab.Screen name="Prof" component={ProfessionalScreen} />
           <Tab.Screen name="Login" component={LoginAndRegisterScreen} />
