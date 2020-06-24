@@ -12,8 +12,8 @@ function SearchPatient(key, referenceList) {
     const targetList = [];
 
     referenceList.map((u, i) => {
-        if(u.name.includes(key)) {
-            targetList.push({name: u.name, lastReserveDate: u.lastReserveDate, key: u.key});
+        if (u.name.includes(key)) {
+            targetList.push({ name: u.name, lastReserveDate: u.lastReserveDate, key: u.key });
         }
     })
 
@@ -29,12 +29,12 @@ const ProfMainMenu = ({ route, navigation }) => {
     const [searchingStatus, setSearchingStatus] = useState(false);
 
     const [isLoading, setIsLoading] = useState(true);
-    
+
     useEffect(() => {
         database.ref('professionals/M001/patients/').once('value', snap => {
             let patients = []
             snap.forEach(child => {
-                patients.push({name: child.val()['info']['name'], lastReserveDate: child.val()['records']!= null? Object.keys(child.val()['records']).slice(-1)[0] : null, key: child.key});
+                patients.push({ name: child.val()['info']['name'], lastReserveDate: child.val()['records'] != null ? Object.keys(child.val()['records']).slice(-1)[0] : null, key: child.key });
             })
             setPatientList(patients);
             setOriginalList(patients);
@@ -44,82 +44,94 @@ const ProfMainMenu = ({ route, navigation }) => {
 
     return (
         <View style={styles.container}>
-            { isLoading? 
-            <View>
-                <ActivityIndicator size="large" color="#00acc1" />
-                <Text style={styles.loadingText}>Loading . . . </Text>
-            </View>
-            :
-            <View>
-                <Text style={styles.title}> 你好！黃醫生 </Text>
-                <View style={styles.searchButton}>
-                    <Button 
-                        title="搜索普通用戶" 
-                        containerStyle={{width: 200}}
-                        onPress={() => navigation.navigate('ProfSearchResultScreen')}/>
+            {isLoading ?
+                <View>
+                    <ActivityIndicator size="large" color="#00acc1" />
+                    <Text style={styles.loadingText}>Loading . . . </Text>
                 </View>
-                <Card containerStyle={{padding: 0}} >
-                <View style={styles.card}> 
-                        <View style={styles.label} >
-                            <Text style={styles.labelText}>姓名</Text>
+                :
+                <View>
+                    <Text style={styles.title}> 你好！黃醫生 </Text>
+                    <View style={styles.searchButton}>
+                        <Button
+                            title="搜索普通用戶"
+                            containerStyle={{ width: 200 }}
+                            onPress={() => navigation.navigate('ProfSearchResultScreen')} />
+                    </View>
+                    <Card containerStyle={{ padding: 0 }} >
+                        <View style={styles.card}>
+                            <View style={styles.label} >
+                                <Text style={styles.labelText}>姓名</Text>
+                            </View>
+                            <View style={styles.label} >
+                                <Text style={styles.labelText}>最近預約</Text>
+                            </View>
                         </View>
-                        <View style={styles.label} >
-                            <Text style={styles.labelText}>最近預約</Text>
-                        </View>
-                </View>
-                <SearchBar
-                    placeholder="以姓名/病人編號/電話搜尋"
-                    onChangeText={e => setSearchContent(e)}
-                    value={searchContent}
-                    lightTheme
-                    containerStyle={{backgroundColor: 'transparent'}}
-                    inputContainerStyle={{backgroundColor: 'transparent', height: 30}}
-                    onSubmitEditing={() => {
-                        setSearchingStatus(true);
-                        setPatientList(SearchPatient(searchContent, originalList));
-                    }}
-                />
-                {  
-                    searchingStatus &&
-                    <Button title=" 返回" type="clear"   
-                        icon={
-                            <Icon
-                            name="arrow-left"
-                            size={15}
-                            color="#2D89DD"
-                            />
-                        }
-                        onPress={() => {
-                            setPatientList(originalList)
-                            setSearchingStatus(false);
-                        }}
-                    />
-                }
-                <ScrollView style={{height: 320}}>
-                    {
-                        patientList.length == 0 ? 
-                            <Text style={{textAlign:'center'}}> No Results found </Text>
-                        :
-                        patientList.map((u, i) => {
-                        return (
-                        <ListItem 
-                            key={i}
-                            roundAvatar
-                            title={u.name}
-                            rightTitle={u.lastReserveDate}
-                            onPress={() => {
-                                navigation.navigate('ProfPatientViewScreen', {key: u.key})
+                        <SearchBar
+                            placeholder="以姓名/病人編號/電話搜尋"
+                            onChangeText={e => setSearchContent(e)}
+                            value={searchContent}
+                            lightTheme
+                            containerStyle={{ backgroundColor: 'transparent' }}
+                            inputContainerStyle={{ backgroundColor: 'transparent', height: 30 }}
+                            onSubmitEditing={() => {
+                                setSearchingStatus(true);
+                                setPatientList(SearchPatient(searchContent, originalList));
                             }}
                         />
-                        );
-                        })
-                    }
-                </ScrollView>
-                </Card>
-                <Button style={{ paddingTop : 30}} title="創建普通用戶" type="clear" onPress={() => navigation.navigate('Register', { screen: 'Registration Form', params: {isProfessional : true}})}/>
-            </View>
+                        {
+                            searchingStatus &&
+                            <Button title=" 返回" type="clear"
+                                icon={
+                                    <Icon
+                                        name="arrow-left"
+                                        size={15}
+                                        color="#2D89DD"
+                                    />
+                                }
+                                onPress={() => {
+                                    setPatientList(originalList)
+                                    setSearchingStatus(false);
+                                }}
+                            />
+                        }
+                        <ScrollView style={{ height: 320 }}>
+                            {
+                                patientList.length == 0 ?
+                                    <Text style={{ textAlign: 'center' }}> No Results found </Text>
+                                    :
+                                    patientList.map((u, i) => {
+                                        return (
+                                            <ListItem
+                                                key={i}
+                                                roundAvatar
+                                                title={u.name}
+                                                rightTitle={u.lastReserveDate}
+                                                onPress={() => {
+                                                    navigation.navigate('ProfPatientViewScreen', { key: u.key })
+                                                }}
+                                            />
+                                        );
+                                    })
+                            }
+                        </ScrollView>
+                    </Card>
+                    <Button style={{ paddingTop: 30 }}
+                        title="創建普通用戶"
+                        type="clear"
+                        onPress={() =>
+                            navigation.navigate(
+                                'Register',
+                                {
+                                    screen: 'Registration Form',
+                                    params: {
+                                        isProfessional: true,
+                                        registerPatient: true,
+                                    }
+                                })} />
+                </View>
             }
-        </View>        
+        </View>
     );
 }
 
@@ -135,29 +147,29 @@ const styles = StyleSheet.create({
     },
     loadingText: {
         fontWeight: 'bold',
-        alignSelf:'center', 
-        paddingTop: 30, 
+        alignSelf: 'center',
+        paddingTop: 30,
     },
     title: {
-        textAlign: 'center', 
-        fontSize: 35, 
+        textAlign: 'center',
+        fontSize: 35,
         paddingBottom: 40
     },
     searchButton: {
-       alignSelf: 'center'
+        alignSelf: 'center'
     },
     card: {
         flexDirection: 'row',
         justifyContent: 'space-between',
     },
     label: {
-        width: "50%", height: 50, 
-        backgroundColor: '#2D89DD', 
-        justifyContent:'center'
+        width: "50%", height: 50,
+        backgroundColor: '#2D89DD',
+        justifyContent: 'center'
     },
     labelText: {
-        textAlign: "center", 
-        color: 'white', 
+        textAlign: "center",
+        color: 'white',
         fontSize: 20
     }
 })

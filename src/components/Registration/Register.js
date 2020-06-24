@@ -23,7 +23,7 @@ export const Register = (props) => {
                 options={{ headerShown: false }}
             />
             <RegistrationStack.Screen
-                name='Register'
+                name='Registration Form'
                 component={RegistrationForm}
                 options={{ headerShown: false }}
             />

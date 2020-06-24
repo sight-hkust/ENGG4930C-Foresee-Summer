@@ -2,10 +2,10 @@ import React from 'react';
 import { TouchableOpacity, View, Text, StyleSheet } from 'react-native';
 import { ScreenHeight, FontScale } from '../constant/Constant';
 
-export const RoundButton = ({ title, onPress }) => {
+export const RoundButton = ({ title, onPress, containerStyle }) => {
     return (
         <TouchableOpacity style={{ zIndex: 2, }} onPress={onPress}>
-            <View style={styles.submitButton}>
+            <View style={[styles.submitButton, containerStyle]}>
                 <Text style={styles.submitButtonText}>{title}</Text>
             </View>
         </TouchableOpacity>

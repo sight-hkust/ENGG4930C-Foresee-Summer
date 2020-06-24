@@ -7,8 +7,6 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 
-import WelcomeScreen from './Screens/WelcomeScreen'
-import LoginScreen from './Screens/LoginScreen';
 import GetEducatedScreen from './Screens/GetEducated';
 import RecordsScreen from './Screens/RecordsScreen';
 import ArticleDetailScreen from './Screens/ArticleDetail';
@@ -70,7 +68,8 @@ function ProfessionalScreen({ navigation, route }) {
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="ProfMainMenu" component={ProfMainMenu} />
       <Stack.Screen name="ProfPatientViewScreen" component={ProfPatientViewScreen} />
-      <Stack.Screen name="ProfSearchResultScreen" component={ProfSearchResultScreen} />
+      <Stack.Screen name="ProfSearchResultScreen" component={ProfSearchResultScreen} /> 
+      <Stack.Screen name="Register" component={Register} />
     </Stack.Navigator>
   );
 }
@@ -95,7 +94,7 @@ export default class Main extends Component {
         >
           <Tab.Screen name="User" component={UserScreen} />
           <Tab.Screen name="Prof" component={ProfessionalScreen} />
-          <Tab.Screen name="login&reg" component={LoginAndRegisterScreen} />
+          <Tab.Screen name="Login" component={LoginAndRegisterScreen} />
           <Tab.Screen name="+record" component={AddRecordScreen} initialParams={{ isProfessional: false }} />
           <Tab.Screen name="record" component={RecordsScreen} initialParams={{ isProfessional: false }} />
         </Tab.Navigator>
