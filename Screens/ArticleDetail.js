@@ -179,7 +179,7 @@ export default class ArticleDetail extends Component {
     }
 }
 
-const ArticleDetailScreen = StyleSheet.create({
+const ArticleDetailStyles = StyleSheet.create({
     articleSubject:{
         position: 'absolute',
         top: 210,
@@ -227,4 +227,3 @@ const ArticleDetailScreen = StyleSheet.create({
     }
 
 });
-

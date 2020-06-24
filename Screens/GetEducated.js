@@ -201,3 +201,4 @@ const GetEducatedScreen = StyleSheet.create({
     },
 
 });
+
