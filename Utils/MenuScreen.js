@@ -37,7 +37,7 @@ export default class MenuScreen extends Component {
                 }
                 </View>
                 </View>
-                <Grid style={{width: WINDOW_WIDTH * 0.9, alignSelf: 'center', alignItems: 'center', marginBottom: 30, zIndex: 1, marginTop: 20}}>
+                {/* <Grid style={{width: WINDOW_WIDTH * 0.9, alignSelf: 'center', alignItems: 'center', marginBottom: 30, zIndex: 1, marginTop: 20}}>
                     <Col>
                     <TouchableOpacity style={{   shadowColor: '#000',
                         shadowOffset: { width: 0, height: 4},
@@ -84,7 +84,7 @@ export default class MenuScreen extends Component {
                             <Image style={styles.menuButton} source={!this.state.isLightTheme? require('../assets/images/Achievement_bright.png') : require('../assets/images/Achievement_dark.png') } />
                         </TouchableOpacity>             
                     </Col>
-                </Grid>
+                </Grid> */}
             </View>
         );
     }

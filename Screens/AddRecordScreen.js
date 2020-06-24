@@ -1,5 +1,5 @@
 import React, { Component ,useState} from 'react';
-import { StyleSheet, Text, View, Button,ScrollView,TouchableOpacity,Image } from 'react-native';
+import { StyleSheet, Text, View,ScrollView,TouchableOpacity,Image } from 'react-native';
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import {Formik} from 'formik';
 import moment from 'moment';
@@ -7,6 +7,8 @@ import { TextInput } from 'react-native-gesture-handler';
 import {database} from '../src/config/config';
 import {number, object,string} from 'yup';
 import {LinearGradient} from 'expo-linear-gradient';
+import {Button} from 'react-native-elements';
+
 
 const Setting = require('../assets/images/setting.png')
 const DropDown = require('../assets/images/DropDown.png');
@@ -149,7 +151,11 @@ export default class Form extends Component{
                     <Text style={AddRecordScreen.errortext}>{errors.PD}</Text>
                     <View style={{paddingTop:24}}>
 
-                    <Button title='提交' style={AddRecordScreen.submitButton} onPress={handleSubmit} disabled={Object.keys(errors).length>0}/> 
+                    <Button title='提交' buttonStyle={AddRecordScreen.submitButton} 
+                    titleStyle={{color:'#3CA1B7', fontSize:18}}
+                    containerStyle={{alignItems:'center', paddingBottom:30}}
+                    onPress={handleSubmit} 
+                    disabled={Object.keys(errors).length>0}/> 
 
                     </View>
                     
@@ -405,6 +411,8 @@ const AddRecordScreen = StyleSheet.create({
         paddingBottom:5,
     },
     submitButton:{
-        color: 'red',
+        backgroundColor: 'white',
+        borderRadius:20,
+        width:120
     }
   });

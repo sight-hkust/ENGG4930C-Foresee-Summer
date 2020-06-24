@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useMemo } from 'react'
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity, FlatList } from 'react-native';
 import { Input, CheckBox, Button, Icon, Avatar } from 'react-native-elements'
 import { Grid, Col } from 'react-native-easy-grid'
@@ -8,11 +8,9 @@ import moment from 'moment';
 
 import { ScreenHeight, ScreenWidth } from '../../../constant/Constant'
 import { database } from '../../config/config'
-import { RoundButton } from '../../../Utils/RoundButton'
 import { LinearGradientBackground } from '../../../Utils/LinearGradientBackground'
 import MenuScreen from '../../../Utils/MenuScreen'
 import BottomModal from '../../../Utils/BottomModal'
-import { set } from 'react-native-reanimated';
 
 
 const faq_list = [
@@ -115,27 +113,12 @@ const faq_list = [
 
 ]
 
-
 const AskAnExpertMainScreen = ({ route, navigation }) => {
 
-    let RGB = [20, 52, 101];
-    
-    const IncreaseFadingEffect = () => {
-        if(RGB[0] + 13 <= 80) {
-            RGB[0] += 6.5;
-        }
+    let hotTopicCounter = 0;
 
-        if(RGB[1] + 36 <= 180){
-            RGB[1] += 18;
-        }
-
-        if(RGB[2] + 27 <= 203) {
-            RGB[2] += 13.5
-        }
-    }
-    
     return (
-        <MenuScreen menuContainer={{height: 30, }}>
+        <MenuScreen>
             <View style={styles.container}>
             <Text style={{fontWeight: 'bold',fontSize: 30, color: 'white', alignSelf: 'baseline', left: 30, marginBottom: ScreenHeight * 0.03 }}>
                 專家解答
@@ -143,20 +126,22 @@ const AskAnExpertMainScreen = ({ route, navigation }) => {
 
             <View style={{width: ScreenWidth, zIndex: 10,}}>
                 <Text style={{color: 'white', fontWeight: 'bold', fontSize: 25, marginLeft: ScreenWidth * 0.05 + 23}}>熱門</Text>
-
                 <FlatList
                     data={faq_list}
                     horizontal={true}
-                    renderItem={({ item, key }) => (
-                        <HotQuestionCard faq={item} RGB={RGB} IncreaseFadingEffect={IncreaseFadingEffect}/>
-                    )}
+                    renderItem={({ item }) => {
+                        hotTopicCounter++;
+                        return(
+                            <HotQuestionCard faq={item} key={item.id} counter={hotTopicCounter - 1} />
+                        );
+                    }}
                     keyExtractor={item => item.id}
                     style={{marginTop: 26, height: 180}}
                     showsHorizontalScrollIndicator={false}
                 >
                 </FlatList>
             </View>
-
+            
             <View style={styles.background}>
                 <Grid style={{marginTop: 91}}>
                     <Col style={{position: 'absolute', left: 23}}>
@@ -170,8 +155,8 @@ const AskAnExpertMainScreen = ({ route, navigation }) => {
                         color="black"
                     />
                     </Col>
-
                 </Grid>
+
                 <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={true}>
                     {
                         faq_list.map(item => {
@@ -254,13 +239,13 @@ export const QuestionCard = (props) => {
 
 export const HotQuestionCard = (props) => {
 
+    const RGB = [20, 52, 101];
+    
     const [isVisible, setIsVisible] = useState(false);
 
     const toggleModal = () => {
         setIsVisible(!isVisible)
     }
-
-    console.log('wtf')
 
     return (
         <View style={{shadowColor: '#000000',
@@ -269,11 +254,8 @@ export const HotQuestionCard = (props) => {
         shadowOpacity: 0.3,
         shadowRadius: 5,}}>
         <View style={{width: 140,height: 140, borderRadius: 30, overflow: 'hidden', marginRight: 20}}>
-            {
-                props.IncreaseFadingEffect()
-            }
             <TouchableOpacity onPress={toggleModal}>
-            <LinearGradientBackground colors={[`rgb(${props.RGB[0]},${props.RGB[1]},${props.RGB[2]})`, `rgb(${props.RGB[0] + 6.5},${props.RGB[1] + 18.5},${props.RGB[2] + 13})`]} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]}>
+            <LinearGradientBackground colors={[`rgb(${RGB[0] + props.counter * 6.5 },${RGB[1] + props.counter * 18 }, ${RGB[2] + props.counter * 13.5 })`, `rgb(${RGB[0] + props.counter * 6.5 },${RGB[1] + props.counter * 18 }, ${RGB[2] + props.counter * 13.5 })`]} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]}>
                 <Text style={{fontSize: 20, fontWeight:'bold', color: 'white', marginTop: 20, marginLeft: 12, marginRight: 12}}> {props.faq.question_title} </Text>
             </LinearGradientBackground>
             </TouchableOpacity>
