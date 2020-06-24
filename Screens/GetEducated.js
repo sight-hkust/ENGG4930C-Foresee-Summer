@@ -42,7 +42,7 @@ export default class GetEducated extends Component {
     render() {
         return (
             
-        <View style={{backgroundColor:"#E1EDFF"}}>
+        <View style={{backgroundColor:"#E1EDFF",height:'100%'}}>
             <View style={GetEducatedScreen.headerContainer}>  
             <LinearGradient
                 colors={['#1872a7','#5a74d1','#a676ff']}

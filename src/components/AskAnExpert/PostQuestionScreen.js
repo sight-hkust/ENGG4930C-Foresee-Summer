@@ -76,6 +76,8 @@ const PostQuestionScreen = ({ route, navigation }) => {
                     onChangeText={formikProps.handleChange('content')}
                     maxLength={200}
                     multiline={true}
+                    returnKeyLabel="done"
+                    returnKeyType={ 'done' }
                     placeholder={formikProps.values.content.length==0?"由於我們會在本程式內發佈專家回應，請注意不要留下個人資料": ""}
                     
                     labelStyle={styles.label}
