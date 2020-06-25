@@ -191,6 +191,44 @@ export const RenderModal = props=>{
   const {data,selectedDate, isVisible, toggleModal} = props;
   const curRecord = data[selectedDate];
 
+  const calSPH = (isLeft)=>{
+    if(isLeft){
+      if(curRecord.L_Myopia != 0){   //myopia, add - sign
+        var num = parseFloat(curRecord.L_Myopia)/100
+        return "-" + num.toFixed(2)
+      }
+      else{       //hyperopia, add + sign
+        var num = parseFloat(curRecord.L_Hyperopia)/100
+        return "-" + num.toFixed(2)
+      }
+    }
+    else{
+      if(curRecord.L_Myopia != 0){   //myopia, add - sign
+        var num = parseFloat(curRecord.R_Myopia)/100
+        return "-" + num.toFixed(2)
+      }
+      else{       //hyperopia, add + sign
+        var num = parseFloat(curRecord.R_Hyperopia)/100
+        return "-" + num.toFixed(2)
+      }
+    }
+  }
+
+  const calCYL = (isLeft)=>{
+    if(isLeft){
+        var num = parseFloat(curRecord.L_CYL)/100
+        return "-" + num.toFixed(2)
+    }
+    else{
+        var num = parseFloat(curRecord.R_CYL)/100
+        return "-" + num.toFixed(2)
+      
+    }
+  }
+
+
+  
+
   return(
     <BottomModal isVisible={isVisible} toggleModal={toggleModal} style={{backgroundColor: 'rgb(225, 237, 255)', height: 500}}>
       <View style={RecordScreenStyle.box}>                     
@@ -203,13 +241,13 @@ export const RenderModal = props=>{
           
           <Row>
             <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridHeader}>SPH:</Text></Col>
-            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{curRecord.R_SPH}</Text></Col>
-            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{curRecord.L_SPH}</Text></Col>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{calSPH(false)}</Text></Col>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{calSPH(true)}</Text></Col>
           </Row>
           <Row>
             <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridHeader}>CYL:</Text></Col>
-            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{curRecord.R_CYL}</Text></Col>
-            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{curRecord.L_CYL}</Text></Col>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{calCYL(false)}</Text></Col>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{calCYL(true)}</Text></Col>
           </Row>
           <Row>
             <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridHeader}>AXIS:</Text></Col>
@@ -223,7 +261,7 @@ export const RenderModal = props=>{
           </Row>
           <Row>
             <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridHeader}>PD:</Text></Col>
-            <Col style={[RecordScreenStyle.gridContainer, {flex: 2}]}><Text style={RecordScreenStyle.gridText}>{curRecord.PD}</Text></Col>
+            <Col style={[RecordScreenStyle.gridContainer, {flex: 2}]}><Text style={RecordScreenStyle.gridText}>{curRecord.PD}mm</Text></Col>
           </Row>
           <Row>
             <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridHeader}>備註:</Text></Col>
@@ -407,7 +445,6 @@ export const RenderWarning = props=>{
         return(
         <View>
           <Text style={RecordScreenStyle.contentText}>您有深散光</Text>
-          <Text style={RecordScreenStyle.contentText}>有形成弱視的風險</Text>
         </View>
         );
       }
