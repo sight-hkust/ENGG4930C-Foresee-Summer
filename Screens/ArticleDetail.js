@@ -19,7 +19,7 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 
 //const { article_id } = this.props.route.params;
 
-export default class ArticleDetail extends Component {
+export default class ArticleDetailScreen extends Component {
     constructor(props) {
         super(props);
         this.playbackInstance = null;

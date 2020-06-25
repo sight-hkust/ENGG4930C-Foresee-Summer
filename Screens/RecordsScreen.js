@@ -5,7 +5,8 @@ import LineChart from '../helpers/line-chart';
 import {LinearGradient} from 'expo-linear-gradient';
 import {Button} from 'react-native-elements';
 import {Icon} from 'react-native-elements'
-
+import { Col, Row, Grid } from "react-native-easy-grid";
+import BottomModal from '../Utils/BottomModal'
 
 const LeftOpen = require('../assets/images/LeftOpen.png');
 const RightOpen = require('../assets/images/RightOpen.png');
@@ -78,10 +79,6 @@ export default class RecordsScreen extends Component{
           
         <View style={RecordScreenStyle.background}>
           
-          {this.state.isModalVisible &&
-              <RenderModal data={data}/>
-          }
-
           <LinearGradient
             colors={['#1872a7','#5a74d1','#a676ff']}
             start={[0, 0.9]}
@@ -137,17 +134,14 @@ export default class RecordsScreen extends Component{
                   </View>
 
                   <View style={RecordScreenStyle.content}>
-                    <RenderContent isLeft={this.state.Leye} ddlValue={this.state.ddlSelectedValue} data={data} selectedDate={this.state.ddlSelectedDate} index={this.state.index} dateArr={this.state.dates} />
+                    <RenderContent isLeft={this.state.Leye} ddlValue={this.state.ddlSelectedValue} data={data} selectedDate={this.state.ddlSelectedDate} />
                   </View>
               </View>
               }
 
                 <View style={RecordScreenStyle.addRecordButton}>
                   {data!=null &&
-                    <Button icon={<Icon name="dehaze" size={22} color="#2D9CDB"/>}
-                      buttonStyle={{backgroundColor:'white', width:40,height:40,borderRadius:24, paddingLeft:0,paddingRight:0}}
-                      containerStyle={{paddingTop:5}}
-                    /> 
+                   <DetailButton data = {data} selectedDate={this.state.ddlSelectedDate}/>
                   }
 
                   <Button icon={<Icon name="add" size={25} color="#2D9CDB"/>} onPress={pressHandler} 
@@ -166,24 +160,78 @@ export default class RecordsScreen extends Component{
             </View>
           </View>
           </LinearGradient>
+          
         </View>
         )
 
   }
 }
 
+export const DetailButton = props=>{
+  const {data,selectedDate} = props;
+
+  const [isVisible, setIsVisible] = useState(false);
+
+  const toggleModal = () => {
+      setIsVisible(!isVisible)
+  }
+  return(
+    <View>
+    <Button icon={<Icon name="dehaze" size={22} color="#2D9CDB"/>} onPress={toggleModal}
+                        buttonStyle={{backgroundColor:'white', width:40,height:40,borderRadius:24, paddingLeft:0,paddingRight:0}}
+                        containerStyle={{paddingTop:5}}
+                      /> 
+    <RenderModal data={data} selectedDate={selectedDate} isVisible={isVisible} toggleModal={toggleModal}/>
+    </View>
+  )
+
+}
+
 export const RenderModal = props=>{
-  const {data} = props;
-  const [visible, setvisible] = useState(true);
+  const {data,selectedDate, isVisible, toggleModal} = props;
+  const curRecord = data[selectedDate];
 
   return(
-    <Modal
-      
-    >
-      <View>
-        <Text>Hello</Text>
+    <BottomModal isVisible={isVisible} toggleModal={toggleModal} style={{backgroundColor: 'rgb(225, 237, 255)', height: 500}}>
+      <View style={RecordScreenStyle.box}>                     
+        <Grid>
+          <Row>
+            <Col style={RecordScreenStyle.gridContainer}></Col>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={[RecordScreenStyle.gridText, {fontSize: 20}]}>O.D.</Text></Col>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={[RecordScreenStyle.gridText, {fontSize: 20}]}>O.S.</Text></Col>
+          </Row>
+          
+          <Row>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridHeader}>SPH:</Text></Col>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{curRecord.R_SPH}</Text></Col>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{curRecord.L_SPH}</Text></Col>
+          </Row>
+          <Row>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridHeader}>CYL:</Text></Col>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{curRecord.R_CYL}</Text></Col>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{curRecord.L_CYL}</Text></Col>
+          </Row>
+          <Row>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridHeader}>AXIS:</Text></Col>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{curRecord.R_Axis}</Text></Col>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{curRecord.L_Axis}</Text></Col>
+          </Row>
+          <Row>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridHeader}>VA:</Text></Col>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{curRecord.R_VA}</Text></Col>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{curRecord.L_VA}</Text></Col>
+          </Row>
+          <Row>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridHeader}>PD:</Text></Col>
+            <Col style={[RecordScreenStyle.gridContainer, {flex: 2}]}><Text style={RecordScreenStyle.gridText}>{curRecord.PD}</Text></Col>
+          </Row>
+          <Row>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridHeader}>備註:</Text></Col>
+            <Col style={[RecordScreenStyle.gridContainer, {flex: 2}]}><Text>{curRecord.remark}</Text></Col>
+          </Row>
+        </Grid>                 
       </View>
-    </Modal>
+    </BottomModal>
   );
 }
 
@@ -378,7 +426,6 @@ export const RenderAmblyopiaWarning = props=>{
 
 }
 
-
 export const RenderLineChart = props=>{
   const {dataArr,dateArr,refractive,isLeft,selectedIndex} = props;
 
@@ -538,5 +585,22 @@ const RecordScreenStyle = StyleSheet.create({
     textAlign: 'center',
     color: "white",
     paddingTop: 175,
-  }
+  },
+  box:{
+    flex:1,
+    
+  },
+  gridContainer:{
+    flex: 1,
+    justifyContent: 'center'
+  },
+  gridHeader:{
+    textAlign: 'left',
+    fontSize: 18,
+    paddingLeft: 30,
+  },
+  gridText:{
+    textAlign: 'center',
+    fontSize: 18
+  },
 });
