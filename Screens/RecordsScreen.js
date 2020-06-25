@@ -761,18 +761,18 @@ const RecordScreenStyle = StyleSheet.create({
     height: '100%',
     backgroundColor: '#24559E',
   },
-  title: {
-    fontSize: 31,
-    color: '#E1EDFF',
-    fontWeight: '700',
-  },
   header: {
-    paddingTop: 30,
-    marginRight: 18,
-    marginLeft: 18,
-    flexDirection: 'row',
+    paddingTop:40,
+    marginHorizontal:30,
+    flexDirection:'row',
     justifyContent: 'space-between',
-  },
+    alignItems: 'center'
+  }, 
+  title: {
+      fontSize:30,
+      color: "white",
+      fontWeight: 'bold',
+    },
   secondaryContainer: {
     marginLeft: 10,
     marginRight: 10,
