@@ -96,14 +96,8 @@ function Education({ navigation, route }) {
 }
 
 /**
- *                            Register Screen
- *                          /
- * Professionl Screen: Main - Search Patient
- *                          \
- *                            View Patient
- *
+ * Professionl Screen
  * Todo: linking with Register
- *
  */
 function ProfessionalScreen({ navigation, route }) {
   const Stack = createStackNavigator();

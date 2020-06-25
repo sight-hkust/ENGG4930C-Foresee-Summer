@@ -19,7 +19,7 @@ export default class LineChart extends React.Component {
     //const max = Math.max(...data);
     const y = scaleLinear()
     .domain([0,800])
-    .range([180, 10]);
+    .range([170, 10]);
     return(Math.floor((( y(val)) / 4) * 3 + paddingTop));
   }
 
@@ -91,7 +91,7 @@ export default class LineChart extends React.Component {
       return this.y_scale(datas[i],datas,height,paddingTop);
     };
     const startingPoint = 2;
-    const verticalPoint = y(0) + 25;
+    const verticalPoint = y(0) + 13;
     const horizontalLine = config.width - (config.paddingRight);
     const lastPoint = y(dateArr.length-1);
     return [`M${startingPoint},750 V${verticalPoint} Q ${startingPoint}, ${y(0)}, ${x(0)}, ${y(0)} `]
@@ -105,7 +105,7 @@ export default class LineChart extends React.Component {
         })
       )
       .join(" ")
-      .concat(`Q ${horizontalLine}, ${lastPoint}, ${horizontalLine}, ${lastPoint+25}  V750 `);
+      .concat(`Q ${horizontalLine}, ${lastPoint}, ${horizontalLine}, ${lastPoint+13}  V750 `);
   };
 
   renderLine = config=>{

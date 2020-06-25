@@ -4,6 +4,7 @@ import {
     View,
 } from 'react-native';
 import Modal from 'react-native-modal';
+import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
 
 
 export default class BottomModal extends Component {
@@ -29,9 +30,11 @@ export default class BottomModal extends Component {
                 swipeDirection={['down']}
                 style={{ justifyContent: 'flex-end', margin: 0,}}
             >
+
             <View style={{...MainStyles.content, ...this.props.style}}>
                 {this.props.children}
             </View>
+
         </Modal>
         );
     }

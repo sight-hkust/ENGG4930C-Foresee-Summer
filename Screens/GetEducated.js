@@ -75,6 +75,7 @@ export default class GetEducated extends Component {
                     <FlatList
                         data={this.state.data}
                         renderItem={({item})=> <Item item={item} navigation={this.props.navigation}/> }
+
                         keyExtractor={item=>item.article_id}
                     />
                 </View>
