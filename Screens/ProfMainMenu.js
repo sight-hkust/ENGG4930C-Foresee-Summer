@@ -1,12 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  ActivityIndicator,
-  Image,
-} from 'react-native';
+import { StyleSheet, Text, View, ScrollView, ActivityIndicator, Image } from 'react-native';
 import { Icon, ListItem, Button, SearchBar } from 'react-native-elements';
 //import Icon from 'react-native-vector-icons/FontAwesome';
 
@@ -51,10 +44,7 @@ const ProfMainMenu = ({ route, navigation }) => {
       snap.forEach((child) => {
         patients.push({
           name: child.val()['info']['name'],
-          lastReserveDate:
-            child.val()['records'] != null
-              ? Object.keys(child.val()['records']).slice(-1)[0]
-              : null,
+          lastReserveDate: child.val()['records'] != null ? Object.keys(child.val()['records']).slice(-1)[0] : null,
           key: child.key,
         });
       });
@@ -118,10 +108,7 @@ const ProfMainMenu = ({ route, navigation }) => {
               }}
             >
               {patientList.length == 0 ? (
-                <Text style={{ textAlign: 'center', color: 'white' }}>
-                  {' '}
-                  No Results found{' '}
-                </Text>
+                <Text style={{ textAlign: 'center', color: 'white' }}> No Results found </Text>
               ) : (
                 patientList.map((u, i) => {
                   return (
@@ -192,20 +179,14 @@ const ProfMainMenu = ({ route, navigation }) => {
 
             <Button
               style={{ paddingTop: 30 }}
-              icon={
-                <Image
-                  source={require('../assets/images/Add_patient_bright.png')}
-                  style={{ height: 35, width: 35 }}
-                />
-              }
+              icon={<Image source={require('../assets/images/Add_patient_bright.png')} style={{ height: 35, width: 35 }} />}
               title=" 創建普通用戶"
               titleStyle={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}
               type="clear"
               onPress={() =>
                 navigation.navigate('Register', {
-                  screen: 'Register',
+                  screen: 'Registration Form',
                   params: { isProfessional: true, registerPatient: true },
-                  registerPatient: true,
                 })
               }
             />
