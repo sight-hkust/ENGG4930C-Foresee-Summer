@@ -1,11 +1,14 @@
 import React, { useState, useEffect } from "react";
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Permissions } from 'react-native-unimodules'
-import { Camera } from 'expo-camera';
-import { Text, Button, View, StyleSheet, SafeAreaView, Animated } from "react-native";
-import { ScreenWidth, ScreenHeight, FontScale } from "../../../constant/Constant";
+import Modal from 'react-native-modal'
+import { Camera } from "expo-camera"
+import { useIsFocused } from "@react-navigation/native";
+import { Text, View, StyleSheet, SafeAreaView, Animated, Button } from "react-native";
+import { FontScale, Scale, ScreenWidth, ScreenHeight } from "../../../constant/Constant";
 import { RoundButton } from '../../../Utils/RoundButton'
 import { database } from "../../config/config";
+
 
 
 export const QRCodeScannerScreen = ({ navigation, route }) => {
@@ -14,12 +17,18 @@ export const QRCodeScannerScreen = ({ navigation, route }) => {
     const [scanned, setScanned] = useState(false);
     const [animationLineHeight, setAnimationLineHeight] = useState(0);
     const [focusLineAnimation, setFocusLineAnimation] = useState(new Animated.Value(0));
+    const [isModalVisible, setModalVisibility] = useState(false);
+    const [doesPatientFound, setDoesPatientFound] = useState(false);
+    const [modalMessage, setModalMessage] = useState('');
+    const isFocused = useIsFocused();
+
 
     useEffect(() => {
         if (!scanned) {
             animateLine()
         }
     })
+
 
     useEffect(() => {
         getPermissionAsync()
@@ -28,7 +37,6 @@ export const QRCodeScannerScreen = ({ navigation, route }) => {
         })
         return unsubscribe;
     }, [navigation])
-
 
 
     const getPermissionAsync = async () => {
@@ -51,29 +59,56 @@ export const QRCodeScannerScreen = ({ navigation, route }) => {
         ])).start()
     }
 
+    const showModalMessage = (message) => {
+        setModalMessage(message);
+        setModalVisibility(true);
+    }
+
+    const hideModalMessage = () => {
+        /* if (doesPatientFound) {
+            navigation.navigate('GetEducated');
+        } */
+        setModalVisibility(false);
+        navigation.navigate('GetEducated');
+    }
+
     const handleQRCodeScanned = ({ type, data, ...rest }) => {
         setScanned(true);
-        database.ref('users').once('value').then((snap) => {
-            if (snap.child(data).exists()) {
-                database.ref('/professionals/test/patients/' + data)
-                    .set(true).then(
-                        alert('Patient was registered successfully.')
-                    )
-            }
-            else {
-                alert('no such patient');
-            }
-        })
+        const regEx = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/g;
+        const hasSpecialCharacterOrSpace = regEx.test(data);
+        if (hasSpecialCharacterOrSpace) {
+            setDoesPatientFound(false);
+            showModalMessage('QR Code格式錯誤')
+        }
+        else {
+            database.ref('users').once('value').then((snap) => {
+                if (snap.child(data).exists()) {
+                    database.ref('/professionals/test/patients/' + data)
+                        .set(true).then(
+                            () => {
+                                setDoesPatientFound(true);
+                                showModalMessage('已成功登記病人')
+                            }
+
+                        )
+                }
+                else {
+                    setDoesPatientFound(false);
+                    showModalMessage('未有病人記錄');
+                }
+            })
+        }
     }
 
     return (
         <SafeAreaView style={styles.container}>
-            {hasCameraPermission === null ? <View>
+            {!(isFocused && hasCameraPermission) ? <View>
                 <Text>{'Requesting for camera permission.'}</Text>
-            </View> : <View style={styles.container}>
-                    <BarCodeScanner
+            </View> : <View style={StyleSheet.absoluteFillObject}>
+                    <Camera
                         onBarCodeScanned={scanned ? undefined : handleQRCodeScanned}
                         style={StyleSheet.absoluteFillObject}
+                        ratio='16:9'
                     />
                     <View style={styles.unfocusedContainer} />
                     <View style={styles.middleContainer} >
@@ -101,16 +136,24 @@ export const QRCodeScannerScreen = ({ navigation, route }) => {
                         <RoundButton
                             onPress={() => navigation.navigate('GetEducated')}
                             containerStyle={{ flex: 2 }}
-                            buttonStyle={styles.button} title={'返回'} />
+                            buttonStyle={styles.button}
+                            title={'返回'} />
                     </View>
                 </View>}
+            <Modal isVisible={isModalVisible} onBackdropPress={hideModalMessage}>
+                <View style={{ backgroundColor: 'white', height: '20%', borderRadius: Scale * 2, justifyContent: 'center', alignItems: 'center' }}>
+                    <Text style={{ fontSize: FontScale * 18, textAlign: 'center', textAlignVertical: 'center', marginBottom: ScreenHeight * 0.02 }}>{modalMessage}</Text>
+                    <RoundButton onPress={() => hideModalMessage()} containerStyle={{ width: '50%' }} buttonStyle={{ height: '7%', width: '100%' }} textStyle={{ color: 'white' }} buttonStyle={{ backgroundColor: '#4287f5' }} title={'確定'} />
+                </View>
+            </Modal>
         </SafeAreaView >)
 }
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        position: 'relative'
+        position: 'relative',
+        backgroundColor: 'black'
     },
     overlay: {
         position: 'absolute',

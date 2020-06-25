@@ -12,7 +12,7 @@
     "@react-native-community/picker": "^1.6.5",
     "@react-navigation/bottom-tabs": "^5.5.2",
     "@react-navigation/material-bottom-tabs": "^5.2.10",
-    "@react-navigation/native": "^5.5.1",
+    "@react-navigation/native": "^5.6.0",
     "@react-navigation/stack": "^5.5.1",
     "d3-scale": "^3.2.1",
     "expo": "~37.0.3",
