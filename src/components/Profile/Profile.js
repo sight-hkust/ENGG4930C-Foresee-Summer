@@ -24,11 +24,11 @@ export const Profile = ({ navigation, route }) => {
     return (
         <SafeAreaView>
             <LinearGradientBackground>
-                <View style={{ height: '100%', paddingTop: ScreenHeight * 0.05, marginHorizontal: ScreenWidth * 0.1 }}>
+                <View style={{ height: '100%', paddingTop: '10%', marginHorizontal: ScreenWidth * 0.1 }}>
                     <View style={{
-                        paddingVertical: ScreenHeight * 0.03,
+                        paddingVertical: '2%',
                         borderRadius: ScreenWidth * 0.02,
-                        flex: 1,
+                        flex: 2,
                         alignItems: 'center',
                         justifyContent: 'center',
                         backgroundColor: 'white'
@@ -40,14 +40,14 @@ export const Profile = ({ navigation, route }) => {
                             backgroundColor='transparent'
                         />
                     </View>
-                    <View style={{ flex: 1, paddingVertical: ScreenHeight * 0.02 }}>
+                    <View style={{ flex: 1, paddingVertical: '2%' }}>
                         <Text style={{
                             fontSize: FontScale * 25,
                             color: '#FFFFFF',
                             fontFamily: 'Roboto',
                             textAlignVertical: 'center',
                             textAlign: 'center',
-                            marginBottom: ScreenHeight * 0.02
+                            marginBottom: '5%'
                         }}>{'請讓眼科醫生/視光師\n掃描QR Code以進行配對'}</Text>
                         <RoundButton title='登出' onPress={handleSignOut} />
                     </View>
