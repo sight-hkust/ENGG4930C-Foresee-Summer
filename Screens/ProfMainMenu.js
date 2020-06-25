@@ -159,8 +159,10 @@ const ProfMainMenu = ({ route, navigation }) => {
                               padding: 3,
                             }}
                             onPress={() => {
-                              navigation.navigate('ProfPatientViewScreen', {
-                                key: u.key,
+                              navigation.navigate('AddRecordScreen', {
+                                isProfessional: true,
+                                professional_id: 'M001',
+                                patient_id: u.key,
                               });
                             }}
                           />
@@ -201,8 +203,9 @@ const ProfMainMenu = ({ route, navigation }) => {
               type="clear"
               onPress={() =>
                 navigation.navigate('Register', {
-                  screen: 'Registration Form',
-                  params: { isProfessional: true },
+                  screen: 'Register',
+                  params: { isProfessional: true, registerPatient: true },
+                  registerPatient: true,
                 })
               }
             />
