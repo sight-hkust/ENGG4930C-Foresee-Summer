@@ -79,9 +79,7 @@ export default class ProfPatientViewScreen extends Component {
                             {flex: 2, 
                             justifyContent: 'center',
                             paddingHorizontal: 30,
-                            backgroundColor: '#56CCF2',
                         }]}>
-                        <View style={{height: 60}}/>
                         <View style={[styles.boxes, {flex: 6, paddingVertical: 10}]}>
                             {records.length == 0 ? <Text>Nah</Text> : 
                                 <Grid>
@@ -174,9 +172,9 @@ const styles = StyleSheet.create({
     },
     profileText: {
         textAlign: 'left',
-        fontSize: 18,
-        paddingHorizontal: 40,
-        color: '#474747'
+        fontSize: 20,
+        paddingHorizontal: 30,
+        color: 'white'
     },
     centreText: {
         textAlign: 'center'
