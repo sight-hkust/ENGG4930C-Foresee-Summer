@@ -197,40 +197,59 @@ export const RenderModal = props=>{
         var num = parseFloat(curRecord.L_Myopia)/100
         return "-" + num.toFixed(2)
       }
-      else{       //hyperopia, add + sign
+      else if(curRecord.L_Hyperopia!=0){       //hyperopia, add + sign
         var num = parseFloat(curRecord.L_Hyperopia)/100
         return "-" + num.toFixed(2)
       }
+      else{
+        return "0.00"
+      }
     }
     else{
-      if(curRecord.L_Myopia != 0){   //myopia, add - sign
+      if(curRecord.R_Myopia != 0){   //myopia, add - sign
         var num = parseFloat(curRecord.R_Myopia)/100
         return "-" + num.toFixed(2)
       }
-      else{       //hyperopia, add + sign
+      else if(curRecord.R_Hyperopia!=0){       //hyperopia, add + sign
         var num = parseFloat(curRecord.R_Hyperopia)/100
         return "-" + num.toFixed(2)
+      }
+      else{
+        return "0.00"
       }
     }
   }
 
   const calCYL = (isLeft)=>{
-    if(isLeft){
+    if(isLeft && curRecord.L_CYL!=0){
         var num = parseFloat(curRecord.L_CYL)/100
         return "-" + num.toFixed(2)
     }
-    else{
+    else if(!isLeft && curRecord.R_CYL!=0){
         var num = parseFloat(curRecord.R_CYL)/100
         return "-" + num.toFixed(2)
-      
+    }
+    else{
+      return "0.00"
     }
   }
 
+  const calAxis = (isLeft)=>{
+    if(isLeft){
+      if(curRecord.L_CYL!=0) return curRecord.L_Axis;
+      else return "NA"
+  }
+  else{
+      if(curRecord.R_CYL!=0) return curRecord.R_Axis;
+      else return "NA"
+    
+  }
+  }
 
   
 
   return(
-    <BottomModal isVisible={isVisible} toggleModal={toggleModal} style={{backgroundColor: 'rgb(225, 237, 255)', height: 500}}>
+    <BottomModal isVisible={isVisible} toggleModal={toggleModal} style={{backgroundColor: '#FFFFFF', height: 350}}>
       <View style={RecordScreenStyle.box}>                     
         <Grid>
           <Row>
@@ -251,8 +270,8 @@ export const RenderModal = props=>{
           </Row>
           <Row>
             <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridHeader}>AXIS:</Text></Col>
-            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{curRecord.R_Axis}</Text></Col>
-            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{curRecord.L_Axis}</Text></Col>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{calAxis(false)}</Text></Col>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{calAxis(true)}</Text></Col>
           </Row>
           <Row>
             <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridHeader}>VA:</Text></Col>
@@ -625,7 +644,7 @@ const RecordScreenStyle = StyleSheet.create({
   },
   box:{
     flex:1,
-    
+    marginTop:10
   },
   gridContainer:{
     flex: 1,
@@ -635,9 +654,11 @@ const RecordScreenStyle = StyleSheet.create({
     textAlign: 'left',
     fontSize: 18,
     paddingLeft: 30,
+    color:"#2D9CDB"
   },
   gridText:{
     textAlign: 'center',
-    fontSize: 18
+    fontSize: 18,
+    color:"#2D9CDB"
   },
 });
