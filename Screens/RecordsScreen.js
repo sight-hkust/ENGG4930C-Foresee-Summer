@@ -199,7 +199,7 @@ export const RenderModal = props=>{
       }
       else if(curRecord.L_Hyperopia!=0){       //hyperopia, add + sign
         var num = parseFloat(curRecord.L_Hyperopia)/100
-        return "-" + num.toFixed(2)
+        return "+" + num.toFixed(2)
       }
       else{
         return "0.00"
@@ -212,7 +212,7 @@ export const RenderModal = props=>{
       }
       else if(curRecord.R_Hyperopia!=0){       //hyperopia, add + sign
         var num = parseFloat(curRecord.R_Hyperopia)/100
-        return "-" + num.toFixed(2)
+        return "+" + num.toFixed(2)
       }
       else{
         return "0.00"
@@ -530,18 +530,17 @@ const RecordScreenStyle = StyleSheet.create({
     height:"100%",
     backgroundColor: '#24559E',
   },
-  title: {
-    fontSize:30,
-    color: "white",
-    fontWeight: '600',
-  },
   header: {
-    paddingTop:25,
-    marginRight:18,
-    marginLeft:18,
+    paddingTop:40,
+    marginHorizontal:30,
     flexDirection:'row',
     justifyContent: 'space-between',
-    
+    alignItems: 'center'
+  },
+  title: {
+      fontSize:30,
+      color: "white",
+      fontWeight: 'bold'
   },
   secondaryContainer:{
     marginTop:10,

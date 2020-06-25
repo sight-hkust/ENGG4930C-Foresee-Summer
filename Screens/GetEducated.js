@@ -4,6 +4,7 @@ import {
 import React, {Component} from 'react';
 import { database } from '../src/config/config';
 import { LinearGradient } from 'expo-linear-gradient';
+import { ScreenWidth, ScreenHeight, FontScale } from '../constant/Constant';
 
 const Setting = require('../assets/images/setting.png')
 
@@ -50,7 +51,7 @@ export default class GetEducated extends Component {
                 end={[1, 0.1]}
                 locations={[0, 0.5, 1]}
                 style={{
-                height: '100%',
+                height: ScreenHeight,
                 }}
             >
             </LinearGradient>
@@ -114,16 +115,16 @@ function Item({item, navigation}){
 
 const GetEducatedScreen = StyleSheet.create({
     header: {
-        paddingTop:25,
-        marginRight:18,
-        marginLeft:18,
+        paddingTop:40,
+        marginHorizontal:30,
         flexDirection:'row',
         justifyContent: 'space-between',
+        alignItems: 'center'
     }, 
     title: {
         fontSize:30,
         color: "white",
-        fontWeight: '600',
+        fontWeight: 'bold',
       },
     headerContainer:{
         overflow:'hidden',
