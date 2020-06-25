@@ -160,16 +160,16 @@ export default class ArticleDetailScreen extends Component {
                 </>
             }
 
-            <Text style={ this.state.isVid? ArticleDetailScreen.videoSubject:ArticleDetailScreen.articleSubject}>{this.state.subject}</Text>
+            <Text style={ this.state.isVid? ArticleDetailStyles.videoSubject:ArticleDetailStyles.articleSubject}>{this.state.subject}</Text>
             </View>
 
            <ScrollView>
            
             <View>
                 {!this.state.isVid &&
-                <Button title={this.state.play? "暫停錄音":"播放錄音"} titleStyle={ArticleDetailScreen.buttonTitle} onPress={()=>PressPlayButton()} buttonStyle={ArticleDetailScreen.playButton}/>
+                <Button title={this.state.play? "暫停錄音":"播放錄音"} titleStyle={ArticleDetailStyles.buttonTitle} onPress={()=>PressPlayButton()} buttonStyle={ArticleDetailStyles.playButton}/>
                 }
-                <Text style={this.state.isVid? ArticleDetailScreen.videoContent :ArticleDetailScreen.articleContent}>{this.state.content}</Text>
+                <Text style={this.state.isVid? ArticleDetailStyles.videoContent :ArticleDetailStyles.articleContent}>{this.state.content}</Text>
 
 
             </View>

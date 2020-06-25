@@ -14,7 +14,8 @@ const BackArrow = require('../assets/images/BackArrow.png');
 const NextArrow = require('../assets/images/NextArrow.png');
 const Setting = require('../assets/images/setting.png')
    
-const patient_id = '001';
+const patient_id = '002';
+const UpperDisplayLimit = 3; //3 for testing, real is 4
 
 export default class RecordsScreen extends Component{
   constructor(props){
@@ -31,25 +32,24 @@ export default class RecordsScreen extends Component{
     }}
   
   componentDidMount(){
-      
-    database.ref('users/'+ patient_id ).on('value', (snapshot)=>{
-        var tempDate = [];
-
-        for(var key in snapshot.child("records").val()){
-          tempDate.push(key);
-        }
-        
-        var tempName = snapshot.child("info/name").val();
-       
-        this.setState({data : snapshot.child("records").toJSON(), 
-                      dates: tempDate,
-                      ddlSelectedDate: tempDate[tempDate.length-1],
-                      username: tempName,
-                      index: tempDate.length-1
-                      });
-    });
+    const ref = database.ref('users/'+ patient_id);
     
-  }
+    ref.child('records').on('value', (snapshot)=>{
+      var tempDate = [];
+        for(var key in snapshot.val()){
+          tempDate.push(key);
+         }
+        this.setState({data : snapshot.toJSON(), 
+              dates: tempDate,
+              ddlSelectedDate: tempDate[tempDate.length-1],
+              index: tempDate.length-1
+              });
+    })
+
+    ref.child('info/name').once('value', snapshot=>{
+      this.setState({username: snapshot.val()})
+    })
+}
 
   render(){
     const data = this.state.data;
@@ -90,7 +90,7 @@ export default class RecordsScreen extends Component{
           >
 
           <View style={RecordScreenStyle.header}>
-            <Text style={RecordScreenStyle.title}>視力趨勢</Text>
+          <Text style={RecordScreenStyle.title}>{this.state.ddlSelectedValue=='0'? '近視' : this.state.ddlSelectedValue=='1'? '遠視' : '散光'}度數趨勢</Text>
             <TouchableOpacity>
               <Image source={Setting}/>
             </TouchableOpacity>
@@ -154,7 +154,7 @@ export default class RecordsScreen extends Component{
                       containerStyle={{paddingTop:5}}
                     />                 
                   }
-
+                <RenderIncreaseWarning data={data} dateArr={this.state.dates} index={this.state.index} refractive={this.state.ddlSelectedValue} isLeft={true}/>
                 </View>
             
             </View>
@@ -250,40 +250,42 @@ export const RenderModal = props=>{
 
   return(
     <BottomModal isVisible={isVisible} toggleModal={toggleModal} style={{backgroundColor: '#FFFFFF', height: 350}}>
+
+      <View style={{backgroundColor: '#1772A6', height: 4, width: 70, alignSelf: 'center', marginBottom: 10}}/>
       <View style={RecordScreenStyle.box}>                     
         <Grid>
           <Row>
             <Col style={RecordScreenStyle.gridContainer}></Col>
-            <Col style={RecordScreenStyle.gridContainer}><Text style={[RecordScreenStyle.gridText, {fontSize: 20}]}>O.D.</Text></Col>
-            <Col style={RecordScreenStyle.gridContainer}><Text style={[RecordScreenStyle.gridText, {fontSize: 20}]}>O.S.</Text></Col>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.colHeader}>O.D.</Text></Col>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.colHeader}>O.S.</Text></Col>
           </Row>
           
           <Row>
-            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridHeader}>SPH:</Text></Col>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.rowHeader}>SPH:</Text></Col>
             <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{calSPH(false)}</Text></Col>
             <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{calSPH(true)}</Text></Col>
           </Row>
           <Row>
-            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridHeader}>CYL:</Text></Col>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.rowHeader}>CYL:</Text></Col>
             <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{calCYL(false)}</Text></Col>
             <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{calCYL(true)}</Text></Col>
           </Row>
           <Row>
-            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridHeader}>AXIS:</Text></Col>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.rowHeader}>AXIS:</Text></Col>
             <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{calAxis(false)}</Text></Col>
             <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{calAxis(true)}</Text></Col>
           </Row>
           <Row>
-            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridHeader}>VA:</Text></Col>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.rowHeader}>VA:</Text></Col>
             <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{curRecord.R_VA}</Text></Col>
             <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{curRecord.L_VA}</Text></Col>
           </Row>
           <Row>
-            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridHeader}>PD:</Text></Col>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.rowHeader}>PD:</Text></Col>
             <Col style={[RecordScreenStyle.gridContainer, {flex: 2}]}><Text style={RecordScreenStyle.gridText}>{curRecord.PD}mm</Text></Col>
           </Row>
           <Row>
-            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridHeader}>備註:</Text></Col>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.rowHeader}>備註:</Text></Col>
             <Col style={[RecordScreenStyle.gridContainer, {flex: 2}]}><Text>{curRecord.remark}</Text></Col>
           </Row>
         </Grid>                 
@@ -455,10 +457,20 @@ export const RenderWarning = props=>{
       }
     case 'A':
       if(degree<75){
-        return(<Text style={RecordScreenStyle.contentText}>您有淺散光</Text>)
+        return(
+        <View>
+          <Text style={RecordScreenStyle.contentText}>您有淺散光</Text>
+          <Text style={RecordScreenStyle.contentText}>距離中度散光還有{75-degree}度</Text>
+        </View>
+        )
       }
       else if(degree<175){
-        return(<Text style={RecordScreenStyle.contentText}>您有中度散光</Text>)
+        return(
+          <View>
+            <Text style={RecordScreenStyle.contentText}>您有中度散光</Text>
+            <Text style={RecordScreenStyle.contentText}>距離深散光還有{175-degree}度</Text>
+        </View>
+          )
       }
       else{
         return(
@@ -480,6 +492,30 @@ export const RenderAmblyopiaWarning = props=>{
   }
   else return null;
 
+}
+
+export const RenderIncreaseWarning = props =>{
+  const {data, dateArr,index, isLeft,refractive} = props;
+  //對比上次紀錄: 近視深了25度，升幅正常/過大。散光度數不變
+  if(data==null || index<=0){return null}
+
+  const curData = data[dateArr[index]];
+  const prevData = data[dateArr[index-1]];
+  
+  if(isLeft){
+    switch(refractive){
+      case '0':
+
+      case '1':
+
+      case '2':
+
+    }
+  }
+  else{
+
+  }
+  
 }
 
 export const RenderLineChart = props=>{
@@ -531,12 +567,12 @@ const RecordScreenStyle = StyleSheet.create({
     backgroundColor: '#24559E',
   },
   title: {
-    fontSize:30,
-    color: "white",
-    fontWeight: '600',
+    fontSize:31,
+    color: "#E1EDFF",
+    fontWeight: '700',
   },
   header: {
-    paddingTop:25,
+    paddingTop:30,
     marginRight:18,
     marginLeft:18,
     flexDirection:'row',
@@ -544,7 +580,6 @@ const RecordScreenStyle = StyleSheet.create({
     
   },
   secondaryContainer:{
-    marginTop:10,
     marginLeft:10,
     marginRight:10,
     height: "100%",
@@ -552,7 +587,7 @@ const RecordScreenStyle = StyleSheet.create({
     borderTopRightRadius: 16,
   },
   refractiveMenu:{
-    paddingTop: 6,
+    paddingTop: 15,
     flexDirection:'row', 
     justifyContent:'space-around',
   },
@@ -591,17 +626,17 @@ const RecordScreenStyle = StyleSheet.create({
   },
   eyesButton:{
     paddingTop:5,
+    paddingBottom:15,
   },
   datesButton:{
     flexDirection:'row',
-    paddingBottom: 3
+    paddingBottom: 2
   },
   dateText:{
     color: "#2D9CDB",
     fontSize: 18,
     paddingLeft:15,
     paddingRight:15,
-    paddingTop:1,
   },
   content:{
     paddingTop:5,
@@ -611,6 +646,7 @@ const RecordScreenStyle = StyleSheet.create({
   degreeText:{
     color: "#2D9CDB",
     fontSize: 20,
+    fontWeight:'bold',
     textAlign:'center',
   },
   contentText:{
@@ -650,14 +686,22 @@ const RecordScreenStyle = StyleSheet.create({
     flex: 1,
     justifyContent: 'center'
   },
-  gridHeader:{
+  colHeader:{
+    textAlign: 'center',
+    fontSize: 18,
+    fontWeight:'bold',
+    color:"#2D9CDB"
+  },
+  rowHeader:{
     textAlign: 'left',
     fontSize: 18,
-    paddingLeft: 30,
+    fontWeight:'bold',
+    paddingLeft: 35,
     color:"#2D9CDB"
   },
   gridText:{
     textAlign: 'center',
+    paddingRight:5,
     fontSize: 18,
     color:"#2D9CDB"
   },
