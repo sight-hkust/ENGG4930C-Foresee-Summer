@@ -303,7 +303,7 @@ export const RenderModal = (props) => {
       } else if (curRecord.L_Hyperopia != 0) {
         //hyperopia, add + sign
         var num = parseFloat(curRecord.L_Hyperopia) / 100;
-        return '-' + num.toFixed(2);
+        return '+' + num.toFixed(2);
       } else {
         return '0.00';
       }
@@ -315,7 +315,7 @@ export const RenderModal = (props) => {
       } else if (curRecord.R_Hyperopia != 0) {
         //hyperopia, add + sign
         var num = parseFloat(curRecord.R_Hyperopia) / 100;
-        return '-' + num.toFixed(2);
+        return '+' + num.toFixed(2);
       } else {
         return '0.00';
       }
