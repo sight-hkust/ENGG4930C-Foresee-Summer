@@ -15,7 +15,7 @@ const Setting = require('../assets/images/setting.png')
    
 const patient_id = '001';
 
-export default class Main extends Component{
+export default class RecordsScreen extends Component{
   constructor(props){
     super(props);
     this.state = {
@@ -484,16 +484,13 @@ const RecordScreenStyle = StyleSheet.create({
     marginRight:40,
     marginTop:200,
     paddingBottom:10,
+    alignItems: 'center'
   },
   eyesButton:{
-    paddingLeft: 13 ,
-    paddingBottom:3,
     paddingTop:5,
   },
   datesButton:{
     flexDirection:'row',
-    paddingLeft:40,
-    paddingTop:8,
     paddingBottom: 3
   },
   dateText:{
