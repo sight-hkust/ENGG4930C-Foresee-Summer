@@ -4,7 +4,6 @@ import {
 import React, { Component } from 'react';
 import { database } from '../src/config/config';
 import { LinearGradient } from 'expo-linear-gradient';
-import { BarCodeScanner } from 'expo-barcode-scanner';
 
 const Setting = require('../assets/images/setting.png')
 

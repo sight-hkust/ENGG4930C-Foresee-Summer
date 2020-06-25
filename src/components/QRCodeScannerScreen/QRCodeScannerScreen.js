@@ -16,7 +16,7 @@ export const QRCodeScannerScreen = ({ navigation, route }) => {
     const [focusLineAnimation, setFocusLineAnimation] = useState(new Animated.Value(0));
 
     useEffect(() => {
-        if (scanned) {
+        if (!scanned) {
             animateLine()
         }
     })
@@ -25,16 +25,11 @@ export const QRCodeScannerScreen = ({ navigation, route }) => {
         getPermissionAsync()
         const unsubscribe = navigation.addListener('blur', () => {
             setScanned(false)
-            test();
-            console.log('focusing the screen')
         })
         return unsubscribe;
     }, [navigation])
 
 
-    const test = () => {
-        console.log('test')
-    }
 
     const getPermissionAsync = async () => {
         const { status } = await Permissions.askAsync(Permissions.CAMERA);
