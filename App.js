@@ -16,6 +16,9 @@ import AddRecordScreen from './Screens/AddRecordScreen';
 import DoctorsScreen from './Screens/Doctors';
 import EyeExercise from './Screens/EyeExercise';
 
+import PostQuestion from './src/components/AskAnExpert/PostQuestionScreen';
+import AskAnExpertMainScreen from './src/components/AskAnExpert/AskAnExpertMainScreen';
+
 import ProfMainMenu from './Screens/ProfMainMenu';
 import ProfPatientViewScreen from './Screens/ProfPatientViewScreen';
 import ProfSearchResultScreen from './Screens/ProfSearchResultScreen';
@@ -47,7 +50,23 @@ function LoginAndRegisterScreen({ navigation, route }) {
 function UserScreen({ navigation, route }) {
   const Stack = createStackNavigator();
   return (
-    <Stack.Navigator headerMode="none">
+    <Stack.Navigator
+      initialRouteName="AskAnExpertScreen"
+      screenOptions={{
+        headerTransparent: true,
+        headerTitleStyle: {
+          fontSize: 31,
+          color: '#E1EDFF',
+          fontWeight: '700',
+        },
+        headerRight: () => (
+          <Image
+            source={require('./assets/images/setting.png')}
+            style={{ marginRight: 20 }}
+          />
+        ),
+      }}
+    >
       <Stack.Screen
         name="MainScreen"
         component={MainScreen}
@@ -59,10 +78,20 @@ function UserScreen({ navigation, route }) {
         name="ArticleDetailScreen"
         component={ArticleDetailScreen}
       />
-      <Stack.Screen name="AskAnExpertScreen" component={AskAnExpertScreen} />
       <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} />
       <Stack.Screen name="DoctorsScreen" component={DoctorsScreen} />
       <Stack.Screen name="EyeExercise" component={EyeExercise} />
+
+      <Stack.Screen
+        name="AskAnExpertScreen"
+        component={AskAnExpertMainScreen}
+        options={{ title: '專家解答' }}
+      />
+      <Stack.Screen
+        name="PostQuestion"
+        component={PostQuestion}
+        options={{ title: '撰寫問題' }}
+      />
     </Stack.Navigator>
   );
 }
@@ -75,8 +104,9 @@ function Education({ navigation, route }) {
       screenOptions={{
         headerTransparent: true,
         headerTitleStyle: {
+          fontSize: 31,
           color: '#E1EDFF',
-          fontSize: 30,
+          fontWeight: '700',
         },
         headerRight: () => (
           <Image
@@ -106,8 +136,9 @@ function ProfessionalScreen({ navigation, route }) {
       screenOptions={{
         headerTransparent: true,
         headerTitleStyle: {
+          fontSize: 31,
           color: '#E1EDFF',
-          fontSize: 30,
+          fontWeight: '700',
         },
         headerRight: () => <SettingButton />,
       }}
@@ -141,8 +172,9 @@ function ArticleScreen({ navigation, route }) {
       screenOptions={{
         headerTransparent: true,
         headerTitleStyle: {
+          fontSize: 31,
           color: '#E1EDFF',
-          fontSize: 30,
+          fontWeight: '700',
         },
         headerRight: () => (
           <Image

@@ -76,7 +76,7 @@ const ProfMainMenu = ({ route, navigation }) => {
           <View>
             <SearchBar
               placeholder="搜索"
-              onChangeText={(e) => setSearchContent(searchContent)}
+              onChangeText={(e) => setSearchContent(e)}
               value={searchContent}
               round
               lightTheme
@@ -101,6 +101,7 @@ const ProfMainMenu = ({ route, navigation }) => {
                 title=" 返回"
                 type="clear"
                 icon={<Icon name="arrow-left" size={15} color="#2D89DD" />}
+                titleStyle={{ color: 'white' }}
                 onPress={() => {
                   setPatientList(originalList);
                   setSearchingStatus(false);
@@ -117,7 +118,10 @@ const ProfMainMenu = ({ route, navigation }) => {
               }}
             >
               {patientList.length == 0 ? (
-                <Text style={{ textAlign: 'center' }}> No Results found </Text>
+                <Text style={{ textAlign: 'center', color: 'white' }}>
+                  {' '}
+                  No Results found{' '}
+                </Text>
               ) : (
                 patientList.map((u, i) => {
                   return (
