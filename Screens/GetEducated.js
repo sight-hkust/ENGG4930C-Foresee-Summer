@@ -57,11 +57,7 @@ export default class GetEducated extends Component {
             </LinearGradient>
             </View>
             <View>
-               <View style={GetEducatedScreen.header}>
-                    <Text style={GetEducatedScreen.title}>護眼秘笈</Text>
-                    <TouchableOpacity>
-                        <Image source={Setting}/>
-                    </TouchableOpacity>
+                <View style={{height: 70}}>
                 </View>
                 
                 <View style={GetEducatedScreen.topArticleContainer}>

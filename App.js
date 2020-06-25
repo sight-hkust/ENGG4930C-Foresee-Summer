@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { Component } from 'react';
-import { Image, Dimensions, TouchableOpacity } from 'react-native';
+import { StyleSheet, Image, Dimensions, TouchableOpacity } from 'react-native';
 
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -54,17 +54,8 @@ function UserScreen({ navigation, route }) {
       initialRouteName="AskAnExpertScreen"
       screenOptions={{
         headerTransparent: true,
-        headerTitleStyle: {
-          fontSize: 31,
-          color: '#E1EDFF',
-          fontWeight: '700',
-        },
-        headerRight: () => (
-          <Image
-            source={require('./assets/images/setting.png')}
-            style={{ marginRight: 20 }}
-          />
-        ),
+        headerTitleStyle: AppStyles.headerTitleStyle,
+        headerRight: () => <SettingButton />,
       }}
     >
       <Stack.Screen
@@ -103,17 +94,8 @@ function Education({ navigation, route }) {
     <Stack.Navigator
       screenOptions={{
         headerTransparent: true,
-        headerTitleStyle: {
-          fontSize: 31,
-          color: '#E1EDFF',
-          fontWeight: '700',
-        },
-        headerRight: () => (
-          <Image
-            source={require('./assets/images/setting.png')}
-            style={{ marginRight: 20 }}
-          />
-        ),
+        headerTitleStyle: AppStyles.headerTitleStyle,
+        headerRight: () => <SettingButton />,
       }}
     >
       <Stack.Screen name="GetEducatedScreen" component={GetEducatedScreen} />
@@ -135,11 +117,7 @@ function ProfessionalScreen({ navigation, route }) {
     <Stack.Navigator
       screenOptions={{
         headerTransparent: true,
-        headerTitleStyle: {
-          fontSize: 31,
-          color: '#E1EDFF',
-          fontWeight: '700',
-        },
+        headerTitleStyle: AppStyles.headerTitleStyle,
         headerRight: () => <SettingButton />,
       }}
     >
@@ -171,17 +149,8 @@ function ArticleScreen({ navigation, route }) {
     <Stack.Navigator
       screenOptions={{
         headerTransparent: true,
-        headerTitleStyle: {
-          fontSize: 31,
-          color: '#E1EDFF',
-          fontWeight: '700',
-        },
-        headerRight: () => (
-          <Image
-            source={require('./assets/images/setting.png')}
-            style={{ marginRight: 20 }}
-          />
-        ),
+        headerTitleStyle: AppStyles.headerTitleStyle,
+        headerRight: () => <SettingButton />,
       }}
     >
       <Stack.Screen
@@ -207,16 +176,8 @@ function HomeScreen({ navigation, route }) {
     <Stack.Navigator
       screenOptions={{
         headerTransparent: true,
-        headerTitleStyle: {
-          color: '#E1EDFF',
-          fontSize: 30,
-        },
-        headerRight: () => (
-          <Image
-            source={require('./assets/images/setting.png')}
-            style={{ marginRight: 20 }}
-          />
-        ),
+        headerTitleStyle: AppStyles.headerTitleStyle,
+        headerRight: () => <SettingButton />,
       }}
     >
       <Stack.Screen
@@ -343,3 +304,11 @@ export default class Main extends Component {
     );
   }
 }
+
+const AppStyles = StyleSheet.create({
+  headerTitleStyle: {
+    fontSize: 31,
+    color: '#E1EDFF',
+    fontWeight: '700',
+  }
+})
