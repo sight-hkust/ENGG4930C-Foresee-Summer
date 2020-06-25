@@ -6,7 +6,6 @@ import {
 import React, { Component } from 'react';
 import Logo from "../../../../Utils/Logo";
 import { styles } from "./styles";
-import { Button } from 'react-native-elements';
 import { ScreenHeight } from '../../../../constant/Constant';
 import { LinearGradientBackground } from '../../../../Utils/LinearGradientBackground';
 
@@ -19,7 +18,7 @@ class RegisterOptions extends Component {
           <View style={styles.optionsContainer}>
             <Text style={styles.title}>你的角色是什麼？</Text>
             <TouchableOpacity onPress={() =>
-              this.props.navigation.navigate('Register', {
+              this.props.navigation.navigate('Registration Form', {
                 isProfessional: true,
               })}>
               <View style={[styles.button, { marginTop: ScreenHeight * 0.06 }]}>
@@ -29,7 +28,7 @@ class RegisterOptions extends Component {
               </View>
             </TouchableOpacity>
             <TouchableOpacity onPress={() =>
-              this.props.navigation.navigate('Register', {
+              this.props.navigation.navigate('Registration Form', {
                 isProfessional: false,
               })}>
               <View style={[styles.button]}>

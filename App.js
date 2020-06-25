@@ -26,6 +26,8 @@ import { Login } from './src/components/Login/Login';
 import { Register } from './src/components/Registration/Register';
 import MainScreen from './Screens/MainScreen';
 import { Profile } from './src/components/Profile/Profile';
+import { ScanQRIcon } from './src/utils/icon';
+import { QRCodeScannerScreen } from './src/components/QRCodeScannerScreen/QRCodeScannerScreen';
 
 const Tab = createMaterialBottomTabNavigator();
 
@@ -81,7 +83,6 @@ function UserScreen({ navigation, route }) {
       <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} />
       <Stack.Screen name="DoctorsScreen" component={DoctorsScreen} />
       <Stack.Screen name="EyeExercise" component={EyeExercise} />
-
       <Stack.Screen
         name="AskAnExpertScreen"
         component={AskAnExpertMainScreen}
@@ -92,6 +93,8 @@ function UserScreen({ navigation, route }) {
         component={PostQuestion}
         options={{ title: '撰寫問題' }}
       />
+
+      <Stack.Screen name="Profile" component={Profile} />
     </Stack.Navigator>
   );
 }
@@ -156,6 +159,12 @@ function ProfessionalScreen({ navigation, route }) {
       <Stack.Screen
         name="ProfSearchResultScreen"
         component={ProfSearchResultScreen}
+      />
+
+      <Stack.Screen
+        name="Register"
+        component={Register}
+        options={{ headerShown: false }}
       />
     </Stack.Navigator>
   );
@@ -269,6 +278,7 @@ export default class Main extends Component {
           }}
           labeled={false}
         >
+          <Tab.Screen name="QR Scan" component={QRCodeScannerScreen} />
           <Tab.Screen
             name="GetEducated"
             showLabel={false}

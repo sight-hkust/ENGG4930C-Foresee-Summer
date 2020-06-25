@@ -11,7 +11,7 @@ export default class MenuScreen extends Component {
         super(props)
 
         this.state = {
-            isLightTheme : true,
+            isLightTheme: true,
             activePage: '',
         }
     }
