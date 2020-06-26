@@ -63,13 +63,6 @@ export default class RecordsScreen extends Component {
   render() {
     const data = this.state.data;
 
-<<<<<<< HEAD
-    const pressHandler = ()=>{
-      this.props.navigation.navigate("AddRecordScreen" ,{isProfessional: false,professional_id: -1, patient_id: patient_id})
-      //this.props.navigation.navigate("AddRecordScreenB" ,{isProfessional: false,professional_id: -1, patient_id: patient_id})
-    }
-    const GetNext = ()=>{
-=======
     const pressHandler = () => {
       this.props.navigation.navigate('AddRecordScreen', {
         isProfessional: false,
@@ -78,7 +71,6 @@ export default class RecordsScreen extends Component {
       });
     };
     const GetNext = () => {
->>>>>>> develop
       const length = this.state.dates.length;
       const value = (this.state.index + 1) % length;
 
@@ -203,18 +195,9 @@ export default class RecordsScreen extends Component {
                   </View>
 
                   <View style={RecordScreenStyle.content}>
-<<<<<<< HEAD
                     <RenderContent isLeft={this.state.Leye} ddlValue={this.state.ddlSelectedValue} data={data} 
                       selectedDate={this.state.ddlSelectedDate} index={this.state.index} dateArr={this.state.dates}/>
                     
-=======
-                    <RenderContent
-                      isLeft={this.state.Leye}
-                      ddlValue={this.state.ddlSelectedValue}
-                      data={data}
-                      selectedDate={this.state.ddlSelectedDate}
-                    />
->>>>>>> develop
                   </View>
                 </View>
               )}
@@ -225,18 +208,6 @@ export default class RecordsScreen extends Component {
                     data={data}
                     selectedDate={this.state.ddlSelectedDate}
                   />
-<<<<<<< HEAD
-
-                  {data!=null &&
-                    <Button icon={<Icon name="eyeglass" type="simple-line-icon" size={22} color="#2D9CDB"/>} 
-                      buttonStyle={{backgroundColor:'white', width:40,height:40,borderRadius:24, paddingLeft:0,paddingRight:0}}
-                      containerStyle={{paddingTop:5}}
-                    />                 
-                  }
-                
-                </View>
-            
-=======
                 )}
 
                 <Button
@@ -275,7 +246,6 @@ export default class RecordsScreen extends Component {
                 )}
                 {/* <RenderIncreaseWarning data={data} dateArr={this.state.dates} index={this.state.index} refractive={this.state.ddlSelectedValue} isLeft={true}/> */}
               </View>
->>>>>>> develop
             </View>
           </View>
         </LinearGradient>
@@ -361,20 +331,6 @@ export const RenderModal = (props) => {
     }
   };
 
-  const calAxis = (isLeft) => {
-    if (isLeft) {
-      if (curRecord.L_CYL != 0) return curRecord.L_Axis;
-      else return 'NA';
-    } else {
-      if (curRecord.R_CYL != 0) return curRecord.R_Axis;
-      else return 'NA';
-    }
-<<<<<<< HEAD
-    else{
-      return "0.00"
-    }
-  }
-
   const calAxis = (isLeft)=>{
     if(isLeft){
       if(curRecord.L_CYL!=0 && curRecord.L_CYL!=" ") return curRecord.L_Axis;
@@ -405,26 +361,6 @@ export const RenderModal = (props) => {
       <View style={{backgroundColor: '#1772A6', height: 4, width: 70, alignSelf: 'center', marginBottom: 10}}/>
       <Text style={RecordScreenStyle.colHeader}>日期: {selectedDate}</Text>
       <View style={RecordScreenStyle.box}>                     
-=======
-  };
-
-  return (
-    <BottomModal
-      isVisible={isVisible}
-      toggleModal={toggleModal}
-      style={{ backgroundColor: '#FFFFFF', height: 350 }}
-    >
-      <View
-        style={{
-          backgroundColor: '#1772A6',
-          height: 4,
-          width: 70,
-          alignSelf: 'center',
-          marginBottom: 10,
-        }}
-      />
-      <View style={RecordScreenStyle.box}>
->>>>>>> develop
         <Grid>
           <Row>
             <Col style={RecordScreenStyle.gridContainer}></Col>
@@ -470,21 +406,9 @@ export const RenderModal = (props) => {
             </Col>
           </Row>
           <Row>
-<<<<<<< HEAD
             <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.rowHeader}>VA:</Text></Col>
             <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{calVA(false)}</Text></Col>
             <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{calVA(true)}</Text></Col>
-=======
-            <Col style={RecordScreenStyle.gridContainer}>
-              <Text style={RecordScreenStyle.rowHeader}>VA:</Text>
-            </Col>
-            <Col style={RecordScreenStyle.gridContainer}>
-              <Text style={RecordScreenStyle.gridText}>{curRecord.R_VA}</Text>
-            </Col>
-            <Col style={RecordScreenStyle.gridContainer}>
-              <Text style={RecordScreenStyle.gridText}>{curRecord.L_VA}</Text>
-            </Col>
->>>>>>> develop
           </Row>
           <Row>
             <Col style={RecordScreenStyle.gridContainer}>
@@ -508,7 +432,6 @@ export const RenderModal = (props) => {
   );
 };
 
-<<<<<<< HEAD
 export const RenderContent = props => {
     const{ isLeft, ddlValue, data, selectedDate, index, dateArr} = props;
 
@@ -640,154 +563,6 @@ export const RenderContent = props => {
               
     }
 }
-=======
-export const RenderContent = (props) => {
-  const { isLeft, ddlValue, data, selectedDate } = props;
-
-  if (data == null) {
-    return <Text style={RecordScreenStyle.contentText}>暫無數據</Text>;
-  }
-
-  switch (ddlValue) {
-    case '0':
-      if (isLeft) {
-        if (data[selectedDate].L_Myopia != '0') {
-          return (
-            <View>
-              <Text style={RecordScreenStyle.degreeText}>
-                {data[selectedDate].L_Myopia}度
-              </Text>
-              <RenderWarning
-                degree={data[selectedDate].L_Myopia}
-                refractive={'M'}
-              />
-              <RenderAmblyopiaWarning
-                Ldegree={data[selectedDate].L_Myopia}
-                Rdegree={data[selectedDate].R_Myopia}
-              />
-            </View>
-          );
-        } else {
-          return (
-            <View>
-              <Text style={RecordScreenStyle.degreeText}>你的左眼沒有近視</Text>
-              <RenderAmblyopiaWarning
-                Ldegree={data[selectedDate].L_Myopia}
-                Rdegree={data[selectedDate].R_Myopia}
-              />
-            </View>
-          );
-        }
-      } else {
-        if (data[selectedDate].R_Myopia != '0') {
-          return (
-            <View>
-              <Text style={RecordScreenStyle.degreeText}>
-                {data[selectedDate].R_Myopia}度
-              </Text>
-              <RenderWarning
-                degree={data[selectedDate].R_Myopia}
-                refractive={'M'}
-              />
-              <RenderAmblyopiaWarning
-                Ldegree={data[selectedDate].L_Myopia}
-                Rdegree={data[selectedDate].R_Myopia}
-              />
-            </View>
-          );
-        } else {
-          return (
-            <View>
-              <Text style={RecordScreenStyle.degreeText}>你的右眼沒有近視</Text>
-              <RenderAmblyopiaWarning
-                Ldegree={data[selectedDate].L_Myopia}
-                Rdegree={data[selectedDate].R_Myopia}
-              />
-            </View>
-          );
-        }
-      }
-
-    case '1':
-      if (isLeft) {
-        if (data[selectedDate].L_Hyperopia != '0') {
-          return (
-            <View>
-              <Text style={RecordScreenStyle.degreeText}>
-                {data[selectedDate].L_Hyperopia}度
-              </Text>
-              <RenderWarning
-                degree={data[selectedDate].L_Hyperopia}
-                refractive={'H'}
-              />
-            </View>
-          );
-        } else {
-          return (
-            <Text style={RecordScreenStyle.degreeText}>你的左眼沒有遠視</Text>
-          );
-        }
-      } else {
-        if (data[selectedDate].R_Hyperopia != '0') {
-          return (
-            <View>
-              <Text style={RecordScreenStyle.degreeText}>
-                {data[selectedDate].R_Hyperopia}度
-              </Text>
-              <RenderWarning
-                degree={data[selectedDate].R_Hyperopia}
-                refractive={'H'}
-              />
-            </View>
-          );
-        } else {
-          return (
-            <Text style={RecordScreenStyle.degreeText}>你的右眼沒有遠視</Text>
-          );
-        }
-      }
-
-    case '2':
-      if (isLeft) {
-        if (data[selectedDate].L_CYL != '0') {
-          return (
-            <View>
-              <Text style={RecordScreenStyle.degreeText}>
-                {data[selectedDate].L_CYL}度
-              </Text>
-              <RenderWarning
-                degree={data[selectedDate].L_CYL}
-                refractive={'A'}
-              />
-            </View>
-          );
-        } else {
-          return (
-            <Text style={RecordScreenStyle.degreeText}>你的左眼沒有散光</Text>
-          );
-        }
-      } else {
-        if (data[selectedDate].R_CYL != '0') {
-          return (
-            <View>
-              <Text style={RecordScreenStyle.degreeText}>
-                {data[selectedDate].R_CYL}度
-              </Text>
-              <RenderWarning
-                degree={data[selectedDate].R_CYL}
-                refractive={'A'}
-              />
-            </View>
-          );
-        } else {
-          return (
-            <Text style={RecordScreenStyle.degreeText}>你的右眼沒有散光</Text>
-          );
-        }
-      }
-  }
-};
->>>>>>> develop
 
 export const RenderWarning = (props) => {
   const { degree, refractive } = props;
@@ -897,7 +672,6 @@ export const RenderIncreaseWarning = (props) => {
   }
 
   const curData = data[dateArr[index]];
-<<<<<<< HEAD
   const prevData = data[dateArr[index-1]];
 
   const calDiff = (cur, prev)=>{
@@ -918,21 +692,8 @@ export const RenderIncreaseWarning = (props) => {
         return <Text style={RecordScreenStyle.contentText}>對比上次紀錄: 遠視{calDiff(curData.L_Hyperopia, prevData.L_Hyperopia)}</Text>
       case '2': //astigmatism
         return <Text style={RecordScreenStyle.contentText}>對比上次紀錄: 散光{calDiff(curData.L_CYL, prevData.L_CYL)}</Text>
-=======
-  const prevData = data[dateArr[index - 1]];
-
-  if (isLeft) {
-    switch (refractive) {
-      case '0':
-
-      case '1':
-
-      case '2':
->>>>>>> develop
     }
-  } else {
   }
-<<<<<<< HEAD
   else{
     switch(refractive){
       case '0': //myopia
@@ -945,9 +706,6 @@ export const RenderIncreaseWarning = (props) => {
   }
   
 }
-=======
-};
->>>>>>> develop
 
 export const RenderLineChart = (props) => {
   const { dataArr, dateArr, refractive, isLeft, selectedIndex } = props;
@@ -961,7 +719,6 @@ export const RenderLineChart = (props) => {
   }
 
   var output = [];
-<<<<<<< HEAD
   //console.log(selectedIndex)
 
   const calSubArray= ()=>{
@@ -1006,30 +763,6 @@ export const RenderLineChart = (props) => {
     return(
       <LineChart data={output} dateArr={calSubArray()} full_dateArr = {dateArr} selectedIndex={selectedIndex} refractive={refractive}/>
       );
-=======
-  switch (refractive) {
-    case '0': {
-      for (const date of dateArr) {
-        output.push(isLeft ? dataArr[date].L_Myopia : dataArr[date].R_Myopia);
-      }
-      break;
-    }
-
-    case '1': {
-      for (const date of dateArr) {
-        output.push(
-          isLeft ? dataArr[date].L_Hyperopia : dataArr[date].R_Hyperopia
-        );
-      }
-      break;
-    }
-    case '2': {
-      for (const date of dateArr) {
-        output.push(isLeft ? dataArr[date].L_CYL : dataArr[date].R_CYL);
-      }
-      break;
-    }
->>>>>>> develop
   }
 
   if (output.length > 0) {
