@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image, ScrollView } from 'react-native';
 import { ScreenWidth, ScreenHeight, FontScale } from '../constant/Constant';
 import { database } from '../src/config/config';
 import { Col, Row, Grid } from "react-native-easy-grid";
@@ -122,20 +122,21 @@ export default class ProfPatientViewScreen extends Component {
                             <Image source={Setting}/>
                         </TouchableOpacity>
                     </View>
-                    <View style={styles.container}>
+                    <ScrollView style={{flex: 1, marginVertical: 20, marginHorizontal: 30}}>
                         <Text style={styles.profileText}>年齡: {info.age}</Text>
                         <Text style={styles.profileText}>職業: {info.job}</Text>
-                        <Text style={styles.profileText}>家庭病史: {info.history}</Text>
-                        <Text style={styles.profileText}>已知眼疾: {info.disease}</Text>
-                    </View>
-                    <View style={[styles.container, 
-                            {flex: 2.5, 
+                        <Text style={styles.profileText}>家庭病史:</Text>
+                        <Text style={[styles.profileText, {paddingLeft: 20}]}>{info.history}</Text>
+                        <Text style={styles.profileText}>已知眼疾:</Text>
+                        <Text style={[styles.profileText, {paddingLeft: 20}]}>{info.disease}</Text>
+                    </ScrollView>
+                    <View style={{flex: 3, 
                             justifyContent: 'center',
                             paddingHorizontal: 30,
                             paddingTop: 0,
                             paddingBottom: 15,
                             alignItems: 'center'
-                        }]}>
+                        }}>
                         <View style={styles.boxes}>
                             {recordsLen == 0 ? 
                                 <Text style={styles.noDataText}>{"暫無數據\n請按 + 輸入資料"}</Text>
@@ -237,10 +238,6 @@ const styles = StyleSheet.create({
         height: "100%",
         width: "100%"
     },
-    container: {
-        flex: 1,
-        justifyContent: 'center'
-    }, 
     header: {
         paddingTop:31,
         marginHorizontal:15,
@@ -256,7 +253,6 @@ const styles = StyleSheet.create({
     profileText: {
         textAlign: 'left',
         fontSize: 20,
-        paddingHorizontal: 30,
         color: 'white'
     },
     centreText: {
