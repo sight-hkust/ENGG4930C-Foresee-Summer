@@ -1,82 +1,72 @@
 import { auth, database } from "../../config/config";
 import moment from 'moment';
-const writeUserData = ({ uid, values, isProfessional, navigation, establishedByProfessional = false }) => {
-    if (isProfessional) {
-        database.ref('/professionals/' + uid)
-            .set({
-                uid: uid,
-                name: values.name,
-                email: values.email,
-                phone: values.phone,
-            })
-    } else {
-        if (establishedByProfessional) {
-            database.ref('/users/' + uid)
-                .set({
-                    uid: uid,
-                    name: values.name,
-                    email: values.email,
-                    age: Math.abs(moment(values.birthYearsAndMonths).diff(moment(), "years")),
-                    phone: values.phone,
-                    job: values.job,
-                    history: values.history,
-                    disease: values.disease
-                })
 
-            database.ref('professionals/M001/patients/' + uid + '/info')
-                .set({
-                    uid: uid,
-                    name: values.name,
-                    email: values.email,
-                    age: Math.abs(moment(values.birthYearsAndMonths).diff(moment(), "years")),
-                    phone: values.phone,
-                    job: values.job,
-                    history: values.history,
-                    disease: values.disease
-                })
-        }
-        else {
+const writeUserData = ({ uid = null, values, isProfessional, navigation, registerPatient = false }) => {
+    if (registerPatient) {
+        database.ref('professionals/' + uid + '/patients/' + values.phone)
+            .set(true)
+        database.ref('userInfo/+852' + values.phone).set({
+            uid: uid,
+            firstname: values.firstname,
+            lastname: values.lastname,
+            email: values.email,
+            age: Math.abs(moment(values.birthday).diff(moment(), "years")),
+            job: values.job,
+            history: values.history,
+            disease: values.disease
+        })
+    }
+    else {
+        if (!isProfessional) {
             database.ref('/users/' + uid)
                 .set({
                     uid: uid,
-                    name: values.name,
                     email: values.email,
-                    age: Math.abs(moment(values.birthYearsAndMonths).diff(moment(), "years")),
                     phone: values.phone,
+                })
+            database.ref('userInfo/+852' + values.phone)
+                .set({
+                    firstname: values.firstname,
+                    lastname: values.lastname,
+                    age: Math.abs(moment(values.birthday).diff(moment(), "years")),
+                })
+        } else {
+            database.ref('/professionals/' + uid)
+                .set({
+                    uid: uid,
+                    firstname: values.firstname,
+                    lastname: values.lastname,
+                    email: values.email,
+                    phone: values.phone,
+                    role: values.role,
                 })
         }
 
     }
-    navigation.navigate('MainScreen');
 }
 
 
-export const createAccount = ({ values, navigation, isProfessional, establishedByProfessional }) => {
+export const registerPatientAccount = ({ values, isProfessional, registerPatient, navigation }) => {
+    const uid = auth.currentUser.uid;
+    writeUserData({ uid, values, isProfessional, registerPatient, navigation })
+}
+
+export const createAccount = ({ values, navigation, isProfessional, registerPatient }) => {
     if (isProfessional) {
-        console.log('values.email', values.email);
         auth.createUserWithEmailAndPassword(values.email, values.password).then(function (userCreds) {
             const uid = userCreds.user.uid;
-            writeUserData({ uid, values, navigation, isProfessional, establishedByProfessional });
+            navigation.navigate('Profile');
+            writeUserData({ uid, values, navigation, isProfessional });
         }).catch(error => {
             console.log(error.code, error.message);
         })
     } else {
-        if (establishedByProfessional) {
-            auth.createUserWithEmailAndPassword(values.email, "NoPassword").then(function (userCreds) {
-                const uid = userCreds.user.uid;
-                writeUserData({ uid, values, isProfessional, navigation, establishedByProfessional });
-            }).catch(error => {
-                console.log(error.code, error.message);
-            })
-        }
-        else {
-            auth.createUserWithEmailAndPassword(values.email, values.password).then(function (userCreds) {
-                const uid = userCreds.user.uid;
-                writeUserData({ uid, values, navigation, establishedByProfessional });
-            }).catch(error => {
-                console.log(error.code, error.message);
-            })
-        }
-
+        auth.createUserWithEmailAndPassword(values.email, values.password).then(function (userCreds) {
+            const uid = userCreds.user.uid;
+            navigation.navigate('Profile');
+            writeUserData({ uid, values, navigation, isProfessional });
+        }).catch(error => {
+            console.log(error.code, error.message);
+        })
     }
 }

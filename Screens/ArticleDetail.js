@@ -17,18 +17,20 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 
 //TODO: STOP VID WHEN LEAVE THE SCREEN!!
 
-//const { article_id } = this.props.route.params;
+
 
 export default class ArticleDetailScreen extends Component {
     constructor(props) {
         super(props);
+        const { article_id } = this.props.route.params;
+        //console.log(article_id);
         this.playbackInstance = null;
         this.state = {
             play : false,
             playbackObject: null,
             volume: 1.0,
             isBuffering: false,
-            article_id: '003', //this.props.route.params.article_id then remove from state
+            article_id: article_id, //this.props.route.params.article_id then remove from state
             content:"",
             subject:"",
             image: null,
@@ -37,6 +39,7 @@ export default class ArticleDetailScreen extends Component {
             isVid: false,
         };
     }
+    
 
     mountVid = component =>{
         this.video = component;
