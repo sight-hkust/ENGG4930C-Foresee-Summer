@@ -248,12 +248,23 @@ export const RenderModal = props=>{
   }
   }
 
-  
+  const calVA = (isLeft)=>{
+    if(isLeft){
+      if(curRecord.L_VA!=0 && curRecord.L_VA!=" ") return curRecord.L_VA;
+      else return "NA"
+  }
+  else{
+      if(curRecord.R_VA!=0 && curRecord.R_VA!=" ") return curRecord.R_VA;
+      else return "NA"
+    
+  }
+  }
 
   return(
     <BottomModal isVisible={isVisible} toggleModal={toggleModal} style={{backgroundColor: '#FFFFFF', height: 350}}>
 
       <View style={{backgroundColor: '#1772A6', height: 4, width: 70, alignSelf: 'center', marginBottom: 10}}/>
+      <Text style={RecordScreenStyle.colHeader}>日期: {selectedDate}</Text>
       <View style={RecordScreenStyle.box}>                     
         <Grid>
           <Row>
@@ -279,8 +290,8 @@ export const RenderModal = props=>{
           </Row>
           <Row>
             <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.rowHeader}>VA:</Text></Col>
-            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{curRecord.R_VA}</Text></Col>
-            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{curRecord.L_VA}</Text></Col>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{calVA(false)}</Text></Col>
+            <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.gridText}>{calVA(true)}</Text></Col>
           </Row>
           <Row>
             <Col style={RecordScreenStyle.gridContainer}><Text style={RecordScreenStyle.rowHeader}>PD:</Text></Col>
@@ -573,22 +584,40 @@ export const RenderLineChart = props=>{
   }
 
   var output = [];
+  //console.log(selectedIndex)
+
+  const calSubArray= ()=>{
+    var end = 0;
+    var start = 0;
+    if(dateArr.length<4){
+      return dateArr;
+    }
+    else if(selectedIndex > dateArr.length-4){
+      return dateArr.slice(-4);
+    }
+    else if(selectedIndex <= dateArr.length-4){
+      start = selectedIndex
+      end = selectedIndex+4
+      return (dateArr.slice(start,end))
+    }
+  }
+
   switch(refractive){
     case '0':{
-      for (const date of dateArr){
+      for (const date of calSubArray()){
         output.push (isLeft? dataArr[date].L_Myopia : dataArr[date].R_Myopia);
       }
       break;
     }
   
     case '1':{
-      for (const date of dateArr){
+      for (const date of calSubArray()){
         output.push (isLeft? dataArr[date].L_Hyperopia : dataArr[date].R_Hyperopia);
       }
       break;
     }
     case '2':{
-        for (const date of dateArr){
+        for (const date of calSubArray()){
           output.push (isLeft? dataArr[date].L_CYL : dataArr[date].R_CYL);
         }
         break;
@@ -597,7 +626,7 @@ export const RenderLineChart = props=>{
 
   if(output.length>0){
     return(
-      <LineChart data={output} dateArr={dateArr} selectedIndex={selectedIndex} refractive={refractive}/>
+      <LineChart data={output} dateArr={calSubArray()} full_dateArr = {dateArr} selectedIndex={selectedIndex} refractive={refractive}/>
       );
   }
   else{
