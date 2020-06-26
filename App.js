@@ -148,7 +148,7 @@ function HomeScreen({ navigation, route }) {
         headerRight: () => <SettingButton navigation={navigation} />,
       }}
     >
-      <Stack.Screen name="RecordsScreen" component={RecordsScreen} options={{ title: '視力趨勢' }} />
+      <Stack.Screen name="RecordsScreen" component={RecordsScreen} options={{ title: '' }} />
       <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} options={{ title: '新增資料' }} />
     </Stack.Navigator>
   );
@@ -173,7 +173,7 @@ function FaqScreen({ navigation, route }) {
 }
 
 function SettingButton({ route, navigation }) {
-  const [isProfessional, setIsProfessional] = useState(false);
+  const [isProfessional, setIsProfessional] = useState(true);
 
   // useEffect(() => {
   //   if (auth.currentUser != null && auth.currentUser.userType == 'professional') {
@@ -199,7 +199,7 @@ function SettingButton({ route, navigation }) {
 }
 
 function Main({ route, navigation }) {
-  const [isProfessional, setIsProfessional] = useState(false);
+  const [isProfessional, setIsProfessional] = useState(true);
 
   // useEffect(() => {
   //   if (auth.currentUser != null && auth.currentUser.userType == 'professional') {
@@ -286,9 +286,10 @@ export default App = (props) => {
   return (
     <NavigationContainer>
       <Stack.Navigator headerMode="none">
-        {/* <Stack.Screen name="Login" component={Login} /> */}
-        {/* <Stack.Screen name="Register" component={Register} /> */}
         <Stack.Screen name="Main" component={Main} />
+        <Stack.Screen name="Login" component={Login} />
+        {/* <Stack.Screen name="Register" component={Register} /> */}
+        <Stack.Screen name="Profile" component={Profile} />
 
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="QR Scan" component={QRCodeScannerScreen} />
