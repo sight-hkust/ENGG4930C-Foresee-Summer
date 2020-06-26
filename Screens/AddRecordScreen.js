@@ -14,25 +14,25 @@ const Setting = require('../assets/images/setting.png')
 const DropDown = require('../assets/images/DropDown.png');
 
 const ReviewSchema = object({
-    L_SPH: string().required('此項必填')
+    L_SPH: string().required('此項必填（如無度數，請填0）')
             .matches('^[0-9]*$','請輸入大過或等於0的整數')
             .max(4, '球面度數(SPH)應在4個數字以內')
             .test('divisible by 25','球面度數(SPH)應為0或以00, 25, 50或75作尾', value=>value%25 == 0),
-    R_SPH : string().required('此項必填')
+    R_SPH : string().required('此項必填（如無度數，請填0）')
             .matches('^[0-9]*$','請輸入大過或等於0的整數')
             .max(4, '球面度數(SPH)應在4個數字以內')
             .test('divisible by 25','球面度數(SPH)應為0或以00, 25, 50或75作尾', value=>value%25 == 0),
     L_VA : number()
-            .test('range','視力(Visual Acuity)應在 0 和 1 之間', value=>value>=0||value<=1)
+            .test('range','視力(Visual Acuity)應在 0 和 1 之間', value=>value>=0||value<=1||value==null)
             .max(1.0, '視力(Visual Acuity)應在 0 和 1 之間'),
     R_VA : number()
-            .test('range','視力(Visual Acuity)應在 0 和 1 之間', value=>value>=0||value<=1)
+            .test('range','視力(Visual Acuity)應在 0 和 1 之間', value=>value>=0||value<=1||value==null)
             .max(1.0, '視力(Visual Acuity)應在 0 和 1 之間'),
-    L_CYL : string().required('此項必填')
+    L_CYL : string().required('此項必填（如無度數，請填0）')
             .matches('^[0-9]*$','請輸入大過或等於0的整數')
             .max(4, '散光度數(CYL)應在4個數字以內')
             .test('divisible by 25','散光度數(CYL)應為0或以00, 25, 50或75作尾', value=>value%25 == 0),    
-    R_CYL : string().required('此項必填')
+    R_CYL : string().required('此項必填（如無度數，請填0）')
             .matches('^[0-9]*$','請輸入大過或等於0的整數')
             .max(4, '散光度數(CYL)應在4個數字以內')
             .test('divisible by 25','散光度數(CYL)應為0或以00, 25, 50或75作尾', value=>value%25 == 0),
@@ -54,7 +54,7 @@ const ReviewSchema = object({
             }),
     PD : string()
             .matches('^[0-9]*$','請輸入大於0的整數')
-            .test('check positive','瞳孔距離(PD)應大於0', value=>value>0 )
+            .max(3,'瞳孔距離(PD)超出合理範圍')
             
 })
 
@@ -120,8 +120,7 @@ export default class Form extends Component{
                         else{
                             data.R_Myopia =  parseInt(values.R_SPH)
                             }            
-                        //console.log(values);
-                        
+                                                
                         if(isProfessional) {
                             database.ref('professionals/' + professional_id + '/patients/' + patient_id + '/records/' + values.date).set(data).catch((error)=>console.log(error));
                         }else{
@@ -141,14 +140,10 @@ export default class Form extends Component{
                     <CYLInput handleChange={handleChange}  setFieldValue={setFieldValue} isLeft={true} errorA={errors.L_CYL} errorB={errors.L_Axis}/>
                     <CYLInput handleChange={handleChange}  setFieldValue={setFieldValue} isLeft={false} errorA={errors.R_CYL} errorB={errors.R_Axis}/>
 
-                    <VAInput handleChange={handleChange} isLeft={true}/>
-                    <Text style={AddRecordScreen.errortext}>{errors.L_VA}</Text>
-                    <VAInput handleChange={handleChange} isLeft={false}/>
-                    <Text style={AddRecordScreen.errortext}>{errors.R_VA}</Text>
-
-                        
-                    <PDInput handleChange={handleChange}/>
-                    <Text style={AddRecordScreen.errortext}>{errors.PD}</Text>
+                    <VAInput handleChange={handleChange} isLeft={true} error={errors.L_VA}/>
+                    <VAInput handleChange={handleChange} isLeft={false} error={errors.R_VA}/>
+ 
+                    <PDInput handleChange={handleChange} error={errors.PD}/>
                     <View style={{paddingTop:24}}>
 
                     <Button title='提交' buttonStyle={AddRecordScreen.submitButton} 
@@ -289,10 +284,11 @@ export const AxisInput = props=>{
     }
 
 export const VAInput = props=>{
-        const{ handleChange, isLeft} = props;
+        const{ handleChange, isLeft,error} = props;
         return(
             <View>
             <Text style={AddRecordScreen.questionText}>請輸入{isLeft? "左眼的(O.S.)" : "右眼的(O.D.)"}視力(VA)(e.g. 1.0)</Text>
+            <Text style={AddRecordScreen.errortext}>{error}</Text>
             <TextInput onChangeText={ handleChange(isLeft? 'L_VA':'R_VA')}
                             keyboardType='numeric'
                             style={AddRecordScreen.answerInputBox}/>
@@ -302,11 +298,12 @@ export const VAInput = props=>{
     } 
     
 export const PDInput = props=>{
-        const{ handleChange} = props;
+        const{ handleChange,error} = props;
         
         return(
         <View>
             <Text style={AddRecordScreen.questionText}>請輸入兩眼瞳孔距離(Pupillary Distance)(mm)</Text>
+            <Text style={AddRecordScreen.errortext}>{error}</Text>
             <TextInput onChangeText={ handleChange('PD')}
                     keyboardType='numeric'
                     style={AddRecordScreen.answerInputBox}/>
@@ -340,7 +337,7 @@ const AddRecordScreen = StyleSheet.create({
         color: "white",
         fontSize:18,
         paddingTop:20,
-        paddingBottom: 10,
+        paddingBottom: 5,
     },
     answerContainer:{
         flexDirection:'row',
