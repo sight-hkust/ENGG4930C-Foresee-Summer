@@ -1,5 +1,6 @@
 import { auth, database } from "../../config/config";
 import moment from 'moment';
+
 const writeUserData = ({ uid = null, values, isProfessional, navigation, registerPatient = false }) => {
     if (registerPatient) {
         database.ref('professionals/' + uid + '/patients/' + values.phone)
@@ -46,31 +47,19 @@ const writeUserData = ({ uid = null, values, isProfessional, navigation, registe
 
 
 export const registerPatientAccount = ({ values, isProfessional, registerPatient, navigation }) => {
-    console.log('testing')
     const uid = auth.currentUser.uid;
     writeUserData({ uid, values, isProfessional, registerPatient, navigation })
 }
 
 export const createAccount = ({ values, navigation, isProfessional, registerPatient }) => {
     if (isProfessional) {
-        if (registerPatient) {
-            console.log('values.email', values.email);
-            auth.createUserWithEmailAndPassword(values.email, "NoPassword").then(function (userCreds) {
-                const uid = userCreds.user.uid;
-                navigation.navigate('Profile');
-                writeUserData({ uid, values, navigation, isProfessional, registerPatient });
-            }).catch(error => {
-                console.log(error.code, error.message);
-            })
-        } else {
-            auth.createUserWithEmailAndPassword(values.email, values.password).then(function (userCreds) {
-                const uid = userCreds.user.uid;
-                navigation.navigate('Profile');
-                writeUserData({ uid, values, navigation, isProfessional });
-            }).catch(error => {
-                console.log(error.code, error.message);
-            })
-        }
+        auth.createUserWithEmailAndPassword(values.email, values.password).then(function (userCreds) {
+            const uid = userCreds.user.uid;
+            navigation.navigate('Profile');
+            writeUserData({ uid, values, navigation, isProfessional });
+        }).catch(error => {
+            console.log(error.code, error.message);
+        })
     } else {
         auth.createUserWithEmailAndPassword(values.email, values.password).then(function (userCreds) {
             const uid = userCreds.user.uid;

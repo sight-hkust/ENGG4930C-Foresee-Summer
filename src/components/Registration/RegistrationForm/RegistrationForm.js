@@ -11,7 +11,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Feather from 'react-native-vector-icons/Feather'
 import moment from 'moment';
-import { createAccount, writeUserData, registerPatientAccount } from "../RegisterAction";
+import { createAccount, registerPatientAccount } from "../RegisterAction";
 import { LinearGradientBackground } from "../../../../Utils/LinearGradientBackground";
 import Logo from "../../../../Utils/Logo";
 import { RoundButton } from "../../../../Utils/RoundButton";
@@ -19,9 +19,10 @@ import { StyledDatePickerModal } from "../../../../Utils/StyledDatePickerModal";
 import DateTimePicker from "@react-native-community/datetimepicker"
 import { StyledMultiLinesInput } from "../../../../Utils/StyledMultiLinesInput";
 import { SchemaRegisterPatient } from "../Schema/SchemaRegisterPatient";
-import { DialogPicker, StyledDialogPicker } from "../../../../Utils/StyledDialogPicker";
+import { StyledDialogPicker } from "../../../../Utils/StyledDialogPicker";
 import { Portal, Dialog, Provider, List } from "react-native-paper";
 import { CheckBox } from "react-native-elements";
+import { KeyIcon, MailIcon } from "../../../utils/icon";
 
 export const RegistrationForm = ({ navigation, route }) => {
     const { isProfessional, registerPatient } = route.params;
@@ -98,9 +99,7 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient }) => {
 
     const personIcon = <MaterialIcons name='person' color={'white'} size={35} />
     const hourGlassIcon = <SimpleLineIcons name='hourglass' color={'white'} size={32} />
-    const emailIcon = <MaterialCommunityIcons name='email-outline' color={'white'} size={35} />
     const phoneIcon = <Feather name='phone' color={'white'} size={32} />
-    const keyIcon = <Feather name='key' color={'white'} size={32} />
     const jobIcon = <MaterialCommunityIcons name='briefcase' color={'white'} size={35} />
     const illnessIcon = <MaterialCommunityIcons name='pill' color={'white'} size={35} />
     const historyIcon = <MaterialCommunityIcons name='file' color={'white'} size={35} />
@@ -169,7 +168,7 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient }) => {
                 <StyledInput
                     containerStyle={{ height: 'auto' }}
                     placeholder={'電子郵件'}
-                    icon={emailIcon}
+                    icon={MailIcon}
                     formikProps={formikProps}
                     formikKey="email"
                 />
@@ -203,14 +202,14 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient }) => {
                         <StyledInput
                             containerStyle={{ height: 'auto' }}
                             placeholder={'密碼'}
-                            icon={keyIcon}
+                            icon={KeyIcon}
                             formikProps={formikProps}
                             formikKey="password"
                             secureTextEntry
                         />
                         <StyledInput
                             placeholder={'確認密碼'}
-                            icon={keyIcon}
+                            icon={KeyIcon}
                             formikProps={formikProps}
                             formikKey="confirmPassword"
                             secureTextEntry

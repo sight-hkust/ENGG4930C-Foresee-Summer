@@ -1,7 +1,7 @@
 import React from 'react';
 import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import FeatherIcon from 'react-native-vector-icons/Feather'
-export const mailIcon = <MaterialCommunityIcon
+export const MailIcon = <MaterialCommunityIcon
         name='email-outline'
         color='#FFFFFF'
         size={34} />

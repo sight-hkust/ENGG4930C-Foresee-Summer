@@ -98,6 +98,7 @@ function ArticleScreen({ navigation, route }) {
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="GetEducatedScreen" component={GetEducatedScreen} />
       <Stack.Screen name="ArticleDetailScreen" component={ArticleDetailScreen} />
+      <Stack.Screen name="Profile" component={Profile} />
     </Stack.Navigator>
   );
 }
@@ -124,13 +125,15 @@ export default class Main extends Component {
     return (
       <NavigationContainer >
         <Tab.Navigator
-          initialRouteName="GetEducated"
+          initialRouteName="Login"
           shifting={false}
           barStyle={{ backgroundColor: '#BED8FF', height: Dimensions.get('window').height * 0.10, paddingHorizontal: 30 }}
           labeled={false}
         >
           <Tab.Screen
             name="QR Scan" component={QRCodeScannerScreen} />
+          <Tab.Screen
+            name="Login" component={LoginAndRegisterScreen} />
           <Tab.Screen
             name="GetEducated"
             showLabel={false}
