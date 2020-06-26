@@ -22,7 +22,6 @@ import AskAnExpertMainScreen from './src/components/AskAnExpert/AskAnExpertMainS
 
 import ProfMainMenu from './Screens/ProfMainMenu';
 import ProfPatientViewScreen from './Screens/ProfPatientViewScreen';
-import ProfSearchResultScreen from './Screens/ProfSearchResultScreen';
 import { Login } from './src/components/Login/Login';
 import { Register } from './src/components/Registration/Register';
 import MainScreen from './Screens/MainScreen';
@@ -46,7 +45,7 @@ function LoginAndRegisterScreen({ navigation, route }) {
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Register" component={Register} />
-      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="Profile" component={Profile} />{' '}
     </Stack.Navigator>
   );
 }
@@ -63,7 +62,7 @@ function UserScreen({ navigation, route }) {
           color: '#E1EDFF',
           fontWeight: '700',
         },
-        headerRight: () => <SettingButton />,
+        headerRight: () => <SettingButton navigation={navigation} />,
       }}
     >
       <Stack.Screen name="MainScreen" component={MainScreen} initialParams={{ isProfessional: true }} />
@@ -73,7 +72,6 @@ function UserScreen({ navigation, route }) {
       <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} />
       <Stack.Screen name="DoctorsScreen" component={DoctorsScreen} />
       <Stack.Screen name="EyeExercise" component={EyeExercise} />
-
       <Stack.Screen name="Profile" component={Profile} />
     </Stack.Navigator>
   );
@@ -90,7 +88,7 @@ function Education({ navigation, route }) {
           color: '#E1EDFF',
           fontWeight: '700',
         },
-        headerRight: () => <SettingButton />,
+        headerRight: () => <SettingButton navigation={navigation} />,
       }}
     >
       <Stack.Screen name="GetEducatedScreen" component={GetEducatedScreen} />
@@ -113,8 +111,8 @@ function ProfessionalScreen({ navigation, route }) {
       }}
     >
       <Stack.Screen name="ProfMainMenu" component={ProfMainMenu} options={{ title: '病人名單' }} />
-      <Stack.Screen name="ProfPatientViewScreen" component={ProfPatientViewScreen} options={{ headerShown: false, tabBarVisible: false }} />
-      <Stack.Screen name="ProfSearchResultScreen" component={ProfSearchResultScreen} />
+      <Stack.Screen name="ProfPatientViewScreen" component={ProfPatientViewScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} options={{ title: '新增資料' }} />
     </Stack.Navigator>
   );
 }
@@ -129,7 +127,7 @@ function ArticleScreen({ navigation, route }) {
           color: '#E1EDFF',
           fontWeight: '700',
         },
-        headerRight: () => <SettingButton />,
+        headerRight: () => <SettingButton navigation={navigation} />,
       }}
     >
       <Stack.Screen name="GetEducatedScreen" component={GetEducatedScreen} options={{ title: '護眼秘笈' }} />
@@ -147,7 +145,7 @@ function HomeScreen({ navigation, route }) {
           color: '#E1EDFF',
           fontSize: 30,
         },
-        headerRight: () => <SettingButton />,
+        headerRight: () => <SettingButton navigation={navigation} />,
       }}
     >
       <Stack.Screen name="RecordsScreen" component={RecordsScreen} options={{ title: '視力趨勢' }} />
@@ -165,7 +163,7 @@ function FaqScreen({ navigation, route }) {
           color: '#E1EDFF',
           fontSize: 30,
         },
-        headerRight: () => <SettingButton />,
+        headerRight: () => <SettingButton navigation={navigation} />,
       }}
     >
       <Stack.Screen name="AskAnExpertMainScreen" component={AskAnExpertMainScreen} options={{ title: '專家解答' }} />
@@ -175,7 +173,7 @@ function FaqScreen({ navigation, route }) {
 }
 
 function SettingButton({ route, navigation }) {
-  const [isProfessional, setIsProfessional] = useState(true);
+  const [isProfessional, setIsProfessional] = useState(false);
 
   // useEffect(() => {
   //   if (auth.currentUser != null && auth.currentUser.userType == 'professional') {
@@ -201,7 +199,7 @@ function SettingButton({ route, navigation }) {
 }
 
 function Main({ route, navigation }) {
-  const [isProfessional, setIsProfessional] = useState(true);
+  const [isProfessional, setIsProfessional] = useState(false);
 
   // useEffect(() => {
   //   if (auth.currentUser != null && auth.currentUser.userType == 'professional') {
@@ -291,6 +289,7 @@ export default App = (props) => {
         {/* <Stack.Screen name="Login" component={Login} /> */}
         {/* <Stack.Screen name="Register" component={Register} /> */}
         <Stack.Screen name="Main" component={Main} />
+
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="QR Scan" component={QRCodeScannerScreen} />
       </Stack.Navigator>

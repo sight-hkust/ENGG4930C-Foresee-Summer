@@ -1,43 +1,38 @@
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 import { View, TouchableOpacity, Image, Dimensions, StyleSheet } from 'react-native';
-import { Col, Row, Grid } from "react-native-easy-grid";
-import { LinearGradientBackground } from './LinearGradientBackground'
+import { Col, Row, Grid } from 'react-native-easy-grid';
+import { LinearGradientBackground } from './LinearGradientBackground';
 
 const WINDOW_HEIGHT = Dimensions.get('window').height;
 const WINDOW_WIDTH = Dimensions.get('window').width;
 
 export default class MenuScreen extends Component {
-    constructor(props) {
-        super(props)
+  constructor(props) {
+    super(props);
 
-        this.state = {
-            isLightTheme: true,
-            activePage: '',
-        }
-    }
+    this.state = {
+      isLightTheme: true,
+      activePage: '',
+    };
+  }
 
-    render() {
-        return (        
-            <View style={{ height: WINDOW_HEIGHT, addingTop: ( Platform.OS === 'ios' ) ? 20 : 0, backgroundColor: this.state.isLightTheme? '#BED8FF': '#2372A5'}}>
-                <View style={{shadowColor: '#000000',
-                    shadowColor: '#000',
-                    shadowOffset: { width: 0, height: 10},
-                    shadowOpacity: 0.3,
-                    shadowRadius: 5,}}
-                    > 
-                <View style={{height: WINDOW_HEIGHT * 0.87, borderBottomLeftRadius: 40, borderBottomRightRadius: 40, overflow: 'hidden'}}>
-                { this.state.isLightTheme?
-                    <LinearGradientBackground style={{ height: '100%' }} colors={['#1772A6', '#A377FF']} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]}>
-                        {this.props.children}
-                    </LinearGradientBackground>
-                :
-                    <LinearGradientBackground style={{ height: '100%' }} colors={['#2D404B', '#2D404B']} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]}>
-                        {this.props.children}
-                    </LinearGradientBackground>
-                }
-                </View>
-                </View>
-                {/* <Grid style={{width: WINDOW_WIDTH * 0.9, alignSelf: 'center', alignItems: 'center', marginBottom: 30, zIndex: 1, marginTop: 20}}>
+  render() {
+    return (
+      <View style={{ height: WINDOW_HEIGHT, addingTop: Platform.OS === 'ios' ? 20 : 0, backgroundColor: this.state.isLightTheme ? '#BED8FF' : '#2372A5' }}>
+        <View style={{ shadowColor: '#000000', shadowColor: '#000', shadowOffset: { width: 0, height: 10 }, shadowOpacity: 0.3, shadowRadius: 5 }}>
+          <View style={{ height: WINDOW_HEIGHT * 0.9, borderBottomLeftRadius: 40, borderBottomRightRadius: 40, overflow: 'hidden' }}>
+            {this.state.isLightTheme ? (
+              <LinearGradientBackground style={{ height: '100%' }} colors={['#1772A6', '#A377FF']} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]}>
+                {this.props.children}
+              </LinearGradientBackground>
+            ) : (
+              <LinearGradientBackground style={{ height: '100%' }} colors={['#2D404B', '#2D404B']} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]}>
+                {this.props.children}
+              </LinearGradientBackground>
+            )}
+          </View>
+        </View>
+        {/* <Grid style={{width: WINDOW_WIDTH * 0.9, alignSelf: 'center', alignItems: 'center', marginBottom: 30, zIndex: 1, marginTop: 20}}>
                     <Col>
                     <TouchableOpacity style={{   shadowColor: '#000',
                         shadowOffset: { width: 0, height: 4},
@@ -85,22 +80,20 @@ export default class MenuScreen extends Component {
                         </TouchableOpacity>             
                     </Col>
                 </Grid> */}
-            </View>
-        );
-    }
-
+      </View>
+    );
+  }
 }
 
 const styles = StyleSheet.create({
-
-    mainButton: {
-        width: 60,
-        height: 60,
-        alignSelf: 'center',
-    },
-    menuButton: {
-        width: 40,
-        height: 40,
-        alignSelf: 'center'
-    },
+  mainButton: {
+    width: 60,
+    height: 60,
+    alignSelf: 'center',
+  },
+  menuButton: {
+    width: 40,
+    height: 40,
+    alignSelf: 'center',
+  },
 });
