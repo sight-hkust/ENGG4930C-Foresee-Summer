@@ -8,28 +8,26 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
 import WelcomeScreen from './Screens/WelcomeScreen';
-import LoginScreen from './Screens/LoginScreen';
 import GetEducatedScreen from './Screens/GetEducated';
 import RecordsScreen from './Screens/RecordsScreen';
 import ArticleDetailScreen from './Screens/ArticleDetail';
 
 import AddRecordScreen from './Screens/AddRecordScreen';
-import DoctorsScreen from './Screens/Doctors';
 import EyeExercise from './Screens/EyeExercise';
 
 import PostQuestion from './src/components/AskAnExpert/PostQuestionScreen';
 import AskAnExpertMainScreen from './src/components/AskAnExpert/AskAnExpertMainScreen';
 
-import ProfMainMenu from './Screens/ProfMainMenu';
-import ProfPatientViewScreen from './Screens/ProfPatientViewScreen';
 import { Login } from './src/components/Login/Login';
 import { Register } from './src/components/Registration/Register';
-import MainScreen from './Screens/MainScreen';
 import { Profile } from './src/components/Profile/Profile';
 import { ScanQRIcon } from './src/utils/icon';
 import { QRCodeScannerScreen } from './src/components/QRCodeScannerScreen/QRCodeScannerScreen';
 
 import { auth } from './src/config/config';
+
+import ProfMainMenu from './src/components/Professional/ProfMainMenu';
+import ProfPatientViewScreen from './src/components/Professional/ProfPatientViewScreen';
 
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -65,12 +63,10 @@ function UserScreen({ navigation, route }) {
         headerRight: () => <SettingButton navigation={navigation} />,
       }}
     >
-      <Stack.Screen name="MainScreen" component={MainScreen} initialParams={{ isProfessional: true }} />
       <Stack.Screen name="RecordsScreen" component={RecordsScreen} />
       <Stack.Screen name="GetEducatedScreen" component={GetEducatedScreen} />
       <Stack.Screen name="ArticleDetailScreen" component={ArticleDetailScreen} />
       <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} />
-      <Stack.Screen name="DoctorsScreen" component={DoctorsScreen} />
       <Stack.Screen name="EyeExercise" component={EyeExercise} />
       <Stack.Screen name="Profile" component={Profile} />
     </Stack.Navigator>
@@ -286,11 +282,10 @@ export default App = (props) => {
   return (
     <NavigationContainer>
       <Stack.Navigator headerMode="none">
-        <Stack.Screen name="Main" component={Main} />
         <Stack.Screen name="Login" component={Login} />
         {/* <Stack.Screen name="Register" component={Register} /> */}
         <Stack.Screen name="Profile" component={Profile} />
-
+        <Stack.Screen name="Main" component={Main} />
         <Stack.Screen name="Register" component={Register} />
         <Stack.Screen name="QR Scan" component={QRCodeScannerScreen} />
       </Stack.Navigator>

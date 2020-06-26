@@ -4,11 +4,10 @@ import { Icon, ListItem, Button, SearchBar } from 'react-native-elements';
 import { Grid, Col, Row } from 'react-native-easy-grid';
 //import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { ScreenWidth, ScreenHeight } from '../constant/Constant';
-import { database } from '../src/config/config';
+import { ScreenWidth, ScreenHeight } from '../../../constant/Constant';
+import { database, auth } from '../../config/config';
 
-import MenuScreen from '../Utils/MenuScreen';
-
+import MenuScreen from '../../../Utils/MenuScreen';
 /**
  * For Local Search.
  */
@@ -40,14 +39,16 @@ const ProfMainMenu = ({ route, navigation }) => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    database.ref('professionals/M001/patients/').once('value', (snap) => {
+    database.ref('professionals/' + auth.currentUser.uid + '/patients/').once('value', (snap) => {
       let patients = [];
       snap.forEach((child) => {
-        patients.push({
-          name: child.val()['info']['name'],
-          lastReserveDate: child.val()['records'] != null ? Object.keys(child.val()['records']).slice(-1)[0] : null,
-          key: child.key,
-        });
+        if (child.val()['info'] != null) {
+          patients.push({
+            name: child.val()['info']['firstName'] && child.val()['info']['lastName'] != null ? child.val()['info']['firstName'] + ' ' + child.val()['info']['lastName'] : '()',
+            lastReserveDate: child.val()['records'] != null ? Object.keys(child.val()['records']).slice(-1)[0] : null,
+            key: child.key,
+          });
+        }
       });
       setPatientList(patients);
       setOriginalList(patients);
@@ -108,7 +109,7 @@ const ProfMainMenu = ({ route, navigation }) => {
               }}
             >
               {patientList.length == 0 ? (
-                <Text style={{ textAlign: 'center', color: 'white' }}> No Results found </Text>
+                <Text style={{ textAlign: 'center', color: 'white', fontSize: 30 }}> 找不到用戶 </Text>
               ) : (
                 patientList.map((u, i) => {
                   return (
@@ -148,7 +149,7 @@ const ProfMainMenu = ({ route, navigation }) => {
                             onPress={() => {
                               navigation.navigate('AddRecordScreen', {
                                 isProfessional: true,
-                                professional_id: 'M001',
+                                professional_id: auth.currentUser.uid,
                                 patient_id: u.key,
                               });
                             }}
