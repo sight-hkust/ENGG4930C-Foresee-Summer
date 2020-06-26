@@ -158,11 +158,11 @@ const ProfMainMenu = ({ route, navigation }) => {
                               borderRadius: 5,
                               padding: 3,
                             }}
-                            onPress={() => {
-                              navigation.navigate('ProfPatientViewScreen', {
-                                key: u.key,
-                              });
-                            }}
+                            onPress={() => navigation.navigate('AddRecordScreen', {
+                                isProfessional: true,
+                                professional_id: 'M001',
+                                patient_id: u.key,
+                            })}                       
                           />
                         </>
                       }
