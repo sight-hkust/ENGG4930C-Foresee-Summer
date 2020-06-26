@@ -140,7 +140,7 @@ export default class LineChart extends React.Component {
     const lastIndex = dateArr.length-1;
     const firstIndex = 0;
     config.dateArr.forEach((item, index)=>{
-      console.log("selected index:",full_dateArr[selectedIndex])
+      //console.log("selected index:",full_dateArr[selectedIndex])
       //const cx = paddingRight/2 + (index * (width - paddingRight)) / (data.length-1);
       const cx = this.x_scale(moment(item, 'YYYY-MM-DD').toDate(), dateArr,paddingRight,width);
       const cy = this.y_scale(data[index], data, height,paddingTop);

@@ -56,6 +56,7 @@ export default class RecordsScreen extends Component{
 
     const pressHandler = ()=>{
       this.props.navigation.navigate("AddRecordScreen" ,{isProfessional: false,professional_id: -1, patient_id: patient_id})
+      //this.props.navigation.navigate("AddRecordScreenB" ,{isProfessional: false,professional_id: -1, patient_id: patient_id})
     }
     const GetNext = ()=>{
       const length = this.state.dates.length;
