@@ -83,15 +83,9 @@ export default class Form extends Component{
           >
         <ScrollView>
 
-        <View style={AddRecordScreen.header}>
-            <Text style={AddRecordScreen.title}>新增資料</Text>
-            <TouchableOpacity>
-              <Image source={Setting}/>
-            </TouchableOpacity>
-        </View>
         
 
-        <View style={{flexDirection:'row',paddingLeft:10,paddingTop:30, justifyContent:"space-around"}}>
+        <View style={{flexDirection:'row',paddingLeft:10,paddingTop:85, justifyContent:"space-around"}}>
             <TouchableOpacity onPress={()=>this.setState({mode:true})}>
                 <Text style={mode? AddRecordScreen.selectedMode: AddRecordScreen.unselectedMode}>
                     Slider</Text>

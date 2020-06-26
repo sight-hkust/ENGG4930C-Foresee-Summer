@@ -112,9 +112,7 @@ export default class RecordsScreen extends Component {
                 : '散光'}
               度數趨勢
             </Text>
-            <TouchableOpacity>
-              <Image source={Setting} />
-            </TouchableOpacity>
+
           </View>
 
           <View style={RecordScreenStyle.secondaryContainer}>
