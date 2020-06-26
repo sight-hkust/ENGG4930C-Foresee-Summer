@@ -33,13 +33,18 @@ export default class GetEducated extends Component {
             //console.log(snapshot.toJSON());
             snapshot.forEach((childSnapshot)=>{
                 var childData = childSnapshot.val();
-                console.log(childData);
+                //console.log(childData.article_id);
                 this.setState({topArticle: childData})
             })
         })
     }
 
     render() {
+    
+    const pressHandler=()=>{
+        const id = this.state.topArticle.article_id
+        this.props.navigation.navigate("ArticleDetailScreen",{article_id:id})
+    }
         return (
             
         <View style={{backgroundColor:"#E1EDFF",height:'100%'}}>
@@ -64,18 +69,19 @@ export default class GetEducated extends Component {
                 </View>
                 
                 <View style={GetEducatedScreen.topArticleContainer}>
-                    <Image
-                        source = {{uri: this.state.topArticle.image}}
-                        style={GetEducatedScreen.topArticleImage}
-                    />
-                    <Text style={GetEducatedScreen.topArticleText}>{this.state.topArticle.subject}</Text>
+                    <TouchableOpacity onPress={pressHandler}> 
+                        <Image
+                            source = {{uri: this.state.topArticle.image}}
+                            style={GetEducatedScreen.topArticleImage}
+                        />
+                        <Text style={GetEducatedScreen.topArticleText}>{this.state.topArticle.subject}</Text>
+                    </TouchableOpacity>
                 </View>
-
+                
                 <View style={GetEducatedScreen.articleListContainer}>
                     <FlatList
                         data={this.state.data}
                         renderItem={({item})=> <Item item={item} navigation={this.props.navigation}/> }
-
                         keyExtractor={item=>item.article_id}
                     />
                 </View>
@@ -86,8 +92,10 @@ export default class GetEducated extends Component {
 }
 
 function Item({item, navigation}){
+    //console.log(item.article_id)
+    const id = item.article_id;
     const pressHandler=()=>{
-        navigation.navigate("ArticleDetailScreen")
+        navigation.navigate("ArticleDetailScreen",{article_id:id})
     }
     return(
         <TouchableOpacity onPress={pressHandler}>
