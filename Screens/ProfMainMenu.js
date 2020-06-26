@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  ActivityIndicator,
-  Image,
-} from 'react-native';
+import { StyleSheet, Text, View, ScrollView, ActivityIndicator, Image, TouchableOpacity } from 'react-native';
 import { Icon, ListItem, Button, SearchBar } from 'react-native-elements';
+import { Grid, Col, Row } from 'react-native-easy-grid';
 //import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { ScreenWidth, ScreenHeight } from '../constant/Constant';
@@ -51,10 +45,7 @@ const ProfMainMenu = ({ route, navigation }) => {
       snap.forEach((child) => {
         patients.push({
           name: child.val()['info']['name'],
-          lastReserveDate:
-            child.val()['records'] != null
-              ? Object.keys(child.val()['records']).slice(-1)[0]
-              : null,
+          lastReserveDate: child.val()['records'] != null ? Object.keys(child.val()['records']).slice(-1)[0] : null,
           key: child.key,
         });
       });
@@ -75,7 +66,7 @@ const ProfMainMenu = ({ route, navigation }) => {
         ) : (
           <View>
             <SearchBar
-              placeholder="搜索"
+              placeholder="尋找病人"
               onChangeText={(e) => setSearchContent(e)}
               value={searchContent}
               round
@@ -88,7 +79,7 @@ const ProfMainMenu = ({ route, navigation }) => {
                 alignSelf: 'center',
                 borderBottomColor: 'transparent',
                 borderTopColor: 'transparent',
-                marginTop: 80,
+                marginTop: 30,
               }}
               inputContainerStyle={{ backgroundColor: '#A6ACE9', height: 35 }}
               onSubmitEditing={() => {
@@ -108,7 +99,6 @@ const ProfMainMenu = ({ route, navigation }) => {
                 }}
               />
             )}
-
             <ScrollView
               style={{
                 height: 450,
@@ -118,10 +108,7 @@ const ProfMainMenu = ({ route, navigation }) => {
               }}
             >
               {patientList.length == 0 ? (
-                <Text style={{ textAlign: 'center', color: 'white' }}>
-                  {' '}
-                  No Results found{' '}
-                </Text>
+                <Text style={{ textAlign: 'center', color: 'white' }}> No Results found </Text>
               ) : (
                 patientList.map((u, i) => {
                   return (
@@ -159,8 +146,10 @@ const ProfMainMenu = ({ route, navigation }) => {
                               padding: 3,
                             }}
                             onPress={() => {
-                              navigation.navigate('ProfPatientViewScreen', {
-                                key: u.key,
+                              navigation.navigate('AddRecordScreen', {
+                                isProfessional: true,
+                                professional_id: 'M001',
+                                patient_id: u.key,
                               });
                             }}
                           />
@@ -188,24 +177,22 @@ const ProfMainMenu = ({ route, navigation }) => {
               )}
             </ScrollView>
 
-            <Button
-              style={{ paddingTop: 30 }}
-              icon={
-                <Image
-                  source={require('../assets/images/Add_patient_bright.png')}
-                  style={{ height: 35, width: 35 }}
+            <View style={{ flexDirection: 'row', flex: 2, justifyContent: 'center', paddingHorizontal: 15 }}>
+              <View style={{ width: ScreenWidth / 2, height: 100, zIndex: 10 }}>
+                <Button
+                  icon={<Icon name="md-add-circle-outline" type="ionicon" size={30} color="white" />}
+                  title="登記病人"
+                  titleStyle={{ marginLeft: 10, color: 'white', fontWeight: 'bold' }}
+                  type="clear"
+                  onPress={() =>
+                    navigation.navigate('Register', {
+                      screen: 'Registration Form',
+                      params: { isProfessional: true, registerPatient: true },
+                    })
+                  }
                 />
-              }
-              title=" 創建普通用戶"
-              titleStyle={{ color: 'white', fontSize: 20, fontWeight: 'bold' }}
-              type="clear"
-              onPress={() =>
-                navigation.navigate('Register', {
-                  screen: 'Registration Form',
-                  params: { isProfessional: true },
-                })
-              }
-            />
+              </View>
+            </View>
           </View>
         )}
       </View>
