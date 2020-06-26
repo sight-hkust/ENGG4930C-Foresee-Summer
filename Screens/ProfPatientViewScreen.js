@@ -1,20 +1,22 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, FlatList, Dimensions } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image } from 'react-native';
 import { ScreenWidth, ScreenHeight, FontScale } from '../constant/Constant';
 import { database } from '../src/config/config';
 import { Col, Row, Grid } from "react-native-easy-grid";
+import { LinearGradient } from 'expo-linear-gradient';
 
-/**
- * Core component
- */
+const LeftOpen = require('../assets/images/LeftOpen.png');
+const RightOpen = require('../assets/images/RightOpen.png');
+const BackArrow = require('../assets/images/BackArrow.png');
+const NextArrow = require('../assets/images/NextArrow.png');
+const Setting = require('../assets/images/setting.png')
+
 export default class ProfPatientViewScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
             info: [],
             records: [],
-            years: [],
-            curYear: 0,
             recordsIndex: -1
         }
     }
@@ -28,67 +30,46 @@ export default class ProfPatientViewScreen extends Component {
         });
         database.ref('professionals/M001/patients/' + key + '/records').orderByKey().once('value', (snapshot) => {
             let records = [];
-            let years = [];
             let curRecord = {};
-            let curYear = 0;
-            let curYearExists = false;
             let curYearObject = {};
             let nowYear = new Date().getFullYear();
-            let justStart = true;
 
             snapshot.forEach(child => {
                 const year = child.key.split('-')[0];
-                if(justStart){
-                    justStart = false;
-                    curYear = year * 1;
-                    curYearExists = true;
-                }else{
-                    for(; curYear < year; ++curYear){
-                        years.push({
-                            year: curYear,
-                            last: records.length - 1,
-                            exists: curYearExists
-                        });
-                        curYearExists = false;
-                    }
-                    curYearExists = true;
-                }
                 curRecord = child.val();
                 curRecord.date = child.key;
                 records.push(curRecord);
             });
-            if(records.length){
-                for(var i = curYear; i <= nowYear; ++i){
-                    years.push({
-                        year: i,
-                        last: records.length - 1,
-                        exists: curYearExists
-                    });
-                    curYearExists = false;
-                }
-            }
             this.setState({
                 records: records,
-                years: years,
-                curYear: curYear,
                 recordsIndex: records.length - 1
             });
-            console.log(years);
         });
     }
 
     render() {
         const info = this.state.info;
         const records = this.state.records;
-        const years = this.state.years;
         const curRecord = records[this.state.recordsIndex];
-        const curYear = this.state.curYear;
 
         return (
-            <>
-                <View style={styles.fullscreen}>
-                    <View style={[styles.container, {backgroundColor: 'white'}]}>
-                        <Text style={[styles.profileText, {fontSize: 30, color: '#000000'}]}>{info.name}</Text>
+            <View style={styles.fullscreen}>
+                <LinearGradient
+                    colors={['#1872a7','#5a74d1','#a676ff']}
+                    start={[0, 0.9]}
+                    end={[1, 0.1]}
+                    locations={[0, 0.5, 1]}
+                    style={{
+                        height: '100%'
+                    }}
+                >
+                    <View style={styles.header}>
+                        <Text style={styles.title}>{info.name}</Text>
+                        <TouchableOpacity>
+                            <Image source={Setting}/>
+                        </TouchableOpacity>
+                    </View>
+                    <View style={styles.container}>
                         <Text style={styles.profileText}>年齡: {info.age}</Text>
                         <Text style={styles.profileText}>職業: {info.job}</Text>
                         <Text style={styles.profileText}>家庭病史: {info.history}</Text>
@@ -98,9 +79,7 @@ export default class ProfPatientViewScreen extends Component {
                             {flex: 2, 
                             justifyContent: 'center',
                             paddingHorizontal: 30,
-                            backgroundColor: '#56CCF2',
                         }]}>
-                        <View style={{height: 60}}/>
                         <View style={[styles.boxes, {flex: 6, paddingVertical: 10}]}>
                             {records.length == 0 ? <Text>Nah</Text> : 
                                 <Grid>
@@ -164,69 +143,38 @@ export default class ProfPatientViewScreen extends Component {
                         </View>
                         <View style={{height: 30}}/>
                     </View>
-                </View>
-                <View style={styles.fullscreen}>
-                    <View style={{flex: 3}}/>
-                    <View style={{flex: 2}}>
-                        <FlatList
-                            showsHorizontalScrollIndicator={false}
-                            data={years}
-                            horizontal={true}
-                            renderItem={({item}) => {
-                                return (
-                                    <View style={[styles.yearButtonContainer, 
-                                        {width: Dimensions.get('screen').width / Math.min(years.length, 4)
-                                    }]}>
-                                        <View style={{flex: 1}}/>
-                                        {!item.exists ? 
-                                            <View style={styles.smallCircle}>
-                                                <Text style={{textAlign: 'center'}}>X</Text>
-                                            </View>
-                                                : 
-                                            <TouchableOpacity
-                                                style={item.year == curYear ? styles.bigCircle : styles.smallCircle}
-                                                onPress = {() => {
-                                                    this.setState({
-                                                        curYear: item.year,
-                                                        recordsIndex: item.exists ? item.last : -1
-                                                    })
-                                                }}
-                                            />
-                                        }
-                                        <Text style={item.year == curYear ? styles.bigYear : styles.smallYear}>{item.year}</Text>
-                                    </View>
-                                );
-                            }}
-                            
-                        />
-                    </View>
-                    <View style={{flex: 7}}/>
-                </View>
-            </>
+                </LinearGradient>
+            </View>
         );
     }
 }
 
-/**
- * The Styling part, you may edit the existing style
- */
 const styles = StyleSheet.create({
     fullscreen: {
         height: "100%",
-        width: "100%",
-        position: "absolute",
-        top: 0,
-        left: 0
+        width: "100%"
     },
     container: {
         flex: 1,
         justifyContent: 'center'
     }, 
+    header: {
+        paddingTop:40,
+        marginHorizontal:30,
+        flexDirection:'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    },
+    title: {
+        fontSize:30,
+        color: "white",
+        fontWeight: 'bold'
+    },
     profileText: {
         textAlign: 'left',
-        fontSize: 18,
-        paddingHorizontal: 40,
-        color: '#474747'
+        fontSize: 20,
+        paddingHorizontal: 30,
+        color: 'white'
     },
     centreText: {
         textAlign: 'center'
