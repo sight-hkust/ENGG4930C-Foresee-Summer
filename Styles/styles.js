@@ -50,10 +50,6 @@ export const Styles = StyleSheet.create({
     /* textAlign: "center", */
     fontWeight: '500',
   },
-  formFieldWrapper: {
-    marginHorizontal: ScreenWidth * 0.1,
-    marginVertical: ScreenHeight * 0.007,
-  },
   formTextInput: {
     marginTop: ScreenHeight * 0.01,
     paddingHorizontal: ScreenWidth * 0.02,
