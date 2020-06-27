@@ -1,15 +1,10 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image, ScrollView } from 'react-native';
-import { ScreenWidth, ScreenHeight, FontScale } from '../../../constant/Constant';
 import { database } from '../../config/config';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Button, Icon } from 'react-native-elements';
 
-const LeftOpen = require('../../../assets/images/LeftOpen.png');
-const RightOpen = require('../../../assets/images/RightOpen.png');
-const BackArrow = require('../../../assets/images/BackArrow.png');
-const NextArrow = require('../../../assets/images/NextArrow.png');
 const Setting = require('../../../assets/images/setting.png');
 
 export default class ProfPatientViewScreen extends Component {
