@@ -19,7 +19,7 @@ export default class LineChart extends React.Component {
     //const max = Math.max(...data);
     const y = scaleLinear()
     .domain([0,800])
-    .range([180, 10]);
+    .range([170, 10]);
     return(Math.floor((( y(val)) / 4) * 3 + paddingTop));
   }
 
@@ -91,7 +91,7 @@ export default class LineChart extends React.Component {
       return this.y_scale(datas[i],datas,height,paddingTop);
     };
     const startingPoint = 2;
-    const verticalPoint = y(0) + 25;
+    const verticalPoint = y(0) + 13;
     const horizontalLine = config.width - (config.paddingRight);
     const lastPoint = y(dateArr.length-1);
     return [`M${startingPoint},750 V${verticalPoint} Q ${startingPoint}, ${y(0)}, ${x(0)}, ${y(0)} `]
@@ -105,7 +105,7 @@ export default class LineChart extends React.Component {
         })
       )
       .join(" ")
-      .concat(`Q ${horizontalLine}, ${lastPoint}, ${horizontalLine}, ${lastPoint+25}  V750 `);
+      .concat(`Q ${horizontalLine}, ${lastPoint}, ${horizontalLine}, ${lastPoint+13}  V750 `);
   };
 
   renderLine = config=>{
@@ -127,6 +127,7 @@ export default class LineChart extends React.Component {
     const {
       data,
       dateArr,
+      full_dateArr,
       selectedIndex,
       width,
       height,
@@ -139,23 +140,23 @@ export default class LineChart extends React.Component {
     const lastIndex = dateArr.length-1;
     const firstIndex = 0;
     config.dateArr.forEach((item, index)=>{
-      
+      //console.log("selected index:",full_dateArr[selectedIndex])
       //const cx = paddingRight/2 + (index * (width - paddingRight)) / (data.length-1);
       const cx = this.x_scale(moment(item, 'YYYY-MM-DD').toDate(), dateArr,paddingRight,width);
       const cy = this.y_scale(data[index], data, height,paddingTop);
       
-      console.log(lastIndex);
+      //console.log(lastIndex);
       output.push(
         <>
         <Circle
-          key={index}
+          key={item}
           cx = {cx}
           cy = {cy}
           r="8"
-          stroke={index===selectedIndex? "white" : "#2D9CDB"}
+          stroke={item===full_dateArr[selectedIndex]? "white" : "#2D9CDB"}
           strokeWidth="2"
-          fill={index===selectedIndex? "#00FFFF": "white"}
-          opacity={index===selectedIndex? "1": "0.72"}
+          fill={item===full_dateArr[selectedIndex]? "#00FFFF": "white"}
+          opacity={item===full_dateArr[selectedIndex]? "1": "0.72"}
           />
           <Text 
             x={cx} 
@@ -171,7 +172,7 @@ export default class LineChart extends React.Component {
             y={cy+45} 
             textAnchor="middle"
             fontSize='14'
-            fill={index===selectedIndex? "black": "none"}>
+            fill={item===full_dateArr[selectedIndex]? "black": "none"}>
               {moment(item).format('D[/]M')}
           </Text>
         </>
@@ -182,7 +183,7 @@ export default class LineChart extends React.Component {
 
   render() {
     const{
-      data, dateArr,selectedIndex,refractive
+      data, dateArr,selectedIndex,refractive,full_dateArr
     } = this.props;
     const height = "750";
     if(data == null){
@@ -222,6 +223,7 @@ export default class LineChart extends React.Component {
                 height: height,
                 data: data,
                 dateArr:dateArr,
+                full_dateArr:full_dateArr,
                 selectedIndex:selectedIndex,
                 paddingRight: 20,
                 paddingTop: 10

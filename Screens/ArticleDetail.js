@@ -13,182 +13,176 @@ import {Audio, Video} from 'expo-av';
 import { LinearGradient } from 'expo-linear-gradient';
 import {Button} from 'react-native-elements';
 import {Icon} from 'react-native-elements'
-//import * as ScreenOrientation from 'expo-screen-orientation';
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 //TODO: STOP VID WHEN LEAVE THE SCREEN!!
 
-export default class ArticleDetail extends Component {
 
-    // constructor(props) {
-    //     super(props);
-    //     this.playbackInstance = null;
-    //     this.state = {
-    //         play : false,
-    //         playbackObject: null,
-    //         volume: 1.0,
-    //         isBuffering: false,
-    //         article_id: '004', //this.route.param
-    //         content:"",
-    //         subject:"",
-    //         image: null,
-    //         video:null,
-    //         isVid: false,
-    //     };
-    // }
 
-    // mountVid = component =>{
-    //     this.video = component;
-    //     this._handleVidRef(true);
-    // }
+export default class ArticleDetailScreen extends Component {
+    constructor(props) {
+        super(props);
+        const { article_id } = this.props.route.params;
+        //console.log(article_id);
+        this.playbackInstance = null;
+        this.state = {
+            play : false,
+            playbackObject: null,
+            volume: 1.0,
+            isBuffering: false,
+            article_id: article_id, //this.props.route.params.article_id then remove from state
+            content:"",
+            subject:"",
+            image: null,
+            audio: null,
+            video: null,
+            isVid: false,
+        };
+    }
+    
 
-    // async _handleVidRef(playing){
-    //     const {video} = this.state;
-    //     try{
-    //         const status={
-    //             shouldPlay: playing,}
-    //         const source = {uri: video}
+    mountVid = component =>{
+        this.video = component;
+        this._handleVidRef(true);
+    }
+
+    async _handleVidRef(playing){
+        const {video} = this.state;
+        try{
+            const status={
+                shouldPlay: playing,}
+            const source = {uri: video}
             
-    //         await this.video.loadAsync(source,status,false);
-    //         this.setState({playbackObject: this.video});
+            await this.video.loadAsync(source,status,false);
+            this.setState({playbackObject: this.video});
 
-    //     }catch(e){console.log(e)}
+        }catch(e){console.log(e)}
 
-    // }       
+    }       
 
-    // onFullScreenPressed = ()=>{
-    //     this.video.presentFullscreenPlayer()
-    // }
+    onFullScreenPressed = ()=>{
+        this.video.presentFullscreenPlayer()
+    }
 
-    // fullscreencontrol = event=>{
-    //     if(event.fullscreenUpdate == 0){
-    //         console.log("jet")
-    //         ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE)
-    //     } 
-    //     if(event.fullscreenUpdate == 3){
-    //         ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_DOWN)
-    //     } 
-        
-    // }
-
-    // async getAudio (){
-    //     const {play,volume,image} = this.state
-    
-    //     try{
-    //         const playbackObject = new Audio.Sound()
-    //         const source = {uri: image}
+    fullscreencontrol = event=>{
+        if(event.fullscreenUpdate == 0){
             
-    //         const status={
-    //             shouldPlay: play,
-    //             volume
-    //         }
-    
-    //         playbackObject.setOnPlaybackStatusUpdate(this.onPlaybackStatusUpdate)
-    //         await playbackObject.loadAsync(source,status,false)
-    //         this.setState({playbackObject:playbackObject})
-    //         } catch(e){
-    //             console.log(e)
-    //         }
-    //     }
-    //     onPlaybackStatusUpdate = status=>{
-    //         this.setState({isBuffering: status.isBuffering})
-    //     }
-    
-
-    // async componentDidMount() {
+            ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.LANDSCAPE)
+        } 
+        if(event.fullscreenUpdate == 3){
+            ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT_DOWN)
+        } 
         
+    }
 
-    //     database.ref("contents/articles").orderByChild("article_id").equalTo(this.state.article_id).once("value",(snapshot)=>{
-    //         snapshot.forEach((childSnapshot)=>{
-    //             var childData = childSnapshot.val();
-    //             if(childData.isVid){
-    //                 this.setState({content: childData.content,
-    //                     subject: childData.subject,
-    //                     isVid: childData.isVid,
-    //                     video: childData.video,
-    //                     })
-    //             }
-    //             else{
-    //                 this.setState({content: childData.content,
-    //                     subject: childData.subject,
-    //                     isVid: childData.isVid,
-    //                     image: childData.image,
-    //                     })
-    //             }
-    //         })
-    //     })
+    async getAudio (){
+        const {play,volume,audio} = this.state
+    
+        try{
+            const playbackObject = new Audio.Sound()
+            const source = {uri: audio}
+            
+            const status={
+                shouldPlay: play,
+                volume
+            }
+    
+            playbackObject.setOnPlaybackStatusUpdate(this.onPlaybackStatusUpdate)
+            await playbackObject.loadAsync(source,status,false)
+            this.setState({playbackObject:playbackObject})
+            } catch(e){
+                console.log(e)
+            }
+        }
+        onPlaybackStatusUpdate = status=>{
+            this.setState({isBuffering: status.isBuffering})
+        }
+    
 
-    //     if(!this.state.isVid){
-    //         this.getAudio()
-    //     }
-        
-    // }
+    componentDidMount() {
 
-    // render() {
+        database.ref("contents/articles").orderByChild("article_id").equalTo(this.state.article_id).once("value",(snapshot)=>{
+            snapshot.forEach((childSnapshot)=>{
+                var childData = childSnapshot.val();
+                if(childData.isVid){
+                    this.setState({content: childData.content,
+                        subject: childData.subject,
+                        isVid: childData.isVid,
+                        video: childData.video,
+                        })
+                }
+                else{
+                    this.setState({content: childData.content,
+                        subject: childData.subject,
+                        isVid: childData.isVid,
+                        image: childData.image,
+                        audio: childData.audio
+                        })
+                    this.getAudio();
+                    }
+            })
+        })
 
-    //     const PressPlayButton = async()=>{
-    //         const {play, playbackObject} = this.state
-    //         play? await playbackObject.pauseAsync(): await playbackObject.playAsync()
-    //         this.setState({play: !play})    
-    //     }
+    }
 
-    //     return (
-    //     <View style={{backgroundColor:"#F6F6F6", height:'100%'}}>
-    //         <View>
-    //         {this.state.isVid &&
-    //             <Video
-    //                 ref={this.mountVid}
-    //                 resizeMode="cover"
-    //                 useNativeControls={true}
-    //                 onFullscreenUpdate={this.fullscreencontrol}
-    //                 style={{width:Dimensions.get('window').width, height:250}}
-    //             />    
-    //             }
-
-    //         {!this.state.isVid &&
-    //             <>
-    //             <Image 
-    //                 source = {{uri: this.state.image}}
-    //                 style={{width:Dimensions.get('window').width, height:250}}
-    //             />
-    //             <LinearGradient
-    //                 colors={['transparent','transparent','#F6F6F6']}
-    //                 locations = {[0,0.2,1]}
-    //                 style={{
-    //                 position:'absolute', height:250,width:Dimensions.get('window').width
-    //                 }}
-    //             >
-    //             </LinearGradient>
-    //             </>
-    //         }
-
-    //         <Text style={ this.state.isVid? ArticleDetailScreen.videoSubject:ArticleDetailScreen.articleSubject}>{this.state.subject}</Text>
-    //         </View>
-
-    //        <ScrollView>
-           
-    //         <View>
-    //             {!this.state.isVid &&
-    //             <Button title={this.state.play? "暫停錄音":"播放錄音"} titleStyle={ArticleDetailScreen.buttonTitle} onPress={()=>PressPlayButton()} buttonStyle={ArticleDetailScreen.playButton}/>
-    //             }
-    //             <Text style={this.state.isVid? ArticleDetailScreen.videoContent :ArticleDetailScreen.articleContent}>{this.state.content}</Text>
-
-
-    //         </View>
-    //         </ScrollView>
-    //     </View>
-    //     );
     render() {
+
+        const PressPlayButton = async()=>{
+            const {play, playbackObject} = this.state
+            play? await playbackObject.pauseAsync(): await playbackObject.playAsync()
+            this.setState({play: !play})    
+        }
+
         return (
+        <View style={{backgroundColor:"#F6F6F6", height:'100%'}}>
             <View>
+            {this.state.isVid &&
+                <Video
+                    ref={this.mountVid}
+                    resizeMode="cover"
+                    useNativeControls={true}
+                    onFullscreenUpdate={this.fullscreencontrol}
+                    style={{width:Dimensions.get('window').width, height:250}}
+                />    
+                }
 
-                This is article
+            {!this.state.isVid &&
+                <>
+                <Image 
+                    source = {{uri: this.state.image}}
+                    style={{width:Dimensions.get('window').width, height:250}}
+                />
+                <LinearGradient
+                    colors={['transparent','transparent','#F6F6F6']}
+                    locations = {[0,0.2,1]}
+                    style={{
+                    position:'absolute', height:250,width:Dimensions.get('window').width
+                    }}
+                >
+                </LinearGradient>
+                </>
+            }
+
+            <Text style={ this.state.isVid? ArticleDetailStyles.videoSubject:ArticleDetailStyles.articleSubject}>{this.state.subject}</Text>
             </View>
-        )
-    }
-    }
+
+           <ScrollView>
+           
+            <View>
+                {!this.state.isVid &&
+                <Button title={this.state.play? "暫停錄音":"播放錄音"} titleStyle={ArticleDetailStyles.buttonTitle} onPress={()=>PressPlayButton()} buttonStyle={ArticleDetailStyles.playButton}/>
+                }
+                <Text style={this.state.isVid? ArticleDetailStyles.videoContent :ArticleDetailStyles.articleContent}>{this.state.content}</Text>
 
 
-const ArticleDetailScreen = StyleSheet.create({
+            </View>
+            </ScrollView>
+        </View>
+        );
+    }
+}
+
+const ArticleDetailStyles = StyleSheet.create({
     articleSubject:{
         position: 'absolute',
         top: 210,

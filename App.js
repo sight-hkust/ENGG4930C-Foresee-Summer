@@ -1,35 +1,36 @@
 import 'react-native-gesture-handler';
-import React, { Component } from 'react';
-import { Image, Dimensions } from 'react-native'
+import React, { useEffect, useState } from 'react';
+import { Image, Dimensions, TouchableOpacity } from 'react-native';
+import { Icon } from 'react-native-elements';
 
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-
+import WelcomeScreen from './Screens/WelcomeScreen';
 import GetEducatedScreen from './Screens/GetEducated';
 import RecordsScreen from './Screens/RecordsScreen';
 import ArticleDetailScreen from './Screens/ArticleDetail';
-import AskAnExpertScreen from './Screens/AskAnExpertScreen';
+
 import AddRecordScreen from './Screens/AddRecordScreen';
-import DoctorsScreen from './Screens/Doctors';
+import EyeExercise from './Screens/EyeExercise';
 
+import PostQuestion from './src/components/AskAnExpert/PostQuestionScreen';
+import AskAnExpertMainScreen from './src/components/AskAnExpert/AskAnExpertMainScreen';
 
-import ProfMainMenu from './Screens/ProfMainMenu'
-import ProfPatientViewScreen from './Screens/ProfPatientViewScreen'
-import ProfSearchResultScreen from './Screens/ProfSearchResultScreen'
 import { Login } from './src/components/Login/Login';
 import { Register } from './src/components/Registration/Register';
-import MainScreen from './Screens/MainScreen';
 import { Profile } from './src/components/Profile/Profile';
 import { ScanQRIcon } from './src/utils/icon';
 import { QRCodeScannerScreen } from './src/components/QRCodeScannerScreen/QRCodeScannerScreen';
 
-//const Tab = createStackNavigator();
-const Tab = createMaterialBottomTabNavigator();
+import { auth } from './src/config/config';
 
-const Icon = require('./assets/images/Icon_solid.png');
+import ProfMainMenu from './src/components/Professional/ProfMainMenu';
+import ProfPatientViewScreen from './src/components/Professional/ProfPatientViewScreen';
+
+const Tab = createMaterialBottomTabNavigator();
+const Stack = createStackNavigator();
 
 global.realName = '';
 global.email = '';
@@ -38,28 +39,35 @@ global.apiUrl = '';
 
 /** Login & Register Stacks */
 function LoginAndRegisterScreen({ navigation, route }) {
-  const Stack = createStackNavigator();
   return (
     <Stack.Navigator headerMode="none">
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="Register" component={Register} />
-      <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="Profile" component={Profile} />{' '}
     </Stack.Navigator>
   );
 }
 
 /** Normal User Screens */
 function UserScreen({ navigation, route }) {
-  const Stack = createStackNavigator();
   return (
-    <Stack.Navigator headerMode="none">
-      <Stack.Screen name="MainScreen" component={MainScreen} initialParams={{ isProfessional: true }} />
+    <Stack.Navigator
+      initialRouteName="AskAnExpertScreen"
+      screenOptions={{
+        headerTransparent: true,
+        headerTitleStyle: {
+          fontSize: 31,
+          color: '#E1EDFF',
+          fontWeight: '700',
+        },
+        headerRight: () => <SettingButton navigation={navigation} />,
+      }}
+    >
       <Stack.Screen name="RecordsScreen" component={RecordsScreen} />
       <Stack.Screen name="GetEducatedScreen" component={GetEducatedScreen} />
       <Stack.Screen name="ArticleDetailScreen" component={ArticleDetailScreen} />
-      <Stack.Screen name="AskAnExpertScreen" component={AskAnExpertScreen} />
       <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} />
-      <Stack.Screen name="DoctorsScreen" component={DoctorsScreen} />
+      <Stack.Screen name="EyeExercise" component={EyeExercise} />
       <Stack.Screen name="Profile" component={Profile} />
     </Stack.Navigator>
   );
@@ -67,124 +75,220 @@ function UserScreen({ navigation, route }) {
 
 //Article list and detailed article
 function Education({ navigation, route }) {
-  const Stack = createStackNavigator();
   return (
-    <Stack.Navigator headerMode="none">
-
+    <Stack.Navigator
+      screenOptions={{
+        headerTransparent: true,
+        headerTitleStyle: {
+          fontSize: 31,
+          color: '#E1EDFF',
+          fontWeight: '700',
+        },
+        headerRight: () => <SettingButton navigation={navigation} />,
+      }}
+    >
       <Stack.Screen name="GetEducatedScreen" component={GetEducatedScreen} />
       <Stack.Screen name="ArticleDetailScreen" component={ArticleDetailScreen} />
-
     </Stack.Navigator>
   );
 }
 
-
-/** Professional User Screen */
 function ProfessionalScreen({ navigation, route }) {
-  const Stack = createStackNavigator();
   return (
-    <Stack.Navigator headerMode="none" >
-      <Stack.Screen name="ProfMainMenu" component={ProfMainMenu} />
-      <Stack.Screen name="ProfPatientViewScreen" component={ProfPatientViewScreen} />
-      <Stack.Screen name="ProfSearchResultScreen" component={ProfSearchResultScreen} />
-      <Stack.Screen name="Register" component={Register} />
+    <Stack.Navigator
+      screenOptions={{
+        headerTransparent: true,
+        headerTitleStyle: {
+          fontSize: 31,
+          color: '#E1EDFF',
+          fontWeight: '700',
+        },
+        headerRight: () => <SettingButton navigation={navigation} />,
+      }}
+    >
+      <Stack.Screen name="ProfMainMenu" component={ProfMainMenu} options={{ title: '病人名單' }} />
+      <Stack.Screen name="ProfPatientViewScreen" component={ProfPatientViewScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} options={{ title: '新增資料' }} />
     </Stack.Navigator>
   );
 }
 
 function ArticleScreen({ navigation, route }) {
-  const Stack = createStackNavigator();
   return (
-    <Stack.Navigator headerMode="none">
-      <Stack.Screen name="GetEducatedScreen" component={GetEducatedScreen} />
-      <Stack.Screen name="ArticleDetailScreen" component={ArticleDetailScreen} />
-      <Stack.Screen name="Profile" component={Profile} />
+    <Stack.Navigator
+      screenOptions={{
+        headerTransparent: true,
+        headerTitleStyle: {
+          fontSize: 31,
+          color: '#E1EDFF',
+          fontWeight: '700',
+        },
+        headerRight: () => <SettingButton navigation={navigation} />,
+      }}
+    >
+      <Stack.Screen name="GetEducatedScreen" component={GetEducatedScreen} options={{ title: '護眼秘笈' }} />
+      <Stack.Screen name="ArticleDetailScreen" component={ArticleDetailScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
 
 function HomeScreen({ navigation, route }) {
-  const Stack = createStackNavigator();
   return (
-    <Stack.Navigator headerMode="none">
-      <Stack.Screen name="RecordsScreen" component={RecordsScreen} />
-      <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} />
+    <Stack.Navigator
+      screenOptions={{
+        headerTransparent: true,
+        headerTitleStyle: {
+          color: '#E1EDFF',
+          fontSize: 30,
+        },
+        headerRight: () => <SettingButton navigation={navigation} />,
+      }}
+    >
+      <Stack.Screen name="RecordsScreen" component={RecordsScreen} options={{ title: '' }} />
+      <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} options={{ title: '新增資料' }} />
     </Stack.Navigator>
   );
 }
 
+function FaqScreen({ navigation, route }) {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerTransparent: true,
+        headerTitleStyle: {
+          color: '#E1EDFF',
+          fontSize: 30,
+        },
+        headerRight: () => <SettingButton navigation={navigation} />,
+      }}
+    >
+      <Stack.Screen name="AskAnExpertMainScreen" component={AskAnExpertMainScreen} options={{ title: '專家解答' }} />
+      <Stack.Screen name="PostQuestion" component={PostQuestion} options={{ title: '撰寫問題' }} />
+    </Stack.Navigator>
+  );
+}
 
-export default class Main extends Component {
+function SettingButton({ route, navigation }) {
+  const [isProfessional, setIsProfessional] = useState(true);
 
-  constructor(props) {
-    super(props)
-  }
+  // useEffect(() => {
+  //   if (auth.currentUser != null && auth.currentUser.userType == 'professional') {
+  //     setIsProfessional(true);
+  //   } else {
+  //     setIsProfessional(false);
+  //   }
+  // }, [auth.currentUser]);
 
-  render() {
+  return (
+    <>
+      {isProfessional ? (
+        <TouchableOpacity onPress={() => navigation.navigate('QR Scan')} style={{ marginRight: 20 }}>
+          <Icon name="camera" type="feather" color="white" size={30} />
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity onPress={() => console.log('patient settings')} style={{ marginRight: 15 }}>
+          <Image source={require('./assets/images/setting.png')} />
+        </TouchableOpacity>
+      )}
+    </>
+  );
+}
 
-    return (
-      <NavigationContainer >
-        <Tab.Navigator
-          initialRouteName="Login"
-          shifting={false}
-          barStyle={{ backgroundColor: '#BED8FF', height: Dimensions.get('window').height * 0.10, paddingHorizontal: 30 }}
-          labeled={false}
-        >
+function Main({ route, navigation }) {
+  const [isProfessional, setIsProfessional] = useState(true);
+
+  // useEffect(() => {
+  //   if (auth.currentUser != null && auth.currentUser.userType == 'professional') {
+  //     setIsProfessional(true);
+  //   } else {
+  //     setIsProfessional(false);
+  //   }
+  // }, [auth.currentUser]);
+
+  return (
+    <Tab.Navigator
+      initialRouteName={isProfessional ? 'ProfessionalScreen' : 'HomeScreen'}
+      labeled={false}
+      barStyle={{
+        backgroundColor: '#BED8FF',
+        height: Dimensions.get('window').height * 0.1,
+        paddingHorizontal: isProfessional ? 100 : 30,
+      }}
+    >
+      {isProfessional ? (
+        <>
           <Tab.Screen
-            name="QR Scan" component={QRCodeScannerScreen} />
-          <Tab.Screen
-            name="Login" component={LoginAndRegisterScreen} />
+            name="ProfessionalScreen"
+            showLabel={false}
+            component={ProfessionalScreen}
+            options={{
+              tabBarIcon: () => <Image source={require('./assets/images/Icon_solid.png')} style={{ width: 40, height: 40 }} />,
+            }}
+          />
+        </>
+      ) : (
+        <>
           <Tab.Screen
             name="GetEducated"
             showLabel={false}
             component={ArticleScreen}
             options={{
-              tabBarIcon: ({ color, size }) => (
-                <Image source={require('./assets/images/Articles_dark.png')} style={{ width: 40, height: 40 }} />
-              ),
-            }} />
+              tabBarIcon: () => <Image source={require('./assets/images/Articles_dark.png')} style={{ width: 40, height: 40 }} />,
+            }}
+          />
 
           <Tab.Screen
             name="TestScreen"
             showLabel={false}
             component={UserScreen}
             options={{
-              tabBarIcon: ({ color, size }) => (
-                <Image source={require('./assets/images/Exercise_dark.png')} style={{ width: 40, height: 40 }} />
-              ),
-            }} />
+              tabBarIcon: () => <Image source={require('./assets/images/Exercise_dark.png')} style={{ width: 40, height: 40 }} />,
+            }}
+          />
 
           <Tab.Screen
             name="HomeScreen"
             showLabel={false}
             component={HomeScreen}
             options={{
-              tabBarIcon: ({ color, size }) => (
-                <Image source={require('./assets/images/Icon_solid.png')} style={{ width: 40, height: 40 }} />
-              ),
-            }} />
+              tabBarIcon: () => <Image source={require('./assets/images/Icon_solid.png')} style={{ width: 40, height: 40 }} />,
+            }}
+          />
 
           <Tab.Screen
-            name="User"
+            name="FaqScreen"
             showLabel={false}
-            component={UserScreen}
+            component={FaqScreen}
             options={{
-              tabBarIcon: ({ color, size }) => (
-                <Image source={require('./assets/images/Qna_dark.png')} style={{ width: 40, height: 40 }} />
-              ),
-            }} />
+              tabBarIcon: () => <Image source={require('./assets/images/Qna_dark.png')} style={{ width: 40, height: 40 }} />,
+            }}
+          />
 
           <Tab.Screen
             name="ProfessionalScreen"
             showLabel={false}
             component={ProfessionalScreen}
             options={{
-              tabBarIcon: ({ color, size }) => (
-                <Image source={require('./assets/images/Achievement_dark.png')} style={{ width: 40, height: 40 }} />
-              ),
-            }} />
-        </Tab.Navigator>
-      </NavigationContainer>
-    );
-  }
+              tabBarIcon: () => <Image source={require('./assets/images/Achievement_dark.png')} style={{ width: 40, height: 40 }} />,
+            }}
+          />
+        </>
+      )}
+    </Tab.Navigator>
+  );
 }
+
+export default App = (props) => {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator headerMode="none">
+        <Stack.Screen name="Login" component={Login} />
+        {/* <Stack.Screen name="Register" component={Register} /> */}
+        <Stack.Screen name="Profile" component={Profile} />
+        <Stack.Screen name="Main" component={Main} />
+        <Stack.Screen name="Register" component={Register} />
+        <Stack.Screen name="QR Scan" component={QRCodeScannerScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
+  );
+};
