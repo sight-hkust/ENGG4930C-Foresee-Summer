@@ -12,13 +12,16 @@ export const StyledInputWrapper = ({
     formikKey,
     hideEmbeddedErrorMessage,
 }) => {
+	console.log(icon);
     return (
         <View style={[styles.content, (hideEmbeddedErrorMessage ? { height: ScreenHeight * 0.07 } : { height: ScreenHeight * 0.1 }), containerStyle]} >
             <View style={styles.textInputBorder}>
                 <View style={styles.textInputContainer}>
-                    <View style={styles.textInputIcon}>
-                        {icon}
-                    </View>
+                    {icon == null ? <View /> :
+						<View style={styles.textInputIcon}>
+							{icon}
+						</View>
+					}
                     {children}
                 </View>
                 <View style={{ flex: 1, alignContent: 'space-around' }}>

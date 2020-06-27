@@ -124,7 +124,8 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient }) => {
                     />
                     <StyledInput
                         containerStyle={{ flex: 1 }}
-                        placeholder={'名'}
+						placeholder={'名'}
+                        icon={null}
                         formikProps={formikProps}
                         formikKey="firstname_chi"
                         inputFieldStyle={{ flex: 3 }}
