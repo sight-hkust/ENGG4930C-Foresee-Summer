@@ -44,7 +44,10 @@ const ProfMainMenu = ({ route, navigation }) => {
       snap.forEach((child) => {
         if (child.val()['info'] != null) {
           patients.push({
-            name: child.val()['info']['firstName'] && child.val()['info']['lastName'] != null ? child.val()['info']['firstName'] + ' ' + child.val()['info']['lastName'] : '()',
+            name:
+              child.val()['info']['firstName_chi'] && child.val()['info']['lastName_chi'] != null
+                ? child.val()['info']['firstName_chi'] + ' ' + child.val()['info']['lastName_chi']
+                : '( 此用戶名稱格式不正確 )',
             lastReserveDate: child.val()['records'] != null ? Object.keys(child.val()['records']).slice(-1)[0] : null,
             key: child.key,
           });
@@ -66,28 +69,29 @@ const ProfMainMenu = ({ route, navigation }) => {
           </View>
         ) : (
           <View>
-            <SearchBar
-              placeholder="尋找病人"
-              onChangeText={(e) => setSearchContent(e)}
-              value={searchContent}
-              round
-              lightTheme
-              placeholderTextColor="white"
-              leftIconContainerStyle={{ color: 'white' }}
-              containerStyle={{
-                backgroundColor: 'transparent',
-                width: ScreenWidth * 0.92,
-                alignSelf: 'center',
-                borderBottomColor: 'transparent',
-                borderTopColor: 'transparent',
-                marginTop: 30,
-              }}
-              inputContainerStyle={{ backgroundColor: '#A6ACE9', height: 35 }}
-              onSubmitEditing={() => {
-                setSearchingStatus(true);
-                setPatientList(SearchPatient(searchContent, originalList));
-              }}
-            />
+            <View style={{ height: 50, width: ScreenWidth, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+              <SearchBar
+                placeholder="尋找病人"
+                onChangeText={(e) => setSearchContent(e)}
+                value={searchContent}
+                round
+                lightTheme
+                placeholderTextColor="white"
+                leftIconContainerStyle={{ color: 'white' }}
+                containerStyle={{
+                  backgroundColor: 'transparent',
+                  width: ScreenWidth * 0.8,
+                  borderBottomColor: 'transparent',
+                  borderTopColor: 'transparent',
+                }}
+                inputContainerStyle={{ backgroundColor: '#A6ACE9', height: 35 }}
+                onSubmitEditing={() => {
+                  setSearchingStatus(true);
+                  setPatientList(SearchPatient(searchContent, originalList));
+                }}
+              />
+              <Icon name="qrcode-scan" type="material-community" color="white" size={30} onPress={() => navigation.navigate('QR Scan')} />
+            </View>
             {searchingStatus && (
               <Button
                 title=" 返回"
@@ -113,66 +117,67 @@ const ProfMainMenu = ({ route, navigation }) => {
               ) : (
                 patientList.map((u, i) => {
                   return (
-                    <ListItem
-                      key={i}
-                      title={u.name}
-                      subtitle={u.lastReserveDate}
-                      rightIcon={
-                        <>
-                          <Icon
-                            size={25}
-                            name="search"
-                            type="feather"
-                            color="#88D3E3"
-                            containerStyle={{
-                              backgroundColor: 'white',
-                              borderRadius: 5,
-                              padding: 3,
-                              marginRight: 5,
-                            }}
-                            onPress={() => {
-                              navigation.navigate('ProfPatientViewScreen', {
-                                key: u.key,
-                              });
-                            }}
-                          />
-                          <Icon
-                            size={25}
-                            name="plus"
-                            type="feather"
-                            color="#80A4EB"
-                            containerStyle={{
-                              backgroundColor: 'white',
-                              borderRadius: 5,
-                              padding: 3,
-                            }}
-                            onPress={() => {
-                              navigation.navigate('AddRecordScreen', {
-                                isProfessional: true,
-                                professional_id: auth.currentUser.uid,
-                                patient_id: u.key,
-                              });
-                            }}
-                          />
-                        </>
-                      }
-                      containerStyle={{
-                        backgroundColor: 'transparent',
-                        borderBottomWidth: 1,
-                        borderBottomColor: 'white',
-                      }}
-                      titleStyle={{
-                        color: 'white',
-                        fontSize: 20,
-                        fontWeight: 'bold',
-                      }}
-                      subtitleStyle={{ color: 'white', fontSize: 13 }}
-                      onPress={() => {
-                        navigation.navigate('ProfPatientViewScreen', {
-                          key: u.key,
-                        });
-                      }}
-                    />
+                    <>
+                      <ListItem
+                        key={i}
+                        title={u.name}
+                        subtitle={u.lastReserveDate}
+                        rightIcon={
+                          <>
+                            <Icon
+                              size={25}
+                              name="search"
+                              type="feather"
+                              color="#88D3E3"
+                              containerStyle={{
+                                backgroundColor: 'white',
+                                borderRadius: 5,
+                                padding: 3,
+                                marginRight: 5,
+                              }}
+                              onPress={() => {
+                                navigation.navigate('ProfPatientViewScreen', {
+                                  key: u.key,
+                                });
+                              }}
+                            />
+                            <Icon
+                              size={25}
+                              name="plus"
+                              type="feather"
+                              color="#80A4EB"
+                              containerStyle={{
+                                backgroundColor: 'white',
+                                borderRadius: 5,
+                                padding: 3,
+                              }}
+                              onPress={() => {
+                                navigation.navigate('AddRecordScreen', {
+                                  isProfessional: true,
+                                  professional_id: auth.currentUser.uid,
+                                  patient_id: u.key,
+                                });
+                              }}
+                            />
+                          </>
+                        }
+                        containerStyle={{
+                          backgroundColor: 'transparent',
+                        }}
+                        titleStyle={{
+                          color: 'white',
+                          fontSize: 20,
+                          fontWeight: 'bold',
+                        }}
+                        subtitleStyle={{ color: 'white', fontSize: 13 }}
+                        onPress={() => {
+                          navigation.navigate('ProfPatientViewScreen', {
+                            key: u.key,
+                          });
+                        }}
+                      />
+                      <View style={{ height: 1, width: ScreenWidth * 0.825, borderColor: '#E1EDFF', borderWidth: 1, alignSelf: 'center', borderRadius: 10 }} />
+                    </>
                   );
                 })
               )}

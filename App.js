@@ -52,6 +52,7 @@ function LoginAndRegisterScreen({ navigation, route }) {
 function UserScreen({ navigation, route }) {
   return (
     <Stack.Navigator
+      headerMode="screen"
       initialRouteName="AskAnExpertScreen"
       screenOptions={{
         headerTransparent: true,
@@ -77,6 +78,7 @@ function UserScreen({ navigation, route }) {
 function Education({ navigation, route }) {
   return (
     <Stack.Navigator
+      headerMode="screen"
       screenOptions={{
         headerTransparent: true,
         headerTitleStyle: {
@@ -96,6 +98,7 @@ function Education({ navigation, route }) {
 function ProfessionalScreen({ navigation, route }) {
   return (
     <Stack.Navigator
+      headerMode="screen"
       screenOptions={{
         headerTransparent: true,
         headerTitleStyle: {
@@ -116,6 +119,7 @@ function ProfessionalScreen({ navigation, route }) {
 function ArticleScreen({ navigation, route }) {
   return (
     <Stack.Navigator
+      headerMode="screen"
       screenOptions={{
         headerTransparent: true,
         headerTitleStyle: {
@@ -135,6 +139,8 @@ function ArticleScreen({ navigation, route }) {
 function HomeScreen({ navigation, route }) {
   return (
     <Stack.Navigator
+      headerMode="screen"
+      headerTitleAlign="left"
       screenOptions={{
         headerTransparent: true,
         headerTitleStyle: {
@@ -153,6 +159,7 @@ function HomeScreen({ navigation, route }) {
 function FaqScreen({ navigation, route }) {
   return (
     <Stack.Navigator
+      headerMode="screen"
       screenOptions={{
         headerTransparent: true,
         headerTitleStyle: {
@@ -183,7 +190,7 @@ function SettingButton({ route, navigation }) {
     <>
       {isProfessional ? (
         <TouchableOpacity onPress={() => navigation.navigate('QR Scan')} style={{ marginRight: 20 }}>
-          <Icon name="camera" type="feather" color="white" size={30} />
+          <Icon name="question" type="evilicon" color="white" size={30} />
         </TouchableOpacity>
       ) : (
         <TouchableOpacity onPress={() => console.log('patient settings')} style={{ marginRight: 15 }}>
@@ -208,6 +215,7 @@ function Main({ route, navigation }) {
   return (
     <Tab.Navigator
       initialRouteName={isProfessional ? 'ProfessionalScreen' : 'HomeScreen'}
+      headerMode="screen"
       labeled={false}
       barStyle={{
         backgroundColor: '#BED8FF',
@@ -218,11 +226,27 @@ function Main({ route, navigation }) {
       {isProfessional ? (
         <>
           <Tab.Screen
+            name="EmptylScreen"
+            showLabel={false}
+            component={ProfessionalScreen}
+            options={{
+              tabBarIcon: () => <Icon type="entypo" name="tools" color="white" style={{ width: 40, height: 40, alignSelf: 'center', justifyContent: 'center' }} />,
+            }}
+          />
+          <Tab.Screen
             name="ProfessionalScreen"
             showLabel={false}
             component={ProfessionalScreen}
             options={{
               tabBarIcon: () => <Image source={require('./assets/images/Icon_solid.png')} style={{ width: 40, height: 40 }} />,
+            }}
+          />
+          <Tab.Screen
+            name="ProfileScreen"
+            showLabel={false}
+            component={Profile}
+            options={{
+              tabBarIcon: () => <Icon type="font-awesome-5" name="user" color="white" style={{ width: 40, height: 40, alignSelf: 'center', justifyContent: 'center' }} />,
             }}
           />
         </>
