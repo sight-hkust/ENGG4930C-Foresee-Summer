@@ -12,7 +12,6 @@ export const StyledInputWrapper = ({
     formikKey,
     hideEmbeddedErrorMessage,
 }) => {
-	console.log(icon);
     return (
         <View style={[styles.content, (hideEmbeddedErrorMessage ? { height: ScreenHeight * 0.07 } : { height: ScreenHeight * 0.1 }), containerStyle]} >
             <View style={styles.textInputBorder}>
