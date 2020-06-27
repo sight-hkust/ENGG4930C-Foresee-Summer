@@ -174,6 +174,7 @@ export default class Form extends Component {
                 R_Myopia: "0",
                 L_Hyperopia: "0",
                 R_Hyperopia: "0",
+                remarks: "",
               }}
               validationSchema={ReviewSchema}
               onSubmit={(values) => {
@@ -197,6 +198,7 @@ export default class Form extends Component {
                   L_Axis: values.L_Axis,
                   R_Axis: values.R_Axis,
                   PD: values.PD,
+                  remarks: values.remarks,
                 };
 
                 if (values.Lsymbol) {
@@ -327,7 +329,7 @@ export default class Form extends Component {
                   />
 
                   <PDInput handleChange={handleChange} error={errors.PD} />
-
+                  <RemarksInput handleChange={handleChange} />
                   <View style={{ paddingTop: 24 }}>
                     <Button
                       title="提交"
@@ -742,6 +744,21 @@ export const PDInput = (props) => {
   );
 };
 
+export const RemarksInput = (props) => {
+  const { handleChange } = props;
+  return (
+    <View style={{ flex: 1 }}>
+      <Text style={AddRecordScreen.questionText}>備註</Text>
+
+      <TextInput
+        onChangeText={handleChange("remarks")}
+        multiline={true}
+        style={AddRecordScreen.remarksInputBox}
+      />
+    </View>
+  );
+};
+
 const AddRecordScreen = StyleSheet.create({
   background: {
     height: "100%",
@@ -809,6 +826,20 @@ const AddRecordScreen = StyleSheet.create({
   },
   answerInputBox: {
     width: 70,
+    textAlign: "center",
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingBottom: 2,
+    paddingTop: 0,
+    color: "white",
+    fontSize: 18,
+    borderBottomWidth: 1.5,
+    borderRightWidth: 1.5,
+    borderColor: "white",
+    marginRight: 15,
+  },
+  remarksInputBox: {
+    width: 270,
     textAlign: "center",
     paddingLeft: 15,
     paddingRight: 15,

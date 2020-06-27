@@ -15,6 +15,7 @@ import { Icon } from "react-native-elements";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import BottomModal from "../Utils/BottomModal";
 import { auth } from "../src/config/config";
+import { ScrollView } from "react-native-gesture-handler";
 
 const LeftOpen = require("../assets/images/LeftOpen.png");
 const RightOpen = require("../assets/images/RightOpen.png");
@@ -435,17 +436,23 @@ export const RenderModal = (props) => {
               <Text style={RecordScreenStyle.rowHeader}>PD:</Text>
             </Col>
             <Col style={[RecordScreenStyle.gridContainer, { flex: 2 }]}>
-              <Text style={RecordScreenStyle.gridText}>{curRecord.PD}mm</Text>
+              <Text style={RecordScreenStyle.gridText}>
+                {curRecord.PD == "0" ? "NA" : curRecord.PD + "mm"}
+              </Text>
             </Col>
           </Row>
-          <Row>
-            <Col style={RecordScreenStyle.gridContainer}>
-              <Text style={RecordScreenStyle.rowHeader}>備註:</Text>
-            </Col>
-            <Col style={[RecordScreenStyle.gridContainer, { flex: 2 }]}>
-              <Text>{curRecord.remark}</Text>
-            </Col>
-          </Row>
+          <ScrollView>
+            <Row>
+              <Col style={RecordScreenStyle.gridContainer}>
+                <Text style={RecordScreenStyle.rowHeader}>備註:</Text>
+              </Col>
+              <Col style={[RecordScreenStyle.gridContainer, { flex: 2 }]}>
+                <Text style={RecordScreenStyle.gridText}>
+                  {curRecord.remarks}
+                </Text>
+              </Col>
+            </Row>
+          </ScrollView>
         </Grid>
       </View>
     </BottomModal>
@@ -1051,7 +1058,7 @@ const RecordScreenStyle = StyleSheet.create({
   },
   box: {
     flex: 1,
-    marginTop: 10,
+    marginTop: 14,
   },
   gridContainer: {
     flex: 1,
