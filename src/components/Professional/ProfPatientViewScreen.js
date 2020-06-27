@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image, ScrollView } from 'react-native';
-import { database } from '../../config/config';
+import { database, auth } from '../../config/config';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Button, Icon } from 'react-native-elements';
@@ -19,13 +19,13 @@ export default class ProfPatientViewScreen extends Component {
 
   componentDidMount() {
     const { key } = this.props.route.params;
-    database.ref('professionals/M001/patients/' + key + '/info').on('value', (snapshot) => {
+    database.ref('professionals/' + auth.currentUser.uid + '/patients/' + key + '/info').on('value', (snapshot) => {
       this.setState({
         info: snapshot.val(),
       });
-    });
+	});
     database
-      .ref('professionals/M001/patients/' + key + '/records')
+      .ref('professionals/' + auth.currentUser.uid + '/patients/' + key + '/records')
       .orderByKey()
       .on('value', (snapshot) => {
         let records = [];
@@ -115,7 +115,7 @@ export default class ProfPatientViewScreen extends Component {
           }}
         >
           <View style={styles.header}>
-            <Text style={styles.title}>{info.name}</Text>
+            <Text style={styles.title}>{info.lastname_chi}{info.firstname_chi}</Text>
             <TouchableOpacity>
               <Image source={Setting} />
             </TouchableOpacity>
@@ -224,7 +224,7 @@ export default class ProfPatientViewScreen extends Component {
               onPress={() =>
                 this.props.navigation.navigate('AddRecordScreen', {
                   isProfessional: true,
-                  professional_id: 'M001',
+                  professional_id: auth.currentUser.uid,
                   patient_id: this.props.route.params.key,
                 })
               }

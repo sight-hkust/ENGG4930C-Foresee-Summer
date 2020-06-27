@@ -6,8 +6,8 @@ const writeUserData = ({ uid = null, values, isProfessional, navigation, registe
     database.ref('professionals/' + uid + '/patients/' + values.phone).set(true);
     database.ref('userInfo/+852' + values.phone).set({
       uid: uid,
-      firstname: values.firstname,
-      lastname: values.lastname,
+      firstname_chi: values.firstname_chi,
+      lastname_chi: values.lastname_chi,
       email: values.email,
       age: Math.abs(moment(values.birthday).diff(moment(), 'years')),
       job: values.job,
@@ -22,15 +22,15 @@ const writeUserData = ({ uid = null, values, isProfessional, navigation, registe
         phone: values.phone,
       });
       database.ref('userInfo/+852' + values.phone).set({
-        firstname: values.firstname,
-        lastname: values.lastname,
+        firstname_chi: values.firstname_chi,
+        lastname_chi: values.lastname_chi,
         age: Math.abs(moment(values.birthday).diff(moment(), 'years')),
       });
     } else {
       database.ref('/professionals/' + uid).set({
         uid: uid,
-        firstname: values.firstname,
-        lastname: values.lastname,
+        firstname_chi: values.firstname_chi,
+        lastname_chi: values.lastname_chi,
         email: values.email,
         phone: values.phone,
         role: values.role,
