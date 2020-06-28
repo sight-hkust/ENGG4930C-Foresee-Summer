@@ -220,59 +220,56 @@ export default class Form extends Component {
                 if (values.R_CYL == 0) {
                   data.R_Axis = 0;
                 }
-                if (isProfessional) {
-                  //change, need to also add to users/patient_id/records, but what if the patient doesnt exist? will it automatically create one entry for the patient?
+                // if (isProfessional) {
+                //   //change, need to also add to users/patient_id/records, but what if the patient doesnt exist? will it automatically create one entry for the patient?
+                //   database
+                //     .ref(
+                //       "professionals/" +
+                //         professional_id +
+                //         "/patients/" +
+                //         patient_id +
+                //         "/records/" +
+                //         values.date
+                //     )
+                //     .set(data)
+                //     .catch((error) => console.log(error));
+                // } else {
+                if (!exist) {
+                  //no existed record
                   database
-                    .ref(
-                      "professionals/" +
-                        professional_id +
-                        "/patients/" +
-                        patient_id +
-                        "/records/" +
-                        values.date
-                    )
+                    .ref("users/" + patient_id + "/records/" + values.date)
                     .set(data)
                     .catch((error) => console.log(error));
+                  this.props.navigation.navigate("RecordsScreen");
                 } else {
-                  if (!exist) {
-                    //no existed record
-                    database
-                      .ref("users/" + patient_id + "/records/" + values.date)
-                      .set(data)
-                      .catch((error) => console.log(error));
-                    this.props.navigation.navigate("RecordsScreen");
-                  } else {
-                    Alert.alert(
-                      "注意！",
-                      "數據庫已存在" +
-                        values.date +
-                        "的資料，再按提交將會覆蓋舊的資料。",
-                      [
-                        {
-                          text: "取消",
-                          style: "cancel",
+                  Alert.alert(
+                    "注意！",
+                    "數據庫已存在" +
+                      values.date +
+                      "的資料，再按提交將會覆蓋舊的資料。",
+                    [
+                      {
+                        text: "取消",
+                        style: "cancel",
+                      },
+                      {
+                        text: "提交",
+                        onPress: () => {
+                          database
+                            .ref(
+                              "users/" + patient_id + "/records/" + values.date
+                            )
+                            .set(data)
+                            .catch((error) => console.log(error));
+                          this.props.navigation.navigate("RecordsScreen");
                         },
-                        {
-                          text: "提交",
-                          onPress: () => {
-                            database
-                              .ref(
-                                "users/" +
-                                  patient_id +
-                                  "/records/" +
-                                  values.date
-                              )
-                              .set(data)
-                              .catch((error) => console.log(error));
-                            this.props.navigation.navigate("RecordsScreen");
-                          },
-                        },
-                      ],
-                      { cancelable: false }
-                    );
-                  }
+                      },
+                    ],
+                    { cancelable: false }
+                  );
                 }
               }}
+              //}
             >
               {({
                 handleSubmit,
