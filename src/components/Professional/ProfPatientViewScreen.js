@@ -115,7 +115,7 @@ export default class ProfPatientViewScreen extends Component {
           }}
         >
           <View style={styles.header}>
-            <Text style={styles.title}>{info.lastname_chi}{info.firstname_chi}</Text>
+            <Text style={styles.title}>{info.lastName}{info.firstName}</Text>
             <TouchableOpacity>
               <Image source={Setting} />
             </TouchableOpacity>

@@ -56,7 +56,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
 		console.log(child.val()['info']);
         if (child.val()['info'] != null) {
           patients.push({
-            name: child.val()['info']['lastname_chi'] && child.val()['info']['firstname_chi'] != null ? child.val()['info']['lastname_chi'] + child.val()['info']['firstname_chi'] : '()',
+            name: child.val()['info']['lastName'] && child.val()['info']['firstName'] != null ? child.val()['info']['lastName'] + child.val()['info']['firstName'] : '()',
             lastReserveDate: child.val()['records'] != null ? Object.keys(child.val()['records']).slice(-1)[0] : null,
             key: child.key,
           });

@@ -32,8 +32,8 @@ export const RegistrationForm = ({ navigation, route }) => {
         <LinearGradientBackground>
             <Formik
                 initialValues={{
-                    lastname_chi: '',
-                    firstname_chi: '',
+                    lastName: '',
+                    firstName: '',
                     birthday: '',
                     email: '',
                     password: '',
@@ -119,7 +119,7 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient }) => {
                         placeholder={'姓'}
                         icon={personIcon}
                         formikProps={formikProps}
-                        formikKey="lastname_chi"
+                        formikKey="lastName"
                         inputFieldStyle={{ flex: 3 }}
                         hideEmbeddedErrorMessage
                     />
@@ -128,7 +128,7 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient }) => {
 						placeholder={'名'}
                         icon={null}
                         formikProps={formikProps}
-                        formikKey="firstname_chi"
+                        formikKey="firstName"
                         inputFieldStyle={{ flex: 3 }}
                         hideEmbeddedErrorMessage
                     />
@@ -143,7 +143,7 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient }) => {
                         color: '#FFFFFF',
                         flexWrap: 'wrap',
                     }}>
-                        {formikProps && formikProps.errors['firstname_chi'] ? '* ' + formikProps.errors['firstname_chi'] : null}
+                        {formikProps && formikProps.errors['firstName'] ? '* ' + formikProps.errors['firstName'] : null}
                     </Text>
                 </View>
                 {isProfessional && !registerPatient ?
