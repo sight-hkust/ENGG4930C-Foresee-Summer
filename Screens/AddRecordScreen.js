@@ -1,13 +1,13 @@
 import React, { Component, useState } from "react";
 import {
   StyleSheet,
-  Keyboard,
   Text,
   View,
   ScrollView,
   TouchableOpacity,
   Image,
   Slider,
+  Alert,
 } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Formik } from "formik";
@@ -19,7 +19,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Button } from "react-native-elements";
 
 import { RadioButton } from "react-native-paper"; //<--------temp
-
+import MultiSelect from "react-native-multiple-select";
 const Setting = require("../assets/images/setting.png");
 const DropDown = require("../assets/images/DropDown.png");
 
@@ -100,7 +100,8 @@ const ReviewSchema = object({
   }),
   PD: string()
     .matches("^[0-9]*$", "請輸入大於0的整數")
-    .max(3, "瞳孔距離(PD)超出合理範圍"),
+    .max(3, "瞳孔距離(PD)超出合理範圍")
+    .notRequired(),
 });
 
 export default class Form extends Component {
@@ -129,14 +130,7 @@ export default class Form extends Component {
           }}
         >
           <ScrollView keyboardShouldPersistTaps="always">
-            <View
-              style={{
-                flexDirection: "row",
-                paddingLeft: 10,
-                paddingTop: 85,
-                justifyContent: "space-around",
-              }}
-            >
+            <View style={AddRecordScreen.selectModeMenu}>
               <TouchableOpacity onPress={() => this.setState({ mode: true })}>
                 <Text
                   style={
@@ -145,7 +139,7 @@ export default class Form extends Component {
                       : AddRecordScreen.unselectedMode
                   }
                 >
-                  Slider
+                  簡易輸入
                 </Text>
               </TouchableOpacity>
 
@@ -157,7 +151,7 @@ export default class Form extends Component {
                       : AddRecordScreen.unselectedMode
                   }
                 >
-                  TextInputBox
+                  鍵盤輸入
                 </Text>
               </TouchableOpacity>
             </View>
@@ -165,24 +159,34 @@ export default class Form extends Component {
             <Formik
               initialValues={{
                 date: moment().format("YYYY-MM-DD"),
-                L_SPH: "",
+                L_SPH: "0",
                 Lsymbol: true, //true: +, false: -
-                R_SPH: "",
+                R_SPH: "0",
                 Rsymbol: true,
                 L_VA: "0",
                 R_VA: "0",
-                L_CYL: "",
-                R_CYL: "",
-                L_Axis: "",
-                R_Axis: "",
+                L_CYL: "0",
+                R_CYL: "0",
+                L_Axis: "0",
+                R_Axis: "0",
                 PD: "0",
                 L_Myopia: "0",
                 R_Myopia: "0",
                 L_Hyperopia: "0",
                 R_Hyperopia: "0",
+                remarks: "",
+                disease: [],
               }}
               validationSchema={ReviewSchema}
               onSubmit={(values) => {
+                var exist = false;
+                database
+                  .ref("users/" + patient_id + "/records/" + values.date)
+                  .once("value", (snap) => {
+                    exist = snap.val() !== null;
+                    //console.log(exist);
+                  });
+
                 let data = {
                   L_Myopia: 0,
                   R_Myopia: 0,
@@ -194,7 +198,9 @@ export default class Form extends Component {
                   R_CYL: parseInt(values.R_CYL),
                   L_Axis: values.L_Axis,
                   R_Axis: values.R_Axis,
-                  PD: parseInt(values.PD),
+                  PD: values.PD,
+                  remarks: values.remarks,
+                  disease: values.disease,
                 };
 
                 if (values.Lsymbol) {
@@ -215,6 +221,7 @@ export default class Form extends Component {
                   data.R_Axis = 0;
                 }
                 if (isProfessional) {
+                  //change, need to also add to users/patient_id/records, but what if the patient doesnt exist? will it automatically create one entry for the patient?
                   database
                     .ref(
                       "professionals/" +
@@ -227,11 +234,43 @@ export default class Form extends Component {
                     .set(data)
                     .catch((error) => console.log(error));
                 } else {
-                  database
-                    .ref("users/" + patient_id + "/records/" + values.date)
-                    .set(data)
-                    .catch((error) => console.log(error));
-                  this.props.navigation.navigate("RecordsScreen");
+                  if (!exist) {
+                    //no existed record
+                    database
+                      .ref("users/" + patient_id + "/records/" + values.date)
+                      .set(data)
+                      .catch((error) => console.log(error));
+                    this.props.navigation.navigate("RecordsScreen");
+                  } else {
+                    Alert.alert(
+                      "注意！",
+                      "數據庫已存在" +
+                        values.date +
+                        "的資料，再按提交將會覆蓋舊的資料。",
+                      [
+                        {
+                          text: "取消",
+                          style: "cancel",
+                        },
+                        {
+                          text: "提交",
+                          onPress: () => {
+                            database
+                              .ref(
+                                "users/" +
+                                  patient_id +
+                                  "/records/" +
+                                  values.date
+                              )
+                              .set(data)
+                              .catch((error) => console.log(error));
+                            this.props.navigation.navigate("RecordsScreen");
+                          },
+                        },
+                      ],
+                      { cancelable: false }
+                    );
+                  }
                 }
               }}
             >
@@ -244,19 +283,18 @@ export default class Form extends Component {
               }) => (
                 <View style={AddRecordScreen.formContainer}>
                   <DateSelect values={values} setFieldValue={setFieldValue} />
-                  {console.log("L_symbol: ", values.Lsymbol)}
 
                   <SPHInput
                     handleChange={handleChange}
                     setFieldValue={setFieldValue}
-                    isLeft={true}
+                    isLeft={false}
                     error={errors.L_SPH}
                     mode={mode}
                   />
                   <SPHInput
                     handleChange={handleChange}
                     setFieldValue={setFieldValue}
-                    isLeft={false}
+                    isLeft={true}
                     error={errors.R_SPH}
                     mode={mode}
                   />
@@ -264,7 +302,7 @@ export default class Form extends Component {
                   <CYLInput
                     handleChange={handleChange}
                     setFieldValue={setFieldValue}
-                    isLeft={true}
+                    isLeft={false}
                     errorA={errors.L_CYL}
                     errorB={errors.L_Axis}
                     mode={mode}
@@ -272,7 +310,7 @@ export default class Form extends Component {
                   <CYLInput
                     handleChange={handleChange}
                     setFieldValue={setFieldValue}
-                    isLeft={false}
+                    isLeft={true}
                     errorA={errors.R_CYL}
                     errorB={errors.R_Axis}
                     mode={mode}
@@ -280,16 +318,24 @@ export default class Form extends Component {
 
                   <VAInput
                     handleChange={handleChange}
-                    isLeft={true}
+                    setFieldValue={setFieldValue}
+                    isLeft={false}
                     error={errors.L_VA}
+                    mode={mode}
                   />
                   <VAInput
                     handleChange={handleChange}
-                    isLeft={false}
+                    setFieldValue={setFieldValue}
+                    isLeft={true}
                     error={errors.R_VA}
+                    mode={mode}
                   />
 
                   <PDInput handleChange={handleChange} error={errors.PD} />
+                  <RemarksInput handleChange={handleChange} />
+                  {isProfessional && (
+                    <DiseasesInput setFieldValue={setFieldValue} />
+                  )}
 
                   <View style={{ paddingTop: 24 }}>
                     <Button
@@ -363,18 +409,7 @@ export const SPHInputB = (props) => {
           </View>
         </View>
 
-        <Text
-          style={{
-            color: "white",
-            fontSize: 18,
-            alignSelf: "center",
-            fontWeight: "bold",
-            backgroundColor: "#47CDBD",
-            paddingHorizontal: 10,
-            borderRadius: 6,
-            paddingBottom: 2,
-          }}
-        >
+        <Text style={AddRecordScreen.sliderText}>
           {symbol ? "+" : "−"} {sliderValue}
         </Text>
 
@@ -507,20 +542,7 @@ export const CYLInputB = (props) => {
       </Text>
 
       <View>
-        <Text
-          style={{
-            color: "white",
-            fontSize: 18,
-            alignSelf: "center",
-            fontWeight: "bold",
-            backgroundColor: "#47CDBD",
-            paddingHorizontal: 10,
-            borderRadius: 6,
-            paddingBottom: 2,
-          }}
-        >
-          −{sliderValue}
-        </Text>
+        <Text style={AddRecordScreen.sliderText}>−{sliderValue}</Text>
         <Slider
           style={{ width: 300, paddingTop: 30 }}
           minimumValue={0}
@@ -619,20 +641,7 @@ export const AxisInputB = (props) => {
       </Text>
 
       <View>
-        <Text
-          style={{
-            color: "white",
-            fontSize: 18,
-            alignSelf: "center",
-            fontWeight: "bold",
-            backgroundColor: "#47CDBD",
-            paddingHorizontal: 10,
-            borderRadius: 6,
-            paddingBottom: 2,
-          }}
-        >
-          {sliderValue}
-        </Text>
+        <Text style={AddRecordScreen.sliderText}>{sliderValue}</Text>
         <Slider
           style={{ width: 300, paddingTop: 30 }}
           minimumValue={0}
@@ -673,8 +682,38 @@ export const AxisInput = (props) => {
   );
 };
 
+export const VAInputB = (props) => {
+  const { setFieldValue, isLeft } = props;
+  const [sliderValue, setSliderValue] = useState(0);
+  return (
+    <View style={{ flex: 1 }}>
+      <Text style={AddRecordScreen.questionText}>
+        請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}視力(VA)
+      </Text>
+
+      <View>
+        <Text style={AddRecordScreen.sliderText}>{sliderValue / 10}</Text>
+        <Slider
+          style={{ width: 280, paddingTop: 30 }}
+          minimumValue={0}
+          maximumValue={10}
+          step={1}
+          thumbTintColor={"#47CDBD"}
+          minimumTrackTintColor={"white"}
+          maximumTrackTintColor={"#B8CAE4"}
+          onValueChange={(value) => setSliderValue(value)}
+          onSlidingComplete={(value) => {
+            setFieldValue(isLeft ? "L_VA" : "R_VA", value / 10, false);
+          }}
+        />
+      </View>
+    </View>
+  );
+};
+
 export const VAInput = (props) => {
-  const { handleChange, isLeft, error } = props;
+  const { handleChange, setFieldValue, isLeft, error, mode } = props;
+  if (mode) return <VAInputB setFieldValue={setFieldValue} isLeft={isLeft} />;
   return (
     <View style={{ flex: 1 }}>
       <Text style={AddRecordScreen.questionText}>
@@ -712,37 +751,121 @@ export const PDInput = (props) => {
   );
 };
 
+export const RemarksInput = (props) => {
+  const { handleChange } = props;
+  return (
+    <View style={{ flex: 1, marginBottom: 10 }}>
+      <Text style={AddRecordScreen.questionText}>備註</Text>
+
+      <TextInput
+        onChangeText={handleChange("remarks")}
+        multiline={true}
+        style={AddRecordScreen.remarksInputBox}
+      />
+    </View>
+  );
+};
+
+export const DiseasesInput = (props) => {
+  const { setFieldValue } = props;
+  const [selectItems, setitems] = useState([]);
+  const items = [
+    { id: "弱視", name: "弱視" },
+    { id: "斜視", name: "斜視" },
+    { id: "青光眼", name: "青光眼" },
+    { id: "色盲", name: "色盲" },
+    { id: "色弱", name: "色弱" },
+    { id: "高眼壓", name: "高眼壓" },
+    { id: "角膜弓(老年)", name: "角膜弓(老年)" },
+    { id: "角膜弓(青少年)", name: "角膜弓(青少年)" },
+    { id: "眼乾症", name: "眼乾症" },
+    { id: "淚溢", name: "淚溢" },
+    { id: "白內障", name: "白內障" },
+    { id: "虹膜炎", name: "虹膜炎 " },
+    { id: "翼狀胬肉", name: "翼狀胬肉" },
+    { id: "後囊膜", name: "後囊膜" },
+    { id: "玻璃體", name: "玻璃體" },
+    { id: "黃斑病", name: "黃斑病" },
+    { id: "眼簾下垂", name: "眼簾下垂" },
+    { id: "瞼裂斑", name: "瞼裂斑" },
+  ];
+  const onSelectItemChange = (selectedItems) => {
+    setitems(selectedItems);
+    setFieldValue("disease", selectedItems);
+    console.log(selectedItems);
+  };
+
+  return (
+    <View>
+      <Text style={[AddRecordScreen.questionText, { marginBottom: 5 }]}>
+        確診眼疾
+      </Text>
+      <MultiSelect
+        items={items}
+        uniqueKey="id"
+        onSelectedItemsChange={onSelectItemChange}
+        selectedItems={selectItems}
+        selectText="選擇確診眼疾"
+        searchInputPlaceholderText="搜尋..."
+        onChangeInput={(text) => console.log(text)}
+        tagRemoveIconColor="#CCC"
+        tagBorderColor="#CCC"
+        tagTextColor="#FFF"
+        styleDropdownMenu={{ width: 270 }}
+        styleListContainer={{ width: 270 }}
+        styleItemsContainer={{ width: 270 }}
+        styleMainWrapper={{ width: 270 }}
+        hideSubmitButton={false}
+        hideDropdown={true}
+        hideTags={true}
+        submitButtonText="確定"
+      />
+    </View>
+  );
+};
+
 const AddRecordScreen = StyleSheet.create({
   background: {
     height: "100%",
     backgroundColor: "white",
   },
+  selectModeMenu: {
+    paddingTop: 100,
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
   selectedMode: {
-    color: "white",
     fontSize: 18,
-    fontWeight: "bold",
+    color: "#3CA1B7",
+    paddingLeft: 10,
+    paddingRight: 10,
+    paddingTop: 4,
+    paddingBottom: 4,
+    backgroundColor: "#FFFFFF",
+    borderRadius: 10,
   },
   unselectedMode: {
-    color: "#B8CAE4",
     fontSize: 18,
-    fontWeight: "normal",
+    color: "#FFFFFF",
+    paddingLeft: 1,
+    paddingRight: 1,
+    marginLeft: 8,
+    marginRight: 8,
+    paddingTop: 3,
+    paddingBottom: 3,
+    borderBottomWidth: 1.5,
+    borderColor: "#B8CAE4",
   },
-  header: {
-    paddingTop: 25,
-    marginRight: 18,
-    marginLeft: 18,
-    flexDirection: "row",
-    justifyContent: "space-between",
-  },
-  title: {
-    fontSize: 30,
-    color: "white",
-    fontWeight: "600",
+  mustFill: {
+    color: "#9AFF98",
+    fontSize: 16,
+    paddingTop: 13,
+    paddingLeft: 35,
   },
   formContainer: {
     paddingLeft: 35,
     paddingRight: 35,
-    paddingTop: 5,
+    paddingTop: 0,
   },
   questionText: {
     color: "white",
@@ -780,6 +903,20 @@ const AddRecordScreen = StyleSheet.create({
     borderColor: "white",
     marginRight: 15,
   },
+  remarksInputBox: {
+    width: 270,
+    textAlign: "center",
+    paddingLeft: 15,
+    paddingRight: 15,
+    paddingBottom: 2,
+    paddingTop: 0,
+    color: "white",
+    fontSize: 18,
+    borderBottomWidth: 1.5,
+    borderRightWidth: 1.5,
+    borderColor: "white",
+    marginRight: 15,
+  },
   dropDownButton: {
     paddingTop: 10,
     paddingLeft: 5,
@@ -795,5 +932,16 @@ const AddRecordScreen = StyleSheet.create({
     backgroundColor: "white",
     borderRadius: 20,
     width: 120,
+  },
+  sliderText: {
+    color: "white",
+    fontSize: 18,
+    alignSelf: "center",
+    fontWeight: "bold",
+    backgroundColor: "#47CDBD",
+    paddingHorizontal: 10,
+    borderRadius: 6,
+    paddingBottom: 2,
+    marginTop: 5,
   },
 });
