@@ -25,14 +25,14 @@ import { CheckBox } from "react-native-elements";
 import { KeyIcon, MailIcon } from "../../../utils/icon";
 
 export const RegistrationForm = ({ navigation, route }) => {
-    const { isProfessional, registerPatient } = route.params;
+	const { isProfessional, registerPatient } = route.params;
     console.log("isProfessional?", isProfessional);
     return (
         <LinearGradientBackground>
             <Formik
                 initialValues={{
-                    lastname: '',
-                    firstname: '',
+                    lastname_chi: '',
+                    firstname_chi: '',
                     birthday: '',
                     email: '',
                     password: '',
@@ -118,15 +118,16 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient }) => {
                         placeholder={'姓'}
                         icon={personIcon}
                         formikProps={formikProps}
-                        formikKey="lastname"
+                        formikKey="lastname_chi"
                         inputFieldStyle={{ flex: 3 }}
                         hideEmbeddedErrorMessage
                     />
                     <StyledInput
                         containerStyle={{ flex: 1 }}
-                        placeholder={'名'}
+						placeholder={'名'}
+                        icon={null}
                         formikProps={formikProps}
-                        formikKey="firstname"
+                        formikKey="firstname_chi"
                         inputFieldStyle={{ flex: 3 }}
                         hideEmbeddedErrorMessage
                     />
@@ -141,7 +142,7 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient }) => {
                         color: '#FFFFFF',
                         flexWrap: 'wrap',
                     }}>
-                        {formikProps && formikProps.errors['firstname'] ? '* ' + formikProps.errors['firstname'] : null}
+                        {formikProps && formikProps.errors['firstname_chi'] ? '* ' + formikProps.errors['firstname_chi'] : null}
                     </Text>
                 </View>
                 {isProfessional && !registerPatient ?
