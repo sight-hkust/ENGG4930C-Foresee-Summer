@@ -19,7 +19,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Button } from "react-native-elements";
 
 import { RadioButton } from "react-native-paper"; //<--------temp
-
+import MultiSelect from "react-native-multiple-select";
 const Setting = require("../assets/images/setting.png");
 const DropDown = require("../assets/images/DropDown.png");
 
@@ -175,6 +175,7 @@ export default class Form extends Component {
                 L_Hyperopia: "0",
                 R_Hyperopia: "0",
                 remarks: "",
+                disease: [],
               }}
               validationSchema={ReviewSchema}
               onSubmit={(values) => {
@@ -199,6 +200,7 @@ export default class Form extends Component {
                   R_Axis: values.R_Axis,
                   PD: values.PD,
                   remarks: values.remarks,
+                  disease: values.disease,
                 };
 
                 if (values.Lsymbol) {
@@ -219,6 +221,7 @@ export default class Form extends Component {
                   data.R_Axis = 0;
                 }
                 if (isProfessional) {
+                  //change, need to also add to users/patient_id/records, but what if the patient doesnt exist? will it automatically create one entry for the patient?
                   database
                     .ref(
                       "professionals/" +
@@ -330,6 +333,10 @@ export default class Form extends Component {
 
                   <PDInput handleChange={handleChange} error={errors.PD} />
                   <RemarksInput handleChange={handleChange} />
+                  {isProfessional && (
+                    <DiseasesInput setFieldValue={setFieldValue} />
+                  )}
+
                   <View style={{ paddingTop: 24 }}>
                     <Button
                       title="提交"
@@ -747,13 +754,71 @@ export const PDInput = (props) => {
 export const RemarksInput = (props) => {
   const { handleChange } = props;
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ flex: 1, marginBottom: 10 }}>
       <Text style={AddRecordScreen.questionText}>備註</Text>
 
       <TextInput
         onChangeText={handleChange("remarks")}
         multiline={true}
         style={AddRecordScreen.remarksInputBox}
+      />
+    </View>
+  );
+};
+
+export const DiseasesInput = (props) => {
+  const { setFieldValue } = props;
+  const [selectItems, setitems] = useState([]);
+  const items = [
+    { id: "弱視", name: "弱視" },
+    { id: "斜視", name: "斜視" },
+    { id: "青光眼", name: "青光眼" },
+    { id: "色盲", name: "色盲" },
+    { id: "色弱", name: "色弱" },
+    { id: "高眼壓", name: "高眼壓" },
+    { id: "角膜弓(老年)", name: "角膜弓(老年)" },
+    { id: "角膜弓(青少年)", name: "角膜弓(青少年)" },
+    { id: "眼乾症", name: "眼乾症" },
+    { id: "淚溢", name: "淚溢" },
+    { id: "白內障", name: "白內障" },
+    { id: "虹膜炎", name: "虹膜炎 " },
+    { id: "翼狀胬肉", name: "翼狀胬肉" },
+    { id: "後囊膜", name: "後囊膜" },
+    { id: "玻璃體", name: "玻璃體" },
+    { id: "黃斑病", name: "黃斑病" },
+    { id: "眼簾下垂", name: "眼簾下垂" },
+    { id: "瞼裂斑", name: "瞼裂斑" },
+  ];
+  const onSelectItemChange = (selectedItems) => {
+    setitems(selectedItems);
+    setFieldValue("disease", selectedItems);
+    console.log(selectedItems);
+  };
+
+  return (
+    <View>
+      <Text style={[AddRecordScreen.questionText, { marginBottom: 5 }]}>
+        確診眼疾
+      </Text>
+      <MultiSelect
+        items={items}
+        uniqueKey="id"
+        onSelectedItemsChange={onSelectItemChange}
+        selectedItems={selectItems}
+        selectText="選擇確診眼疾"
+        searchInputPlaceholderText="搜尋..."
+        onChangeInput={(text) => console.log(text)}
+        tagRemoveIconColor="#CCC"
+        tagBorderColor="#CCC"
+        tagTextColor="#FFF"
+        styleDropdownMenu={{ width: 270 }}
+        styleListContainer={{ width: 270 }}
+        styleItemsContainer={{ width: 270 }}
+        styleMainWrapper={{ width: 270 }}
+        hideSubmitButton={false}
+        hideDropdown={true}
+        hideTags={true}
+        submitButtonText="確定"
       />
     </View>
   );

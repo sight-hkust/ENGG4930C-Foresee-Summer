@@ -23,8 +23,8 @@ const BackArrow = require("../assets/images/BackArrow.png");
 const NextArrow = require("../assets/images/NextArrow.png");
 const Setting = require("../assets/images/setting.png");
 
-//const patient_id = auth.currentUser.uid;
-const patient_id = "002";
+const patient_id = auth.currentUser.uid;
+//const patient_id = "002";
 const UpperDisplayLimit = 3; //3 for testing, real is 4
 
 export default class RecordsScreen extends Component {
