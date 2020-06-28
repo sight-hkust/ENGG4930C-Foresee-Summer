@@ -407,7 +407,7 @@ export const SPHInputB = (props) => {
         </View>
 
         <Text style={AddRecordScreen.sliderText}>
-          {symbol ? "+" : "−"} {sliderValue}
+          {symbol ? "+" : "−"}{sliderValue}
         </Text>
 
         <Slider

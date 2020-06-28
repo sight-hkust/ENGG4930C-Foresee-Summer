@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Formik } from "formik";
-import { Keyboard, StyleSheet, View, Platform, Picker, Text } from "react-native";
+import { Keyboard, StyleSheet, View, Platform, Picker, Text, TouchableOpacity } from "react-native";
 import { ScreenHeight, ScreenWidth, FontScale } from "../../../../constant/Constant";
 import { SchemaPatient } from "../Schema/SchemaPatient";
 import { SchemaProfessional } from "../Schema/SchemaProfessional";
@@ -8,6 +8,7 @@ import { ScrollView } from "react-native-gesture-handler";
 import { StyledInput } from "../../../../Utils/StyledInput";
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import IonIcons from 'react-native-vector-icons/Ionicons'
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import Feather from 'react-native-vector-icons/Feather'
 import moment from 'moment';
@@ -25,14 +26,15 @@ import { CheckBox } from "react-native-elements";
 import { KeyIcon, MailIcon } from "../../../utils/icon";
 
 export const RegistrationForm = ({ navigation, route }) => {
-	const { isProfessional, registerPatient } = route.params;
-    console.log("isProfessional?", isProfessional);
+    const { isProfessional, registerPatient } = route.params;
+    const [isLoading, setIsLoading] = useState(false);
+
     return (
         <LinearGradientBackground>
             <Formik
                 initialValues={{
-                    lastname_chi: '',
-                    firstname_chi: '',
+                    lastName: '',
+                    firstName: '',
                     birthday: '',
                     email: '',
                     password: '',
@@ -45,8 +47,17 @@ export const RegistrationForm = ({ navigation, route }) => {
                     allowedSearch: false,
                 }}
                 onSubmit={(values) => {
+                    setIsLoading(true);
                     isProfessional && registerPatient ?
-                        registerPatientAccount({ values, navigation, isProfessional, registerPatient }) :
+                        registerPatientAccount({
+                            values,
+                            isProfessional,
+                            registerPatient,
+                            onComplete: () => {
+                                setIsLoading(false);
+                                navigation.goBack();
+                            }
+                        }) :
                         createAccount({ values, navigation, isProfessional, registerPatient })
                 }}
                 validationSchema={isProfessional ? (registerPatient ? SchemaRegisterPatient : SchemaProfessional) : SchemaPatient}
@@ -57,18 +68,20 @@ export const RegistrationForm = ({ navigation, route }) => {
                     <FormDetails
                         formikProps={formikProps}
                         isProfessional={isProfessional}
-                        registerPatient={registerPatient} />
+                        registerPatient={registerPatient}
+                        isLoading={isLoading} />
                 )}
             </Formik >
-        </LinearGradientBackground >)
+        </LinearGradientBackground >
+
+    )
 }
 
-const FormDetails = ({ formikProps, isProfessional, registerPatient }) => {
+const FormDetails = ({ formikProps, isProfessional, registerPatient, isLoading }) => {
 
     const { setFieldValue, values } = formikProps;
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [isDialogVisible, setDialogVisibility] = useState(false);
-    const [allowedSearch, setAllowedSearch] = useState(false);
 
     const _showDatePicker = () => setDatePickerVisibility(true);
 
@@ -118,7 +131,7 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient }) => {
                         placeholder={'姓'}
                         icon={personIcon}
                         formikProps={formikProps}
-                        formikKey="lastname_chi"
+                        formikKey="lastName"
                         inputFieldStyle={{ flex: 3 }}
                         hideEmbeddedErrorMessage
                     />
@@ -127,7 +140,7 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient }) => {
 						placeholder={'名'}
                         icon={null}
                         formikProps={formikProps}
-                        formikKey="firstname_chi"
+                        formikKey="firstName"
                         inputFieldStyle={{ flex: 3 }}
                         hideEmbeddedErrorMessage
                     />
@@ -142,7 +155,7 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient }) => {
                         color: '#FFFFFF',
                         flexWrap: 'wrap',
                     }}>
-                        {formikProps && formikProps.errors['firstname_chi'] ? '* ' + formikProps.errors['firstname_chi'] : null}
+                        {formikProps && formikProps.errors['firstName'] ? '* ' + formikProps.errors['firstName'] : null}
                     </Text>
                 </View>
                 {isProfessional && !registerPatient ?
@@ -182,19 +195,19 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient }) => {
                 />
                 {registerPatient ? <>
                     <StyledInput
-                        placeholder="職業"
+                        placeholder="職業（非必須）"
                         icon={jobIcon}
                         formikKey="job"
                         formikProps={formikProps}
                     />
                     <StyledMultiLinesInput
-                        label="家庭病史"
+                        label="家庭病史（非必須）"
                         icon={historyIcon}
                         formikKey="history"
                         formikProps={formikProps}
                     />
                     <StyledMultiLinesInput
-                        label="已知眼疾"
+                        label="已知眼疾（非必須）"
                         icon={illnessIcon}
                         formikKey="disease"
                         formikProps={formikProps}
@@ -263,9 +276,20 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient }) => {
                                     onPress={handleDialogOption.bind(this, data.value)} />))}
                         </Dialog.Content>
                     </Dialog>
+                    <Dialog
+                        visible={isLoading}
+                    >
+                        {/* <Dialog.Title>請選擇你的職業</Dialog.Title>
+                        <Dialog.Content>
+                            {roleList.map(data => (
+                                <List.Item
+                                    key={data.key}
+                                    title={data.label}
+                                    onPress={handleDialogOption.bind(this, data.value)} />))}
+                        </Dialog.Content> */}
+                    </Dialog>
                 </Portal>
             </Provider>
-
         </>)
 }
 

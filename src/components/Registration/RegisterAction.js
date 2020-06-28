@@ -3,13 +3,19 @@ import moment from 'moment';
 
 const writeUserData = ({ uid = null, values, isProfessional, navigation, registerPatient = false }) => {
   if (registerPatient) {
-    database.ref('professionals/' + uid + '/patients/' + values.phone).set(true);
-    database.ref('userInfo/+852' + values.phone).set({
+    database.ref('professionals/' + uid + '/patients/' + values.phone).set(
+      {
+        firstName: values.firstName,
+        lastName: values.lastName,
+        phone: values.phone,
+      }
+    );
+    database.ref('userInfo/' + values.phone).set({
       uid: uid,
-      firstname_chi: values.firstname_chi,
-      lastname_chi: values.lastname_chi,
+      firstName: values.firstName,
+      lastName: values.lastName,
       email: values.email,
-      age: Math.abs(moment(values.birthday).diff(moment(), 'years')),
+      birthday: moment(values.birthday).toJSON(),
       job: values.job,
       history: values.history,
       disease: values.disease,
@@ -20,17 +26,21 @@ const writeUserData = ({ uid = null, values, isProfessional, navigation, registe
         uid: uid,
         email: values.email,
         phone: values.phone,
+        firstName: values.firstName,
+        lastName: values.lastName,
+        birthday: moment(values.birthday).toJSON(),
+        records: {},
       });
-      database.ref('userInfo/+852' + values.phone).set({
-        firstname_chi: values.firstname_chi,
-        lastname_chi: values.lastname_chi,
-        age: Math.abs(moment(values.birthday).diff(moment(), 'years')),
+      database.ref('userInfo/' + values.phone).set({
+        firstName: values.firstName,
+        lastName: values.lastName,
+        birthday: moment(values.birthday).toJSON(),
       });
     } else {
       database.ref('/professionals/' + uid).set({
         uid: uid,
-        firstname_chi: values.firstname_chi,
-        lastname_chi: values.lastname_chi,
+        firstName: values.firstName,
+        lastName: values.lastName,
         email: values.email,
         phone: values.phone,
         role: values.role,
@@ -39,10 +49,10 @@ const writeUserData = ({ uid = null, values, isProfessional, navigation, registe
   }
 };
 
-export const registerPatientAccount = ({ values, isProfessional, registerPatient, navigation }) => {
+export const registerPatientAccount = ({ values, isProfessional, registerPatient, onComplete }) => {
   const uid = auth.currentUser.uid;
-  writeUserData({ uid, values, isProfessional, registerPatient, navigation });
-  navigation.goBack();
+  writeUserData({ uid, values, isProfessional, registerPatient });
+  onComplete();
 };
 
 export const createAccount = ({ values, navigation, isProfessional, registerPatient }) => {

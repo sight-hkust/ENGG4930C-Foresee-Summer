@@ -30,6 +30,7 @@
     "react": "~16.9.0",
     "react-dom": "~16.9.0",
     "react-native": "~0.61.5",
+    "react-native-dropdown-picker": "^3.0.4",
     "react-native-easy-grid": "^0.2.2",
     "react-native-elements": "^2.0.2",
     "react-native-gesture-handler": "^1.6.1",
@@ -54,6 +55,9 @@
     "react-native-web": "~0.11.7",
     "react-navigation": "^4.4.0",
     "react-redux": "^7.2.0",
+    "react-redux-firebase": "^3.6.0",
+    "redux": "^4.0.5",
+    "redux-logger": "^3.0.6",
     "redux-thunk": "^2.3.0",
     "yarn": "^1.22.4",
     "yup": "^0.29.1"

@@ -2,8 +2,6 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 import RegisterOptions from './RegisterOptions/RegisterOptions';
-import { Styles } from '../../../Styles/styles';
-import AppColors from '../../../Styles/colors';
 import { RegistrationForm } from './RegistrationForm/RegistrationForm';
 import { RegisterMehtod } from './RegisterOptions/RegisterMethod';
 
@@ -25,7 +23,9 @@ export const Register = (props) => {
             <RegistrationStack.Screen
                 name='Registration Form'
                 component={RegistrationForm}
-                options={{ headerShown: false }}
+                options={{
+                    headerShown: false,
+                }}
             />
         </RegistrationStack.Navigator>
     )

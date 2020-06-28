@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import { BarCodeScanner } from 'expo-barcode-scanner';
 import { Permissions } from 'react-native-unimodules';
 import Modal from 'react-native-modal';
 import { Camera } from 'expo-camera';

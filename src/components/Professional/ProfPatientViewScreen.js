@@ -4,14 +4,15 @@ import { database, auth } from '../../config/config';
 import { Col, Row, Grid } from 'react-native-easy-grid';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Button, Icon } from 'react-native-elements';
-
-const Setting = require('../../../assets/images/setting.png');
+import moment from 'moment';
 
 export default class ProfPatientViewScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      info: [],
+      info: {
+        birthday: moment().toJSON()
+      },
       records: [],
       recordsIndex: -1,
     };
@@ -19,20 +20,16 @@ export default class ProfPatientViewScreen extends Component {
 
   componentDidMount() {
     const { key } = this.props.route.params;
-    database.ref('professionals/' + auth.currentUser.uid + '/patients/' + key + '/info').on('value', (snapshot) => {
+    database.ref('userInfo/' + key).on('value', (snapshot) => {
       this.setState({
         info: snapshot.val(),
       });
-	});
-    database
-      .ref('professionals/' + auth.currentUser.uid + '/patients/' + key + '/records')
+    });
+    database.ref('professionals/' + auth.currentUser.uid + '/patients/' + key + '/records')
       .orderByKey()
       .on('value', (snapshot) => {
         let records = [];
         let curRecord = {};
-        let curYearObject = {};
-        let nowYear = new Date().getFullYear();
-
         snapshot.forEach((child) => {
           const year = child.key.split('-')[0];
           curRecord = child.val();
@@ -52,54 +49,67 @@ export default class ProfPatientViewScreen extends Component {
     const recordsLen = records.length;
     const recordsIndex = this.state.recordsIndex;
     const curRecord = records[recordsIndex];
+    const age = Math.abs(moment(info.birthday).diff(moment(), 'years'));
 
     const calSPH = (isLeft) => {
       if (isLeft) {
         if (curRecord.L_Myopia != 0) {
           //myopia, add - sign
           var num = parseFloat(curRecord.L_Myopia) / 100;
-          return '-' + num.toFixed(2);
+          return "-" + num.toFixed(2);
         } else if (curRecord.L_Hyperopia != 0) {
           //hyperopia, add + sign
           var num = parseFloat(curRecord.L_Hyperopia) / 100;
-          return '+' + num.toFixed(2);
+          return "+" + num.toFixed(2);
         } else {
-          return '0.00';
+          return "0.00";
         }
       } else {
         if (curRecord.R_Myopia != 0) {
           //myopia, add - sign
           var num = parseFloat(curRecord.R_Myopia) / 100;
-          return '-' + num.toFixed(2);
+          return "-" + num.toFixed(2);
         } else if (curRecord.R_Hyperopia != 0) {
           //hyperopia, add + sign
           var num = parseFloat(curRecord.R_Hyperopia) / 100;
-          return '+' + num.toFixed(2);
+          return "+" + num.toFixed(2);
         } else {
-          return '0.00';
+          return "0.00";
         }
       }
     };
-
+  
     const calCYL = (isLeft) => {
       if (isLeft && curRecord.L_CYL != 0) {
         var num = parseFloat(curRecord.L_CYL) / 100;
-        return '-' + num.toFixed(2);
+        return "-" + num.toFixed(2);
       } else if (!isLeft && curRecord.R_CYL != 0) {
         var num = parseFloat(curRecord.R_CYL) / 100;
-        return '-' + num.toFixed(2);
+        return "-" + num.toFixed(2);
       } else {
-        return '0.00';
+        return "0.00";
       }
     };
-
+  
     const calAxis = (isLeft) => {
       if (isLeft) {
-        if (curRecord.L_CYL != 0) return curRecord.L_Axis;
-        else return 'NA';
+        if (curRecord.L_CYL != 0 && curRecord.L_CYL != " ")
+          return curRecord.L_Axis;
+        else return "NA";
       } else {
-        if (curRecord.R_CYL != 0) return curRecord.R_Axis;
-        else return 'NA';
+        if (curRecord.R_CYL != 0 && curRecord.R_CYL != " ")
+          return curRecord.R_Axis;
+        else return "NA";
+      }
+    };
+  
+    const calVA = (isLeft) => {
+      if (isLeft) {
+        if (curRecord.L_VA != 0 && curRecord.L_VA != " ") return curRecord.L_VA;
+        else return "NA";
+      } else {
+        if (curRecord.R_VA != 0 && curRecord.R_VA != " ") return curRecord.R_VA;
+        else return "NA";
       }
     };
 
@@ -115,18 +125,15 @@ export default class ProfPatientViewScreen extends Component {
           }}
         >
           <View style={styles.header}>
-            <Text style={styles.title}>{info.lastname_chi}{info.firstname_chi}</Text>
-            <TouchableOpacity>
-              <Image source={Setting} />
-            </TouchableOpacity>
+            <Text style={styles.title}>{info.lastName}{info.firstName}</Text>
           </View>
           <ScrollView style={{ flex: 1, marginVertical: 20, marginHorizontal: 30 }}>
-            <Text style={styles.profileText}>年齡: {info.age}</Text>
+            <Text style={styles.profileText}>年齡: {age}</Text>
             <Text style={styles.profileText}>職業: {info.job}</Text>
             <Text style={styles.profileText}>家庭病史:</Text>
-            <Text style={[styles.profileText, { paddingLeft: 20 }]}>{info.history}</Text>
+            {info.history != "" ? <Text style={[styles.profileText, { paddingLeft: 20 }]}>{info.history}</Text> : <></>}
             <Text style={styles.profileText}>已知眼疾:</Text>
-            <Text style={[styles.profileText, { paddingLeft: 20 }]}>{info.disease}</Text>
+            {info.disease != "" ? <Text style={[styles.profileText, { paddingLeft: 20 }]}>{info.disease}</Text> : <></>}
           </ScrollView>
           <View style={{ flex: 3, justifyContent: 'center', paddingHorizontal: 30, paddingTop: 0, paddingBottom: 15, alignItems: 'center' }}>
             <View style={styles.boxes}>
@@ -135,13 +142,19 @@ export default class ProfPatientViewScreen extends Component {
               ) : (
                 <View style={{ height: '100%' }}>
                   <View style={styles.datesButton}>
-                    <TouchableOpacity onPress={() => this.setState({ recordsIndex: (recordsIndex + recordsLen - 1) % recordsLen })}>
-                      <Icon name="swapleft" type="antdesign" size={36} color="#2D9CDB" />
-                    </TouchableOpacity>
+                    {recordsLen == 1 ? 
+                      <Icon name="swapleft" type="antdesign" size={36} color="rgba(45, 156, 259, 0.2)" /> : 
+                      <TouchableOpacity onPress={() => this.setState({ recordsIndex: (recordsIndex + recordsLen - 1) % recordsLen })}>
+                        <Icon name="swapleft" type="antdesign" size={36} color="#2D9CDB" />
+                      </TouchableOpacity>
+                    }
                     <Text style={styles.dateText}>{curRecord.date}</Text>
-                    <TouchableOpacity onPress={() => this.setState({ recordsIndex: (recordsIndex + 1) % recordsLen })}>
-                      <Icon name="swapright" type="antdesign" size={36} color="#2D9CDB" />
-                    </TouchableOpacity>
+                    {recordsLen == 1 ? 
+                      <Icon name="swapright" type="antdesign" size={36} color="rgba(45, 156, 259, 0.2)" /> : 
+                      <TouchableOpacity onPress={() => this.setState({ recordsIndex: (recordsIndex + 1) % recordsLen })}>
+                        <Icon name="swapright" type="antdesign" size={36} color="#2D9CDB" />
+                      </TouchableOpacity>
+                    }
                   </View>
                   <Grid style={{ flex: 5 }}>
                     <Row>
@@ -191,10 +204,10 @@ export default class ProfPatientViewScreen extends Component {
                         <Text style={styles.gridHeader}>VA:</Text>
                       </Col>
                       <Col style={styles.container}>
-                        <Text style={styles.gridText}>{curRecord.R_VA}</Text>
+                        <Text style={styles.gridText}>{calVA(false)}</Text>
                       </Col>
                       <Col style={styles.container}>
-                        <Text style={styles.gridText}>{curRecord.L_VA}</Text>
+                        <Text style={styles.gridText}>{calVA(true)}</Text>
                       </Col>
                     </Row>
                     <Row>
@@ -202,7 +215,7 @@ export default class ProfPatientViewScreen extends Component {
                         <Text style={styles.gridHeader}>PD:</Text>
                       </Col>
                       <Col style={[styles.container, { flex: 2 }]}>
-                        <Text style={styles.gridText}>{curRecord.PD}mm</Text>
+                        <Text style={styles.gridText}>{curRecord.PD == "0" ? "NA" : curRecord.PD + "mm"}</Text>
                       </Col>
                     </Row>
                     <Row>
@@ -210,7 +223,7 @@ export default class ProfPatientViewScreen extends Component {
                         <Text style={styles.gridHeader}>備註:</Text>
                       </Col>
                       <Col style={[styles.container, { flex: 2 }]}>
-                        <Text>{curRecord.remark}</Text>
+                        <Text style={styles.gridText}>{curRecord.remarks}</Text>
                       </Col>
                     </Row>
                   </Grid>
@@ -252,6 +265,7 @@ const styles = StyleSheet.create({
   },
   header: {
     paddingTop: 31,
+    paddingLeft: 57,
     marginHorizontal: 15,
     flexDirection: 'row',
     justifyContent: 'space-between',
