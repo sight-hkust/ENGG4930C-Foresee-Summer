@@ -125,7 +125,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                                   }}
                                   onPress={() => {
                                     navigation.navigate('ProfPatientViewScreen', {
-                                      key: data.key
+                                      key: data.phone
                                     });
                                   }}
                                 />
