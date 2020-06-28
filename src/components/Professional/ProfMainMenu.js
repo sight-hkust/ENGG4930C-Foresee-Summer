@@ -4,7 +4,7 @@ import { Icon, ListItem, Button, SearchBar } from 'react-native-elements';
 import { Grid, Col, Row } from 'react-native-easy-grid';
 //import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { ScreenWidth, ScreenHeight } from '../../../constant/Constant';
+import { ScreenWidth, ScreenHeight, FontScale } from '../../../constant/Constant';
 import { auth } from '../../config/config';
 
 import MenuScreen from '../../../Utils/MenuScreen';
@@ -71,7 +71,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
           </View>
         ) : (
             <View>
-              <View style={{ height: 50, width: ScreenWidth, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+              <View style={{ marginTop: ScreenHeight * 0.078, height: ScreenHeight * 0.078, width: ScreenWidth, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                 <SearchBar
                   placeholder="尋找病人"
                   onChangeText={(e) => {
@@ -96,9 +96,9 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
               </View>
               <ScrollView
                 style={{
-                  height: 450,
-                  backgroundColor: 'transparent',
+                  height: ScreenHeight * 0.6,
                   width: ScreenWidth * 0.9,
+                  backgroundColor: 'transparent',
                   alignSelf: 'center',
                 }}
               >
@@ -172,8 +172,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                     })
                   )}
               </ScrollView>
-
-              <View style={{ flexDirection: 'row', flex: 2, justifyContent: 'center', paddingHorizontal: 15 }}>
+              <View style={{ flexDirection: 'row', height: ScreenHeight*0.05, justifyContent: 'center', paddingHorizontal: 15 }}>
                 <View style={{ width: ScreenWidth / 2, height: 100, zIndex: 10 }}>
                   <Button
                     icon={<Icon name="md-add-circle-outline" type="ionicon" size={30} color="white" />}

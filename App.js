@@ -197,7 +197,7 @@ function SettingButton({ route, navigation }) {
           auth.signOut();
           navigation.navigate('Login')
         }} style={{ marginRight: 20 }}>
-          <Icon name="question" type="evilicon" color="white" size={30} />
+          <Icon name="logout" type="material-community" color="white" size={30} />
         </TouchableOpacity>
       ) : (
           <TouchableOpacity onPress={() => {
@@ -210,6 +210,7 @@ function SettingButton({ route, navigation }) {
     </>
   );
 }
+
 
 function Main({ route, navigation }) {
   const [isProfessional, setIsProfessional] = useState(true);

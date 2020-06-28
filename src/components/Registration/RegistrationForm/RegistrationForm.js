@@ -120,7 +120,7 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, isLoading }
     return (
         <>
             <ScrollView
-                style={{ paddingHorizontal: ScreenWidth * 0.15 }}
+                style={{ paddingHorizontal: ScreenWidth * 0.11 }}
                 showsVerticalScrollIndicator={false}
                 keyboardDismissMode='on-drag'
             >

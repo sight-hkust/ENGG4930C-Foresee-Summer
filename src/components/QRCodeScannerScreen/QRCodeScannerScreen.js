@@ -6,7 +6,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { Text, View, StyleSheet, SafeAreaView, Animated, Button } from 'react-native';
 import { FontScale, Scale, ScreenWidth, ScreenHeight } from '../../../constant/Constant';
 import { RoundButton } from '../../../Utils/RoundButton';
-import { database } from '../../config/config';
+import { database, auth } from '../../config/config';
 
 export const QRCodeScannerScreen = ({ navigation, route }) => {
   const [hasCameraPermission, setCameraPermission] = useState(null);
@@ -60,10 +60,11 @@ export const QRCodeScannerScreen = ({ navigation, route }) => {
   };
 
   const hideModalMessage = () => {
-    if (doesPatientFound) {
+    /* if (doesPatientFound) {
       navigation.navigate('Main');
-    }
+    } */
     setModalVisibility(false);
+    navigation.navigate('Main');
   };
 
   const handleQRCodeScanned = ({ type, data, ...rest }) => {
@@ -79,9 +80,14 @@ export const QRCodeScannerScreen = ({ navigation, route }) => {
         .once('value')
         .then((snap) => {
           if (snap.child(data).exists()) {
+            const patient = snap.child(data).val();
             database
-              .ref('/professionals/' + auth.currentUser.uid + '/patients/' + data)
-              .set(true)
+              .ref('/professionals/' + auth.currentUser.uid + '/patients/' + patient.phone)
+              .set({
+                firstName: patient.firstName,
+                lastName: patient.lastName,
+                phone: patient.phone,
+              })
               .then(() => {
                 setDoesPatientFound(true);
                 showModalMessage('已成功登記病人');
