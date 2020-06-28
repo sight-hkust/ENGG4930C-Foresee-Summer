@@ -80,7 +80,7 @@ export default class ProfPatientViewScreen extends Component {
         }
       }
     };
-
+    
     const calCYL = (isLeft) => {
       if (isLeft && curRecord.L_CYL != 0) {
         var num = parseFloat(curRecord.L_CYL) / 100;
