@@ -26,19 +26,28 @@ export const Login = ({ navigation, route }) => {
   const [loginErrorMessage, setLoginErrorMessage] = useState('');
   const [isLoading, setLoadingState] = useState(false);
 
+  const handleLoginError = (message) => {
+    setLoginErrorMessage(message);
+    setLoadingState(false);
+  }
+
   const handleLogin = () => {
     setLoadingState(true);
     console.log('isLoading? ', isLoading);
     auth.signInWithEmailAndPassword(emailInput, passwordInput).catch(function onFailure(err) {
       switch (err.code) {
         case 'auth/invalid-email':
-          setLoginErrorMessage('電子郵件格式無效');
+          handleLogin('電子郵件格式無效');
           break;
         case 'auth/wrong-password':
-          setLoginErrorMessage('密碼錯誤或帳號不存在');
+          handleLoginError('密碼錯誤');
+          break;
+        case 'auth/user-not-found':
+          handleLoginError('帳號不存在，\n該帳戶有可能已被刪除');
           break;
         default:
-          setLoginErrorMessage(err.code + ': ' + err.message);
+          console.log(err.code)
+          handleLoginError(err.code + ': ' + err.message);
       }
     });
   };

@@ -262,6 +262,7 @@ function Main({ route, navigation }) {
         </>
       ) : (
           <>
+            <Tab.Screen name="Profile" component={Profile} />
             <Tab.Screen
               name="GetEducated"
               showLabel={false}
@@ -319,6 +320,7 @@ export default App = (props) => {
   return (
     <Provider store={store}>
       <NavigationContainer>
+
         <Stack.Navigator headerMode="none">
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
           <Stack.Screen name="Login" component={Login} />
