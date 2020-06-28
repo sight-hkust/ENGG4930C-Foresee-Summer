@@ -5,7 +5,7 @@ import { Grid, Col, Row } from 'react-native-easy-grid';
 //import Icon from 'react-native-vector-icons/FontAwesome';
 
 import { ScreenWidth, ScreenHeight } from '../../../constant/Constant';
-import { database, auth } from '../../config/config';
+import { auth } from '../../config/config';
 
 import MenuScreen from '../../../Utils/MenuScreen';
 import { connect } from 'react-redux';
@@ -39,8 +39,9 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
 
   const [isLoading, setIsLoading] = useState(true);
 
-
   const { patientList } = patientListStore
+
+  /* console.log(patientList); */
 
   useEffect(() => {
     if (patientList !== null && patientList !== undefined) {
@@ -130,7 +131,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                         <>
                           <ListItem
                             key={index}
-                            title={data.lastName + data.firstName}
+                            title={data.lastname + data.firstname}
                             subtitle={'test'.lastReserveDate}
                             rightIcon={
                               <>
@@ -182,7 +183,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                             subtitleStyle={{ color: 'white', fontSize: 13 }}
                             onPress={() => {
                               navigation.navigate('ProfPatientViewScreen', {
-                                key: u.key,
+                                key: data.phone,
                               });
                             }}
                           />

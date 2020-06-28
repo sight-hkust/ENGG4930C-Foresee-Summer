@@ -5,15 +5,15 @@ const writeUserData = ({ uid = null, values, isProfessional, navigation, registe
   if (registerPatient) {
     database.ref('professionals/' + uid + '/patients/' + values.phone).set(
       {
-        firstName: values.firstname,
-        lastName: values.lastname,
+        firstname: values.firstname,
+        lastname: values.lastname,
         phone: values.phone,
       }
     );
     database.ref('userInfo/' + values.phone).set({
       uid: uid,
-      firstName: values.firstname,
-      lastName: values.lastname,
+      firstname: values.firstname,
+      lastname: values.lastname,
       email: values.email,
       age: moment(values.birthday).toJSON(),
       job: values.job,
@@ -26,8 +26,8 @@ const writeUserData = ({ uid = null, values, isProfessional, navigation, registe
         uid: uid,
         email: values.email,
         phone: values.phone,
-        firstName: values.firstname,
-        lastName: values.lastname,
+        firstname: values.firstname,
+        lastname: values.lastname,
         birthday: moment(values.birthday).toJSON(),
         records: {},
       });
@@ -49,10 +49,10 @@ const writeUserData = ({ uid = null, values, isProfessional, navigation, registe
   }
 };
 
-export const registerPatientAccount = ({ values, isProfessional, registerPatient, navigation }) => {
+export const registerPatientAccount = ({ values, isProfessional, registerPatient, onComplete }) => {
   const uid = auth.currentUser.uid;
-  writeUserData({ uid, values, isProfessional, registerPatient, navigation });
-  navigation.goBack();
+  writeUserData({ uid, values, isProfessional, registerPatient });
+  onComplete();
 };
 
 export const createAccount = ({ values, navigation, isProfessional, registerPatient }) => {

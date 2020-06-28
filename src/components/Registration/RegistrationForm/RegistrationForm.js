@@ -27,7 +27,8 @@ import { KeyIcon, MailIcon } from "../../../utils/icon";
 
 export const RegistrationForm = ({ navigation, route }) => {
     const { isProfessional, registerPatient } = route.params;
-    console.log("isProfessional?", isProfessional);
+    const [isLoading, setIsLoading] = useState(false);
+
     return (
         <LinearGradientBackground>
             <Formik
@@ -46,8 +47,17 @@ export const RegistrationForm = ({ navigation, route }) => {
                     allowedSearch: false,
                 }}
                 onSubmit={(values) => {
+                    setIsLoading(true);
                     isProfessional && registerPatient ?
-                        registerPatientAccount({ values, navigation, isProfessional, registerPatient }) :
+                        registerPatientAccount({
+                            values,
+                            isProfessional,
+                            registerPatient,
+                            onComplete: () => {
+                                setIsLoading(false);
+                                navigation.goBack();
+                            }
+                        }) :
                         createAccount({ values, navigation, isProfessional, registerPatient })
                 }}
                 validationSchema={isProfessional ? (registerPatient ? SchemaRegisterPatient : SchemaProfessional) : SchemaPatient}
@@ -58,18 +68,20 @@ export const RegistrationForm = ({ navigation, route }) => {
                     <FormDetails
                         formikProps={formikProps}
                         isProfessional={isProfessional}
-                        registerPatient={registerPatient} />
+                        registerPatient={registerPatient}
+                        isLoading={isLoading} />
                 )}
             </Formik >
-        </LinearGradientBackground >)
+        </LinearGradientBackground >
+
+    )
 }
 
-const FormDetails = ({ formikProps, isProfessional, registerPatient }) => {
+const FormDetails = ({ formikProps, isProfessional, registerPatient, isLoading }) => {
 
     const { setFieldValue, values } = formikProps;
     const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
     const [isDialogVisible, setDialogVisibility] = useState(false);
-    const [allowedSearch, setAllowedSearch] = useState(false);
 
     const _showDatePicker = () => setDatePickerVisibility(true);
 
@@ -263,9 +275,20 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient }) => {
                                     onPress={handleDialogOption.bind(this, data.value)} />))}
                         </Dialog.Content>
                     </Dialog>
+                    <Dialog
+                        visible={isLoading}
+                    >
+                        {/* <Dialog.Title>請選擇你的職業</Dialog.Title>
+                        <Dialog.Content>
+                            {roleList.map(data => (
+                                <List.Item
+                                    key={data.key}
+                                    title={data.label}
+                                    onPress={handleDialogOption.bind(this, data.value)} />))}
+                        </Dialog.Content> */}
+                    </Dialog>
                 </Portal>
             </Provider>
-
         </>)
 }
 
