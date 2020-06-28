@@ -49,10 +49,10 @@ const writeUserData = ({ uid = null, values, isProfessional, navigation, registe
   }
 };
 
-export const registerPatientAccount = ({ values, isProfessional, registerPatient, navigation }) => {
+export const registerPatientAccount = ({ values, isProfessional, registerPatient, onComplete }) => {
   const uid = auth.currentUser.uid;
-  writeUserData({ uid, values, isProfessional, registerPatient, navigation });
-  navigation.goBack();
+  writeUserData({ uid, values, isProfessional, registerPatient });
+  onComplete();
 };
 
 export const createAccount = ({ values, navigation, isProfessional, registerPatient }) => {
