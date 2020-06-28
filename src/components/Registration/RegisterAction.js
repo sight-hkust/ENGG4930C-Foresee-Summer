@@ -3,13 +3,19 @@ import moment from 'moment';
 
 const writeUserData = ({ uid = null, values, isProfessional, navigation, registerPatient = false }) => {
   if (registerPatient) {
-    database.ref('professionals/' + uid + '/patients/' + values.phone).set(true);
-    database.ref('userInfo/+852' + values.phone).set({
+    database.ref('professionals/' + uid + '/patients/' + values.phone).set(
+      {
+        firstName: values.firstname,
+        lastName: values.lastname,
+        phone: values.phone,
+      }
+    );
+    database.ref('userInfo/' + values.phone).set({
       uid: uid,
-      firstname: values.firstname,
-      lastname: values.lastname,
+      firstName: values.firstname,
+      lastName: values.lastname,
       email: values.email,
-      age: Math.abs(moment(values.birthday).diff(moment(), 'years')),
+      age: moment(values.birthday).toJSON(),
       job: values.job,
       history: values.history,
       disease: values.disease,
@@ -20,11 +26,15 @@ const writeUserData = ({ uid = null, values, isProfessional, navigation, registe
         uid: uid,
         email: values.email,
         phone: values.phone,
+        firstName: values.firstname,
+        lastName: values.lastname,
+        birthday: moment(values.birthday).toJSON(),
+        records: {},
       });
-      database.ref('userInfo/+852' + values.phone).set({
+      database.ref('userInfo/' + values.phone).set({
         firstname: values.firstname,
         lastname: values.lastname,
-        age: Math.abs(moment(values.birthday).diff(moment(), 'years')),
+        birthday: moment(values.birthday).toJSON(),
       });
     } else {
       database.ref('/professionals/' + uid).set({

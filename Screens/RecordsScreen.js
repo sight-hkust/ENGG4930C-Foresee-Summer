@@ -7,7 +7,7 @@ import {
   Image,
   Modal,
 } from 'react-native';
-import { database } from '../src/config/config';
+import { database, auth } from '../src/config/config';
 import LineChart from '../helpers/line-chart';
 import { LinearGradient } from 'expo-linear-gradient';
 import { Button } from 'react-native-elements';
@@ -21,7 +21,7 @@ const BackArrow = require('../assets/images/BackArrow.png');
 const NextArrow = require('../assets/images/NextArrow.png');
 const Setting = require('../assets/images/setting.png');
 
-const patient_id = '002';
+const patient_id = auth.currentUser ? auth.currentUser.uid: '002';
 const UpperDisplayLimit = 3; //3 for testing, real is 4
 
 export default class RecordsScreen extends Component {
@@ -108,8 +108,8 @@ export default class RecordsScreen extends Component {
               {this.state.ddlSelectedValue == '0'
                 ? '近視'
                 : this.state.ddlSelectedValue == '1'
-                ? '遠視'
-                : '散光'}
+                  ? '遠視'
+                  : '散光'}
               度數趨勢
             </Text>
 
@@ -193,9 +193,9 @@ export default class RecordsScreen extends Component {
                   </View>
 
                   <View style={RecordScreenStyle.content}>
-                    <RenderContent isLeft={this.state.Leye} ddlValue={this.state.ddlSelectedValue} data={data} 
-                      selectedDate={this.state.ddlSelectedDate} index={this.state.index} dateArr={this.state.dates}/>
-                    
+                    <RenderContent isLeft={this.state.Leye} ddlValue={this.state.ddlSelectedValue} data={data}
+                      selectedDate={this.state.ddlSelectedDate} index={this.state.index} dateArr={this.state.dates} />
+
                   </View>
                 </View>
               )}
@@ -329,36 +329,36 @@ export const RenderModal = (props) => {
     }
   };
 
-  const calAxis = (isLeft)=>{
-    if(isLeft){
-      if(curRecord.L_CYL!=0 && curRecord.L_CYL!=" ") return curRecord.L_Axis;
+  const calAxis = (isLeft) => {
+    if (isLeft) {
+      if (curRecord.L_CYL != 0 && curRecord.L_CYL != " ") return curRecord.L_Axis;
       else return "NA"
-  }
-  else{
-      if(curRecord.R_CYL!=0 && curRecord.R_CYL!=" ") return curRecord.R_Axis;
+    }
+    else {
+      if (curRecord.R_CYL != 0 && curRecord.R_CYL != " ") return curRecord.R_Axis;
       else return "NA"
-    
-  }
+
+    }
   }
 
-  const calVA = (isLeft)=>{
-    if(isLeft){
-      if(curRecord.L_VA!=0 && curRecord.L_VA!=" ") return curRecord.L_VA;
+  const calVA = (isLeft) => {
+    if (isLeft) {
+      if (curRecord.L_VA != 0 && curRecord.L_VA != " ") return curRecord.L_VA;
       else return "NA"
-  }
-  else{
-      if(curRecord.R_VA!=0 && curRecord.R_VA!=" ") return curRecord.R_VA;
+    }
+    else {
+      if (curRecord.R_VA != 0 && curRecord.R_VA != " ") return curRecord.R_VA;
       else return "NA"
-    
-  }
+
+    }
   }
 
-  return(
-    <BottomModal isVisible={isVisible} toggleModal={toggleModal} style={{backgroundColor: '#FFFFFF', height: 350}}>
+  return (
+    <BottomModal isVisible={isVisible} toggleModal={toggleModal} style={{ backgroundColor: '#FFFFFF', height: 350 }}>
 
-      <View style={{backgroundColor: '#1772A6', height: 4, width: 70, alignSelf: 'center', marginBottom: 10}}/>
+      <View style={{ backgroundColor: '#1772A6', height: 4, width: 70, alignSelf: 'center', marginBottom: 10 }} />
       <Text style={RecordScreenStyle.colHeader}>日期: {selectedDate}</Text>
-      <View style={RecordScreenStyle.box}>                     
+      <View style={RecordScreenStyle.box}>
         <Grid>
           <Row>
             <Col style={RecordScreenStyle.gridContainer}></Col>
@@ -431,135 +431,140 @@ export const RenderModal = (props) => {
 };
 
 export const RenderContent = props => {
-    const{ isLeft, ddlValue, data, selectedDate, index, dateArr} = props;
+  const { isLeft, ddlValue, data, selectedDate, index, dateArr } = props;
 
-    if(data == null){
-      return(
-        <Text style={RecordScreenStyle.contentText}>暫無數據</Text>
-        );
-    }
-    
-    switch(ddlValue){
-        case '0':
-            if(isLeft){
-                if(data[selectedDate].L_Myopia!="0"){
-                    return(
-                    <View>
-                      <Text style={RecordScreenStyle.degreeText}>{data[selectedDate].L_Myopia}度</Text>
-                      <RenderWarning degree={data[selectedDate].L_Myopia} refractive={'M'}/>
-                      <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft}/>
-                      <RenderAmblyopiaWarning Ldegree={data[selectedDate].L_Myopia} Rdegree={data[selectedDate].R_Myopia}/>
-                      
-                    </View>
-                    )
-                }
-                else{
-                    return(
-                      <View>
-                        <Text style={RecordScreenStyle.degreeText}>你的左眼沒有近視</Text>
-                        <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft}/>
-                        <RenderAmblyopiaWarning Ldegree={data[selectedDate].L_Myopia} Rdegree={data[selectedDate].R_Myopia}/>
-                      </View>
-                    )
-                    
-                }
-            }
-            else{
-                if(data[selectedDate].R_Myopia!="0"){
-                  return(
-                  <View>
-                    <Text style={RecordScreenStyle.degreeText}>{data[selectedDate].R_Myopia}度</Text>
-                    <RenderWarning degree={data[selectedDate].R_Myopia} refractive={'M'}/>
-                    <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft}/>
-                    <RenderAmblyopiaWarning Ldegree={data[selectedDate].L_Myopia} Rdegree={data[selectedDate].R_Myopia}/>
-                  </View>
-                  )}
-                else{
-                    return(
-                      <View>
-                        <Text style={RecordScreenStyle.degreeText}>你的右眼沒有近視</Text>
-                        <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft}/>
-                        <RenderAmblyopiaWarning Ldegree={data[selectedDate].L_Myopia} Rdegree={data[selectedDate].R_Myopia}/>
-                      </View>
-                    )
-                }                
-            }
-        
-        case '1':
-            if(isLeft){
-                if(data[selectedDate].L_Hyperopia!="0"){
-                  return(
-                  <View>
-                    <Text style={RecordScreenStyle.degreeText}>{data[selectedDate].L_Hyperopia}度</Text>
-                    <RenderWarning degree={data[selectedDate].L_Hyperopia} refractive={'H'}/>
-                    <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft}/>
-                  </View>
-                  )}
-                else{
-                    return(
-                    <View>
-                      <Text style={RecordScreenStyle.degreeText}>你的左眼沒有遠視</Text>
-                      <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft}/>
-                    </View>)
-                }
-            }
-            else{
-                if(data[selectedDate].R_Hyperopia!="0"){
-                    return(
-                    <View>
-                      <Text style={RecordScreenStyle.degreeText}>{data[selectedDate].R_Hyperopia}度</Text>
-                      <RenderWarning degree={data[selectedDate].R_Hyperopia} refractive={'H'}/>
-                      <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft}/>
-                    </View>
-                    )}
-                else{
-                    return(
-                      <View>
-                    <Text style={RecordScreenStyle.degreeText}>你的右眼沒有遠視</Text>
-                    <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft}/>
-                      </View>
-                    )
-                }                
-            }
-        
-        case '2':
-            if(isLeft){
-                if(data[selectedDate].L_CYL!="0"){
-                    return(
-                      <View>
-                    <Text style={RecordScreenStyle.degreeText}>{data[selectedDate].L_CYL}度</Text>
-                    <RenderWarning degree={data[selectedDate].L_CYL} refractive={'A'}/>
-                    <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft}/>
-                      </View>
-                    )}
-                else{
-                    return(
-                      <View>
-                    <Text style={RecordScreenStyle.degreeText}>你的左眼沒有散光</Text>
-                    <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft}/>
-                      </View>
-                    )
-                }
-            }
-            else{
-                if(data[selectedDate].R_CYL!="0"){
-                    return(
-                    <View>
-                      <Text style={RecordScreenStyle.degreeText}>{data[selectedDate].R_CYL}度</Text>
-                      <RenderWarning degree={data[selectedDate].R_CYL} refractive={'A'}/>
-                      <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft}/>
-                    </View>
-                    )}
-                else{
-                    return(
-                    <View>
-                    <Text style={RecordScreenStyle.degreeText}>你的右眼沒有散光</Text>
-                    <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft}/>
-                    </View>)
-                }                
-            }
-              
-    }
+  if (data == null) {
+    return (
+      <Text style={RecordScreenStyle.contentText}>暫無數據</Text>
+    );
+  }
+
+  switch (ddlValue) {
+    case '0':
+      if (isLeft) {
+        if (data[selectedDate].L_Myopia != "0") {
+          return (
+            <View>
+              <Text style={RecordScreenStyle.degreeText}>{data[selectedDate].L_Myopia}度</Text>
+              <RenderWarning degree={data[selectedDate].L_Myopia} refractive={'M'} />
+              <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft} />
+              <RenderAmblyopiaWarning Ldegree={data[selectedDate].L_Myopia} Rdegree={data[selectedDate].R_Myopia} />
+
+            </View>
+          )
+        }
+        else {
+          return (
+            <View>
+              <Text style={RecordScreenStyle.degreeText}>你的左眼沒有近視</Text>
+              <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft} />
+              <RenderAmblyopiaWarning Ldegree={data[selectedDate].L_Myopia} Rdegree={data[selectedDate].R_Myopia} />
+            </View>
+          )
+
+        }
+      }
+      else {
+        if (data[selectedDate].R_Myopia != "0") {
+          return (
+            <View>
+              <Text style={RecordScreenStyle.degreeText}>{data[selectedDate].R_Myopia}度</Text>
+              <RenderWarning degree={data[selectedDate].R_Myopia} refractive={'M'} />
+              <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft} />
+              <RenderAmblyopiaWarning Ldegree={data[selectedDate].L_Myopia} Rdegree={data[selectedDate].R_Myopia} />
+            </View>
+          )
+        }
+        else {
+          return (
+            <View>
+              <Text style={RecordScreenStyle.degreeText}>你的右眼沒有近視</Text>
+              <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft} />
+              <RenderAmblyopiaWarning Ldegree={data[selectedDate].L_Myopia} Rdegree={data[selectedDate].R_Myopia} />
+            </View>
+          )
+        }
+      }
+
+    case '1':
+      if (isLeft) {
+        if (data[selectedDate].L_Hyperopia != "0") {
+          return (
+            <View>
+              <Text style={RecordScreenStyle.degreeText}>{data[selectedDate].L_Hyperopia}度</Text>
+              <RenderWarning degree={data[selectedDate].L_Hyperopia} refractive={'H'} />
+              <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft} />
+            </View>
+          )
+        }
+        else {
+          return (
+            <View>
+              <Text style={RecordScreenStyle.degreeText}>你的左眼沒有遠視</Text>
+              <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft} />
+            </View>)
+        }
+      }
+      else {
+        if (data[selectedDate].R_Hyperopia != "0") {
+          return (
+            <View>
+              <Text style={RecordScreenStyle.degreeText}>{data[selectedDate].R_Hyperopia}度</Text>
+              <RenderWarning degree={data[selectedDate].R_Hyperopia} refractive={'H'} />
+              <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft} />
+            </View>
+          )
+        }
+        else {
+          return (
+            <View>
+              <Text style={RecordScreenStyle.degreeText}>你的右眼沒有遠視</Text>
+              <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft} />
+            </View>
+          )
+        }
+      }
+
+    case '2':
+      if (isLeft) {
+        if (data[selectedDate].L_CYL != "0") {
+          return (
+            <View>
+              <Text style={RecordScreenStyle.degreeText}>{data[selectedDate].L_CYL}度</Text>
+              <RenderWarning degree={data[selectedDate].L_CYL} refractive={'A'} />
+              <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft} />
+            </View>
+          )
+        }
+        else {
+          return (
+            <View>
+              <Text style={RecordScreenStyle.degreeText}>你的左眼沒有散光</Text>
+              <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft} />
+            </View>
+          )
+        }
+      }
+      else {
+        if (data[selectedDate].R_CYL != "0") {
+          return (
+            <View>
+              <Text style={RecordScreenStyle.degreeText}>{data[selectedDate].R_CYL}度</Text>
+              <RenderWarning degree={data[selectedDate].R_CYL} refractive={'A'} />
+              <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft} />
+            </View>
+          )
+        }
+        else {
+          return (
+            <View>
+              <Text style={RecordScreenStyle.degreeText}>你的右眼沒有散光</Text>
+              <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft} />
+            </View>)
+        }
+      }
+
+  }
 }
 
 export const RenderWarning = (props) => {
@@ -670,20 +675,20 @@ export const RenderIncreaseWarning = (props) => {
   }
 
   const curData = data[dateArr[index]];
-  const prevData = data[dateArr[index-1]];
+  const prevData = data[dateArr[index - 1]];
 
-  const calDiff = (cur, prev)=>{
-    const diff = prev-cur;
-    if(diff > 0){
-      return("淺了" + diff + "度，" )
-    }else if(diff < 0){
-      return("深了" + Math.abs(diff) + "度，" )
+  const calDiff = (cur, prev) => {
+    const diff = prev - cur;
+    if (diff > 0) {
+      return ("淺了" + diff + "度，")
+    } else if (diff < 0) {
+      return ("深了" + Math.abs(diff) + "度，")
     }
     else return ("度數不變。")
   }
 
-  if(isLeft){
-    switch(refractive){
+  if (isLeft) {
+    switch (refractive) {
       case '0': //myopia
         return <Text style={RecordScreenStyle.contentText}>對比上次紀錄: 近視{calDiff(curData.L_Myopia, prevData.L_Myopia)}</Text>
       case '1': //hyperopia
@@ -692,17 +697,17 @@ export const RenderIncreaseWarning = (props) => {
         return <Text style={RecordScreenStyle.contentText}>對比上次紀錄: 散光{calDiff(curData.L_CYL, prevData.L_CYL)}</Text>
     }
   }
-  else{
-    switch(refractive){
+  else {
+    switch (refractive) {
       case '0': //myopia
         return <Text style={RecordScreenStyle.contentText}>對比上次紀錄: 近視{calDiff(curData.R_Myopia, prevData.R_Myopia)}</Text>
       case '1': //hyperopia
         return <Text style={RecordScreenStyle.contentText}>對比上次紀錄: 遠視{calDiff(curData.R_Hyperopia, prevData.R_Hyperopia)}</Text>
       case '2': //astigmatism
         return <Text style={RecordScreenStyle.contentText}>對比上次紀錄: 散光{calDiff(curData.R_CYL, prevData.R_CYL)}</Text>
-      }
+    }
   }
-  
+
 }
 
 export const RenderLineChart = (props) => {
@@ -719,48 +724,48 @@ export const RenderLineChart = (props) => {
   var output = [];
   //console.log(selectedIndex)
 
-  const calSubArray= ()=>{
+  const calSubArray = () => {
     var end = 0;
     var start = 0;
-    if(dateArr.length<4){
+    if (dateArr.length < 4) {
       return dateArr;
     }
-    else if(selectedIndex > dateArr.length-4){
+    else if (selectedIndex > dateArr.length - 4) {
       return dateArr.slice(-4);
     }
-    else if(selectedIndex <= dateArr.length-4){
+    else if (selectedIndex <= dateArr.length - 4) {
       start = selectedIndex
-      end = selectedIndex+4
-      return (dateArr.slice(start,end))
+      end = selectedIndex + 4
+      return (dateArr.slice(start, end))
     }
   }
 
-  switch(refractive){
-    case '0':{
-      for (const date of calSubArray()){
-        output.push (isLeft? dataArr[date].L_Myopia : dataArr[date].R_Myopia);
+  switch (refractive) {
+    case '0': {
+      for (const date of calSubArray()) {
+        output.push(isLeft ? dataArr[date].L_Myopia : dataArr[date].R_Myopia);
       }
       break;
     }
-  
-    case '1':{
-      for (const date of calSubArray()){
-        output.push (isLeft? dataArr[date].L_Hyperopia : dataArr[date].R_Hyperopia);
-      }
-      break;
-    }
-    case '2':{
-        for (const date of calSubArray()){
-          output.push (isLeft? dataArr[date].L_CYL : dataArr[date].R_CYL);
-        }
-        break;
-    }
-  } 
 
-  if(output.length>0){
-    return(
-      <LineChart data={output} dateArr={calSubArray()} full_dateArr = {dateArr} selectedIndex={selectedIndex} refractive={refractive}/>
-      );
+    case '1': {
+      for (const date of calSubArray()) {
+        output.push(isLeft ? dataArr[date].L_Hyperopia : dataArr[date].R_Hyperopia);
+      }
+      break;
+    }
+    case '2': {
+      for (const date of calSubArray()) {
+        output.push(isLeft ? dataArr[date].L_CYL : dataArr[date].R_CYL);
+      }
+      break;
+    }
+  }
+
+  if (output.length > 0) {
+    return (
+      <LineChart data={output} dateArr={calSubArray()} full_dateArr={dateArr} selectedIndex={selectedIndex} refractive={refractive} />
+    );
   }
 
   if (output.length > 0) {
@@ -783,17 +788,17 @@ const RecordScreenStyle = StyleSheet.create({
     backgroundColor: '#24559E',
   },
   header: {
-    paddingTop:40,
-    marginHorizontal:30,
-    flexDirection:'row',
+    paddingTop: 40,
+    marginHorizontal: 30,
+    flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center'
-  }, 
+  },
   title: {
-      fontSize:30,
-      color: "white",
-      fontWeight: 'bold',
-    },
+    fontSize: 30,
+    color: "white",
+    fontWeight: 'bold',
+  },
   secondaryContainer: {
     marginLeft: 10,
     marginRight: 10,
