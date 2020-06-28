@@ -113,7 +113,7 @@ function ProfessionalScreen({ navigation, route }) {
       }}
     >
       <Stack.Screen name="ProfMainMenu" component={ProfMainMenu} options={{ title: '病人名單' }} />
-      <Stack.Screen name="ProfPatientViewScreen" component={ProfPatientViewScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="ProfPatientViewScreen" component={ProfPatientViewScreen} options={{ title: '' }} />
       <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} options={{ title: '新增資料' }} />
     </Stack.Navigator>
   );
