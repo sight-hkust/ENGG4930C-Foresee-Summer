@@ -131,7 +131,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                         <>
                           <ListItem
                             key={index}
-                            title={data.lastname + data.firstname}
+                            title={data.lastName + data.firstName}
                             subtitle={'test'.lastReserveDate}
                             rightIcon={
                               <>
