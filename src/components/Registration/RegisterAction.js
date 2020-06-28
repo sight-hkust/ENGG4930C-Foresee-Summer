@@ -5,15 +5,15 @@ const writeUserData = ({ uid = null, values, isProfessional, navigation, registe
   if (registerPatient) {
     database.ref('professionals/' + uid + '/patients/' + values.phone).set(
       {
-        firstname: values.firstname,
-        lastname: values.lastname,
+        firstName: values.firstname,
+        lastName: values.lastname,
         phone: values.phone,
       }
     );
     database.ref('userInfo/' + values.phone).set({
       uid: uid,
-      firstname: values.firstname,
-      lastname: values.lastname,
+      firstName: values.firstname,
+      lastName: values.lastname,
       email: values.email,
       age: moment(values.birthday).toJSON(),
       job: values.job,
@@ -26,21 +26,21 @@ const writeUserData = ({ uid = null, values, isProfessional, navigation, registe
         uid: uid,
         email: values.email,
         phone: values.phone,
-        firstname: values.firstname,
-        lastname: values.lastname,
+        firstName: values.firstname,
+        lastName: values.lastname,
         birthday: moment(values.birthday).toJSON(),
         records: {},
       });
       database.ref('userInfo/' + values.phone).set({
-        firstname: values.firstname,
-        lastname: values.lastname,
+        firstName: values.firstname,
+        lastName: values.lastname,
         birthday: moment(values.birthday).toJSON(),
       });
     } else {
       database.ref('/professionals/' + uid).set({
         uid: uid,
-        firstname: values.firstname,
-        lastname: values.lastname,
+        firstName: values.firstname,
+        lastName: values.lastname,
         email: values.email,
         phone: values.phone,
         role: values.role,

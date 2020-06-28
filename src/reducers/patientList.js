@@ -26,6 +26,7 @@ const initialState = []
 export const patientList = (state = initialState, { type, payload }) => {
     switch (type) {
         case UPDATE_PATIENT_LIST:
+            console.log(payload)
             return {
                 patientList: payload,
             }
