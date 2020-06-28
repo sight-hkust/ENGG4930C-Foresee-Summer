@@ -31,6 +31,7 @@ import { Provider } from 'react-redux';
 import rootReducer from './src/reducers'
 import logger from 'redux-logger';
 import thunk from 'redux-thunk'
+import WelcomeScreen from './Screens/WelcomeScreen';
 
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -319,6 +320,7 @@ export default App = (props) => {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator headerMode="none">
+          <Stack.Screen name="Welcome" component={WelcomeScreen} />
           <Stack.Screen name="Login" component={Login} />
           {/* <Stack.Screen name="Register" component={Register} /> */}
           <Stack.Screen name="Profile" component={Profile} />

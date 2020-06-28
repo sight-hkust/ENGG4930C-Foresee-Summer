@@ -15,7 +15,7 @@ const writeUserData = ({ uid = null, values, isProfessional, navigation, registe
       firstName: values.firstname,
       lastName: values.lastname,
       email: values.email,
-      age: moment(values.birthday).toJSON(),
+      birthday: moment(values.birthday).toJSON(),
       job: values.job,
       history: values.history,
       disease: values.disease,
