@@ -33,8 +33,10 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
   const { patientList } = patientListStore;
   const [showList, setShowList] = useState([]);
 
+  console.log(patientList);
+
   useEffect(() => {
-    if (patientList !== null && patientList !== undefined && isLoading) {
+    if (patientList !== null && patientList !== undefined && searchContent === '') {
       setIsLoading(false);
       setShowList(patientList);
     }
@@ -125,7 +127,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                                   }}
                                   onPress={() => {
                                     navigation.navigate('ProfPatientViewScreen', {
-                                      key: data.key
+                                      key: data.phone
                                     });
                                   }}
                                 />

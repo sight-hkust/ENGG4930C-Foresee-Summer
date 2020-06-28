@@ -60,11 +60,10 @@ export const QRCodeScannerScreen = ({ navigation, route }) => {
   };
 
   const hideModalMessage = () => {
-    /* if (doesPatientFound) {
-            navigation.navigate('GetEducated');
-        } */
+    if (doesPatientFound) {
+      navigation.navigate('Main');
+    }
     setModalVisibility(false);
-    navigation.navigate('GetEducated');
   };
 
   const handleQRCodeScanned = ({ type, data, ...rest }) => {
@@ -81,7 +80,7 @@ export const QRCodeScannerScreen = ({ navigation, route }) => {
         .then((snap) => {
           if (snap.child(data).exists()) {
             database
-              .ref('/professionals/test/patients/' + data)
+              .ref('/professionals/' + auth.currentUser.uid + '/patients/' + data)
               .set(true)
               .then(() => {
                 setDoesPatientFound(true);
@@ -102,40 +101,40 @@ export const QRCodeScannerScreen = ({ navigation, route }) => {
           <Text>{'Requesting for camera permission.'}</Text>
         </View>
       ) : (
-        <View style={StyleSheet.absoluteFillObject}>
-          <Camera onBarCodeScanned={scanned ? undefined : handleQRCodeScanned} style={StyleSheet.absoluteFillObject} ratio="16:9" />
-          <View style={styles.unfocusedContainer} />
-          <View style={styles.middleContainer}>
+          <View style={StyleSheet.absoluteFillObject}>
+            <Camera onBarCodeScanned={scanned ? undefined : handleQRCodeScanned} style={StyleSheet.absoluteFillObject} ratio="16:9" />
             <View style={styles.unfocusedContainer} />
-            <View onLayout={(e) => setAnimationLineHeight(e.nativeEvent.layout.height)} style={styles.focusedContainer}>
-              {!scanned && (
-                <>
-                  <Animated.View
-                    style={[
-                      styles.animationLineStyle,
-                      {
-                        transform: [
-                          {
-                            translateY: focusLineAnimation.interpolate({
-                              inputRange: [0, 1],
-                              outputRange: [0, animationLineHeight],
-                            }),
-                          },
-                        ],
-                      },
-                    ]}
-                  />
-                </>
-              )}
+            <View style={styles.middleContainer}>
+              <View style={styles.unfocusedContainer} />
+              <View onLayout={(e) => setAnimationLineHeight(e.nativeEvent.layout.height)} style={styles.focusedContainer}>
+                {!scanned && (
+                  <>
+                    <Animated.View
+                      style={[
+                        styles.animationLineStyle,
+                        {
+                          transform: [
+                            {
+                              translateY: focusLineAnimation.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: [0, animationLineHeight],
+                              }),
+                            },
+                          ],
+                        },
+                      ]}
+                    />
+                  </>
+                )}
+              </View>
+              <View style={styles.unfocusedContainer} />
             </View>
-            <View style={styles.unfocusedContainer} />
+            <View style={[styles.unfocusedContainer, { flex: 2 }]}>
+              <Text style={styles.instruction}>{'請掃描病人\n帳戶上的QR Code'}</Text>
+              <RoundButton onPress={() => navigation.goBack()} containerStyle={{ flex: 2 }} buttonStyle={styles.button} title={'返回'} />
+            </View>
           </View>
-          <View style={[styles.unfocusedContainer, { flex: 2 }]}>
-            <Text style={styles.instruction}>{'請掃描病人\n帳戶上的QR Code'}</Text>
-            <RoundButton onPress={() => navigation.goBack()} containerStyle={{ flex: 2 }} buttonStyle={styles.button} title={'返回'} />
-          </View>
-        </View>
-      )}
+        )}
       <Modal isVisible={isModalVisible} onBackdropPress={hideModalMessage}>
         <View style={{ backgroundColor: 'white', height: '20%', borderRadius: Scale * 2, justifyContent: 'center', alignItems: 'center' }}>
           <Text style={{ fontSize: FontScale * 18, textAlign: 'center', textAlignVertical: 'center', marginBottom: ScreenHeight * 0.02 }}>{modalMessage}</Text>
