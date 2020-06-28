@@ -12,5 +12,4 @@ export const SchemaRegisterPatient = object().shape({
             else
                 return true;
         }),
-    job: string().required('請輸入病人職業')
 })
