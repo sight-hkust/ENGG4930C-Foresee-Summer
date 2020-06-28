@@ -178,7 +178,7 @@ function HomeScreen({ navigation, route }) {
       <Stack.Screen
         name="AddRecordScreen"
         component={AddRecordScreen}
-        options={{ title: "新增資料" }}
+        options={{ title: "" }}
       />
     </Stack.Navigator>
   );
@@ -211,7 +211,7 @@ function FaqScreen({ navigation, route }) {
 }
 
 function SettingButton({ route, navigation }) {
-  const [isProfessional, setIsProfessional] = useState(false); //<===for demo: true, for develop user side: false
+  const [isProfessional, setIsProfessional] = useState(false); //<===for prof: true, for develop user side: false
 
   // useEffect(() => {
   //   if (auth.currentUser != null && auth.currentUser.userType == 'professional') {
@@ -234,6 +234,7 @@ function SettingButton({ route, navigation }) {
         <TouchableOpacity
           //onPress={() => console.log("patient settings")}
           onPress={() => {
+            console.log("signOut");
             auth.signOut();
           }} //<==for debug, temp use!!
           style={{ marginRight: 15 }}

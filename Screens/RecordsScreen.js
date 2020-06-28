@@ -21,10 +21,15 @@ const LeftOpen = require("../assets/images/LeftOpen.png");
 const RightOpen = require("../assets/images/RightOpen.png");
 const BackArrow = require("../assets/images/BackArrow.png");
 const NextArrow = require("../assets/images/NextArrow.png");
-const Setting = require("../assets/images/setting.png");
 
-const patient_id = auth.currentUser.uid;
+//const patient_id = auth.currentUser.uid;
 //const patient_id = "002";
+var patient_id;
+auth.onAuthStateChanged((user) => {
+  if (user != null) {
+    patient_id = user.uid;
+  }
+});
 const UpperDisplayLimit = 3; //3 for testing, real is 4
 
 export default class RecordsScreen extends Component {
