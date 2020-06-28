@@ -11,13 +11,14 @@ export const updatePatientList = (patientList) => {
 
 export const watchPatientListUpdate = () => {
     return dispatch => {
-        let patientList = []
+
         database.ref('/professionals/' + auth.currentUser.uid + '/patients')
             .on('value', snap => {
+                let patientList = []
                 snap.forEach(data => {
                     patientList.push(data.val());
                 })
-                dispatch(updatePatientList(patientList))
+                dispatch(updatePatientList(patientList));
             })
     }
 }
@@ -26,7 +27,7 @@ const initialState = []
 export const patientList = (state = initialState, { type, payload }) => {
     switch (type) {
         case UPDATE_PATIENT_LIST:
-            console.log(payload)
+            console.log("payload", payload)
             return {
                 patientList: payload,
             }

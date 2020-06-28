@@ -215,7 +215,7 @@ function Main({ route, navigation }) {
 
   // useEffect(() => {
   //   if (auth.currentUser != null && auth.currentUser.userType == 'professional') {
-  //     setIsProfessional(true);
+  //     setIsProfessional(true);x
   //   } else {
   //     setIsProfessional(false);
   //   }
@@ -311,7 +311,7 @@ function Main({ route, navigation }) {
   );
 }
 
-const store = createStore(rootReducer, applyMiddleware(logger, thunk));
+const store = createStore(rootReducer, applyMiddleware(/* logger, */ thunk));
 
 
 export default App = (props) => {
