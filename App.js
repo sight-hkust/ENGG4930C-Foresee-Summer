@@ -129,10 +129,13 @@ function ProfessionalScreen({ navigation, route }) {
         component={ProfPatientViewScreen}
         options={{ title: "" }}
       />
+
       <Stack.Screen
         name="AddRecordScreen"
         component={AddRecordScreen}
-        options={{ title: "新增資料" }}
+        options={{
+          title: "新增資料",
+        }}
       />
     </Stack.Navigator>
   );
@@ -222,7 +225,7 @@ function FaqScreen({ navigation, route }) {
 }
 
 function SettingButton({ route, navigation }) {
-  const [isProfessional, setIsProfessional] = useState(false);
+  const [isProfessional, setIsProfessional] = useState(true);
 
   // useEffect(() => {
   //   if (auth.currentUser != null && auth.currentUser.userType == 'professional') {
@@ -265,7 +268,7 @@ function SettingButton({ route, navigation }) {
 }
 
 function Main({ route, navigation }) {
-  const [isProfessional, setIsProfessional] = useState(false);
+  const [isProfessional, setIsProfessional] = useState(true);
 
   // useEffect(() => {
   //   if (auth.currentUser != null && auth.currentUser.userType == 'professional') {
