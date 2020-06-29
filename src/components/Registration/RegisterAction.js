@@ -3,13 +3,11 @@ import moment from 'moment';
 
 const writeUserData = ({ uid = null, values, isProfessional, navigation, registerPatient = false }) => {
   if (registerPatient) {
-    database.ref('professionals/' + uid + '/patients/' + values.phone).set(
-      {
-        firstName: values.firstName,
-        lastName: values.lastName,
-        phone: values.phone,
-      }
-    );
+    database.ref('professionals/' + uid + '/patients/' + values.phone).set({
+      firstName: values.firstName,
+      lastName: values.lastName,
+      phone: values.phone,
+    });
     database.ref('userInfo/' + values.phone).set({
       uid: uid,
       firstName: values.firstName,
@@ -61,6 +59,9 @@ export const createAccount = ({ values, navigation, isProfessional, registerPati
       .createUserWithEmailAndPassword(values.email, values.password)
       .then(function (userCreds) {
         const uid = userCreds.user.uid;
+        if (userCreds) {
+          userCreds.user.updateProfile({ displayName: 'professional' });
+        }
         navigation.navigate('Profile');
         writeUserData({ uid, values, navigation, isProfessional });
       })
@@ -72,6 +73,9 @@ export const createAccount = ({ values, navigation, isProfessional, registerPati
       .createUserWithEmailAndPassword(values.email, values.password)
       .then(function (userCreds) {
         const uid = userCreds.user.uid;
+        if (userCreds) {
+          userCreds.user.updateProfile({ displayName: 'user' });
+        }
         navigation.navigate('Profile');
         writeUserData({ uid, values, navigation, isProfessional });
       })
