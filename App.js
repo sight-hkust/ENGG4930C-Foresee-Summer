@@ -215,10 +215,10 @@ function Main({ route, navigation }) {
       barStyle={{
         backgroundColor: '#BED8FF',
         height: Dimensions.get('window').height * 0.1,
-        paddingHorizontal: auth.currentUser.displayName == 'professional' ? 100 : 30,
+        paddingHorizontal: auth.currentUser.displayName != null && auth.currentUser.displayName == 'professional' ? 100 : 30,
       }}
     >
-      {auth.currentUser.displayName == 'professional' ? (
+      {auth.currentUser.displayName != null && auth.currentUser.displayName == 'professional' ? (
         <>
           <Tab.Screen
             name="EmptyScreen"
