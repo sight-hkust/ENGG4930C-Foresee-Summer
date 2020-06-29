@@ -4,11 +4,11 @@ import { Image, View, Text } from "react-native"
 import { StyleSheet } from "react-native";
 import { ScreenWidth, ScreenHeight, FontScale } from '../constant/Constant';
 
-export const Logo = ({ style }) => {
+export const Logo = ({ style, iconStyle, textStyle, hideText = false }) => {
     return (
         <View style={[styles.logoContainer, style]}>
-            <Image style={styles.icon} source={icon} resizeMode='contain' />
-            <Text style={styles.logoText}>ForeSEE</Text>
+            <Image style={[styles.icon, iconStyle]} source={icon} resizeMode='contain' />
+            {hideText ? null : <Text style={[styles.logoText, textStyle]}>ForeSEE</Text>}
         </View>)
 }
 
