@@ -222,17 +222,29 @@ export default class Form extends Component {
                 }
                 if (isProfessional) {
                   //change, need to also add to users/patient_id/records, but what if the patient doesnt exist? will it automatically create one entry for the patient?
+                  // database
+                  //   .ref(
+                  //     "professionals/" +
+                  //     professional_id +
+                  //     "/patients/" +
+                  //     patient_id +
+                  //     "/records/" +
+                  //     values.date
+                  //   )
+                  //   .set(data)
+                  //   .catch((error) => console.log(error));
+                  var uid;
                   database
-                    .ref(
-                      "professionals/" +
-                      professional_id +
-                      "/patients/" +
-                      patient_id +
-                      "/records/" +
-                      values.date
-                    )
+                    .ref("userInfo/" + patient_id)
+                    .once("value", (snap) => {
+                      uid = snap.val().uid;
+                    });
+
+                  database
+                    .ref("users/" + uid + "/records/" + values.date)
                     .set(data)
                     .catch((error) => console.log(error));
+                  this.props.navigation.goBack();
                 }
                 if (!exist) {
                   //no existed record
@@ -245,8 +257,8 @@ export default class Form extends Component {
                   Alert.alert(
                     "注意！",
                     "數據庫已存在" +
-                    values.date +
-                    "的資料，再按提交將會覆蓋舊的資料。",
+                      values.date +
+                      "的資料，再按提交將會覆蓋舊的資料。",
                     [
                       {
                         text: "取消",
@@ -277,81 +289,81 @@ export default class Form extends Component {
                 handleChange,
                 errors,
               }) => (
-                  <View style={AddRecordScreen.formContainer}>
-                    <DateSelect values={values} setFieldValue={setFieldValue} />
+                <View style={AddRecordScreen.formContainer}>
+                  <DateSelect values={values} setFieldValue={setFieldValue} />
 
-                    <SPHInput
-                      handleChange={handleChange}
-                      setFieldValue={setFieldValue}
-                      isLeft={false}
-                      error={errors.L_SPH}
-                      mode={mode}
-                    />
-                    <SPHInput
-                      handleChange={handleChange}
-                      setFieldValue={setFieldValue}
-                      isLeft={true}
-                      error={errors.R_SPH}
-                      mode={mode}
-                    />
+                  <SPHInput
+                    handleChange={handleChange}
+                    setFieldValue={setFieldValue}
+                    isLeft={false}
+                    error={errors.L_SPH}
+                    mode={mode}
+                  />
+                  <SPHInput
+                    handleChange={handleChange}
+                    setFieldValue={setFieldValue}
+                    isLeft={true}
+                    error={errors.R_SPH}
+                    mode={mode}
+                  />
 
-                    <CYLInput
-                      handleChange={handleChange}
-                      setFieldValue={setFieldValue}
-                      isLeft={false}
-                      errorA={errors.L_CYL}
-                      errorB={errors.L_Axis}
-                      mode={mode}
-                    />
-                    <CYLInput
-                      handleChange={handleChange}
-                      setFieldValue={setFieldValue}
-                      isLeft={true}
-                      errorA={errors.R_CYL}
-                      errorB={errors.R_Axis}
-                      mode={mode}
-                    />
+                  <CYLInput
+                    handleChange={handleChange}
+                    setFieldValue={setFieldValue}
+                    isLeft={false}
+                    errorA={errors.L_CYL}
+                    errorB={errors.L_Axis}
+                    mode={mode}
+                  />
+                  <CYLInput
+                    handleChange={handleChange}
+                    setFieldValue={setFieldValue}
+                    isLeft={true}
+                    errorA={errors.R_CYL}
+                    errorB={errors.R_Axis}
+                    mode={mode}
+                  />
 
-                    <VAInput
-                      handleChange={handleChange}
-                      setFieldValue={setFieldValue}
-                      isLeft={false}
-                      error={errors.L_VA}
-                      mode={mode}
-                    />
-                    <VAInput
-                      handleChange={handleChange}
-                      setFieldValue={setFieldValue}
-                      isLeft={true}
-                      error={errors.R_VA}
-                      mode={mode}
-                    />
+                  <VAInput
+                    handleChange={handleChange}
+                    setFieldValue={setFieldValue}
+                    isLeft={false}
+                    error={errors.L_VA}
+                    mode={mode}
+                  />
+                  <VAInput
+                    handleChange={handleChange}
+                    setFieldValue={setFieldValue}
+                    isLeft={true}
+                    error={errors.R_VA}
+                    mode={mode}
+                  />
 
-                    <PDInput handleChange={handleChange} error={errors.PD} />
-                    <RemarksInput handleChange={handleChange} />
-                    {isProfessional && (
-                      <DiseasesInput setFieldValue={setFieldValue} />
-                    )}
+                  <PDInput handleChange={handleChange} error={errors.PD} />
+                  <RemarksInput handleChange={handleChange} />
+                  {isProfessional && (
+                    <DiseasesInput setFieldValue={setFieldValue} />
+                  )}
 
-                    <View style={{ paddingTop: 24 }}>
-                      <Button
-                        title="提交"
-                        buttonStyle={AddRecordScreen.submitButton}
-                        titleStyle={{ color: "#3CA1B7", fontSize: 18 }}
-                        containerStyle={{
-                          alignItems: "center",
-                          paddingBottom: 30,
-                        }}
-                        onPress={handleSubmit}
-                        disabled={Object.keys(errors).length > 0}
-                      />
-                    </View>
+                  <View style={{ paddingTop: 24 }}>
+                    <Button
+                      title="提交"
+                      buttonStyle={AddRecordScreen.submitButton}
+                      titleStyle={{ color: "#3CA1B7", fontSize: 18 }}
+                      containerStyle={{
+                        alignItems: "center",
+                        paddingBottom: 30,
+                      }}
+                      onPress={handleSubmit}
+                      disabled={Object.keys(errors).length > 0}
+                    />
                   </View>
-                )}
+                </View>
+              )}
             </Formik>
           </ScrollView>
         </LinearGradient>
-      </View >
+      </View>
     );
   }
 }
@@ -406,7 +418,8 @@ export const SPHInputB = (props) => {
         </View>
 
         <Text style={AddRecordScreen.sliderText}>
-          {symbol ? "+" : "−"}{sliderValue}
+          {symbol ? "+" : "−"}
+          {sliderValue}
         </Text>
 
         <Slider
