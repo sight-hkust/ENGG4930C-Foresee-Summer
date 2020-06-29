@@ -31,6 +31,7 @@ import { Provider } from 'react-redux';
 import rootReducer from './src/reducers'
 import logger from 'redux-logger';
 import thunk from 'redux-thunk'
+import WelcomeScreen from './Screens/WelcomeScreen';
 
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -113,7 +114,7 @@ function ProfessionalScreen({ navigation, route }) {
       }}
     >
       <Stack.Screen name="ProfMainMenu" component={ProfMainMenu} options={{ title: '病人名單' }} />
-      <Stack.Screen name="ProfPatientViewScreen" component={ProfPatientViewScreen} options={{ headerShown: false }} />
+      <Stack.Screen name="ProfPatientViewScreen" component={ProfPatientViewScreen} options={{ title: '' }} />
       <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} options={{ title: '新增資料' }} />
     </Stack.Navigator>
   );
@@ -196,7 +197,7 @@ function SettingButton({ route, navigation }) {
           auth.signOut();
           navigation.navigate('Login')
         }} style={{ marginRight: 20 }}>
-          <Icon name="question" type="evilicon" color="white" size={30} />
+          <Icon name="logout" type="material-community" color="white" size={30} />
         </TouchableOpacity>
       ) : (
           <TouchableOpacity onPress={() => {
@@ -210,8 +211,9 @@ function SettingButton({ route, navigation }) {
   );
 }
 
+
 function Main({ route, navigation }) {
-  const [isProfessional, setIsProfessional] = useState(false);
+  const [isProfessional, setIsProfessional] = useState(true);
 
   // useEffect(() => {
   //   if (auth.currentUser != null && auth.currentUser.userType == 'professional') {
@@ -235,7 +237,7 @@ function Main({ route, navigation }) {
       {isProfessional ? (
         <>
           <Tab.Screen
-            name="EmptylScreen"
+            name="EmptyScreen"
             showLabel={false}
             component={ProfessionalScreen}
             options={{
@@ -319,6 +321,7 @@ export default App = (props) => {
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator headerMode="none">
+          <Stack.Screen name="Welcome" component={WelcomeScreen} />
           <Stack.Screen name="Login" component={Login} />
           {/* <Stack.Screen name="Register" component={Register} /> */}
           <Stack.Screen name="Profile" component={Profile} />
