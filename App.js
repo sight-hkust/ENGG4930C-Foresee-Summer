@@ -28,9 +28,9 @@ import ProfMainMenu from './src/components/Professional/ProfMainMenu';
 import ProfPatientViewScreen from './src/components/Professional/ProfPatientViewScreen';
 import { createStore, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
-import rootReducer from './src/reducers'
+import rootReducer from './src/reducers';
 import logger from 'redux-logger';
-import thunk from 'redux-thunk'
+import thunk from 'redux-thunk';
 import WelcomeScreen from './Screens/WelcomeScreen';
 
 const Tab = createMaterialBottomTabNavigator();
@@ -180,61 +180,45 @@ function FaqScreen({ navigation, route }) {
 }
 
 function SettingButton({ route, navigation }) {
-  const [isProfessional, setIsProfessional] = useState(true);
-
-  // useEffect(() => {
-  //   if (auth.currentUser != null && auth.currentUser.userType == 'professional') {
-  //     setIsProfessional(true);
-  //   } else {
-  //     setIsProfessional(false);
-  //   }
-  // }, [auth.currentUser]);
-
   return (
     <>
-      {isProfessional ? (
-        <TouchableOpacity onPress={() => {
-          auth.signOut();
-          navigation.navigate('Login')
-        }} style={{ marginRight: 20 }}>
+      {auth.currentUser.displayName == 'professional' ? (
+        <TouchableOpacity
+          onPress={() => {
+            auth.signOut();
+            navigation.navigate('Login');
+          }}
+          style={{ marginRight: 20 }}
+        >
           <Icon name="logout" type="material-community" color="white" size={30} />
         </TouchableOpacity>
       ) : (
-          <TouchableOpacity onPress={() => {
+        <TouchableOpacity
+          onPress={() => {
             auth.signOut();
-            navigation.navigate('Login')
-          }} style={{ marginRight: 15 }}>
-            <Image source={require('./assets/images/setting.png')} />
-          </TouchableOpacity>
-        )}
+            navigation.navigate('Login');
+          }}
+          style={{ marginRight: 15 }}
+        >
+          <Image source={require('./assets/images/setting.png')} />
+        </TouchableOpacity>
+      )}
     </>
   );
 }
 
-
 function Main({ route, navigation }) {
-  const [isProfessional, setIsProfessional] = useState(true);
-
-  // useEffect(() => {
-  //   if (auth.currentUser != null && auth.currentUser.userType == 'professional') {
-  //     setIsProfessional(true);x
-  //   } else {
-  //     setIsProfessional(false);
-  //   }
-  // }, [auth.currentUser]);
-
   return (
     <Tab.Navigator
-      initialRouteName={isProfessional ? 'ProfessionalScreen' : 'HomeScreen'}
       headerMode="screen"
       labeled={false}
       barStyle={{
         backgroundColor: '#BED8FF',
         height: Dimensions.get('window').height * 0.1,
-        paddingHorizontal: isProfessional ? 100 : 30,
+        paddingHorizontal: auth.currentUser.displayName != null && auth.currentUser.displayName == 'professional' ? 100 : 30,
       }}
     >
-      {isProfessional ? (
+      {auth.currentUser.displayName != null && auth.currentUser.displayName == 'professional' ? (
         <>
           <Tab.Screen
             name="EmptyScreen"
@@ -262,60 +246,58 @@ function Main({ route, navigation }) {
           />
         </>
       ) : (
-          <>
-            <Tab.Screen name="Profile" component={Profile} />
-            <Tab.Screen
-              name="GetEducated"
-              showLabel={false}
-              component={ArticleScreen}
-              options={{
-                tabBarIcon: () => <Image source={require('./assets/images/Articles_dark.png')} style={{ width: 40, height: 40 }} />,
-              }}
-            />
+        <>
+          <Tab.Screen
+            name="GetEducated"
+            showLabel={false}
+            component={ArticleScreen}
+            options={{
+              tabBarIcon: () => <Image source={require('./assets/images/Articles_dark.png')} style={{ width: 40, height: 40 }} />,
+            }}
+          />
 
-            <Tab.Screen
-              name="TestScreen"
-              showLabel={false}
-              component={UserScreen}
-              options={{
-                tabBarIcon: () => <Image source={require('./assets/images/Exercise_dark.png')} style={{ width: 40, height: 40 }} />,
-              }}
-            />
+          <Tab.Screen
+            name="TestScreen"
+            showLabel={false}
+            component={UserScreen}
+            options={{
+              tabBarIcon: () => <Image source={require('./assets/images/Exercise_dark.png')} style={{ width: 40, height: 40 }} />,
+            }}
+          />
 
-            <Tab.Screen
-              name="HomeScreen"
-              showLabel={false}
-              component={HomeScreen}
-              options={{
-                tabBarIcon: () => <Image source={require('./assets/images/Icon_solid.png')} style={{ width: 40, height: 40 }} />,
-              }}
-            />
+          <Tab.Screen
+            name="HomeScreen"
+            showLabel={false}
+            component={HomeScreen}
+            options={{
+              tabBarIcon: () => <Image source={require('./assets/images/Icon_solid.png')} style={{ width: 40, height: 40 }} />,
+            }}
+          />
 
-            <Tab.Screen
-              name="FaqScreen"
-              showLabel={false}
-              component={FaqScreen}
-              options={{
-                tabBarIcon: () => <Image source={require('./assets/images/Qna_dark.png')} style={{ width: 40, height: 40 }} />,
-              }}
-            />
+          <Tab.Screen
+            name="FaqScreen"
+            showLabel={false}
+            component={FaqScreen}
+            options={{
+              tabBarIcon: () => <Image source={require('./assets/images/Qna_dark.png')} style={{ width: 40, height: 40 }} />,
+            }}
+          />
 
-            <Tab.Screen
-              name="ProfessionalScreen"
-              showLabel={false}
-              component={ProfessionalScreen}
-              options={{
-                tabBarIcon: () => <Image source={require('./assets/images/Achievement_dark.png')} style={{ width: 40, height: 40 }} />,
-              }}
-            />
-          </>
-        )}
+          <Tab.Screen
+            name="ProfessionalScreen"
+            showLabel={false}
+            component={ProfessionalScreen}
+            options={{
+              tabBarIcon: () => <Image source={require('./assets/images/Achievement_dark.png')} style={{ width: 40, height: 40 }} />,
+            }}
+          />
+        </>
+      )}
     </Tab.Navigator>
   );
 }
 
 const store = createStore(rootReducer, applyMiddleware(/* logger, */ thunk));
-
 
 export default App = (props) => {
   return (
@@ -324,11 +306,10 @@ export default App = (props) => {
 
         <Stack.Navigator headerMode="none">
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
-          <Stack.Screen name="Login" component={Login} />
-          {/* <Stack.Screen name="Register" component={Register} /> */}
-          <Stack.Screen name="Profile" component={Profile} />
-          <Stack.Screen name="Main" component={Main} />
           <Stack.Screen name="Register" component={Register} />
+          <Stack.Screen name="Login" component={Login} />
+          <Stack.Screen name="Main" component={Main} />
+          <Stack.Screen name="Profile" component={Profile} />
           <Stack.Screen name="QR Scan" component={QRCodeScannerScreen} />
         </Stack.Navigator>
       </NavigationContainer>
