@@ -33,8 +33,8 @@ export const RegistrationForm = ({ navigation, route }) => {
         <LinearGradientBackground>
             <Formik
                 initialValues={{
-                    lastname: '',
-                    firstname: '',
+                    lastName: '',
+                    firstName: '',
                     birthday: '',
                     email: '',
                     password: '',
@@ -120,7 +120,7 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, isLoading }
     return (
         <>
             <ScrollView
-                style={{ paddingHorizontal: ScreenWidth * 0.15 }}
+                style={{ paddingHorizontal: ScreenWidth * 0.11 }}
                 showsVerticalScrollIndicator={false}
                 keyboardDismissMode='on-drag'
             >
@@ -131,15 +131,16 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, isLoading }
                         placeholder={'姓'}
                         icon={personIcon}
                         formikProps={formikProps}
-                        formikKey="lastname"
+                        formikKey="lastName"
                         inputFieldStyle={{ flex: 3 }}
                         hideEmbeddedErrorMessage
                     />
                     <StyledInput
                         containerStyle={{ flex: 1 }}
-                        placeholder={'名'}
+						placeholder={'名'}
+                        icon={null}
                         formikProps={formikProps}
-                        formikKey="firstname"
+                        formikKey="firstName"
                         inputFieldStyle={{ flex: 3 }}
                         hideEmbeddedErrorMessage
                     />
@@ -154,7 +155,7 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, isLoading }
                         color: '#FFFFFF',
                         flexWrap: 'wrap',
                     }}>
-                        {formikProps && formikProps.errors['firstname'] ? '* ' + formikProps.errors['firstname'] : null}
+                        {formikProps && formikProps.errors['firstName'] ? '* ' + formikProps.errors['firstName'] : null}
                     </Text>
                 </View>
                 {isProfessional && !registerPatient ?

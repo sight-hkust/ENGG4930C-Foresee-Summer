@@ -6,7 +6,7 @@ import { useIsFocused } from '@react-navigation/native';
 import { Text, View, StyleSheet, SafeAreaView, Animated, Button } from 'react-native';
 import { FontScale, Scale, ScreenWidth, ScreenHeight } from '../../../constant/Constant';
 import { RoundButton } from '../../../Utils/RoundButton';
-import { database } from '../../config/config';
+import { database, auth } from '../../config/config';
 
 export const QRCodeScannerScreen = ({ navigation, route }) => {
   const [hasCameraPermission, setCameraPermission] = useState(null);
@@ -61,10 +61,10 @@ export const QRCodeScannerScreen = ({ navigation, route }) => {
 
   const hideModalMessage = () => {
     /* if (doesPatientFound) {
-            navigation.navigate('GetEducated');
-        } */
+      navigation.navigate('Main');
+    } */
     setModalVisibility(false);
-    navigation.navigate('GetEducated');
+    navigation.navigate('Main');
   };
 
   const handleQRCodeScanned = ({ type, data, ...rest }) => {
@@ -80,9 +80,14 @@ export const QRCodeScannerScreen = ({ navigation, route }) => {
         .once('value')
         .then((snap) => {
           if (snap.child(data).exists()) {
+            const patient = snap.child(data).val();
             database
-              .ref('/professionals/test/patients/' + data)
-              .set(true)
+              .ref('/professionals/' + auth.currentUser.uid + '/patients/' + patient.phone)
+              .set({
+                firstName: patient.firstName,
+                lastName: patient.lastName,
+                phone: patient.phone,
+              })
               .then(() => {
                 setDoesPatientFound(true);
                 showModalMessage('已成功登記病人');
@@ -102,40 +107,40 @@ export const QRCodeScannerScreen = ({ navigation, route }) => {
           <Text>{'Requesting for camera permission.'}</Text>
         </View>
       ) : (
-        <View style={StyleSheet.absoluteFillObject}>
-          <Camera onBarCodeScanned={scanned ? undefined : handleQRCodeScanned} style={StyleSheet.absoluteFillObject} ratio="16:9" />
-          <View style={styles.unfocusedContainer} />
-          <View style={styles.middleContainer}>
+          <View style={StyleSheet.absoluteFillObject}>
+            <Camera onBarCodeScanned={scanned ? undefined : handleQRCodeScanned} style={StyleSheet.absoluteFillObject} ratio="16:9" />
             <View style={styles.unfocusedContainer} />
-            <View onLayout={(e) => setAnimationLineHeight(e.nativeEvent.layout.height)} style={styles.focusedContainer}>
-              {!scanned && (
-                <>
-                  <Animated.View
-                    style={[
-                      styles.animationLineStyle,
-                      {
-                        transform: [
-                          {
-                            translateY: focusLineAnimation.interpolate({
-                              inputRange: [0, 1],
-                              outputRange: [0, animationLineHeight],
-                            }),
-                          },
-                        ],
-                      },
-                    ]}
-                  />
-                </>
-              )}
+            <View style={styles.middleContainer}>
+              <View style={styles.unfocusedContainer} />
+              <View onLayout={(e) => setAnimationLineHeight(e.nativeEvent.layout.height)} style={styles.focusedContainer}>
+                {!scanned && (
+                  <>
+                    <Animated.View
+                      style={[
+                        styles.animationLineStyle,
+                        {
+                          transform: [
+                            {
+                              translateY: focusLineAnimation.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: [0, animationLineHeight],
+                              }),
+                            },
+                          ],
+                        },
+                      ]}
+                    />
+                  </>
+                )}
+              </View>
+              <View style={styles.unfocusedContainer} />
             </View>
-            <View style={styles.unfocusedContainer} />
+            <View style={[styles.unfocusedContainer, { flex: 2 }]}>
+              <Text style={styles.instruction}>{'請掃描病人\n帳戶上的QR Code'}</Text>
+              <RoundButton onPress={() => navigation.goBack()} containerStyle={{ flex: 2 }} buttonStyle={styles.button} title={'返回'} />
+            </View>
           </View>
-          <View style={[styles.unfocusedContainer, { flex: 2 }]}>
-            <Text style={styles.instruction}>{'請掃描病人\n帳戶上的QR Code'}</Text>
-            <RoundButton onPress={() => navigation.goBack()} containerStyle={{ flex: 2 }} buttonStyle={styles.button} title={'返回'} />
-          </View>
-        </View>
-      )}
+        )}
       <Modal isVisible={isModalVisible} onBackdropPress={hideModalMessage}>
         <View style={{ backgroundColor: 'white', height: '20%', borderRadius: Scale * 2, justifyContent: 'center', alignItems: 'center' }}>
           <Text style={{ fontSize: FontScale * 18, textAlign: 'center', textAlignVertical: 'center', marginBottom: ScreenHeight * 0.02 }}>{modalMessage}</Text>

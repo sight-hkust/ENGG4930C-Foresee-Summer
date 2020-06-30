@@ -37,7 +37,7 @@ export const Login = ({ navigation, route }) => {
     auth.signInWithEmailAndPassword(emailInput, passwordInput).catch(function onFailure(err) {
       switch (err.code) {
         case 'auth/invalid-email':
-          handleLogin('電子郵件格式無效');
+          handleLoginError('電子郵件格式無效');
           break;
         case 'auth/wrong-password':
           handleLoginError('密碼錯誤');
@@ -92,12 +92,10 @@ export const Login = ({ navigation, route }) => {
         </KeyboardAvoidingView>
       </LinearGradientBackground>
       <Modal isVisible={isLoading}
-        animationIn={'slideInUp'}
-        animationInTiming={300}
-        animationOut={'slideOutDown'}
-        animationOutTiming={300}
+        animationIn={'fadeIn'}
+        animationOut={'fadeOut'}
       >
-        <ActivityIndicator size={Scale * 30} color="lightskyblue" hidesWhenStopped={true} />
+        <ActivityIndicator size={Scale * 30} color="lightskyblue" />
       </Modal>
     </>
   );

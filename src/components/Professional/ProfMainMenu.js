@@ -4,7 +4,7 @@ import { Icon, ListItem, Button, SearchBar } from 'react-native-elements';
 import { Grid, Col, Row } from 'react-native-easy-grid';
 //import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { ScreenWidth, ScreenHeight } from '../../../constant/Constant';
+import { ScreenWidth, ScreenHeight, FontScale } from '../../../constant/Constant';
 import { auth } from '../../config/config';
 
 import MenuScreen from '../../../Utils/MenuScreen';
@@ -15,61 +15,52 @@ import { watchPatientListUpdate } from '../../reducers/patientList';
  */
 function SearchPatient(key, referenceList) {
   const targetList = [];
-
   referenceList.map((u, i) => {
-    console.log(u);
-
-    if (u.name != undefined && u.name.includes(key)) {
-      targetList.push({
-        name: u.name,
-        lastReserveDate: u.lastReserveDate,
-        key: u.key,
-      });
+    let name = u.lastName + u.firstName;
+    if (name != undefined && name.includes(key)) {
+      targetList.push(u);
     }
   });
-
   return targetList;
 }
 
 const ProfMainMenu = ({ route, navigation, patientListStore }) => {
-  const [originalList, setOriginalList] = useState([]);
+  //const [originalList, setOriginalList] = useState([]);
 
   const [searchContent, setSearchContent] = useState('');
   const [searchingStatus, setSearchingStatus] = useState(false);
-
   const [isLoading, setIsLoading] = useState(true);
+  const { patientList } = patientListStore;
+  const [showList, setShowList] = useState([]);
 
-  const { patientList } = patientListStore
-
-  /* console.log(patientList); */
+  console.log(patientList);
 
   useEffect(() => {
-    if (patientList !== null && patientList !== undefined) {
+    if (patientList !== null && patientList !== undefined && searchContent === '') {
       setIsLoading(false);
+      setShowList(patientList);
     }
   })
-
 
   /* useEffect(() => {
     database.ref('professionals/' + auth.currentUser.uid + '/patients/').once('value', (snap) => {
       let patients = [];
       snap.forEach((child) => {
+		console.log(child.val()['info']);
         if (child.val()['info'] != null) {
           patients.push({
-            name:
-              child.val()['info']['firstName_chi'] && child.val()['info']['lastName_chi'] != null
-                ? child.val()['info']['firstName_chi'] + ' ' + child.val()['info']['lastName_chi']
-                : '( 此用戶名稱格式不正確 )',
+            name: child.val()['info']['lastName'] && child.val()['info']['firstName'] != null ? child.val()['info']['lastName'] + child.val()['info']['firstName'] : '()',
             lastReserveDate: child.val()['records'] != null ? Object.keys(child.val()['records']).slice(-1)[0] : null,
             key: child.key,
           });
         }
       });
-      setPatientList(patients);
-      setOriginalList(patients);
+      setShowList(patients);
+      //setOriginalList(patients);
       setIsLoading(false);
     });
   }, []); */
+
   return (
     <MenuScreen>
       <View style={styles.container}>
@@ -80,10 +71,14 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
           </View>
         ) : (
             <View>
-              <View style={{ height: 50, width: ScreenWidth, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+              <View style={{ marginTop: ScreenHeight * 0.078, height: ScreenHeight * 0.078, width: ScreenWidth, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
                 <SearchBar
                   placeholder="尋找病人"
-                  onChangeText={(e) => setSearchContent(e)}
+                  onChangeText={(e) => {
+                    setSearchContent(e);
+                    setSearchingStatus(true);
+                    setShowList(SearchPatient(e, patientList));
+                  }}
                   value={searchContent}
                   round
                   lightTheme
@@ -96,37 +91,21 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                     borderTopColor: 'transparent',
                   }}
                   inputContainerStyle={{ backgroundColor: '#A6ACE9', height: 35 }}
-                  onSubmitEditing={() => {
-                    setSearchingStatus(true);
-                    setPatientList(SearchPatient(searchContent, originalList));
-                  }}
                 />
                 <Icon name="qrcode-scan" type="material-community" color="white" size={30} onPress={() => navigation.navigate('QR Scan')} />
               </View>
-              {searchingStatus && (
-                <Button
-                  title=" 返回"
-                  type="clear"
-                  icon={<Icon name="arrow-left" size={15} color="#2D89DD" />}
-                  titleStyle={{ color: 'white' }}
-                  onPress={() => {
-                    setPatientList(originalList);
-                    setSearchingStatus(false);
-                  }}
-                />
-              )}
               <ScrollView
                 style={{
-                  height: 450,
-                  backgroundColor: 'transparent',
+                  height: ScreenHeight * 0.6,
                   width: ScreenWidth * 0.9,
+                  backgroundColor: 'transparent',
                   alignSelf: 'center',
                 }}
               >
-                {patientList.length == 0 ? (
+                {showList.length == 0 ? (
                   <Text style={{ textAlign: 'center', color: 'white', fontSize: 30 }}> 找不到用戶 </Text>
                 ) : (
-                    patientList.map((data, index) => {
+                    showList.map((data, index) => {
                       return (
                         <>
                           <ListItem
@@ -148,7 +127,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                                   }}
                                   onPress={() => {
                                     navigation.navigate('ProfPatientViewScreen', {
-                                      key: u.key,
+                                      key: data.phone
                                     });
                                   }}
                                 />
@@ -166,7 +145,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                                     navigation.navigate('AddRecordScreen', {
                                       isProfessional: true,
                                       professional_id: auth.currentUser.uid,
-                                      patient_id: u.key,
+                                      patient_id: data.phone,
                                     });
                                   }}
                                 />
@@ -193,8 +172,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                     })
                   )}
               </ScrollView>
-
-              <View style={{ flexDirection: 'row', flex: 2, justifyContent: 'center', paddingHorizontal: 15 }}>
+              <View style={{ flexDirection: 'row', height: ScreenHeight*0.05, justifyContent: 'center', paddingHorizontal: 15 }}>
                 <View style={{ width: ScreenWidth / 2, height: 100, zIndex: 10 }}>
                   <Button
                     icon={<Icon name="md-add-circle-outline" type="ionicon" size={30} color="white" />}
