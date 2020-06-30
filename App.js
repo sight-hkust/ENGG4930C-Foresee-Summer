@@ -33,6 +33,10 @@ import logger from 'redux-logger';
 import thunk from 'redux-thunk';
 import WelcomeScreen from './Screens/WelcomeScreen';
 
+import SettingScreen from './src/components/Setting/Setting';
+import PrivacyPolicy from './src/components/Policy/PrivacyPolicy';
+import TermsAndCondition from './src/components/Policy/TermsAndCondition';
+
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
 
@@ -41,23 +45,11 @@ global.email = '';
 global.password = '';
 global.apiUrl = '';
 
-/** Login & Register Stacks */
-function LoginAndRegisterScreen({ navigation, route }) {
-  return (
-    <Stack.Navigator headerMode="none">
-      <Stack.Screen name="Login" component={Login} />
-      <Stack.Screen name="Register" component={Register} />
-      <Stack.Screen name="Profile" component={Profile} />{' '}
-    </Stack.Navigator>
-  );
-}
-
 /** Normal User Screens */
 function UserScreen({ navigation, route }) {
   return (
     <Stack.Navigator
       headerMode="screen"
-      initialRouteName="AskAnExpertScreen"
       screenOptions={{
         headerTransparent: true,
         headerTitleStyle: {
@@ -74,6 +66,7 @@ function UserScreen({ navigation, route }) {
       <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} />
       <Stack.Screen name="EyeExercise" component={EyeExercise} />
       <Stack.Screen name="Profile" component={Profile} />
+      <Stack.Screen name="SettingScreen" component={SettingScreen} options={{ title: '設定' }} />
     </Stack.Navigator>
   );
 }
@@ -185,8 +178,8 @@ function SettingButton({ route, navigation }) {
       {auth.currentUser.displayName != null && auth.currentUser.displayName == 'professional' ? (
         <TouchableOpacity
           onPress={() => {
-            auth.signOut();
-            navigation.navigate('Login');
+            navigation.navigate('UserScreen', { screen: 'SettingScreen' });
+            //navigation.navigate('ProfessionalScreen', { screen: 'TutorialScreen' });
           }}
           style={{ marginRight: 20 }}
         >
@@ -195,8 +188,7 @@ function SettingButton({ route, navigation }) {
       ) : (
         <TouchableOpacity
           onPress={() => {
-            auth.signOut();
-            navigation.navigate('Login');
+            navigation.navigate('UserScreen', { screen: 'SettingScreen' });
           }}
           style={{ marginRight: 15 }}
         >
@@ -257,7 +249,7 @@ function Main({ route, navigation }) {
           />
 
           <Tab.Screen
-            name="TestScreen"
+            name="UserScreen"
             showLabel={false}
             component={UserScreen}
             options={{
@@ -300,16 +292,32 @@ function Main({ route, navigation }) {
 const store = createStore(rootReducer, applyMiddleware(/* logger, */ thunk));
 
 export default App = (props) => {
+  const [loggedIn, setLoggedIn] = useState();
+
+  auth.onAuthStateChanged(function (user) {
+    if (user) {
+      setLoggedIn(user);
+    }
+  });
   return (
     <Provider store={store}>
       <NavigationContainer>
         <Stack.Navigator headerMode="none">
           <Stack.Screen name="Welcome" component={WelcomeScreen} />
-          <Stack.Screen name="Register" component={Register} />
-          <Stack.Screen name="Login" component={Login} />
-          <Stack.Screen name="Main" component={Main} />
-          <Stack.Screen name="Profile" component={Profile} />
-          <Stack.Screen name="QR Scan" component={QRCodeScannerScreen} />
+          {loggedIn ? (
+            <>
+              <Stack.Screen name="Main" component={Main} />
+              <Stack.Screen name="Profile" component={Profile} />
+              <Stack.Screen name="QR Scan" component={QRCodeScannerScreen} />
+            </>
+          ) : (
+            <>
+              <Stack.Screen name="Login" component={Login} />
+              <Stack.Screen name="Register" component={Register} />
+            </>
+          )}
+          <Stack.Screen name="Terms" component={TermsAndCondition} options={{ headerShown: true, title: '條款及細則' }} />
+          <Stack.Screen name="Policy" component={PrivacyPolicy} options={{ headerShown: true, title: '私隱政策' }} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
