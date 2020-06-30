@@ -14,7 +14,10 @@ import {
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Formik } from "formik";
 import moment from "moment";
-import { TextInput } from "react-native-gesture-handler";
+import {
+  TextInput,
+  TouchableWithoutFeedback,
+} from "react-native-gesture-handler";
 import { database } from "../src/config/config";
 import { SchemaRecords } from "../Screens/SchemaRecords";
 import { LinearGradient } from "expo-linear-gradient";
@@ -131,8 +134,8 @@ export default class Form extends Component {
                 Lsymbol: true, //true: +, false: -
                 R_SPH: "0",
                 Rsymbol: true,
-                L_VA: "0",
-                R_VA: "0",
+                L_VA: "20/200",
+                R_VA: "20/200",
                 L_CYL: "0",
                 R_CYL: "0",
                 L_Axis: "0",
@@ -160,8 +163,10 @@ export default class Form extends Component {
                   R_Myopia: 0,
                   L_Hyperopia: 0,
                   R_Hyperopia: 0,
-                  L_VA: parseFloat(values.L_VA),
-                  R_VA: parseFloat(values.R_VA),
+                  //L_VA: parseFloat(values.L_VA),
+                  //R_VA: parseFloat(values.R_VA),
+                  L_VA: values.L_VA,
+                  R_VA: values.R_VA,
                   L_CYL: parseInt(values.L_CYL),
                   R_CYL: parseInt(values.R_CYL),
                   L_Axis: values.L_Axis,
@@ -335,79 +340,6 @@ export default class Form extends Component {
     );
   }
 }
-
-export const SPHInputB = (props) => {
-  const { setFieldValue, isLeft } = props;
-  const [symbol, Togglesymbol] = useState(true); //true = positive
-  const [sliderValue, setSliderValue] = useState(0);
-
-  const setToTrue = () => {
-    Togglesymbol(true);
-    if (isLeft) setFieldValue("Lsymbol", true, false);
-    else setFieldValue("Rsymbol", true, false);
-  };
-
-  const setToFalse = () => {
-    Togglesymbol(false);
-    if (isLeft) setFieldValue("Lsymbol", false, false);
-    else setFieldValue("Rsymbol", false, false);
-  };
-
-  return (
-    <View style={{ flex: 1 }}>
-      <Text style={AddRecordScreen.questionText}>
-        請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}球面度數(SPH)
-      </Text>
-
-      <View>
-        <View style={{ flexDirection: "row", paddingLeft: 10 }}>
-          <View style={{ flexDirection: "row", marginRight: 15 }}>
-            <Text style={{ fontSize: 20, color: "white" }}>+</Text>
-            <RadioButton
-              color="white"
-              uncheckedColor="white"
-              value="+"
-              status={symbol == true ? "checked" : "unchecked"}
-              onPress={setToTrue}
-            />
-          </View>
-          <View style={{ flexDirection: "row" }}>
-            <Text style={{ fontSize: 20, color: "white", fontWeight: "bold" }}>
-              −
-            </Text>
-            <RadioButton
-              color="white"
-              uncheckedColor="white"
-              value="-"
-              status={symbol == false ? "checked" : "unchecked"}
-              onPress={setToFalse}
-            />
-          </View>
-        </View>
-
-        <Text style={AddRecordScreen.sliderText}>
-          {symbol ? "+" : "−"}
-          {sliderValue}
-        </Text>
-
-        <Slider
-          style={{ width: 300, paddingTop: 30 }}
-          minimumValue={0}
-          maximumValue={700}
-          step={25}
-          thumbTintColor={"#47CDBD"}
-          minimumTrackTintColor={"white"}
-          maximumTrackTintColor={"#B8CAE4"}
-          onValueChange={(value) => setSliderValue(value)}
-          onSlidingComplete={(value) =>
-            setFieldValue(isLeft ? "L_SPH" : "R_SPH", value, false)
-          }
-        />
-      </View>
-    </View>
-  );
-};
-
 export const DateSelect = (props) => {
   const { values, setFieldValue } = props;
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -451,6 +383,93 @@ export const DateSelect = (props) => {
         date={moment(values.date).toDate()}
         maximumDate={new Date()}
       />
+    </View>
+  );
+};
+
+export const SPHInputB = (props) => {
+  const { setFieldValue, isLeft } = props;
+  const [symbol, Togglesymbol] = useState(true); //true = positive
+  const [sliderValue, setSliderValue] = useState(0);
+
+  const setToTrue = () => {
+    Togglesymbol(true);
+    if (isLeft) setFieldValue("Lsymbol", true, false);
+    else setFieldValue("Rsymbol", true, false);
+  };
+
+  const setToFalse = () => {
+    Togglesymbol(false);
+    if (isLeft) setFieldValue("Lsymbol", false, false);
+    else setFieldValue("Rsymbol", false, false);
+  };
+
+  return (
+    <View style={{ flex: 1 }}>
+      <Text style={AddRecordScreen.questionText}>
+        請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}球面度數(SPH)
+      </Text>
+
+      <View>
+        <View style={{ flexDirection: "row", paddingLeft: 10 }}>
+          <TouchableOpacity
+            style={{ flexDirection: "row", marginRight: 15 }}
+            onPress={() => {
+              console.log(symbol);
+              setToTrue();
+            }}
+          >
+            <View
+              style={
+                symbol
+                  ? AddRecordScreen.selectedRadioButton
+                  : AddRecordScreen.unselectedRadioButton
+              }
+            />
+            <Text style={{ fontSize: 20, color: "white", paddingRight: 10 }}>
+              +
+            </Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{ flexDirection: "row" }}
+            onPress={() => {
+              console.log(symbol);
+              setToFalse();
+            }}
+          >
+            <View
+              style={
+                !symbol
+                  ? AddRecordScreen.selectedRadioButton
+                  : AddRecordScreen.unselectedRadioButton
+              }
+            />
+            <Text style={{ fontSize: 20, color: "white", fontWeight: "bold" }}>
+              −
+            </Text>
+          </TouchableOpacity>
+        </View>
+
+        <Text style={AddRecordScreen.sliderText}>
+          {symbol ? "+" : "−"}
+          {sliderValue}
+        </Text>
+
+        <Slider
+          style={{ width: 300, paddingTop: 30 }}
+          minimumValue={0}
+          maximumValue={700}
+          step={25}
+          thumbTintColor={"#47CDBD"}
+          minimumTrackTintColor={"white"}
+          maximumTrackTintColor={"#B8CAE4"}
+          onValueChange={(value) => setSliderValue(value)}
+          onSlidingComplete={(value) =>
+            setFieldValue(isLeft ? "L_SPH" : "R_SPH", value, false)
+          }
+        />
+      </View>
     </View>
   );
 };
@@ -662,34 +681,106 @@ export const AxisInput = (props) => {
 export const VAInputB = (props) => {
   const { setFieldValue, isLeft } = props;
   const [sliderValue, setSliderValue] = useState(0);
+  const [mode, SetMode] = useState(true); //true = 20/20, false = decimal
+  const VAArr = [
+    "20/200",
+    "20/100",
+    "20/70",
+    "20/50",
+    "20/40",
+    "20/30",
+    "20/25",
+    "20/20",
+  ];
+
   return (
     <View style={{ flex: 1 }}>
       <Text style={AddRecordScreen.questionText}>
         請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}視力(VA)
       </Text>
 
-      <View>
-        <Text style={AddRecordScreen.sliderText}>
-          {(sliderValue / 10).toFixed(1)}
-        </Text>
-        <Slider
-          style={{ width: 300, paddingTop: 30 }}
-          minimumValue={0}
-          maximumValue={12}
-          step={1}
-          thumbTintColor={"#47CDBD"}
-          minimumTrackTintColor={"white"}
-          maximumTrackTintColor={"#B8CAE4"}
-          onValueChange={(value) => setSliderValue(value)}
-          onSlidingComplete={(value) => {
-            setFieldValue(
-              isLeft ? "L_VA" : "R_VA",
-              (value / 10).toFixed(2),
-              false
-            );
+      <View style={{ flexDirection: "row", paddingLeft: 10 }}>
+        <TouchableOpacity
+          style={{ flexDirection: "row", marginRight: 15 }}
+          onPress={() => {
+            SetMode(true);
           }}
-        />
+        >
+          <View
+            style={
+              mode
+                ? AddRecordScreen.selectedRadioButton
+                : AddRecordScreen.unselectedRadioButton
+            }
+          />
+          <Text style={{ fontSize: 20, color: "white", paddingRight: 10 }}>
+            20/20
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{ flexDirection: "row" }}
+          onPress={() => {
+            SetMode(false);
+            setFieldValue(isLeft ? "L_VA" : "R_VA", "0", false);
+          }}
+        >
+          <View
+            style={
+              !mode
+                ? AddRecordScreen.selectedRadioButton
+                : AddRecordScreen.unselectedRadioButton
+            }
+          />
+          <Text style={{ fontSize: 20, color: "white" }}>decimal</Text>
+        </TouchableOpacity>
       </View>
+
+      {mode ? (
+        <>
+          <Text style={AddRecordScreen.sliderText}>{VAArr[sliderValue]}</Text>
+          <Slider
+            style={{ width: 300, paddingTop: 30 }}
+            minimumValue={0}
+            maximumValue={7}
+            step={1}
+            thumbTintColor={"#47CDBD"}
+            minimumTrackTintColor={"white"}
+            maximumTrackTintColor={"#B8CAE4"}
+            onValueChange={(value) => setSliderValue(value)}
+            onSlidingComplete={(value) => {
+              setFieldValue(
+                isLeft ? "L_VA" : "R_VA",
+                VAArr[value].toString(),
+                false
+              );
+            }}
+          />
+        </>
+      ) : (
+        <>
+          <Text style={AddRecordScreen.sliderText}>
+            {(sliderValue / 10).toFixed(1)}
+          </Text>
+          <Slider
+            style={{ width: 300, paddingTop: 30 }}
+            minimumValue={0}
+            maximumValue={12}
+            step={1}
+            thumbTintColor={"#47CDBD"}
+            minimumTrackTintColor={"white"}
+            maximumTrackTintColor={"#B8CAE4"}
+            onValueChange={(value) => setSliderValue(value)}
+            onSlidingComplete={(value) => {
+              setFieldValue(
+                isLeft ? "L_VA" : "R_VA",
+                (value / 10).toFixed(2),
+                false
+              );
+            }}
+          />
+        </>
+      )}
     </View>
   );
 };
@@ -925,6 +1016,26 @@ const AddRecordScreen = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 6,
     paddingBottom: 2,
-    marginTop: 5,
+    marginTop: 15,
+  },
+  selectedRadioButton: {
+    width: 18,
+    height: 18,
+    borderRadius: 10,
+    borderWidth: 2.5,
+    borderColor: "white",
+    backgroundColor: "#47CDBD",
+    marginTop: 4,
+    marginRight: 5,
+  },
+  unselectedRadioButton: {
+    width: 18,
+    height: 18,
+    borderRadius: 10,
+    borderWidth: 2.5,
+    borderColor: "white",
+    backgroundColor: "white",
+    marginTop: 4,
+    marginRight: 5,
   },
 });

@@ -18,20 +18,6 @@ export const SchemaRecords = object({
       "球面度數(SPH)應為0或以00, 25, 50或75作尾",
       (value) => value % 25 == 0
     ),
-  L_VA: number()
-    .test(
-      "range",
-      "視力(Visual Acuity)應在 0 和 1 之間",
-      (value) => value >= 0 || value <= 1 || value == null
-    )
-    .max(1.0, "視力(Visual Acuity)應在 0 和 1 之間"),
-  R_VA: number()
-    .test(
-      "range",
-      "視力(Visual Acuity)應在 0 和 1 之間",
-      (value) => value >= 0 || value <= 1 || value == null
-    )
-    .max(1.0, "視力(Visual Acuity)應在 0 和 1 之間"),
   L_CYL: string()
     .required("此項必填（如無度數，請填0）")
     .matches("^[0-9]*$", "請輸入大過或等於0的整數")

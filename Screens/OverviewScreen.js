@@ -1,15 +1,5 @@
-import React, { Component, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-  Slider,
-  Alert,
-  Animated,
-} from "react-native";
+import React, { Component } from "react";
+import { StyleSheet, Text, View } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { database, auth } from "../src/config/config";
 import { Button } from "react-native-elements";
@@ -134,13 +124,13 @@ export default class OverviewScreen extends Component {
                   }
                   buttonStyle={{
                     backgroundColor: "white",
-                    width: 50,
-                    height: 50,
+                    width: 45,
+                    height: 45,
                     borderRadius: 25,
                     paddingLeft: 2,
                     paddingRight: 0,
                   }}
-                  containerStyle={{ paddingTop: 15, marginLeft: 40 }}
+                  containerStyle={{ paddingTop: 10, marginLeft: 40 }}
                 />
               </View>
             </View>
@@ -161,8 +151,51 @@ export default class OverviewScreen extends Component {
 export const DisplayDegree = (props) => {
   const { data, dateArr, isLeft } = props;
   if (data == null) {
-    return null;
+    return (
+      <>
+        <View style={OverviewScreenStyle.topContainer}>
+          <Text style={OverviewScreenStyle.topText}>
+            {isLeft ? "左" : "右"}
+          </Text>
+        </View>
+        <View>
+          <Text style={OverviewScreenStyle.noRecordText}>暫無數據</Text>
+        </View>
+      </>
+    );
   }
+
+  if (isLeft && ((data.L_Myopia == data.L_Hyperopia) == data.L_CYL) == 0) {
+    return (
+      <>
+        <View style={OverviewScreenStyle.topContainer}>
+          <Text style={OverviewScreenStyle.topText}>
+            {isLeft ? "左" : "右"}
+          </Text>
+        </View>
+        <View>
+          <Text style={OverviewScreenStyle.noRecordText}>沒有屈光不正</Text>
+        </View>
+      </>
+    );
+  } else if (
+    !isLeft &&
+    ((data.R_Myopia == data.R_Hyperopia) == data.R_CYL) == 0
+  ) {
+    return (
+      <>
+        <View style={OverviewScreenStyle.topContainer}>
+          <Text style={OverviewScreenStyle.topText}>
+            {isLeft ? "左" : "右"}
+          </Text>
+        </View>
+        <View>
+          <Text style={OverviewScreenStyle.noRecordText}>沒有屈光不正</Text>
+        </View>
+      </>
+    );
+  }
+
   const length = dateArr.length - 1;
   const curData = data[dateArr[length]];
 
@@ -175,44 +208,38 @@ export const DisplayDegree = (props) => {
       <View style={OverviewScreenStyle.topContainer}>
         <Text style={OverviewScreenStyle.topText}>{isLeft ? "左" : "右"}</Text>
       </View>
+
       {(isLeft ? curData.L_Myopia != 0 : curData.R_Myopia != 0) && (
-        <View style={OverviewScreenStyle.itemContainer}>
-          <RenderIndicator
-            degree={isLeft ? curData.L_Myopia : curData.R_Myopia}
-            refractive={"M"}
-          />
-          <Text style={{ fontSize: 30 }}>
-            {isLeft ? curData.L_Myopia : curData.R_Myopia}
-          </Text>
-          <Text>度</Text>
-        </View>
+        <RenderItem
+          degree={isLeft ? curData.L_Myopia : curData.R_Myopia}
+          refractive={"M"}
+        />
       )}
 
       {(isLeft ? curData.L_Hyperopia != 0 : curData.R_Hyperopia != 0) && (
-        <View style={OverviewScreenStyle.itemContainer}>
-          <RenderIndicator
-            degree={isLeft ? curData.L_Hyperopia : curData.R_Hyperopia}
-            refractive={"H"}
-          />
-          <Text style={OverviewScreenStyle.degreeText}>
-            {isLeft ? curData.L_Hyperopia : curData.R_Hyperopia}
-          </Text>
-          <Text style={OverviewScreenStyle.unitText}>度</Text>
-        </View>
+        <RenderItem
+          degree={isLeft ? curData.L_Hyperopia : curData.R_Hyperopia}
+          refractive={"H"}
+        />
       )}
 
       {(isLeft ? curData.L_CYL != 0 : curData.R_CYL != 0) && (
-        <View style={OverviewScreenStyle.itemContainer}>
-          <RenderIndicator
-            degree={isLeft ? curData.L_CYL : curData.R_CYL}
-            refractive={"A"}
-          />
-          <Text style={OverviewScreenStyle.degreeText}>
-            {isLeft ? curData.L_CYL : curData.R_CYL}
-          </Text>
-          <Text style={OverviewScreenStyle.unitText}>度</Text>
-        </View>
+        <RenderItem
+          degree={isLeft ? curData.L_CYL : curData.R_CYL}
+          refractive={"A"}
+        />
       )}
+    </View>
+  );
+};
+
+export const RenderItem = (props) => {
+  const { degree, refractive } = props;
+  return (
+    <View style={OverviewScreenStyle.itemContainer}>
+      <RenderIndicator degree={degree} refractive={refractive} />
+      <Text style={OverviewScreenStyle.degreeText}>{degree}</Text>
+      <Text style={OverviewScreenStyle.unitText}>度</Text>
     </View>
   );
 };
@@ -325,7 +352,7 @@ const OverviewScreenStyle = StyleSheet.create({
   nextPageContainer: {
     width: 140,
     height: 100,
-    marginTop: 40,
+    marginTop: 30,
     marginLeft: 30,
   },
   nextPageText: {
@@ -334,7 +361,7 @@ const OverviewScreenStyle = StyleSheet.create({
     fontWeight: "bold",
   },
   dateContainer: {
-    marginTop: 20,
+    marginTop: 30,
     alignItems: "center",
   },
   dateText: {
@@ -371,5 +398,11 @@ const OverviewScreenStyle = StyleSheet.create({
   iconstyle: {
     paddingTop: 10,
     paddingLeft: 10,
+  },
+  noRecordText: {
+    textAlign: "center",
+    fontSize: 20,
+    paddingTop: 50,
+    color: "#1772A6",
   },
 });
