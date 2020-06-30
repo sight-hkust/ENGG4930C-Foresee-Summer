@@ -5,7 +5,7 @@ import { Formik } from 'formik';
 import { object, string } from 'yup';
 import moment from 'moment';
 
-import { database } from '../../config/config';
+import { database, auth } from '../../config/config';
 import { RoundButton } from '../../../Utils/RoundButton';
 import { ScreenHeight, ScreenWidth } from '../../../constant/Constant';
 
@@ -33,11 +33,11 @@ const PostQuestionScreen = ({ route, navigation }) => {
             onSubmit={(values) => {
               if (values.title.length != 0 && values.content.length != 0) {
                 database
-                  .ref('contents/askProf/' + values.title)
-                  .set({
+                  .ref('contents/askProf/')
+                  .push({
+                    subject: values.title,
                     content: values.content,
-                    author: 'firebase.auth.currentUser.userName',
-                    createdBy: 'firebase.auth.currentUser.uid',
+                    createdBy: auth.currentUser.uid,
                     createdDate: moment().format('YYYY-MM-DD HH:mm:ss'),
                     settings: {
                       allowInspect: values.allowInspect,
@@ -61,11 +61,7 @@ const PostQuestionScreen = ({ route, navigation }) => {
                   labelStyle={styles.label}
                   inputContainerStyle={styles.textContainer}
                   inputStyle={styles.input}
-                  rightIcon={
-                    <Text style={styles.wordCounter}>
-                      {formikProps.values.title.length}/20
-                    </Text>
-                  }
+                  rightIcon={<Text style={styles.wordCounter}>{formikProps.values.title.length}/20</Text>}
                   errorMessage={formikProps.errors.title}
                 />
 
@@ -76,19 +72,11 @@ const PostQuestionScreen = ({ route, navigation }) => {
                   multiline={true}
                   returnKeyLabel="done"
                   returnKeyType={'done'}
-                  placeholder={
-                    formikProps.values.content.length == 0
-                      ? '由於我們會在本程式內發佈專家回應，請注意不要留下個人資料'
-                      : ''
-                  }
+                  placeholder={formikProps.values.content.length == 0 ? '由於我們會在本程式內發佈專家回應，請注意不要留下個人資料' : ''}
                   labelStyle={styles.label}
                   inputContainerStyle={styles.contentContainer}
                   inputStyle={styles.textAreaContainer}
-                  rightIcon={
-                    <Text style={styles.wordCounter}>
-                      {formikProps.values.content.length}/200
-                    </Text>
-                  }
+                  rightIcon={<Text style={styles.wordCounter}>{formikProps.values.content.length}/200</Text>}
                   rightIconContainerStyle={{
                     position: 'absolute',
                     bottom: 0,
@@ -111,21 +99,11 @@ const PostQuestionScreen = ({ route, navigation }) => {
                   }}
                   textStyle={{ color: '#E1EDFF', fontSize: 18 }}
                   size={18}
-                  onPress={() =>
-                    formikProps.setFieldValue(
-                      'allowInspect',
-                      !formikProps.values.allowInspect
-                    )
-                  }
+                  onPress={() => formikProps.setFieldValue('allowInspect', !formikProps.values.allowInspect)}
                   checked={formikProps.values.allowInspect}
                 />
 
-                <RoundButton
-                  onPress={() => formikProps.handleSubmit()}
-                  title="提交"
-                  buttonStyle={{ width: 96 }}
-                  textStyle={{ color: '#3CA1B7' }}
-                />
+                <RoundButton onPress={() => formikProps.handleSubmit()} title="提交" buttonStyle={{ width: 96 }} textStyle={{ color: '#3CA1B7' }} />
               </View>
             )}
           </Formik>
@@ -139,9 +117,7 @@ const PostQuestionScreen = ({ route, navigation }) => {
             }}
           >
             <Text style={styles.farewellTitle}>謝謝你的提問</Text>
-            <Text style={styles.farewellMessage}>
-              收集問題後，我們的專家會在一星期內回答你的，請耐心等候。如有緊急需要，請聯絡你的眼科醫生。
-            </Text>
+            <Text style={styles.farewellMessage}>收集問題後，我們的專家會在一星期內回答你的，請耐心等候。如有緊急需要，請聯絡你的眼科醫生。</Text>
             <Button
               title="返回"
               type="clear"
@@ -153,16 +129,10 @@ const PostQuestionScreen = ({ route, navigation }) => {
               }}
               titleStyle={{ color: 'white', fontSize: 23 }}
               iconContainerStyle={{ position: 'absolute', bottom: 0 }}
-              icon={
-                <Icon
-                  type="antdesign"
-                  name="swapleft"
-                  size={50}
-                  color="white"
-                />
-              }
+              icon={<Icon type="antdesign" name="swapleft" size={50} color="white" />}
               onPress={() => {
                 setIsSubmitted(false);
+                navigation.navigate('AskAnExpertMainScreen');
               }}
             />
           </View>

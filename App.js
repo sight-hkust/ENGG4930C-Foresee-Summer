@@ -182,7 +182,7 @@ function FaqScreen({ navigation, route }) {
 function SettingButton({ route, navigation }) {
   return (
     <>
-      {auth.currentUser.displayName == 'professional' ? (
+      {auth.currentUser.displayName != null && auth.currentUser.displayName == 'professional' ? (
         <TouchableOpacity
           onPress={() => {
             auth.signOut();
