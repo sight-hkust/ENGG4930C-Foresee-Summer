@@ -267,6 +267,21 @@ export default class Form extends Component {
                     error={errors.L_SPH}
                     mode={mode}
                   />
+                  <CYLInput
+                    handleChange={handleChange}
+                    setFieldValue={setFieldValue}
+                    isLeft={false}
+                    errorA={errors.L_CYL}
+                    errorB={errors.L_Axis}
+                    mode={mode}
+                  />
+                  <VAInput
+                    handleChange={handleChange}
+                    setFieldValue={setFieldValue}
+                    isLeft={false}
+                    error={errors.L_VA}
+                    mode={mode}
+                  />
                   <SPHInput
                     handleChange={handleChange}
                     setFieldValue={setFieldValue}
@@ -278,27 +293,12 @@ export default class Form extends Component {
                   <CYLInput
                     handleChange={handleChange}
                     setFieldValue={setFieldValue}
-                    isLeft={false}
-                    errorA={errors.L_CYL}
-                    errorB={errors.L_Axis}
-                    mode={mode}
-                  />
-                  <CYLInput
-                    handleChange={handleChange}
-                    setFieldValue={setFieldValue}
                     isLeft={true}
                     errorA={errors.R_CYL}
                     errorB={errors.R_Axis}
                     mode={mode}
                   />
 
-                  <VAInput
-                    handleChange={handleChange}
-                    setFieldValue={setFieldValue}
-                    isLeft={false}
-                    error={errors.L_VA}
-                    mode={mode}
-                  />
                   <VAInput
                     handleChange={handleChange}
                     setFieldValue={setFieldValue}
@@ -393,7 +393,7 @@ export const SPHInputB = (props) => {
         <Slider
           style={{ width: 300, paddingTop: 30 }}
           minimumValue={0}
-          maximumValue={500}
+          maximumValue={700}
           step={25}
           thumbTintColor={"#47CDBD"}
           minimumTrackTintColor={"white"}
@@ -523,7 +523,7 @@ export const CYLInputB = (props) => {
         <Slider
           style={{ width: 300, paddingTop: 30 }}
           minimumValue={0}
-          maximumValue={500}
+          maximumValue={600}
           step={25}
           thumbTintColor={"#47CDBD"}
           minimumTrackTintColor={"white"}
@@ -669,18 +669,24 @@ export const VAInputB = (props) => {
       </Text>
 
       <View>
-        <Text style={AddRecordScreen.sliderText}>{sliderValue / 10}</Text>
+        <Text style={AddRecordScreen.sliderText}>
+          {(sliderValue / 10).toFixed(1)}
+        </Text>
         <Slider
-          style={{ width: 280, paddingTop: 30 }}
+          style={{ width: 300, paddingTop: 30 }}
           minimumValue={0}
-          maximumValue={10}
+          maximumValue={12}
           step={1}
           thumbTintColor={"#47CDBD"}
           minimumTrackTintColor={"white"}
           maximumTrackTintColor={"#B8CAE4"}
           onValueChange={(value) => setSliderValue(value)}
           onSlidingComplete={(value) => {
-            setFieldValue(isLeft ? "L_VA" : "R_VA", value / 10, false);
+            setFieldValue(
+              isLeft ? "L_VA" : "R_VA",
+              (value / 10).toFixed(2),
+              false
+            );
           }}
         />
       </View>

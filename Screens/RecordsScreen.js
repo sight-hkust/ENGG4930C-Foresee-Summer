@@ -12,7 +12,6 @@ import LineChart from "../helpers/line-chart";
 import { LinearGradient } from "expo-linear-gradient";
 import { Button } from "react-native-elements";
 import { Icon } from "react-native-elements";
-import { Col, Row, Grid } from "react-native-easy-grid";
 import BottomModal from "../Utils/BottomModal";
 import DisplayRecords from "../helpers/displayRecord";
 const LeftOpen = require("../assets/images/LeftOpen.png");

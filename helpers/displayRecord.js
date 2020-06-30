@@ -58,10 +58,12 @@ export default function DisplayRecords(props) {
 
   const calVA = (isLeft) => {
     if (isLeft) {
-      if (curRecord.L_VA != 0 && curRecord.L_VA != " ") return curRecord.L_VA;
+      if (curRecord.L_VA != 0 && curRecord.L_VA != " ")
+        return curRecord.L_VA.toFixed(1);
       else return "NA";
     } else {
-      if (curRecord.R_VA != 0 && curRecord.R_VA != " ") return curRecord.R_VA;
+      if (curRecord.R_VA != 0 && curRecord.R_VA != " ")
+        return curRecord.R_VA.toFixed(1);
       else return "NA";
     }
   };
