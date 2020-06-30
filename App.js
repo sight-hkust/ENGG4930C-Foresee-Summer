@@ -7,15 +7,15 @@ import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 
-import GetEducatedScreen from "./Screens/GetEducated";
-import RecordsScreen from "./Screens/RecordsScreen";
-import ArticleDetailScreen from "./Screens/ArticleDetail";
-
-import AddRecordScreen from "./Screens/AddRecordScreen";
-import EyeExercise from "./Screens/EyeExercise";
-
+import GetEducatedScreen from "./src/components/Education/GetEducated";
+import EyeExercise from "./src/components/Education/EyeExercise";
+import ArticleDetailScreen from "./src/components/Education/ArticleDetail";
 import PostQuestion from "./src/components/AskAnExpert/PostQuestionScreen";
 import AskAnExpertMainScreen from "./src/components/AskAnExpert/AskAnExpertMainScreen";
+
+import RecordsScreen from "./Screens/RecordsScreen";
+import AddRecordScreen from "./Screens/AddRecordScreen";
+import OverviewScreen from "./Screens/OverviewScreen";
 
 import { Login } from "./src/components/Login/Login";
 import { Register } from "./src/components/Registration/Register";
@@ -184,6 +184,11 @@ function HomeScreen({ navigation, route }) {
       }}
     >
       <Stack.Screen
+        name="OverViewScreen"
+        component={OverviewScreen}
+        options={{ title: "" }}
+      />
+      <Stack.Screen
         name="RecordsScreen"
         component={RecordsScreen}
         options={{ title: "" }}
@@ -225,7 +230,7 @@ function FaqScreen({ navigation, route }) {
 }
 
 function SettingButton({ route, navigation }) {
-  const [isProfessional, setIsProfessional] = useState(true);
+  const [isProfessional, setIsProfessional] = useState(false);
 
   // useEffect(() => {
   //   if (auth.currentUser != null && auth.currentUser.userType == 'professional') {
@@ -268,7 +273,7 @@ function SettingButton({ route, navigation }) {
 }
 
 function Main({ route, navigation }) {
-  const [isProfessional, setIsProfessional] = useState(true);
+  const [isProfessional, setIsProfessional] = useState(false);
 
   // useEffect(() => {
   //   if (auth.currentUser != null && auth.currentUser.userType == 'professional') {
