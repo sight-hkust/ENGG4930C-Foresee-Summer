@@ -8,106 +8,62 @@ import {
   Image,
   Slider,
   Alert,
+  Animated,
 } from "react-native";
+
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Formik } from "formik";
 import moment from "moment";
 import { TextInput } from "react-native-gesture-handler";
 import { database } from "../src/config/config";
-import { number, object, string } from "yup";
+import { SchemaRecords } from "../Screens/SchemaRecords";
 import { LinearGradient } from "expo-linear-gradient";
 import { Button } from "react-native-elements";
 
 import { RadioButton } from "react-native-paper"; //<--------temp
 import MultiSelect from "react-native-multiple-select";
+//import Animated from "react-native-reanimated";
 const Setting = require("../assets/images/setting.png");
 const DropDown = require("../assets/images/DropDown.png");
 
-const ReviewSchema = object({
-  L_SPH: string()
-    .required("此項必填（如無度數，請填0）")
-    .matches("^[0-9]*$", "請輸入大過或等於0的整數")
-    .max(4, "球面度數(SPH)應在4個數字以內")
-    .test(
-      "divisible by 25",
-      "球面度數(SPH)應為0或以00, 25, 50或75作尾",
-      (value) => value % 25 == 0
-    ),
-  R_SPH: string()
-    .required("此項必填（如無度數，請填0）")
-    .matches("^[0-9]*$", "請輸入大過或等於0的整數")
-    .max(4, "球面度數(SPH)應在4個數字以內")
-    .test(
-      "divisible by 25",
-      "球面度數(SPH)應為0或以00, 25, 50或75作尾",
-      (value) => value % 25 == 0
-    ),
-  L_VA: number()
-    .test(
-      "range",
-      "視力(Visual Acuity)應在 0 和 1 之間",
-      (value) => value >= 0 || value <= 1 || value == null
-    )
-    .max(1.0, "視力(Visual Acuity)應在 0 和 1 之間"),
-  R_VA: number()
-    .test(
-      "range",
-      "視力(Visual Acuity)應在 0 和 1 之間",
-      (value) => value >= 0 || value <= 1 || value == null
-    )
-    .max(1.0, "視力(Visual Acuity)應在 0 和 1 之間"),
-  L_CYL: string()
-    .required("此項必填（如無度數，請填0）")
-    .matches("^[0-9]*$", "請輸入大過或等於0的整數")
-    .max(4, "散光度數(CYL)應在4個數字以內")
-    .test(
-      "divisible by 25",
-      "散光度數(CYL)應為0或以00, 25, 50或75作尾",
-      (value) => value % 25 == 0
-    ),
-  R_CYL: string()
-    .required("此項必填（如無度數，請填0）")
-    .matches("^[0-9]*$", "請輸入大過或等於0的整數")
-    .max(4, "散光度數(CYL)應在4個數字以內")
-    .test(
-      "divisible by 25",
-      "散光度數(CYL)應為0或以00, 25, 50或75作尾",
-      (value) => value % 25 == 0
-    ),
-  L_Axis: string().when("L_CYL", {
-    is: (val) => val > 0,
-    then: string()
-      .required("此項必填")
-      .test(
-        "between 0 and 180",
-        "散光軸度(Axis)應在 0 和 180 之間",
-        (value) => value >= 0 && value <= 180
-      )
-      .matches("^[0-9]*$", "請輸入整數"),
-    otherwise: string().notRequired(),
-  }),
-  R_Axis: string().when("L_CYL", {
-    is: (val) => val > 0,
-    then: string()
-      .required("此項必填")
-      .test(
-        "between 0 and 180",
-        "散光軸度(Axis)應在 0 和 180 之間",
-        (value) => value >= 0 && value <= 180
-      )
-      .matches("^[0-9]*$", "請輸入整數"),
-    otherwise: string().notRequired(),
-  }),
-  PD: string()
-    .matches("^[0-9]*$", "請輸入大於0的整數")
-    .max(3, "瞳孔距離(PD)超出合理範圍")
-    .notRequired(),
-});
-
 export default class Form extends Component {
+  yScroll = new Animated.Value(0);
   constructor(props) {
     super(props);
     this.state = { mode: true }; //true: slider mode ; false: input box mode
+  }
+
+  componentDidMount() {
+    this.props.navigation.setOptions({
+      headerRightContainerStyle: {
+        position: "absolute",
+        top: this.yScroll.interpolate({
+          inputRange: [0, 80],
+          outputRange: [0, -200],
+          extrapolate: "clamp",
+        }),
+      },
+      headerTitleStyle: {
+        position: "absolute",
+        top: this.yScroll.interpolate({
+          inputRange: [0, 80],
+          outputRange: [-20, -120],
+          extrapolate: "clamp",
+        }),
+        fontSize: 31,
+        color: "#E1EDFF",
+        fontWeight: "700",
+        overflow: "hidden",
+      },
+      headerLeftContainerStyle: {
+        position: "absolute",
+        top: this.yScroll.interpolate({
+          inputRange: [0, 80],
+          outputRange: [0, -200],
+          extrapolate: "clamp",
+        }),
+      },
+    });
   }
 
   render() {
@@ -129,7 +85,19 @@ export default class Form extends Component {
             height: "100%",
           }}
         >
-          <ScrollView keyboardShouldPersistTaps="always">
+          <ScrollView
+            keyboardShouldPersistTaps="always"
+            onScroll={Animated.event([
+              {
+                nativeEvent: {
+                  contentOffset: {
+                    y: this.yScroll,
+                  },
+                },
+              },
+            ])}
+            scrollEventThrottle={1}
+          >
             <View style={AddRecordScreen.selectModeMenu}>
               <TouchableOpacity onPress={() => this.setState({ mode: true })}>
                 <Text
@@ -177,7 +145,7 @@ export default class Form extends Component {
                 remarks: "",
                 disease: [],
               }}
-              validationSchema={ReviewSchema}
+              validationSchema={SchemaRecords}
               onSubmit={(values) => {
                 var exist = false;
                 database
@@ -222,17 +190,29 @@ export default class Form extends Component {
                 }
                 if (isProfessional) {
                   //change, need to also add to users/patient_id/records, but what if the patient doesnt exist? will it automatically create one entry for the patient?
+                  // database
+                  //   .ref(
+                  //     "professionals/" +
+                  //     professional_id +
+                  //     "/patients/" +
+                  //     patient_id +
+                  //     "/records/" +
+                  //     values.date
+                  //   )
+                  //   .set(data)
+                  //   .catch((error) => console.log(error));
+                  var uid;
                   database
-                    .ref(
-                      "professionals/" +
-                      professional_id +
-                      "/patients/" +
-                      patient_id +
-                      "/records/" +
-                      values.date
-                    )
+                    .ref("userInfo/" + patient_id)
+                    .once("value", (snap) => {
+                      uid = snap.val().uid;
+                    });
+
+                  database
+                    .ref("users/" + uid + "/records/" + values.date)
                     .set(data)
                     .catch((error) => console.log(error));
+                  this.props.navigation.goBack();
                 }
                 if (!exist) {
                   //no existed record
@@ -245,8 +225,8 @@ export default class Form extends Component {
                   Alert.alert(
                     "注意！",
                     "數據庫已存在" +
-                    values.date +
-                    "的資料，再按提交將會覆蓋舊的資料。",
+                      values.date +
+                      "的資料，再按提交將會覆蓋舊的資料。",
                     [
                       {
                         text: "取消",
@@ -277,81 +257,81 @@ export default class Form extends Component {
                 handleChange,
                 errors,
               }) => (
-                  <View style={AddRecordScreen.formContainer}>
-                    <DateSelect values={values} setFieldValue={setFieldValue} />
+                <View style={AddRecordScreen.formContainer}>
+                  <DateSelect values={values} setFieldValue={setFieldValue} />
 
-                    <SPHInput
-                      handleChange={handleChange}
-                      setFieldValue={setFieldValue}
-                      isLeft={false}
-                      error={errors.L_SPH}
-                      mode={mode}
-                    />
-                    <SPHInput
-                      handleChange={handleChange}
-                      setFieldValue={setFieldValue}
-                      isLeft={true}
-                      error={errors.R_SPH}
-                      mode={mode}
-                    />
+                  <SPHInput
+                    handleChange={handleChange}
+                    setFieldValue={setFieldValue}
+                    isLeft={false}
+                    error={errors.L_SPH}
+                    mode={mode}
+                  />
+                  <SPHInput
+                    handleChange={handleChange}
+                    setFieldValue={setFieldValue}
+                    isLeft={true}
+                    error={errors.R_SPH}
+                    mode={mode}
+                  />
 
-                    <CYLInput
-                      handleChange={handleChange}
-                      setFieldValue={setFieldValue}
-                      isLeft={false}
-                      errorA={errors.L_CYL}
-                      errorB={errors.L_Axis}
-                      mode={mode}
-                    />
-                    <CYLInput
-                      handleChange={handleChange}
-                      setFieldValue={setFieldValue}
-                      isLeft={true}
-                      errorA={errors.R_CYL}
-                      errorB={errors.R_Axis}
-                      mode={mode}
-                    />
+                  <CYLInput
+                    handleChange={handleChange}
+                    setFieldValue={setFieldValue}
+                    isLeft={false}
+                    errorA={errors.L_CYL}
+                    errorB={errors.L_Axis}
+                    mode={mode}
+                  />
+                  <CYLInput
+                    handleChange={handleChange}
+                    setFieldValue={setFieldValue}
+                    isLeft={true}
+                    errorA={errors.R_CYL}
+                    errorB={errors.R_Axis}
+                    mode={mode}
+                  />
 
-                    <VAInput
-                      handleChange={handleChange}
-                      setFieldValue={setFieldValue}
-                      isLeft={false}
-                      error={errors.L_VA}
-                      mode={mode}
-                    />
-                    <VAInput
-                      handleChange={handleChange}
-                      setFieldValue={setFieldValue}
-                      isLeft={true}
-                      error={errors.R_VA}
-                      mode={mode}
-                    />
+                  <VAInput
+                    handleChange={handleChange}
+                    setFieldValue={setFieldValue}
+                    isLeft={false}
+                    error={errors.L_VA}
+                    mode={mode}
+                  />
+                  <VAInput
+                    handleChange={handleChange}
+                    setFieldValue={setFieldValue}
+                    isLeft={true}
+                    error={errors.R_VA}
+                    mode={mode}
+                  />
 
-                    <PDInput handleChange={handleChange} error={errors.PD} />
-                    <RemarksInput handleChange={handleChange} />
-                    {isProfessional && (
-                      <DiseasesInput setFieldValue={setFieldValue} />
-                    )}
+                  <PDInput handleChange={handleChange} error={errors.PD} />
+                  <RemarksInput handleChange={handleChange} />
+                  {isProfessional && (
+                    <DiseasesInput setFieldValue={setFieldValue} />
+                  )}
 
-                    <View style={{ paddingTop: 24 }}>
-                      <Button
-                        title="提交"
-                        buttonStyle={AddRecordScreen.submitButton}
-                        titleStyle={{ color: "#3CA1B7", fontSize: 18 }}
-                        containerStyle={{
-                          alignItems: "center",
-                          paddingBottom: 30,
-                        }}
-                        onPress={handleSubmit}
-                        disabled={Object.keys(errors).length > 0}
-                      />
-                    </View>
+                  <View style={{ paddingTop: 24 }}>
+                    <Button
+                      title="提交"
+                      buttonStyle={AddRecordScreen.submitButton}
+                      titleStyle={{ color: "#3CA1B7", fontSize: 18 }}
+                      containerStyle={{
+                        alignItems: "center",
+                        paddingBottom: 30,
+                      }}
+                      onPress={handleSubmit}
+                      disabled={Object.keys(errors).length > 0}
+                    />
                   </View>
-                )}
+                </View>
+              )}
             </Formik>
           </ScrollView>
         </LinearGradient>
-      </View >
+      </View>
     );
   }
 }
@@ -406,7 +386,8 @@ export const SPHInputB = (props) => {
         </View>
 
         <Text style={AddRecordScreen.sliderText}>
-          {symbol ? "+" : "−"}{sliderValue}
+          {symbol ? "+" : "−"}
+          {sliderValue}
         </Text>
 
         <Slider
