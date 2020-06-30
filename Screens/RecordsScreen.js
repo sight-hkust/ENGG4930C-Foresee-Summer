@@ -34,11 +34,11 @@ export default class RecordsScreen extends Component {
     super(props);
     this.state = {
       data: null,
-      Leye: true,
+      Leye: false,
       dates: [],
-      ddlSelectedValue: "0",
+      refractive: "0", //0:myopia, 1:hyperopia
       index: "0",
-      ddlSelectedDate: "0",
+      selectedDate: "0",
       username: "",
       isModalVisible: false,
     };
@@ -55,7 +55,7 @@ export default class RecordsScreen extends Component {
       this.setState({
         data: snapshot.toJSON(),
         dates: tempDate,
-        ddlSelectedDate: tempDate[tempDate.length - 1],
+        selectedDate: tempDate[tempDate.length - 1],
         index: tempDate.length - 1,
       });
     });
@@ -73,26 +73,27 @@ export default class RecordsScreen extends Component {
         isProfessional: false,
         professional_id: -1,
         patient_id: patient_id,
+        refractive: this.state.refractive,
       });
     };
     const GetNext = () => {
       const length = this.state.dates.length;
       const value = (this.state.index + 1) % length;
 
-      this.setState({ index: value, ddlSelectedDate: this.state.dates[value] });
+      this.setState({ index: value, selectedDate: this.state.dates[value] });
     };
     const GetBack = () => {
       if (this.state.index == 0) {
         const length = this.state.dates.length - 1;
         this.setState({
           index: length,
-          ddlSelectedDate: this.state.dates[length],
+          selectedDate: this.state.dates[length],
         });
       } else {
         const value = this.state.index;
         this.setState({
           index: value - 1,
-          ddlSelectedDate: this.state.dates[value - 1],
+          selectedDate: this.state.dates[value - 1],
         });
       }
     };
@@ -110,9 +111,9 @@ export default class RecordsScreen extends Component {
         >
           <View style={RecordScreenStyle.header}>
             <Text style={RecordScreenStyle.title}>
-              {this.state.ddlSelectedValue == "0"
+              {this.state.refractive == "0"
                 ? "近視"
-                : this.state.ddlSelectedValue == "1"
+                : this.state.refractive == "1"
                 ? "遠視"
                 : "散光"}
               度數趨勢
@@ -122,11 +123,11 @@ export default class RecordsScreen extends Component {
           <View style={RecordScreenStyle.secondaryContainer}>
             <View style={RecordScreenStyle.refractiveMenu}>
               <TouchableOpacity
-                onPress={() => this.setState({ ddlSelectedValue: "1" })}
+                onPress={() => this.setState({ refractive: "1" })}
               >
                 <Text
                   style={
-                    this.state.ddlSelectedValue == "1"
+                    this.state.refractive == "1"
                       ? RecordScreenStyle.selectedMenuText
                       : RecordScreenStyle.unselectedMenuText
                   }
@@ -136,11 +137,11 @@ export default class RecordsScreen extends Component {
               </TouchableOpacity>
 
               <TouchableOpacity
-                onPress={() => this.setState({ ddlSelectedValue: "0" })}
+                onPress={() => this.setState({ refractive: "0" })}
               >
                 <Text
                   style={
-                    this.state.ddlSelectedValue == "0"
+                    this.state.refractive == "0"
                       ? RecordScreenStyle.selectedMenuText
                       : RecordScreenStyle.unselectedMenuText
                   }
@@ -150,11 +151,11 @@ export default class RecordsScreen extends Component {
               </TouchableOpacity>
 
               <TouchableOpacity
-                onPress={() => this.setState({ ddlSelectedValue: "2" })}
+                onPress={() => this.setState({ refractive: "2" })}
               >
                 <Text
                   style={
-                    this.state.ddlSelectedValue == "2"
+                    this.state.refractive == "2"
                       ? RecordScreenStyle.selectedMenuText
                       : RecordScreenStyle.unselectedMenuText
                   }
@@ -168,7 +169,7 @@ export default class RecordsScreen extends Component {
               <RenderLineChart
                 dataArr={data}
                 dateArr={this.state.dates}
-                refractive={this.state.ddlSelectedValue}
+                refractive={this.state.refractive}
                 isLeft={this.state.Leye}
                 selectedIndex={this.state.index}
               />
@@ -189,7 +190,7 @@ export default class RecordsScreen extends Component {
                       <Image source={BackArrow} />
                     </TouchableOpacity>
                     <Text style={RecordScreenStyle.dateText}>
-                      {this.state.ddlSelectedDate}
+                      {this.state.selectedDate}
                     </Text>
                     <TouchableOpacity onPress={GetNext}>
                       <Image source={NextArrow} />
@@ -199,9 +200,9 @@ export default class RecordsScreen extends Component {
                   <View style={RecordScreenStyle.content}>
                     <RenderContent
                       isLeft={this.state.Leye}
-                      ddlValue={this.state.ddlSelectedValue}
+                      ddlValue={this.state.refractive}
                       data={data}
-                      selectedDate={this.state.ddlSelectedDate}
+                      selectedDate={this.state.selectedDate}
                       index={this.state.index}
                       dateArr={this.state.dates}
                     />
@@ -213,7 +214,7 @@ export default class RecordsScreen extends Component {
                 {data != null && (
                   <DetailButton
                     data={data}
-                    selectedDate={this.state.ddlSelectedDate}
+                    selectedDate={this.state.selectedDate}
                   />
                 )}
 
@@ -251,7 +252,7 @@ export default class RecordsScreen extends Component {
                     containerStyle={{ paddingTop: 5 }}
                   />
                 )}
-                {/* <RenderIncreaseWarning data={data} dateArr={this.state.dates} index={this.state.index} refractive={this.state.ddlSelectedValue} isLeft={true}/> */}
+                {/* <RenderIncreaseWarning data={data} dateArr={this.state.dates} index={this.state.index} refractive={this.state.refractive} isLeft={true}/> */}
               </View>
             </View>
           </View>

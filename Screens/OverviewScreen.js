@@ -164,8 +164,15 @@ export const DisplayDegree = (props) => {
       </>
     );
   }
+  const length = dateArr.length - 1;
+  const curData = data[dateArr[length]];
 
-  if (isLeft && ((data.L_Myopia == data.L_Hyperopia) == data.L_CYL) == 0) {
+  if (
+    isLeft &&
+    curData.L_Myopia == "0" &&
+    curData.L_Hyperopia == "0" &&
+    curData.L_CYL == "0"
+  ) {
     return (
       <>
         <View style={OverviewScreenStyle.topContainer}>
@@ -180,7 +187,9 @@ export const DisplayDegree = (props) => {
     );
   } else if (
     !isLeft &&
-    ((data.R_Myopia == data.R_Hyperopia) == data.R_CYL) == 0
+    curData.R_Myopia == "0" &&
+    curData.R_Hyperopia == "0" &&
+    curData.R_CYL == "0"
   ) {
     return (
       <>
@@ -195,9 +204,6 @@ export const DisplayDegree = (props) => {
       </>
     );
   }
-
-  const length = dateArr.length - 1;
-  const curData = data[dateArr[length]];
 
   return (
     <View

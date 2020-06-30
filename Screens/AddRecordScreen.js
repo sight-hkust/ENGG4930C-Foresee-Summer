@@ -14,19 +14,13 @@ import {
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Formik } from "formik";
 import moment from "moment";
-import {
-  TextInput,
-  TouchableWithoutFeedback,
-} from "react-native-gesture-handler";
+import { TextInput } from "react-native-gesture-handler";
 import { database } from "../src/config/config";
 import { SchemaRecords } from "../Screens/SchemaRecords";
 import { LinearGradient } from "expo-linear-gradient";
 import { Button } from "react-native-elements";
 
-import { RadioButton } from "react-native-paper"; //<--------temp
 import MultiSelect from "react-native-multiple-select";
-//import Animated from "react-native-reanimated";
-const Setting = require("../assets/images/setting.png");
 const DropDown = require("../assets/images/DropDown.png");
 
 export default class Form extends Component {
@@ -75,6 +69,7 @@ export default class Form extends Component {
       isProfessional,
       professional_id,
       patient_id,
+      refractive,
     } = this.props.route.params;
 
     return (
@@ -271,6 +266,7 @@ export default class Form extends Component {
                     isLeft={false}
                     error={errors.L_SPH}
                     mode={mode}
+                    refractive={refractive}
                   />
                   <CYLInput
                     handleChange={handleChange}
@@ -293,6 +289,7 @@ export default class Form extends Component {
                     isLeft={true}
                     error={errors.R_SPH}
                     mode={mode}
+                    refractive={refractive}
                   />
 
                   <CYLInput
@@ -388,10 +385,11 @@ export const DateSelect = (props) => {
 };
 
 export const SPHInputB = (props) => {
-  const { setFieldValue, isLeft } = props;
-  const [symbol, Togglesymbol] = useState(true); //true = positive
+  const { setFieldValue, isLeft, refractive } = props;
+  const [symbol, Togglesymbol] = useState(refractive != 0 ? true : false); //true = positive = hyperopia
+  //const [symbol, Togglesymbol] = useState(true);
   const [sliderValue, setSliderValue] = useState(0);
-
+  console.log("symbol", symbol);
   const setToTrue = () => {
     Togglesymbol(true);
     if (isLeft) setFieldValue("Lsymbol", true, false);
@@ -413,28 +411,9 @@ export const SPHInputB = (props) => {
       <View>
         <View style={{ flexDirection: "row", paddingLeft: 10 }}>
           <TouchableOpacity
-            style={{ flexDirection: "row", marginRight: 15 }}
+            style={{ flexDirection: "row", marginRight: 20 }}
             onPress={() => {
-              console.log(symbol);
-              setToTrue();
-            }}
-          >
-            <View
-              style={
-                symbol
-                  ? AddRecordScreen.selectedRadioButton
-                  : AddRecordScreen.unselectedRadioButton
-              }
-            />
-            <Text style={{ fontSize: 20, color: "white", paddingRight: 10 }}>
-              +
-            </Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{ flexDirection: "row" }}
-            onPress={() => {
-              console.log(symbol);
+              //console.log(symbol);
               setToFalse();
             }}
           >
@@ -449,8 +428,26 @@ export const SPHInputB = (props) => {
               −
             </Text>
           </TouchableOpacity>
-        </View>
 
+          <TouchableOpacity
+            style={{ flexDirection: "row" }}
+            onPress={() => {
+              //console.log(symbol);
+              setToTrue();
+            }}
+          >
+            <View
+              style={
+                symbol
+                  ? AddRecordScreen.selectedRadioButton
+                  : AddRecordScreen.unselectedRadioButton
+              }
+            />
+            <Text style={{ fontSize: 20, color: "white", paddingRight: 10 }}>
+              +
+            </Text>
+          </TouchableOpacity>
+        </View>
         <Text style={AddRecordScreen.sliderText}>
           {symbol ? "+" : "−"}
           {sliderValue}
@@ -465,9 +462,10 @@ export const SPHInputB = (props) => {
           minimumTrackTintColor={"white"}
           maximumTrackTintColor={"#B8CAE4"}
           onValueChange={(value) => setSliderValue(value)}
-          onSlidingComplete={(value) =>
-            setFieldValue(isLeft ? "L_SPH" : "R_SPH", value, false)
-          }
+          onSlidingComplete={(value) => {
+            setFieldValue(isLeft ? "L_SPH" : "R_SPH", value, false);
+            setFieldValue(isLeft ? "Lsymbol" : "Rsymbol", symbol, false);
+          }}
         />
       </View>
     </View>
@@ -475,7 +473,14 @@ export const SPHInputB = (props) => {
 };
 
 export const SPHInput = (props) => {
-  const { handleChange, setFieldValue, isLeft, error, mode } = props;
+  const {
+    handleChange,
+    setFieldValue,
+    isLeft,
+    error,
+    mode,
+    refractive,
+  } = props;
 
   if (mode) {
     return (
@@ -483,11 +488,12 @@ export const SPHInput = (props) => {
         handleChange={handleChange}
         setFieldValue={setFieldValue}
         isLeft={isLeft}
+        refractive={refractive}
       />
     );
   }
 
-  const [symbol, Togglesymbol] = useState(true); //true = positive
+  const [symbol, Togglesymbol] = useState(refractive == "0" ? false : true); //true = positive = hyperopia
   const pressHandler = () => {
     Togglesymbol(!symbol);
     if (isLeft) {
@@ -680,18 +686,7 @@ export const AxisInput = (props) => {
 
 export const VAInputB = (props) => {
   const { setFieldValue, isLeft } = props;
-  const [sliderValue, setSliderValue] = useState(0);
-  const [mode, SetMode] = useState(true); //true = 20/20, false = decimal
-  const VAArr = [
-    "20/200",
-    "20/100",
-    "20/70",
-    "20/50",
-    "20/40",
-    "20/30",
-    "20/25",
-    "20/20",
-  ];
+  const [mode, SetMode] = useState("A"); //A = 20/20, B=6/6, C = decimal
 
   return (
     <View style={{ flex: 1 }}>
@@ -703,12 +698,12 @@ export const VAInputB = (props) => {
         <TouchableOpacity
           style={{ flexDirection: "row", marginRight: 15 }}
           onPress={() => {
-            SetMode(true);
+            SetMode("A");
           }}
         >
           <View
             style={
-              mode
+              mode == "A"
                 ? AddRecordScreen.selectedRadioButton
                 : AddRecordScreen.unselectedRadioButton
             }
@@ -719,69 +714,155 @@ export const VAInputB = (props) => {
         </TouchableOpacity>
 
         <TouchableOpacity
+          style={{ flexDirection: "row", marginRight: 15 }}
+          onPress={() => {
+            SetMode("B");
+          }}
+        >
+          <View
+            style={
+              mode == "B"
+                ? AddRecordScreen.selectedRadioButton
+                : AddRecordScreen.unselectedRadioButton
+            }
+          />
+          <Text style={{ fontSize: 20, color: "white", paddingRight: 10 }}>
+            6/6
+          </Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
           style={{ flexDirection: "row" }}
           onPress={() => {
-            SetMode(false);
+            SetMode("C");
             setFieldValue(isLeft ? "L_VA" : "R_VA", "0", false);
           }}
         >
           <View
             style={
-              !mode
+              mode == "C"
                 ? AddRecordScreen.selectedRadioButton
                 : AddRecordScreen.unselectedRadioButton
             }
           />
-          <Text style={{ fontSize: 20, color: "white" }}>decimal</Text>
+          <Text style={{ fontSize: 20, color: "white" }}>1.0</Text>
         </TouchableOpacity>
       </View>
 
-      {mode ? (
-        <>
-          <Text style={AddRecordScreen.sliderText}>{VAArr[sliderValue]}</Text>
-          <Slider
-            style={{ width: 300, paddingTop: 30 }}
-            minimumValue={0}
-            maximumValue={7}
-            step={1}
-            thumbTintColor={"#47CDBD"}
-            minimumTrackTintColor={"white"}
-            maximumTrackTintColor={"#B8CAE4"}
-            onValueChange={(value) => setSliderValue(value)}
-            onSlidingComplete={(value) => {
-              setFieldValue(
-                isLeft ? "L_VA" : "R_VA",
-                VAArr[value].toString(),
-                false
-              );
-            }}
-          />
-        </>
+      {mode == "A" ? (
+        <VA20Slider setFieldValue={setFieldValue} isLeft={isLeft} />
+      ) : mode == "B" ? (
+        <VA6Slider setFieldValue={setFieldValue} isLeft={isLeft} />
       ) : (
-        <>
-          <Text style={AddRecordScreen.sliderText}>
-            {(sliderValue / 10).toFixed(1)}
-          </Text>
-          <Slider
-            style={{ width: 300, paddingTop: 30 }}
-            minimumValue={0}
-            maximumValue={12}
-            step={1}
-            thumbTintColor={"#47CDBD"}
-            minimumTrackTintColor={"white"}
-            maximumTrackTintColor={"#B8CAE4"}
-            onValueChange={(value) => setSliderValue(value)}
-            onSlidingComplete={(value) => {
-              setFieldValue(
-                isLeft ? "L_VA" : "R_VA",
-                (value / 10).toFixed(2),
-                false
-              );
-            }}
-          />
-        </>
+        <VAdecimalSlider setFieldValue={setFieldValue} isLeft={isLeft} />
       )}
     </View>
+  );
+};
+
+export const VA20Slider = (props) => {
+  const { setFieldValue, isLeft } = props;
+  const [sliderValue, setSliderValue] = useState(0);
+  const VA20Arr = [
+    "20/200",
+    "20/100",
+    "20/80",
+    "20/60",
+    "20/50",
+    "20/40",
+    "20/30",
+    "20/25",
+    "20/20",
+  ];
+  return (
+    <>
+      <Text style={AddRecordScreen.sliderText}>{VA20Arr[sliderValue]}</Text>
+      <Slider
+        style={{ width: 300, paddingTop: 30 }}
+        minimumValue={0}
+        maximumValue={VA20Arr.length - 1}
+        step={1}
+        thumbTintColor={"#47CDBD"}
+        minimumTrackTintColor={"white"}
+        maximumTrackTintColor={"#B8CAE4"}
+        onValueChange={(value) => setSliderValue(value)}
+        onSlidingComplete={(value) => {
+          setFieldValue(
+            isLeft ? "L_VA" : "R_VA",
+            VA20Arr[value].toString(),
+            false
+          );
+        }}
+      />
+    </>
+  );
+};
+
+export const VA6Slider = (props) => {
+  const { setFieldValue, isLeft } = props;
+  const [sliderValue, setSliderValue] = useState(0);
+  const VA6Arr = [
+    "6/60",
+    "6/30",
+    "6/24",
+    "6/18",
+    "6/15",
+    "6/12",
+    "6/9",
+    "6/7.5",
+    "6/6",
+  ];
+  return (
+    <>
+      <Text style={AddRecordScreen.sliderText}>{VA6Arr[sliderValue]}</Text>
+      <Slider
+        style={{ width: 300, paddingTop: 30 }}
+        minimumValue={0}
+        maximumValue={VA6Arr.length - 1}
+        step={1}
+        thumbTintColor={"#47CDBD"}
+        minimumTrackTintColor={"white"}
+        maximumTrackTintColor={"#B8CAE4"}
+        onValueChange={(value) => setSliderValue(value)}
+        onSlidingComplete={(value) => {
+          setFieldValue(
+            isLeft ? "L_VA" : "R_VA",
+            VA6Arr[value].toString(),
+            false
+          );
+        }}
+      />
+    </>
+  );
+};
+
+export const VAdecimalSlider = (props) => {
+  const { setFieldValue, isLeft } = props;
+  const [sliderValue, setSliderValue] = useState(0);
+
+  return (
+    <>
+      <Text style={AddRecordScreen.sliderText}>
+        {(sliderValue / 10).toFixed(1)}
+      </Text>
+      <Slider
+        style={{ width: 300, paddingTop: 30 }}
+        minimumValue={0}
+        maximumValue={12}
+        step={1}
+        thumbTintColor={"#47CDBD"}
+        minimumTrackTintColor={"white"}
+        maximumTrackTintColor={"#B8CAE4"}
+        onValueChange={(value) => setSliderValue(value)}
+        onSlidingComplete={(value) => {
+          setFieldValue(
+            isLeft ? "L_VA" : "R_VA",
+            (value / 10).toFixed(2),
+            false
+          );
+        }}
+      />
+    </>
   );
 };
 
