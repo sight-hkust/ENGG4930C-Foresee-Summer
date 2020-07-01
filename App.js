@@ -9,7 +9,7 @@ import { createMaterialBottomTabNavigator } from '@react-navigation/material-bot
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import GetEducatedScreen from './src/components/Education/GetEducated';
-import EyeExercise from './src/components/Education/EyeExercise';
+import EyeExerciseScreen from './src/components/Education/EyeExercise';
 import ArticleDetailScreen from './src/components/Education/ArticleDetail';
 import PostQuestion from './src/components/AskAnExpert/PostQuestionScreen';
 import AskAnExpertMainScreen from './src/components/AskAnExpert/AskAnExpertMainScreen';
@@ -54,7 +54,7 @@ function ArticleScreen({ navigation, route }) {
 function ExerciseScreen({ navigation, route }) {
   return (
     <Stack.Navigator screenOptions={{ ...headerConfig, headerRight: () => <SettingButton navigation={navigation} /> }}>
-      <Stack.Screen name="RecordsScreen" component={RecordsScreen} options={{ title: '' }} />
+      <Stack.Screen name="EyeExerciseScreen" component={EyeExerciseScreen} options={{ title: '護眼操' }} />
     </Stack.Navigator>
   );
 }
