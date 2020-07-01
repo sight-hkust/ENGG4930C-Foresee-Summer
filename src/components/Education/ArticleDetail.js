@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { database } from "../../../src/config/config";
+import { database } from "../../config/config";
 import React, { Component } from "react";
 import { Audio, Video } from "expo-av";
 import { LinearGradient } from "expo-linear-gradient";
