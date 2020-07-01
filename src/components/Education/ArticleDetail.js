@@ -1,27 +1,12 @@
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  Dimensions,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
-import { database } from "../../config/config";
-import React, { Component } from "react";
-import { Audio, Video } from "expo-av";
-import { LinearGradient } from "expo-linear-gradient";
-import { Button } from "react-native-elements";
-import { Icon } from "react-native-elements";
-import * as ScreenOrientation from "expo-screen-orientation";
-import {
-  ScreenWidth,
-  ScreenHeight,
-  FontScale,
-} from "../../../constant/Constant";
-
-//TODO: STOP VID WHEN LEAVE THE SCREEN!!
+import { SafeAreaView, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
+import { database } from '../../../src/config/config';
+import React, { Component } from 'react';
+import { Audio, Video } from 'expo-av';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Button } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
+import * as ScreenOrientation from 'expo-screen-orientation';
+import { ScreenWidth, ScreenHeight, FontScale } from '../../../constant/Constant';
 
 export default class ArticleDetailScreen extends Component {
   constructor(props) {
@@ -35,8 +20,8 @@ export default class ArticleDetailScreen extends Component {
       volume: 1.0,
       isBuffering: false,
       article_id: article_id, //this.props.route.params.article_id then remove from state
-      content: "",
-      subject: "",
+      content: '',
+      subject: '',
       image: null,
       audio: null,
       video: null,
@@ -103,10 +88,10 @@ export default class ArticleDetailScreen extends Component {
 
   componentDidMount() {
     database
-      .ref("contents/articles")
-      .orderByChild("article_id")
+      .ref('contents/articles')
+      .orderByChild('article_id')
       .equalTo(this.state.article_id)
-      .once("value", (snapshot) => {
+      .once('value', (snapshot) => {
         snapshot.forEach((childSnapshot) => {
           var childData = childSnapshot.val();
           if (childData.isVid) {
@@ -136,20 +121,18 @@ export default class ArticleDetailScreen extends Component {
 
   componentWillUnmount() {
     this.state.playbackObject.pauseAsync();
-    console.log("unmount");
+    console.log('unmount');
   }
 
   render() {
     const PressPlayButton = async () => {
       const { play, playbackObject } = this.state;
-      play
-        ? await playbackObject.pauseAsync()
-        : await playbackObject.playAsync();
+      play ? await playbackObject.pauseAsync() : await playbackObject.playAsync();
       this.setState({ play: !play });
     };
 
     return (
-      <View style={{ backgroundColor: "#F6F6F6", height: "100%" }}>
+      <View style={{ backgroundColor: '#F6F6F6', height: '100%' }}>
         <View>
           {this.state.isVid && (
             <>
@@ -159,9 +142,7 @@ export default class ArticleDetailScreen extends Component {
                 useNativeControls={true}
                 onReadyForDisplay={(params) => {
                   this.setState({
-                    videoHeight:
-                      (ScreenWidth / params.naturalSize.width) *
-                      params.naturalSize.height,
+                    videoHeight: (ScreenWidth / params.naturalSize.width) * params.naturalSize.height,
                   });
                 }}
                 onFullscreenUpdate={this.fullscreencontrol}
@@ -170,64 +151,34 @@ export default class ArticleDetailScreen extends Component {
                   height: this.state.videoHeight,
                 }}
               />
-              <Text
-                style={[
-                  ArticleDetailStyles.videoSubject,
-                  { top: this.state.videoHeight + 20 },
-                ]}
-              >
-                {this.state.subject}
-              </Text>
+              <Text style={[ArticleDetailStyles.videoSubject, { top: this.state.videoHeight + 20 }]}>{this.state.subject}</Text>
             </>
           )}
 
           {!this.state.isVid && (
             <>
-              <Image
-                source={{ uri: this.state.image }}
-                style={{ width: ScreenWidth, height: ScreenWidth * 0.5625 }}
-              />
+              <Image source={{ uri: this.state.image }} style={{ width: ScreenWidth, height: ScreenWidth * 0.5625 }} />
               <LinearGradient
-                colors={["transparent", "transparent", "#F6F6F6"]}
+                colors={['transparent', 'transparent', '#F6F6F6']}
                 locations={[0, 0.2, 1]}
                 style={{
-                  position: "absolute",
+                  position: 'absolute',
                   height: ScreenWidth * 0.5625,
-                  width: Dimensions.get("window").width,
-                  resizeMode: "cover",
+                  width: Dimensions.get('window').width,
+                  resizeMode: 'cover',
                 }}
               ></LinearGradient>
-              <Text
-                style={[
-                  ArticleDetailStyles.articleSubject,
-                  { top: ScreenWidth * 0.5625 - 30 },
-                ]}
-              >
-                {this.state.subject}
-              </Text>
+              <Text style={[ArticleDetailStyles.articleSubject, { top: ScreenWidth * 0.5625 - 30 }]}>{this.state.subject}</Text>
             </>
           )}
         </View>
 
         <ScrollView>
-          <View style={{ alignItems: "center" }}>
+          <View style={{ alignItems: 'center' }}>
             {!this.state.isVid && (
-              <Button
-                title={this.state.play ? "暫停錄音" : "播放錄音"}
-                titleStyle={ArticleDetailStyles.buttonTitle}
-                onPress={() => PressPlayButton()}
-                buttonStyle={ArticleDetailStyles.playButton}
-              />
+              <Button title={this.state.play ? '暫停錄音' : '播放錄音'} titleStyle={ArticleDetailStyles.buttonTitle} onPress={() => PressPlayButton()} buttonStyle={ArticleDetailStyles.playButton} />
             )}
-            <Text
-              style={
-                this.state.isVid
-                  ? ArticleDetailStyles.videoContent
-                  : ArticleDetailStyles.articleContent
-              }
-            >
-              {this.state.content}
-            </Text>
+            <Text style={this.state.isVid ? ArticleDetailStyles.videoContent : ArticleDetailStyles.articleContent}>{this.state.content}</Text>
           </View>
         </ScrollView>
       </View>
@@ -237,19 +188,19 @@ export default class ArticleDetailScreen extends Component {
 
 const ArticleDetailStyles = StyleSheet.create({
   articleSubject: {
-    position: "absolute",
+    position: 'absolute',
     top: 210,
     fontSize: 30,
     paddingLeft: 30,
-    color: "#24559E",
-    fontWeight: "bold",
+    color: '#24559E',
+    fontWeight: 'bold',
   },
   videoSubject: {
-    position: "absolute",
+    position: 'absolute',
     fontSize: 30,
     paddingLeft: 30,
-    color: "#24559E",
-    fontWeight: "bold",
+    color: '#24559E',
+    fontWeight: 'bold',
   },
   articleContent: {
     paddingTop: 20,
@@ -257,8 +208,8 @@ const ArticleDetailStyles = StyleSheet.create({
     paddingRight: 30,
     paddingBottom: 15,
     fontSize: 18,
-    color: "#4D8AE4",
-    textAlign: "justify",
+    color: '#4D8AE4',
+    textAlign: 'justify',
   },
   videoContent: {
     paddingTop: 70,
@@ -266,10 +217,10 @@ const ArticleDetailStyles = StyleSheet.create({
     paddingRight: 30,
     paddingBottom: 15,
     fontSize: 18,
-    color: "#4D8AE4",
+    color: '#4D8AE4',
   },
   playButton: {
-    backgroundColor: "#8BB5F4",
+    backgroundColor: '#8BB5F4',
     marginTop: 25,
     paddingTop: 5,
     width: 120,
