@@ -10,14 +10,6 @@ import {
 import { database } from "../../../src/config/config";
 import { LinearGradient } from "expo-linear-gradient";
 
-const LeftOpen = require("../../../assets/images/LeftOpen.png");
-const RightOpen = require("../../../assets/images/RightOpen.png");
-const BackArrow = require("../../../assets/images/BackArrow.png");
-const NextArrow = require("../../../assets/images/NextArrow.png");
-const Setting = require("../../../assets/images/setting.png");
-
-const patient_id = "004";
-
 export default class EyeExercise extends Component {
   constructor(props) {
     super(props);
