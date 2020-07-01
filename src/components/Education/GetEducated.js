@@ -33,7 +33,7 @@ export default class GetEducated extends Component {
     database
       .ref("contents/articles")
       .orderByChild("article_id")
-      .limitToFirst(4)
+      .limitToFirst(3)
       .once("value", (snapshot) => {
         var temp = [];
         //console.log(snapshot.toJSON());
