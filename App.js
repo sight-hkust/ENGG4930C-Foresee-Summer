@@ -12,7 +12,7 @@ import RecordsScreen from './Screens/RecordsScreen';
 import ArticleDetailScreen from './Screens/ArticleDetail';
 
 import AddRecordScreen from './Screens/AddRecordScreen';
-import EyeExercise from './Screens/EyeExercise';
+import EyeExerciseScreen from './src/components/EyeExercise/EyeExercise';
 
 import PostQuestion from './src/components/AskAnExpert/PostQuestionScreen';
 import AskAnExpertMainScreen from './src/components/AskAnExpert/AskAnExpertMainScreen';
@@ -72,14 +72,14 @@ function UserScreen({ navigation, route }) {
       <Stack.Screen name="GetEducatedScreen" component={GetEducatedScreen} />
       <Stack.Screen name="ArticleDetailScreen" component={ArticleDetailScreen} />
       <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} />
-      <Stack.Screen name="EyeExercise" component={EyeExercise} />
+      <Stack.Screen name="ExerciseScreen" component={ExerciseScreen} />
       <Stack.Screen name="Profile" component={Profile} />
     </Stack.Navigator>
   );
 }
 
 //Article list and detailed article
-function Education({ navigation, route }) {
+function ExerciseScreen({ navigation, route }) {
   return (
     <Stack.Navigator
       headerMode="screen"
@@ -93,8 +93,7 @@ function Education({ navigation, route }) {
         headerRight: () => <SettingButton navigation={navigation} />,
       }}
     >
-      <Stack.Screen name="GetEducatedScreen" component={GetEducatedScreen} />
-      <Stack.Screen name="ArticleDetailScreen" component={ArticleDetailScreen} />
+      <Stack.Screen name="EyeExerciseScreen" component={EyeExerciseScreen} options={{title: '護眼操'}} />
     </Stack.Navigator>
   );
 }
@@ -213,7 +212,7 @@ function SettingButton({ route, navigation }) {
 
 
 function Main({ route, navigation }) {
-  const [isProfessional, setIsProfessional] = useState(true);
+  const [isProfessional, setIsProfessional] = useState(false);
 
   // useEffect(() => {
   //   if (auth.currentUser != null && auth.currentUser.userType == 'professional') {
@@ -275,7 +274,7 @@ function Main({ route, navigation }) {
             <Tab.Screen
               name="TestScreen"
               showLabel={false}
-              component={UserScreen}
+              component={ExerciseScreen}
               options={{
                 tabBarIcon: () => <Image source={require('./assets/images/Exercise_dark.png')} style={{ width: 40, height: 40 }} />,
               }}
