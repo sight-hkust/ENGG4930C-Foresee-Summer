@@ -1,13 +1,4 @@
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  Image,
-  Dimensions,
-  TouchableOpacity,
-  ScrollView,
-} from "react-native";
+import { SafeAreaView, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, ScrollView } from "react-native";
 import { database } from "../../../src/config/config";
 import React, { Component } from "react";
 import { Audio, Video } from "expo-av";
@@ -15,8 +6,6 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Button } from "react-native-elements";
 import { Icon } from "react-native-elements";
 import * as ScreenOrientation from "expo-screen-orientation";
-
-//TODO: STOP VID WHEN LEAVE THE SCREEN!!
 
 export default class ArticleDetailScreen extends Component {
   constructor(props) {
@@ -132,9 +121,7 @@ export default class ArticleDetailScreen extends Component {
   render() {
     const PressPlayButton = async () => {
       const { play, playbackObject } = this.state;
-      play
-        ? await playbackObject.pauseAsync()
-        : await playbackObject.playAsync();
+      play ? await playbackObject.pauseAsync() : await playbackObject.playAsync();
       this.setState({ play: !play });
     };
 
@@ -142,21 +129,12 @@ export default class ArticleDetailScreen extends Component {
       <View style={{ backgroundColor: "#F6F6F6", height: "100%" }}>
         <View>
           {this.state.isVid && (
-            <Video
-              ref={this.mountVid}
-              resizeMode="cover"
-              useNativeControls={true}
-              onFullscreenUpdate={this.fullscreencontrol}
-              style={{ width: Dimensions.get("window").width, height: 250 }}
-            />
+            <Video ref={this.mountVid} resizeMode="cover" useNativeControls={true} onFullscreenUpdate={this.fullscreencontrol} style={{ width: Dimensions.get("window").width, height: 250 }} />
           )}
 
           {!this.state.isVid && (
             <>
-              <Image
-                source={{ uri: this.state.image }}
-                style={{ width: Dimensions.get("window").width, height: 250 }}
-              />
+              <Image source={{ uri: this.state.image }} style={{ width: Dimensions.get("window").width, height: 250 }} />
               <LinearGradient
                 colors={["transparent", "transparent", "#F6F6F6"]}
                 locations={[0, 0.2, 1]}
@@ -169,36 +147,15 @@ export default class ArticleDetailScreen extends Component {
             </>
           )}
 
-          <Text
-            style={
-              this.state.isVid
-                ? ArticleDetailStyles.videoSubject
-                : ArticleDetailStyles.articleSubject
-            }
-          >
-            {this.state.subject}
-          </Text>
+          <Text style={this.state.isVid ? ArticleDetailStyles.videoSubject : ArticleDetailStyles.articleSubject}>{this.state.subject}</Text>
         </View>
 
         <ScrollView>
           <View>
             {!this.state.isVid && (
-              <Button
-                title={this.state.play ? "暫停錄音" : "播放錄音"}
-                titleStyle={ArticleDetailStyles.buttonTitle}
-                onPress={() => PressPlayButton()}
-                buttonStyle={ArticleDetailStyles.playButton}
-              />
+              <Button title={this.state.play ? "暫停錄音" : "播放錄音"} titleStyle={ArticleDetailStyles.buttonTitle} onPress={() => PressPlayButton()} buttonStyle={ArticleDetailStyles.playButton} />
             )}
-            <Text
-              style={
-                this.state.isVid
-                  ? ArticleDetailStyles.videoContent
-                  : ArticleDetailStyles.articleContent
-              }
-            >
-              {this.state.content}
-            </Text>
+            <Text style={this.state.isVid ? ArticleDetailStyles.videoContent : ArticleDetailStyles.articleContent}>{this.state.content}</Text>
           </View>
         </ScrollView>
       </View>

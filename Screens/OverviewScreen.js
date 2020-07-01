@@ -110,7 +110,7 @@ export default class OverviewScreen extends Component {
             </View>
           </View>
           <View style={OverviewScreenStyle.dateContainer}>
-            <Text style={OverviewScreenStyle.dateText}>最近驗眼日期: {this.state.dateArr == null ? "" : this.state.dateArr[this.state.dateArr.length - 1]}</Text>
+            <Text style={OverviewScreenStyle.dateText}>最近驗眼日期: {this.state.dateArr == null ? "" : moment(this.state.dateArr[this.state.dateArr.length - 1]).format("YYYY-MM-DD")}</Text>
           </View>
         </LinearGradient>
       </View>

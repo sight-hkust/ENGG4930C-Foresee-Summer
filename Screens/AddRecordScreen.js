@@ -108,6 +108,11 @@ export default class Form extends Component {
                 L_Axis: "0",
                 R_Axis: "0",
 
+                Adj_L_SPH: "0",
+                Adj_R_SPH: "0",
+                Adj_Lsymbol: true,
+                Adj_Rsymbol: true,
+
                 L_VA: "20/200",
                 R_VA: "20/200",
 
@@ -137,6 +142,12 @@ export default class Form extends Component {
                   R_CYL: parseInt(values.R_CYL),
                   L_Axis: values.L_Axis,
                   R_Axis: values.R_Axis,
+
+                  Adj_L_SPH: values.Adj_L_SPH,
+                  Adj_R_SPH: values.Adj_R_SPH,
+                  Adj_Lsymbol: values.Adj_Lsymbol,
+                  Adj_Rsymbol: values.Adj_Rsymbol,
+
                   L_PD: values.L_PD,
                   R_PD: values.R_PD,
                   remarks: values.remarks,
@@ -220,15 +231,17 @@ export default class Form extends Component {
                 <View style={AddRecordScreen.formContainer}>
                   <DateSelect values={values} setFieldValue={setFieldValue} />
 
-                  <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} error={errors.L_SPH} mode={mode} refractive={refractive} />
+                  <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} error={errors.L_SPH} mode={mode} refractive={refractive} isAdj={false} />
                   <CYLInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} errorA={errors.L_CYL} errorB={errors.L_Axis} mode={mode} />
                   <VAInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} error={errors.L_VA} mode={mode} />
                   <PDInput handleChange={handleChange} error={errors.PD} isLeft={false} />
 
-                  <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} error={errors.R_SPH} mode={mode} refractive={refractive} />
+                  <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} error={errors.R_SPH} mode={mode} refractive={refractive} isAdj={false} />
                   <CYLInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} errorA={errors.R_CYL} errorB={errors.R_Axis} mode={mode} />
                   <VAInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} error={errors.R_VA} mode={mode} />
                   <PDInput handleChange={handleChange} error={errors.PD} isLeft={true} />
+
+                  <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} error={errors.R_SPH} mode={mode} refractive={refractive} isAdj={true} />
 
                   <RemarksInput handleChange={handleChange} />
                   {isProfessional && <DiseasesInput setFieldValue={setFieldValue} />}
@@ -292,33 +305,50 @@ export const DateSelect = (props) => {
 };
 
 export const SPHInputB = (props) => {
-  const { setFieldValue, isLeft, refractive } = props;
+  const { setFieldValue, isLeft, refractive, isAdj } = props;
   const [symbol, Togglesymbol] = useState(refractive != 0 ? true : false); //true = positive = hyperopia
-  //const [symbol, Togglesymbol] = useState(true);
+
   const [sliderValue, setSliderValue] = useState(0);
   console.log("symbol", symbol);
   const setToTrue = () => {
     Togglesymbol(true);
-    if (isLeft) setFieldValue("Lsymbol", true, false);
-    else setFieldValue("Rsymbol", true, false);
+    if (isLeft) {
+      setFieldValue(isAdj ? "Adj_Lsymbol" : "L_symbol", true, false);
+    } else {
+      setFieldValue(isAdj ? "Adj_Rsymbol" : "R_symbol", true, false);
+    }
   };
 
   const setToFalse = () => {
     Togglesymbol(false);
-    if (isLeft) setFieldValue("Lsymbol", false, false);
-    else setFieldValue("Rsymbol", false, false);
+    if (isLeft) {
+      setFieldValue(isAdj ? "Adj_Lsymbol" : "L_symbol", false, false);
+    } else {
+      setFieldValue(isAdj ? "Adj_Rsymbol" : "R_symbol", false, false);
+    }
   };
 
+  const SliderHandler = (value) => {
+    if (isAdj) {
+      setFieldValue(isLeft ? "Adj_L_SPH" : "Adj_R_SPH", value, false);
+      setFieldValue(isLeft ? "Adj_Lsymbol" : "Adj_Rsymbol", symbol, false);
+    } else {
+      setFieldValue(isLeft ? "L_SPH" : "R_SPH", value, false);
+      setFieldValue(isLeft ? "Lsymbol" : "Rsymbol", symbol, false);
+    }
+  };
   return (
     <View style={{ flex: 1 }}>
-      <Text style={AddRecordScreen.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}球面度數(SPH)</Text>
+      <Text style={AddRecordScreen.questionText}>
+        請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}
+        {isAdj ? "調整" : ""}球面度數(SPH)
+      </Text>
 
       <View>
         <View style={{ flexDirection: "row", paddingLeft: 10 }}>
           <TouchableOpacity
             style={{ flexDirection: "row", marginRight: 20 }}
             onPress={() => {
-              //console.log(symbol);
               setToFalse();
             }}
           >
@@ -329,7 +359,6 @@ export const SPHInputB = (props) => {
           <TouchableOpacity
             style={{ flexDirection: "row" }}
             onPress={() => {
-              //console.log(symbol);
               setToTrue();
             }}
           >
@@ -351,10 +380,7 @@ export const SPHInputB = (props) => {
           minimumTrackTintColor={"white"}
           maximumTrackTintColor={"#B8CAE4"}
           onValueChange={(value) => setSliderValue(value)}
-          onSlidingComplete={(value) => {
-            setFieldValue(isLeft ? "L_SPH" : "R_SPH", value, false);
-            setFieldValue(isLeft ? "Lsymbol" : "Rsymbol", symbol, false);
-          }}
+          onSlidingComplete={(value) => SliderHandler(value)}
         />
       </View>
     </View>
@@ -362,10 +388,10 @@ export const SPHInputB = (props) => {
 };
 
 export const SPHInput = (props) => {
-  const { handleChange, setFieldValue, isLeft, error, mode, refractive } = props;
+  const { handleChange, setFieldValue, isLeft, error, mode, refractive, isAdj } = props;
 
   if (mode) {
-    return <SPHInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={isLeft} refractive={refractive} />;
+    return <SPHInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={isLeft} refractive={refractive} isAdj={isAdj} />;
   }
 
   const [symbol, Togglesymbol] = useState(refractive == "0" ? false : true); //true = positive = hyperopia
@@ -656,7 +682,7 @@ export const PDInput = (props) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <Text style={AddRecordScreen.questionText}>請輸入兩眼瞳孔距離(Pupillary Distance)(mm)</Text>
+      <Text style={AddRecordScreen.questionText}>請輸入{isLeft ? "左眼" : "右眼"}瞳孔距離(Pupillary Distance)(mm)</Text>
       {error != undefined && <Text style={AddRecordScreen.errortext}>{error}</Text>}
       <TextInput onChangeText={handleChange(isLeft ? "L_PD" : "R_PD")} keyboardType="numeric" style={AddRecordScreen.answerInputBox} />
     </View>
