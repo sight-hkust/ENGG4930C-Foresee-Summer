@@ -5,7 +5,6 @@ import { Icon } from 'react-native-elements';
 
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
-import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import GetEducatedScreen from './src/components/Education/GetEducated';
@@ -38,6 +37,7 @@ import SettingScreen from './src/components/Setting/Setting';
 import PrivacyPolicy from './src/components/Policy/PrivacyPolicy';
 import TermsAndCondition from './src/components/Policy/TermsAndCondition';
 import { set } from 'react-native-reanimated';
+import TutorialScreen from './src/components/Tutorial/Tutorial';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -202,7 +202,7 @@ export default App = (props) => {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Welcome" screenOptions={headerConfig}>
+        <Stack.Navigator initialRouteName="Tutorial" screenOptions={headerConfig}>
           {loggedIn ? (
             <>
               <Stack.Screen name="Main" component={Main} options={{ headerShown: false }} />
@@ -219,6 +219,7 @@ export default App = (props) => {
             </>
           )}
           <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="Tutorial" component={TutorialScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
