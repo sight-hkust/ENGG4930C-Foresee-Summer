@@ -10,6 +10,8 @@ import { auth } from '../../config/config';
 import MenuScreen from '../../../Utils/MenuScreen';
 import { connect } from 'react-redux';
 import { watchPatientListUpdate } from '../../reducers/patientList';
+
+import * as func from 'firebase/firebase-functions';
 /**
  * For Local Search.
  */
@@ -33,33 +35,12 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
   const { patientList } = patientListStore;
   const [showList, setShowList] = useState([]);
 
-  console.log(patientList);
-
   useEffect(() => {
     if (patientList !== null && patientList !== undefined && searchContent === '') {
       setIsLoading(false);
       setShowList(patientList);
     }
-  })
-
-  /* useEffect(() => {
-    database.ref('professionals/' + auth.currentUser.uid + '/patients/').once('value', (snap) => {
-      let patients = [];
-      snap.forEach((child) => {
-		console.log(child.val()['info']);
-        if (child.val()['info'] != null) {
-          patients.push({
-            name: child.val()['info']['lastName'] && child.val()['info']['firstName'] != null ? child.val()['info']['lastName'] + child.val()['info']['firstName'] : '()',
-            lastReserveDate: child.val()['records'] != null ? Object.keys(child.val()['records']).slice(-1)[0] : null,
-            key: child.key,
-          });
-        }
-      });
-      setShowList(patients);
-      //setOriginalList(patients);
-      setIsLoading(false);
-    });
-  }, []); */
+  });
 
   return (
     <MenuScreen>
@@ -70,126 +51,126 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
             <Text style={styles.loadingText}>Loading . . . </Text>
           </View>
         ) : (
-            <View>
-              <View style={{ marginTop: ScreenHeight * 0.078, height: ScreenHeight * 0.078, width: ScreenWidth, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
-                <SearchBar
-                  placeholder="尋找病人"
-                  onChangeText={(e) => {
-                    setSearchContent(e);
-                    setSearchingStatus(true);
-                    setShowList(SearchPatient(e, patientList));
-                  }}
-                  value={searchContent}
-                  round
-                  lightTheme
-                  placeholderTextColor="white"
-                  leftIconContainerStyle={{ color: 'white' }}
-                  containerStyle={{
-                    backgroundColor: 'transparent',
-                    width: ScreenWidth * 0.8,
-                    borderBottomColor: 'transparent',
-                    borderTopColor: 'transparent',
-                  }}
-                  inputContainerStyle={{ backgroundColor: '#A6ACE9', height: 35 }}
-                />
-                <Icon name="qrcode-scan" type="material-community" color="white" size={30} onPress={() => navigation.navigate('QR Scan')} />
-              </View>
-              <ScrollView
-                style={{
-                  height: ScreenHeight * 0.6,
-                  width: ScreenWidth * 0.9,
-                  backgroundColor: 'transparent',
-                  alignSelf: 'center',
+          <View>
+            <View style={{ marginTop: ScreenHeight * 0.078, height: ScreenHeight * 0.078, width: ScreenWidth, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+              <SearchBar
+                placeholder="尋找病人"
+                onChangeText={(e) => {
+                  setSearchContent(e);
+                  setSearchingStatus(true);
+                  setShowList(SearchPatient(e, patientList));
                 }}
-              >
-                {showList.length == 0 ? (
-                  <Text style={{ textAlign: 'center', color: 'white', fontSize: 30 }}> 找不到用戶 </Text>
-                ) : (
-                    showList.map((data, index) => {
-                      return (
-                        <>
-                          <ListItem
-                            key={index}
-                            title={data.lastName + data.firstName}
-                            subtitle={'test'.lastReserveDate}
-                            rightIcon={
-                              <>
-                                <Icon
-                                  size={25}
-                                  name="search"
-                                  type="feather"
-                                  color="#88D3E3"
-                                  containerStyle={{
-                                    backgroundColor: 'white',
-                                    borderRadius: 5,
-                                    padding: 3,
-                                    marginRight: 5,
-                                  }}
-                                  onPress={() => {
-                                    navigation.navigate('ProfPatientViewScreen', {
-                                      key: data.phone
-                                    });
-                                  }}
-                                />
-                                <Icon
-                                  size={25}
-                                  name="plus"
-                                  type="feather"
-                                  color="#80A4EB"
-                                  containerStyle={{
-                                    backgroundColor: 'white',
-                                    borderRadius: 5,
-                                    padding: 3,
-                                  }}
-                                  onPress={() => {
-                                    navigation.navigate('AddRecordScreen', {
-                                      isProfessional: true,
-                                      professional_id: auth.currentUser.uid,
-                                      patient_id: data.phone,
-                                    });
-                                  }}
-                                />
-                              </>
-                            }
-                            containerStyle={{
-                              backgroundColor: 'transparent',
-                            }}
-                            titleStyle={{
-                              color: 'white',
-                              fontSize: 20,
-                              fontWeight: 'bold',
-                            }}
-                            subtitleStyle={{ color: 'white', fontSize: 13 }}
-                            onPress={() => {
-                              navigation.navigate('ProfPatientViewScreen', {
-                                key: data.phone,
-                              });
-                            }}
-                          />
-                          <View style={{ height: 1, width: ScreenWidth * 0.825, borderColor: '#E1EDFF', borderWidth: 1, alignSelf: 'center', borderRadius: 10 }} />
-                        </>
-                      );
+                value={searchContent}
+                round
+                lightTheme
+                placeholderTextColor="white"
+                leftIconContainerStyle={{ color: 'white' }}
+                containerStyle={{
+                  backgroundColor: 'transparent',
+                  width: ScreenWidth * 0.8,
+                  borderBottomColor: 'transparent',
+                  borderTopColor: 'transparent',
+                }}
+                inputContainerStyle={{ backgroundColor: '#A6ACE9', height: 35 }}
+              />
+              <Icon name="qrcode-scan" type="material-community" color="white" size={30} onPress={() => navigation.navigate('QR Scan')} />
+            </View>
+            <ScrollView
+              style={{
+                height: ScreenHeight * 0.6,
+                width: ScreenWidth * 0.9,
+                backgroundColor: 'transparent',
+                alignSelf: 'center',
+              }}
+            >
+              {showList.length == 0 ? (
+                <Text style={{ textAlign: 'center', color: 'white', fontSize: 30 }}> 找不到用戶 </Text>
+              ) : (
+                showList.map((data, index) => {
+                  return (
+                    <>
+                      <ListItem
+                        key={index}
+                        title={data.lastName + data.firstName}
+                        subtitle={'test'.lastReserveDate}
+                        rightIcon={
+                          <>
+                            <Icon
+                              size={25}
+                              name="search"
+                              type="feather"
+                              color="#88D3E3"
+                              containerStyle={{
+                                backgroundColor: 'white',
+                                borderRadius: 5,
+                                padding: 3,
+                                marginRight: 5,
+                              }}
+                              onPress={() => {
+                                navigation.navigate('ProfPatientViewScreen', {
+                                  key: data.phone,
+                                });
+                              }}
+                            />
+                            <Icon
+                              size={25}
+                              name="plus"
+                              type="feather"
+                              color="#80A4EB"
+                              containerStyle={{
+                                backgroundColor: 'white',
+                                borderRadius: 5,
+                                padding: 3,
+                              }}
+                              onPress={() => {
+                                navigation.navigate('AddRecordScreen', {
+                                  isProfessional: true,
+                                  professional_id: auth.currentUser.uid,
+                                  patient_id: data.phone,
+                                });
+                              }}
+                            />
+                          </>
+                        }
+                        containerStyle={{
+                          backgroundColor: 'transparent',
+                        }}
+                        titleStyle={{
+                          color: 'white',
+                          fontSize: 20,
+                          fontWeight: 'bold',
+                        }}
+                        subtitleStyle={{ color: 'white', fontSize: 13 }}
+                        onPress={() => {
+                          navigation.navigate('ProfPatientViewScreen', {
+                            key: data.phone,
+                          });
+                        }}
+                      />
+                      <View style={{ height: 1, width: ScreenWidth * 0.825, borderColor: '#E1EDFF', borderWidth: 1, alignSelf: 'center', borderRadius: 10 }} />
+                    </>
+                  );
+                })
+              )}
+            </ScrollView>
+            <View style={{ flexDirection: 'row', height: ScreenHeight * 0.05, justifyContent: 'center', paddingHorizontal: 15 }}>
+              <View style={{ width: ScreenWidth / 2, height: 100, zIndex: 10 }}>
+                <Button
+                  icon={<Icon name="md-add-circle-outline" type="ionicon" size={30} color="white" />}
+                  title="登記病人"
+                  titleStyle={{ marginLeft: 10, color: 'white', fontWeight: 'bold' }}
+                  type="clear"
+                  onPress={() =>
+                    navigation.navigate('Register', {
+                      screen: 'Registration Form',
+                      params: { isProfessional: true, registerPatient: true },
                     })
-                  )}
-              </ScrollView>
-              <View style={{ flexDirection: 'row', height: ScreenHeight*0.05, justifyContent: 'center', paddingHorizontal: 15 }}>
-                <View style={{ width: ScreenWidth / 2, height: 100, zIndex: 10 }}>
-                  <Button
-                    icon={<Icon name="md-add-circle-outline" type="ionicon" size={30} color="white" />}
-                    title="登記病人"
-                    titleStyle={{ marginLeft: 10, color: 'white', fontWeight: 'bold' }}
-                    type="clear"
-                    onPress={() =>
-                      navigation.navigate('Register', {
-                        screen: 'Registration Form',
-                        params: { isProfessional: true, registerPatient: true },
-                      })
-                    }
-                  />
-                </View>
+                  }
+                />
               </View>
             </View>
-          )}
+          </View>
+        )}
       </View>
     </MenuScreen>
   );
@@ -206,6 +187,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     alignSelf: 'center',
     paddingTop: 30,
+    color: 'white',
   },
   title: {
     textAlign: 'center',
@@ -235,15 +217,15 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = state => {
+const mapStateToProps = (state) => {
   return {
     patientListStore: state.patientList,
-  }
-}
+  };
+};
 
-const mapDispatchToProps = dispatch => {
-  dispatch(watchPatientListUpdate())
-  return {}
-}
+const mapDispatchToProps = (dispatch) => {
+  dispatch(watchPatientListUpdate());
+  return {};
+};
 
 export default connect(mapStateToProps, mapDispatchToProps)(ProfMainMenu);

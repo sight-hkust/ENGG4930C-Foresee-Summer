@@ -6,6 +6,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Button } from "react-native-elements";
 import { Icon } from "react-native-elements";
 import * as ScreenOrientation from "expo-screen-orientation";
+import { ScreenWidth, ScreenHeight, FontScale } from "../constant/Constant";
 
 export default class ArticleDetailScreen extends Component {
   constructor(props) {
@@ -25,6 +26,7 @@ export default class ArticleDetailScreen extends Component {
       audio: null,
       video: null,
       isVid: false,
+      videoHeight: ScreenWidth * 0.5625,
     };
   }
 
@@ -100,14 +102,18 @@ export default class ArticleDetailScreen extends Component {
               video: childData.video,
             });
           } else {
-            this.setState({
-              content: childData.content,
-              subject: childData.subject,
-              isVid: childData.isVid,
-              image: childData.image,
-              audio: childData.audio,
-            });
-            this.getAudio();
+            this.setState(
+              {
+                content: childData.content,
+                subject: childData.subject,
+                isVid: childData.isVid,
+                image: childData.image,
+                audio: childData.audio,
+              },
+              () => {
+                this.getAudio();
+              }
+            );
           }
         });
       });
@@ -129,29 +135,46 @@ export default class ArticleDetailScreen extends Component {
       <View style={{ backgroundColor: "#F6F6F6", height: "100%" }}>
         <View>
           {this.state.isVid && (
-            <Video ref={this.mountVid} resizeMode="cover" useNativeControls={true} onFullscreenUpdate={this.fullscreencontrol} style={{ width: Dimensions.get("window").width, height: 250 }} />
+            <>
+              <Video
+                ref={this.mountVid}
+                resizeMode="contain"
+                useNativeControls={true}
+                onReadyForDisplay={(params) => {
+                  this.setState({
+                    videoHeight: (ScreenWidth / params.naturalSize.width) * params.naturalSize.height,
+                  });
+                }}
+                onFullscreenUpdate={this.fullscreencontrol}
+                style={{
+                  width: ScreenWidth,
+                  height: this.state.videoHeight,
+                }}
+              />
+              <Text style={[ArticleDetailStyles.videoSubject, { top: this.state.videoHeight + 20 }]}>{this.state.subject}</Text>
+            </>
           )}
 
           {!this.state.isVid && (
             <>
-              <Image source={{ uri: this.state.image }} style={{ width: Dimensions.get("window").width, height: 250 }} />
+              <Image source={{ uri: this.state.image }} style={{ width: ScreenWidth, height: ScreenWidth * 0.5625 }} />
               <LinearGradient
                 colors={["transparent", "transparent", "#F6F6F6"]}
                 locations={[0, 0.2, 1]}
                 style={{
                   position: "absolute",
-                  height: 250,
+                  height: ScreenWidth * 0.5625,
                   width: Dimensions.get("window").width,
+                  resizeMode: "cover",
                 }}
               ></LinearGradient>
+              <Text style={[ArticleDetailStyles.articleSubject, { top: ScreenWidth * 0.5625 - 30 }]}>{this.state.subject}</Text>
             </>
           )}
-
-          <Text style={this.state.isVid ? ArticleDetailStyles.videoSubject : ArticleDetailStyles.articleSubject}>{this.state.subject}</Text>
         </View>
 
         <ScrollView>
-          <View>
+          <View style={{ alignItems: "center" }}>
             {!this.state.isVid && (
               <Button title={this.state.play ? "暫停錄音" : "播放錄音"} titleStyle={ArticleDetailStyles.buttonTitle} onPress={() => PressPlayButton()} buttonStyle={ArticleDetailStyles.playButton} />
             )}
@@ -174,7 +197,6 @@ const ArticleDetailStyles = StyleSheet.create({
   },
   videoSubject: {
     position: "absolute",
-    top: 260,
     fontSize: 30,
     paddingLeft: 30,
     color: "#24559E",
@@ -187,6 +209,7 @@ const ArticleDetailStyles = StyleSheet.create({
     paddingBottom: 15,
     fontSize: 18,
     color: "#4D8AE4",
+    textAlign: "justify",
   },
   videoContent: {
     paddingTop: 70,
@@ -198,7 +221,6 @@ const ArticleDetailStyles = StyleSheet.create({
   },
   playButton: {
     backgroundColor: "#8BB5F4",
-    marginLeft: 110,
     marginTop: 25,
     paddingTop: 5,
     width: 120,
