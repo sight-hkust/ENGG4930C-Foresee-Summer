@@ -36,6 +36,7 @@ import WelcomeScreen from './Screens/WelcomeScreen';
 import SettingScreen from './src/components/Setting/Setting';
 import PrivacyPolicy from './src/components/Policy/PrivacyPolicy';
 import TermsAndCondition from './src/components/Policy/TermsAndCondition';
+import { set } from 'react-native-reanimated';
 
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -109,6 +110,7 @@ function ProfessionalScreen({ navigation, route }) {
       <Stack.Screen name="ProfMainMenu" component={ProfMainMenu} options={{ title: '病人名單' }} />
       <Stack.Screen name="ProfPatientViewScreen" component={ProfPatientViewScreen} options={{ title: '' }} />
       <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} options={{ title: '新增資料' }} />
+      <Stack.Screen name="SettingScreen" component={SettingScreen} options={{ title: '設定' }} />
     </Stack.Navigator>
   );
 }
@@ -133,6 +135,25 @@ function ArticleScreen({ navigation, route }) {
   );
 }
 
+function ExerciseScreen({ navigation, route }) {
+  return (
+    <Stack.Navigator
+      headerMode="screen"
+      headerTitleAlign="left"
+      screenOptions={{
+        headerTransparent: true,
+        headerTitleStyle: {
+          color: '#E1EDFF',
+          fontSize: 30,
+        },
+        headerRight: () => <SettingButton navigation={navigation} />,
+      }}
+    >
+      <Stack.Screen name="RecordsScreen" component={RecordsScreen} options={{ title: '' }} />
+    </Stack.Navigator>
+  );
+}
+
 function HomeScreen({ navigation, route }) {
   return (
     <Stack.Navigator
@@ -149,6 +170,7 @@ function HomeScreen({ navigation, route }) {
     >
       <Stack.Screen name="RecordsScreen" component={RecordsScreen} options={{ title: '' }} />
       <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} options={{ title: '新增資料' }} />
+      <Stack.Screen name="SettingScreen" component={SettingScreen} options={{ title: '設定' }} />
     </Stack.Navigator>
   );
 }
@@ -178,7 +200,7 @@ function SettingButton({ route, navigation }) {
       {auth.currentUser.displayName != null && auth.currentUser.displayName == 'professional' ? (
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('UserScreen', { screen: 'SettingScreen' });
+            navigation.navigate('SettingScreen');
             //navigation.navigate('ProfessionalScreen', { screen: 'TutorialScreen' });
           }}
           style={{ marginRight: 20 }}
@@ -188,7 +210,7 @@ function SettingButton({ route, navigation }) {
       ) : (
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('UserScreen', { screen: 'SettingScreen' });
+            navigation.navigate('SettingScreen');
           }}
           style={{ marginRight: 15 }}
         >
@@ -207,10 +229,10 @@ function Main({ route, navigation }) {
       barStyle={{
         backgroundColor: '#BED8FF',
         height: Dimensions.get('window').height * 0.1,
-        paddingHorizontal: auth.currentUser.displayName != null && auth.currentUser.displayName == 'professional' ? 100 : 30,
+        paddingHorizontal: auth.currentUser != null && auth.currentUser.displayName == 'professional' ? 100 : 30,
       }}
     >
-      {auth.currentUser.displayName != null && auth.currentUser.displayName == 'professional' ? (
+      {auth.currentUser != null && auth.currentUser.displayName == 'professional' ? (
         <>
           <Tab.Screen
             name="EmptyScreen"
@@ -241,17 +263,17 @@ function Main({ route, navigation }) {
         <>
           <Tab.Screen
             name="GetEducated"
-            showLabel={false}
             component={ArticleScreen}
             options={{
+              tabBarLabel: 'Home',
               tabBarIcon: () => <Image source={require('./assets/images/Articles_dark.png')} style={{ width: 40, height: 40 }} />,
             }}
           />
 
           <Tab.Screen
-            name="UserScreen"
+            name="ExerciseScreen"
             showLabel={false}
-            component={UserScreen}
+            component={ExerciseScreen}
             options={{
               tabBarIcon: () => <Image source={require('./assets/images/Exercise_dark.png')} style={{ width: 40, height: 40 }} />,
             }}
@@ -295,31 +317,39 @@ export default App = (props) => {
   const [loggedIn, setLoggedIn] = useState();
 
   auth.onAuthStateChanged(function (user) {
-    if (user) {
-      setLoggedIn(user);
-    }
+    user ? setLoggedIn(true) : setLoggedIn(false);
   });
+
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator headerMode="none">
-          <Stack.Screen name="Welcome" component={WelcomeScreen} />
+        <Stack.Navigator initialRouteName="Welcome" screenOptions={headerConfig}>
           {loggedIn ? (
             <>
-              <Stack.Screen name="Main" component={Main} />
-              <Stack.Screen name="Profile" component={Profile} />
-              <Stack.Screen name="QR Scan" component={QRCodeScannerScreen} />
+              <Stack.Screen name="Main" component={Main} options={{ headerShown: false }} />
+              <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
+              <Stack.Screen name="QR Scan" component={QRCodeScannerScreen} options={{ headerShown: false }} />
+              <Stack.Screen name="Terms" component={TermsAndCondition} options={{ title: '條款及細則' }} />
+              <Stack.Screen name="Policy" component={PrivacyPolicy} options={{ title: '私隱政策' }} />
+              <Stack.Screen name="SettingScreen" component={SettingScreen} options={{ title: '設定' }} />
             </>
           ) : (
             <>
-              <Stack.Screen name="Login" component={Login} />
-              <Stack.Screen name="Register" component={Register} />
+              <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+              <Stack.Screen name="Register" component={Register} options={{ headerShown: false }} />
             </>
           )}
-          <Stack.Screen name="Terms" component={TermsAndCondition} options={{ headerShown: true, title: '條款及細則' }} />
-          <Stack.Screen name="Policy" component={PrivacyPolicy} options={{ headerShown: true, title: '私隱政策' }} />
+          <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
   );
+};
+
+const headerConfig = {
+  headerTransparent: true,
+  headerTitleStyle: {
+    color: '#E1EDFF',
+    fontSize: 25,
+  },
 };

@@ -9,20 +9,13 @@ import { auth } from '../../config/config';
 import { RoundButton } from '../../../Utils/RoundButton';
 import { Grid, Col, Row } from 'react-native-easy-grid';
 
-import { WebView } from 'react-native-webview';
-
-const htmlContent = `
-    <h1>This HTML snippet is now rendered with native components !</h1>
-    <h2>Enjoy a webview-free and blazing fast application</h2>
-    <img src="https://i.imgur.com/dHLmxfO.jpg?2" />
-    <em style="textAlign: center;">Look at how happy this native cat is</em>
-`;
+import { LinearGradientBackground } from '../../../Utils/LinearGradientBackground';
 
 export default function Setting({ route, navigation }) {
   const [selectedLabel, setSelectedLabel] = useState();
 
   return (
-    <MenuScreen>
+    <LinearGradientBackground style={{ height: '100%' }} colors={['#1772A6', '#A377FF']} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]}>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <ListItem title={'深色主題'} containerStyle={styles.listItem} titleStyle={styles.title} rightIcon={<ThemeSwitch />} />
         <ListItem Component={TouchableOpacity} title={'程式教學'} containerStyle={styles.listItem} titleStyle={styles.title} chevron={{ size: 30 }} />
@@ -61,16 +54,20 @@ export default function Setting({ route, navigation }) {
         </Collapsible>
         <ListItem
           Component={TouchableOpacity}
-          title={'條款及細則和私隱政策'}
+          title={'條款及細則'}
           containerStyle={styles.listItem}
-          titleStyle={styles.title}
+          titleStyle={{ fontSize: 20, color: 'white' }}
           chevron={{ size: 30 }}
           onPress={() => navigation.navigate('Terms')}
-          //onPress={() => setSelectedLabel(selectedLabel == 'policy' ? '' : 'policy')}
         />
-        <Collapsible collapsed={selectedLabel != 'policy'}>
-          <Policy />
-        </Collapsible>
+        <ListItem
+          Component={TouchableOpacity}
+          title={'私隱政策'}
+          containerStyle={styles.listItem}
+          titleStyle={{ fontSize: 20, color: 'white' }}
+          chevron={{ size: 30 }}
+          onPress={() => navigation.navigate('Policy')}
+        />
         <ListItem
           Component={TouchableOpacity}
           title={'登出'}
@@ -81,9 +78,9 @@ export default function Setting({ route, navigation }) {
             auth.signOut();
           }}
         />
-        <Text style={{ marginTop: 100, color: 'white', alignSelf: 'center' }}>© 2020 ForeSee</Text>
       </ScrollView>
-    </MenuScreen>
+      <Text style={{ marginTop: 100, color: 'white', alignSelf: 'center', position: 'absolute', bottom: 20 }}>© 2020 ForeSee</Text>
+    </LinearGradientBackground>
   );
 }
 
@@ -159,7 +156,7 @@ const Feedback = () => {
         maxLength={200}
         multiline={true}
         value={feedback}
-        placeholder="歡迎留下你的個人看法"
+        placeholder="歡迎留下意見"
         inputContainerStyle={styles.contentContainer}
         inputStyle={styles.textAreaContainer}
         rightIcon={<Text style={styles.wordCounter}>{feedback.length}/200</Text>}
@@ -237,16 +234,12 @@ const PermissionSetting = () => {
   );
 };
 
-const Policy = () => {
-  return <WebView style={{ width: '100%', height: 300, backgroundColor: 'transparent' }} originWhitelist={['*']} source={{ html: htmlContent }} />;
-};
-
 const styles = StyleSheet.create({
   container: {
     width: ScreenWidth * 0.8,
     height: ScreenHeight * 0.75,
     position: 'absolute',
-    bottom: 0,
+    bottom: 40,
     alignSelf: 'center',
   },
   listItem: {
