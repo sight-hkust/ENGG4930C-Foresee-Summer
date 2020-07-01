@@ -187,6 +187,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     alignSelf: 'center',
     paddingTop: 30,
+    color: 'white',
   },
   title: {
     textAlign: 'center',

@@ -37,6 +37,7 @@ import SettingScreen from './src/components/Setting/Setting';
 import PrivacyPolicy from './src/components/Policy/PrivacyPolicy';
 import TermsAndCondition from './src/components/Policy/TermsAndCondition';
 import { set } from 'react-native-reanimated';
+import { auth } from './src/config/config';
 
 const Tab = createMaterialBottomTabNavigator();
 const Stack = createStackNavigator();
