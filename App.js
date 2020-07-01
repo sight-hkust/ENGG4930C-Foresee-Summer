@@ -7,15 +7,15 @@ import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
 
-import GetEducatedScreen from './Screens/GetEducated';
-import RecordsScreen from './Screens/RecordsScreen';
-import ArticleDetailScreen from './Screens/ArticleDetail';
-
-import AddRecordScreen from './Screens/AddRecordScreen';
-import EyeExercise from './Screens/EyeExercise';
-
+import GetEducatedScreen from './src/components/Education/GetEducated';
+import EyeExercise from './src/components/Education/EyeExercise';
+import ArticleDetailScreen from './src/components/Education/ArticleDetail';
 import PostQuestion from './src/components/AskAnExpert/PostQuestionScreen';
 import AskAnExpertMainScreen from './src/components/AskAnExpert/AskAnExpertMainScreen';
+
+import RecordsScreen from './Screens/RecordsScreen';
+import AddRecordScreen from './Screens/AddRecordScreen';
+import OverviewScreen from './Screens/OverviewScreen';
 
 import { Login } from './src/components/Login/Login';
 import { Register } from './src/components/Registration/Register';
@@ -168,9 +168,9 @@ function HomeScreen({ navigation, route }) {
         headerRight: () => <SettingButton navigation={navigation} />,
       }}
     >
+      <Stack.Screen name="OverViewScreen" component={OverviewScreen} options={{ title: '' }} />
       <Stack.Screen name="RecordsScreen" component={RecordsScreen} options={{ title: '' }} />
       <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} options={{ title: '新增資料' }} />
-      <Stack.Screen name="SettingScreen" component={SettingScreen} options={{ title: '設定' }} />
     </Stack.Navigator>
   );
 }
@@ -239,7 +239,19 @@ function Main({ route, navigation }) {
             showLabel={false}
             component={ProfessionalScreen}
             options={{
-              tabBarIcon: () => <Icon type="entypo" name="tools" color="white" style={{ width: 40, height: 40, alignSelf: 'center', justifyContent: 'center' }} />,
+              tabBarIcon: () => (
+                <Icon
+                  type="entypo"
+                  name="tools"
+                  color="white"
+                  style={{
+                    width: 40,
+                    height: 40,
+                    alignSelf: 'center',
+                    justifyContent: 'center',
+                  }}
+                />
+              ),
             }}
           />
           <Tab.Screen
@@ -255,7 +267,19 @@ function Main({ route, navigation }) {
             showLabel={false}
             component={Profile}
             options={{
-              tabBarIcon: () => <Icon type="font-awesome-5" name="user" color="white" style={{ width: 40, height: 40, alignSelf: 'center', justifyContent: 'center' }} />,
+              tabBarIcon: () => (
+                <Icon
+                  type="font-awesome-5"
+                  name="user"
+                  color="white"
+                  style={{
+                    width: 40,
+                    height: 40,
+                    alignSelf: 'center',
+                    justifyContent: 'center',
+                  }}
+                />
+              ),
             }}
           />
         </>
@@ -263,9 +287,9 @@ function Main({ route, navigation }) {
         <>
           <Tab.Screen
             name="GetEducated"
+            showLabel={false}
             component={ArticleScreen}
             options={{
-              tabBarLabel: 'Home',
               tabBarIcon: () => <Image source={require('./assets/images/Articles_dark.png')} style={{ width: 40, height: 40 }} />,
             }}
           />

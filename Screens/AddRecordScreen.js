@@ -1,122 +1,61 @@
 import React, { Component, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  TouchableOpacity,
-  Image,
-  Slider,
-  Alert,
-} from "react-native";
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, Slider, Alert, Animated } from "react-native";
+
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Formik } from "formik";
 import moment from "moment";
 import { TextInput } from "react-native-gesture-handler";
 import { database } from "../src/config/config";
-import { number, object, string } from "yup";
+import { SchemaRecords } from "../Screens/SchemaRecords";
 import { LinearGradient } from "expo-linear-gradient";
 import { Button } from "react-native-elements";
 
-import { RadioButton } from "react-native-paper"; //<--------temp
 import MultiSelect from "react-native-multiple-select";
-const Setting = require("../assets/images/setting.png");
 const DropDown = require("../assets/images/DropDown.png");
 
-const ReviewSchema = object({
-  L_SPH: string()
-    .required("此項必填（如無度數，請填0）")
-    .matches("^[0-9]*$", "請輸入大過或等於0的整數")
-    .max(4, "球面度數(SPH)應在4個數字以內")
-    .test(
-      "divisible by 25",
-      "球面度數(SPH)應為0或以00, 25, 50或75作尾",
-      (value) => value % 25 == 0
-    ),
-  R_SPH: string()
-    .required("此項必填（如無度數，請填0）")
-    .matches("^[0-9]*$", "請輸入大過或等於0的整數")
-    .max(4, "球面度數(SPH)應在4個數字以內")
-    .test(
-      "divisible by 25",
-      "球面度數(SPH)應為0或以00, 25, 50或75作尾",
-      (value) => value % 25 == 0
-    ),
-  L_VA: number()
-    .test(
-      "range",
-      "視力(Visual Acuity)應在 0 和 1 之間",
-      (value) => value >= 0 || value <= 1 || value == null
-    )
-    .max(1.0, "視力(Visual Acuity)應在 0 和 1 之間"),
-  R_VA: number()
-    .test(
-      "range",
-      "視力(Visual Acuity)應在 0 和 1 之間",
-      (value) => value >= 0 || value <= 1 || value == null
-    )
-    .max(1.0, "視力(Visual Acuity)應在 0 和 1 之間"),
-  L_CYL: string()
-    .required("此項必填（如無度數，請填0）")
-    .matches("^[0-9]*$", "請輸入大過或等於0的整數")
-    .max(4, "散光度數(CYL)應在4個數字以內")
-    .test(
-      "divisible by 25",
-      "散光度數(CYL)應為0或以00, 25, 50或75作尾",
-      (value) => value % 25 == 0
-    ),
-  R_CYL: string()
-    .required("此項必填（如無度數，請填0）")
-    .matches("^[0-9]*$", "請輸入大過或等於0的整數")
-    .max(4, "散光度數(CYL)應在4個數字以內")
-    .test(
-      "divisible by 25",
-      "散光度數(CYL)應為0或以00, 25, 50或75作尾",
-      (value) => value % 25 == 0
-    ),
-  L_Axis: string().when("L_CYL", {
-    is: (val) => val > 0,
-    then: string()
-      .required("此項必填")
-      .test(
-        "between 0 and 180",
-        "散光軸度(Axis)應在 0 和 180 之間",
-        (value) => value >= 0 && value <= 180
-      )
-      .matches("^[0-9]*$", "請輸入整數"),
-    otherwise: string().notRequired(),
-  }),
-  R_Axis: string().when("L_CYL", {
-    is: (val) => val > 0,
-    then: string()
-      .required("此項必填")
-      .test(
-        "between 0 and 180",
-        "散光軸度(Axis)應在 0 和 180 之間",
-        (value) => value >= 0 && value <= 180
-      )
-      .matches("^[0-9]*$", "請輸入整數"),
-    otherwise: string().notRequired(),
-  }),
-  PD: string()
-    .matches("^[0-9]*$", "請輸入大於0的整數")
-    .max(3, "瞳孔距離(PD)超出合理範圍")
-    .notRequired(),
-});
-
 export default class Form extends Component {
+  yScroll = new Animated.Value(0);
   constructor(props) {
     super(props);
     this.state = { mode: true }; //true: slider mode ; false: input box mode
   }
 
+  componentDidMount() {
+    this.props.navigation.setOptions({
+      headerRightContainerStyle: {
+        position: "absolute",
+        top: this.yScroll.interpolate({
+          inputRange: [0, 80],
+          outputRange: [0, -200],
+          extrapolate: "clamp",
+        }),
+      },
+      headerTitleStyle: {
+        position: "absolute",
+        top: this.yScroll.interpolate({
+          inputRange: [0, 80],
+          outputRange: [-20, -120],
+          extrapolate: "clamp",
+        }),
+        fontSize: 31,
+        color: "#E1EDFF",
+        fontWeight: "700",
+        overflow: "hidden",
+      },
+      headerLeftContainerStyle: {
+        position: "absolute",
+        top: this.yScroll.interpolate({
+          inputRange: [0, 80],
+          outputRange: [0, -200],
+          extrapolate: "clamp",
+        }),
+      },
+    });
+  }
+
   render() {
     const mode = this.state.mode;
-    const {
-      isProfessional,
-      professional_id,
-      patient_id,
-    } = this.props.route.params;
+    const { isProfessional, professional_id, patient_id, refractive } = this.props.route.params;
 
     return (
       <View style={AddRecordScreen.background}>
@@ -129,42 +68,38 @@ export default class Form extends Component {
             height: "100%",
           }}
         >
-          <ScrollView keyboardShouldPersistTaps="always">
+          <ScrollView
+            keyboardShouldPersistTaps="always"
+            onScroll={Animated.event([
+              {
+                nativeEvent: {
+                  contentOffset: {
+                    y: this.yScroll,
+                  },
+                },
+              },
+            ])}
+            scrollEventThrottle={1}
+          >
             <View style={AddRecordScreen.selectModeMenu}>
               <TouchableOpacity onPress={() => this.setState({ mode: true })}>
-                <Text
-                  style={
-                    mode
-                      ? AddRecordScreen.selectedMode
-                      : AddRecordScreen.unselectedMode
-                  }
-                >
-                  簡易輸入
-                </Text>
+                <Text style={mode ? AddRecordScreen.selectedMode : AddRecordScreen.unselectedMode}>簡易輸入</Text>
               </TouchableOpacity>
 
               <TouchableOpacity onPress={() => this.setState({ mode: false })}>
-                <Text
-                  style={
-                    !mode
-                      ? AddRecordScreen.selectedMode
-                      : AddRecordScreen.unselectedMode
-                  }
-                >
-                  鍵盤輸入
-                </Text>
+                <Text style={!mode ? AddRecordScreen.selectedMode : AddRecordScreen.unselectedMode}>鍵盤輸入</Text>
               </TouchableOpacity>
             </View>
 
             <Formik
               initialValues={{
-                date: moment().format("YYYY-MM-DD"),
+                date: moment().format("YYYY-MM-DD HH:mm"),
                 L_SPH: "0",
                 Lsymbol: true, //true: +, false: -
                 R_SPH: "0",
                 Rsymbol: true,
-                L_VA: "0",
-                R_VA: "0",
+                L_VA: "20/200",
+                R_VA: "20/200",
                 L_CYL: "0",
                 R_CYL: "0",
                 L_Axis: "0",
@@ -177,23 +112,23 @@ export default class Form extends Component {
                 remarks: "",
                 disease: [],
               }}
-              validationSchema={ReviewSchema}
+              validationSchema={SchemaRecords}
               onSubmit={(values) => {
                 var exist = false;
-                database
-                  .ref("users/" + patient_id + "/records/" + values.date)
-                  .once("value", (snap) => {
-                    exist = snap.val() !== null;
-                    //console.log(exist);
-                  });
+                database.ref("users/" + patient_id + "/records/" + values.date).once("value", (snap) => {
+                  exist = snap.val() !== null;
+                  //console.log(exist);
+                });
 
                 let data = {
                   L_Myopia: 0,
                   R_Myopia: 0,
                   L_Hyperopia: 0,
                   R_Hyperopia: 0,
-                  L_VA: parseFloat(values.L_VA),
-                  R_VA: parseFloat(values.R_VA),
+                  //L_VA: parseFloat(values.L_VA),
+                  //R_VA: parseFloat(values.R_VA),
+                  L_VA: values.L_VA,
+                  R_VA: values.R_VA,
                   L_CYL: parseInt(values.L_CYL),
                   R_CYL: parseInt(values.R_CYL),
                   L_Axis: values.L_Axis,
@@ -222,17 +157,27 @@ export default class Form extends Component {
                 }
                 if (isProfessional) {
                   //change, need to also add to users/patient_id/records, but what if the patient doesnt exist? will it automatically create one entry for the patient?
+                  // database
+                  //   .ref(
+                  //     "professionals/" +
+                  //     professional_id +
+                  //     "/patients/" +
+                  //     patient_id +
+                  //     "/records/" +
+                  //     values.date
+                  //   )
+                  //   .set(data)
+                  //   .catch((error) => console.log(error));
+                  var uid;
+                  database.ref("userInfo/" + patient_id).once("value", (snap) => {
+                    uid = snap.val().uid;
+                  });
+
                   database
-                    .ref(
-                      "professionals/" +
-                      professional_id +
-                      "/patients/" +
-                      patient_id +
-                      "/records/" +
-                      values.date
-                    )
+                    .ref("users/" + uid + "/records/" + values.date)
                     .set(data)
                     .catch((error) => console.log(error));
+                  this.props.navigation.goBack();
                 }
                 if (!exist) {
                   //no existed record
@@ -244,9 +189,7 @@ export default class Form extends Component {
                 } else {
                   Alert.alert(
                     "注意！",
-                    "數據庫已存在" +
-                    values.date +
-                    "的資料，再按提交將會覆蓋舊的資料。",
+                    "數據庫已存在" + values.date + "的資料，再按提交將會覆蓋舊的資料。",
                     [
                       {
                         text: "取消",
@@ -256,9 +199,7 @@ export default class Form extends Component {
                         text: "提交",
                         onPress: () => {
                           database
-                            .ref(
-                              "users/" + patient_id + "/records/" + values.date
-                            )
+                            .ref("users/" + patient_id + "/records/" + values.date)
                             .set(data)
                             .catch((error) => console.log(error));
                           this.props.navigation.navigate("RecordsScreen");
@@ -270,163 +211,45 @@ export default class Form extends Component {
                 }
               }}
             >
-              {({
-                handleSubmit,
-                values,
-                setFieldValue,
-                handleChange,
-                errors,
-              }) => (
-                  <View style={AddRecordScreen.formContainer}>
-                    <DateSelect values={values} setFieldValue={setFieldValue} />
+              {({ handleSubmit, values, setFieldValue, handleChange, errors }) => (
+                <View style={AddRecordScreen.formContainer}>
+                  <DateSelect values={values} setFieldValue={setFieldValue} />
 
-                    <SPHInput
-                      handleChange={handleChange}
-                      setFieldValue={setFieldValue}
-                      isLeft={false}
-                      error={errors.L_SPH}
-                      mode={mode}
-                    />
-                    <SPHInput
-                      handleChange={handleChange}
-                      setFieldValue={setFieldValue}
-                      isLeft={true}
-                      error={errors.R_SPH}
-                      mode={mode}
-                    />
+                  <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} error={errors.L_SPH} mode={mode} refractive={refractive} />
+                  <CYLInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} errorA={errors.L_CYL} errorB={errors.L_Axis} mode={mode} />
+                  <VAInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} error={errors.L_VA} mode={mode} />
+                  <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} error={errors.R_SPH} mode={mode} refractive={refractive} />
 
-                    <CYLInput
-                      handleChange={handleChange}
-                      setFieldValue={setFieldValue}
-                      isLeft={false}
-                      errorA={errors.L_CYL}
-                      errorB={errors.L_Axis}
-                      mode={mode}
-                    />
-                    <CYLInput
-                      handleChange={handleChange}
-                      setFieldValue={setFieldValue}
-                      isLeft={true}
-                      errorA={errors.R_CYL}
-                      errorB={errors.R_Axis}
-                      mode={mode}
-                    />
+                  <CYLInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} errorA={errors.R_CYL} errorB={errors.R_Axis} mode={mode} />
 
-                    <VAInput
-                      handleChange={handleChange}
-                      setFieldValue={setFieldValue}
-                      isLeft={false}
-                      error={errors.L_VA}
-                      mode={mode}
-                    />
-                    <VAInput
-                      handleChange={handleChange}
-                      setFieldValue={setFieldValue}
-                      isLeft={true}
-                      error={errors.R_VA}
-                      mode={mode}
-                    />
+                  <VAInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} error={errors.R_VA} mode={mode} />
 
-                    <PDInput handleChange={handleChange} error={errors.PD} />
-                    <RemarksInput handleChange={handleChange} />
-                    {isProfessional && (
-                      <DiseasesInput setFieldValue={setFieldValue} />
-                    )}
+                  <PDInput handleChange={handleChange} error={errors.PD} />
+                  <RemarksInput handleChange={handleChange} />
+                  {isProfessional && <DiseasesInput setFieldValue={setFieldValue} />}
 
-                    <View style={{ paddingTop: 24 }}>
-                      <Button
-                        title="提交"
-                        buttonStyle={AddRecordScreen.submitButton}
-                        titleStyle={{ color: "#3CA1B7", fontSize: 18 }}
-                        containerStyle={{
-                          alignItems: "center",
-                          paddingBottom: 30,
-                        }}
-                        onPress={handleSubmit}
-                        disabled={Object.keys(errors).length > 0}
-                      />
-                    </View>
+                  <View style={{ paddingTop: 24 }}>
+                    <Button
+                      title="提交"
+                      buttonStyle={AddRecordScreen.submitButton}
+                      titleStyle={{ color: "#3CA1B7", fontSize: 18 }}
+                      containerStyle={{
+                        alignItems: "center",
+                        paddingBottom: 30,
+                      }}
+                      onPress={handleSubmit}
+                      disabled={Object.keys(errors).length > 0}
+                    />
                   </View>
-                )}
+                </View>
+              )}
             </Formik>
           </ScrollView>
         </LinearGradient>
-      </View >
+      </View>
     );
   }
 }
-
-export const SPHInputB = (props) => {
-  const { setFieldValue, isLeft } = props;
-  const [symbol, Togglesymbol] = useState(true); //true = positive
-  const [sliderValue, setSliderValue] = useState(0);
-
-  const setToTrue = () => {
-    Togglesymbol(true);
-    if (isLeft) setFieldValue("Lsymbol", true, false);
-    else setFieldValue("Rsymbol", true, false);
-  };
-
-  const setToFalse = () => {
-    Togglesymbol(false);
-    if (isLeft) setFieldValue("Lsymbol", false, false);
-    else setFieldValue("Rsymbol", false, false);
-  };
-
-  return (
-    <View style={{ flex: 1 }}>
-      <Text style={AddRecordScreen.questionText}>
-        請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}球面度數(SPH)
-      </Text>
-
-      <View>
-        <View style={{ flexDirection: "row", paddingLeft: 10 }}>
-          <View style={{ flexDirection: "row", marginRight: 15 }}>
-            <Text style={{ fontSize: 20, color: "white" }}>+</Text>
-            <RadioButton
-              color="white"
-              uncheckedColor="white"
-              value="+"
-              status={symbol == true ? "checked" : "unchecked"}
-              onPress={setToTrue}
-            />
-          </View>
-          <View style={{ flexDirection: "row" }}>
-            <Text style={{ fontSize: 20, color: "white", fontWeight: "bold" }}>
-              −
-            </Text>
-            <RadioButton
-              color="white"
-              uncheckedColor="white"
-              value="-"
-              status={symbol == false ? "checked" : "unchecked"}
-              onPress={setToFalse}
-            />
-          </View>
-        </View>
-
-        <Text style={AddRecordScreen.sliderText}>
-          {symbol ? "+" : "−"}{sliderValue}
-        </Text>
-
-        <Slider
-          style={{ width: 300, paddingTop: 30 }}
-          minimumValue={0}
-          maximumValue={500}
-          step={25}
-          thumbTintColor={"#47CDBD"}
-          minimumTrackTintColor={"white"}
-          maximumTrackTintColor={"#B8CAE4"}
-          onValueChange={(value) => setSliderValue(value)}
-          onSlidingComplete={(value) =>
-            setFieldValue(isLeft ? "L_SPH" : "R_SPH", value, false)
-          }
-        />
-      </View>
-    </View>
-  );
-};
-
 export const DateSelect = (props) => {
   const { values, setFieldValue } = props;
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -441,53 +264,106 @@ export const DateSelect = (props) => {
 
   const handleConfirm = (date) => {
     hideDatePicker();
-    setFieldValue("date", moment(date).format("YYYY-MM-DD"), false);
+    console.log(moment(date).format("YYYY-MM-DD HH:mm"));
+    setFieldValue("date", moment(date).format("YYYY-MM-DD HH:mm"), false);
   };
 
   return (
     <View>
-      <Text style={AddRecordScreen.questionText}>日期</Text>
+      <Text style={AddRecordScreen.questionText}>日期 時間</Text>
 
       <View>
-        <TouchableOpacity
-          onPress={showDatePicker}
-          style={AddRecordScreen.answerContainer}
-        >
+        <TouchableOpacity onPress={showDatePicker} style={AddRecordScreen.answerContainer}>
           <View style={AddRecordScreen.dropDownButton}>
             <Image source={DropDown} />
           </View>
-          <Text style={AddRecordScreen.answerText}>
-            {moment(values.date).format("YYYY-MM-DD")}
-          </Text>
+          <Text style={AddRecordScreen.answerText}>{moment(values.date).format("YYYY-MM-DD HH:mm")}</Text>
         </TouchableOpacity>
       </View>
 
-      <DateTimePickerModal
-        isVisible={isDatePickerVisible}
-        mode="date"
-        onConfirm={handleConfirm}
-        onCancel={hideDatePicker}
-        date={moment(values.date).toDate()}
-        maximumDate={new Date()}
-      />
+      <DateTimePickerModal isVisible={isDatePickerVisible} mode="datetime" onConfirm={handleConfirm} onCancel={hideDatePicker} date={moment(values.date).toDate()} maximumDate={new Date()} />
+    </View>
+  );
+};
+
+export const SPHInputB = (props) => {
+  const { setFieldValue, isLeft, refractive } = props;
+  const [symbol, Togglesymbol] = useState(refractive != 0 ? true : false); //true = positive = hyperopia
+  //const [symbol, Togglesymbol] = useState(true);
+  const [sliderValue, setSliderValue] = useState(0);
+  console.log("symbol", symbol);
+  const setToTrue = () => {
+    Togglesymbol(true);
+    if (isLeft) setFieldValue("Lsymbol", true, false);
+    else setFieldValue("Rsymbol", true, false);
+  };
+
+  const setToFalse = () => {
+    Togglesymbol(false);
+    if (isLeft) setFieldValue("Lsymbol", false, false);
+    else setFieldValue("Rsymbol", false, false);
+  };
+
+  return (
+    <View style={{ flex: 1 }}>
+      <Text style={AddRecordScreen.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}球面度數(SPH)</Text>
+
+      <View>
+        <View style={{ flexDirection: "row", paddingLeft: 10 }}>
+          <TouchableOpacity
+            style={{ flexDirection: "row", marginRight: 20 }}
+            onPress={() => {
+              //console.log(symbol);
+              setToFalse();
+            }}
+          >
+            <View style={!symbol ? AddRecordScreen.selectedRadioButton : AddRecordScreen.unselectedRadioButton} />
+            <Text style={{ fontSize: 20, color: "white", fontWeight: "bold" }}>−</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            style={{ flexDirection: "row" }}
+            onPress={() => {
+              //console.log(symbol);
+              setToTrue();
+            }}
+          >
+            <View style={symbol ? AddRecordScreen.selectedRadioButton : AddRecordScreen.unselectedRadioButton} />
+            <Text style={{ fontSize: 20, color: "white", paddingRight: 10 }}>+</Text>
+          </TouchableOpacity>
+        </View>
+        <Text style={AddRecordScreen.sliderText}>
+          {symbol ? "+" : "−"}
+          {sliderValue}
+        </Text>
+
+        <Slider
+          style={{ width: 300, paddingTop: 30 }}
+          minimumValue={0}
+          maximumValue={700}
+          step={25}
+          thumbTintColor={"#47CDBD"}
+          minimumTrackTintColor={"white"}
+          maximumTrackTintColor={"#B8CAE4"}
+          onValueChange={(value) => setSliderValue(value)}
+          onSlidingComplete={(value) => {
+            setFieldValue(isLeft ? "L_SPH" : "R_SPH", value, false);
+            setFieldValue(isLeft ? "Lsymbol" : "Rsymbol", symbol, false);
+          }}
+        />
+      </View>
     </View>
   );
 };
 
 export const SPHInput = (props) => {
-  const { handleChange, setFieldValue, isLeft, error, mode } = props;
+  const { handleChange, setFieldValue, isLeft, error, mode, refractive } = props;
 
   if (mode) {
-    return (
-      <SPHInputB
-        handleChange={handleChange}
-        setFieldValue={setFieldValue}
-        isLeft={isLeft}
-      />
-    );
+    return <SPHInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={isLeft} refractive={refractive} />;
   }
 
-  const [symbol, Togglesymbol] = useState(true); //true = positive
+  const [symbol, Togglesymbol] = useState(refractive == "0" ? false : true); //true = positive = hyperopia
   const pressHandler = () => {
     Togglesymbol(!symbol);
     if (isLeft) {
@@ -498,28 +374,17 @@ export const SPHInput = (props) => {
   };
   return (
     <View style={{ flex: 1 }}>
-      <Text style={AddRecordScreen.questionText}>
-        請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}球面度數(SPH) (e.g. 125)
-      </Text>
-      {error != undefined && (
-        <Text style={AddRecordScreen.errortext}>{error}</Text>
-      )}
+      <Text style={AddRecordScreen.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}球面度數(SPH) (e.g. 125)</Text>
+      {error != undefined && <Text style={AddRecordScreen.errortext}>{error}</Text>}
 
       <View style={AddRecordScreen.answerContainer}>
-        <TouchableOpacity
-          style={AddRecordScreen.answerContainer}
-          onPress={pressHandler}
-        >
+        <TouchableOpacity style={AddRecordScreen.answerContainer} onPress={pressHandler}>
           <View style={AddRecordScreen.dropDownButton}>
             <Image source={DropDown} />
           </View>
           <Text style={AddRecordScreen.answerText}>{symbol ? "+" : "-"}</Text>
         </TouchableOpacity>
-        <TextInput
-          onChangeText={handleChange(isLeft ? "L_SPH" : "R_SPH")}
-          keyboardType="numeric"
-          style={AddRecordScreen.answerInputBox}
-        />
+        <TextInput onChangeText={handleChange(isLeft ? "L_SPH" : "R_SPH")} keyboardType="numeric" style={AddRecordScreen.answerInputBox} />
       </View>
     </View>
   );
@@ -533,16 +398,14 @@ export const CYLInputB = (props) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <Text style={AddRecordScreen.questionText}>
-        請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}散光度數(CYL)
-      </Text>
+      <Text style={AddRecordScreen.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}散光度數(CYL)</Text>
 
       <View>
         <Text style={AddRecordScreen.sliderText}>−{sliderValue}</Text>
         <Slider
           style={{ width: 300, paddingTop: 30 }}
           minimumValue={0}
-          maximumValue={500}
+          maximumValue={600}
           step={25}
           thumbTintColor={"#47CDBD"}
           minimumTrackTintColor={"white"}
@@ -559,9 +422,7 @@ export const CYLInputB = (props) => {
         />
       </View>
 
-      <View>
-        {isable && <AxisInputB setFieldValue={setFieldValue} isLeft={isLeft} />}
-      </View>
+      <View>{isable && <AxisInputB setFieldValue={setFieldValue} isLeft={isLeft} />}</View>
     </View>
   );
 };
@@ -570,24 +431,14 @@ export const CYLInput = (props) => {
   const { handleChange, setFieldValue, isLeft, errorA, errorB, mode } = props;
 
   if (mode) {
-    return (
-      <CYLInputB
-        handleChange={handleChange}
-        setFieldValue={setFieldValue}
-        isLeft={isLeft}
-      />
-    );
+    return <CYLInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={isLeft} />;
   }
 
   const [isable, setIsable] = useState(false);
   return (
     <View style={{ flex: 1 }}>
-      <Text style={AddRecordScreen.questionText}>
-        請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}散光度數(CYL) (e.g. 125)
-      </Text>
-      {errorA != undefined && (
-        <Text style={AddRecordScreen.errortext}>{errorA}</Text>
-      )}
+      <Text style={AddRecordScreen.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}散光度數(CYL) (e.g. 125)</Text>
+      {errorA != undefined && <Text style={AddRecordScreen.errortext}>{errorA}</Text>}
       <View style={AddRecordScreen.answerContainer}>
         <Text style={AddRecordScreen.answerText}>−</Text>
 
@@ -613,16 +464,7 @@ export const CYLInput = (props) => {
           style={AddRecordScreen.answerInputBox}
         />
       </View>
-      <View>
-        {isable && (
-          <AxisInput
-            handleChange={handleChange}
-            setFieldValue={setFieldValue}
-            isLeft={isLeft}
-            error={errorB}
-          />
-        )}
-      </View>
+      <View>{isable && <AxisInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={isLeft} error={errorB} />}</View>
     </View>
   );
 };
@@ -632,9 +474,7 @@ export const AxisInputB = (props) => {
   const [sliderValue, setSliderValue] = useState(0);
   return (
     <View style={{ flex: 1 }}>
-      <Text style={AddRecordScreen.questionText}>
-        請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}散光軸度(Axis)
-      </Text>
+      <Text style={AddRecordScreen.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}散光軸度(Axis)</Text>
 
       <View>
         <Text style={AddRecordScreen.sliderText}>{sliderValue}</Text>
@@ -663,47 +503,134 @@ export const AxisInput = (props) => {
   }
   return (
     <View style={{ flex: 1 }}>
-      <Text style={AddRecordScreen.questionText}>
-        請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}散光軸度(Axis)
-      </Text>
-      {error != undefined && (
-        <Text style={AddRecordScreen.errortext}>{error}</Text>
-      )}
-      <TextInput
-        onChangeText={handleChange(isLeft ? "L_Axis" : "R_Axis")}
-        keyboardType="numeric"
-        style={AddRecordScreen.answerInputBox}
-      />
+      <Text style={AddRecordScreen.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}散光軸度(Axis)</Text>
+      {error != undefined && <Text style={AddRecordScreen.errortext}>{error}</Text>}
+      <TextInput onChangeText={handleChange(isLeft ? "L_Axis" : "R_Axis")} keyboardType="numeric" style={AddRecordScreen.answerInputBox} />
     </View>
   );
 };
 
 export const VAInputB = (props) => {
   const { setFieldValue, isLeft } = props;
-  const [sliderValue, setSliderValue] = useState(0);
+  const [mode, SetMode] = useState("A"); //A = 20/20, B=6/6, C = decimal
+
   return (
     <View style={{ flex: 1 }}>
-      <Text style={AddRecordScreen.questionText}>
-        請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}視力(VA)
-      </Text>
+      <Text style={AddRecordScreen.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}視力(VA)</Text>
 
-      <View>
-        <Text style={AddRecordScreen.sliderText}>{sliderValue / 10}</Text>
-        <Slider
-          style={{ width: 280, paddingTop: 30 }}
-          minimumValue={0}
-          maximumValue={10}
-          step={1}
-          thumbTintColor={"#47CDBD"}
-          minimumTrackTintColor={"white"}
-          maximumTrackTintColor={"#B8CAE4"}
-          onValueChange={(value) => setSliderValue(value)}
-          onSlidingComplete={(value) => {
-            setFieldValue(isLeft ? "L_VA" : "R_VA", value / 10, false);
+      <View style={{ flexDirection: "row", paddingLeft: 10 }}>
+        <TouchableOpacity
+          style={{ flexDirection: "row", marginRight: 15 }}
+          onPress={() => {
+            SetMode("A");
           }}
-        />
+        >
+          <View style={mode == "A" ? AddRecordScreen.selectedRadioButton : AddRecordScreen.unselectedRadioButton} />
+          <Text style={{ fontSize: 18, color: "white", paddingRight: 10 }}>20/20</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{ flexDirection: "row", marginRight: 15 }}
+          onPress={() => {
+            SetMode("B");
+          }}
+        >
+          <View style={mode == "B" ? AddRecordScreen.selectedRadioButton : AddRecordScreen.unselectedRadioButton} />
+          <Text style={{ fontSize: 18, color: "white", paddingRight: 10 }}>6/6</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{ flexDirection: "row" }}
+          onPress={() => {
+            SetMode("C");
+            setFieldValue(isLeft ? "L_VA" : "R_VA", "0", false);
+          }}
+        >
+          <View style={mode == "C" ? AddRecordScreen.selectedRadioButton : AddRecordScreen.unselectedRadioButton} />
+          <Text style={{ fontSize: 18, color: "white" }}>1.0</Text>
+        </TouchableOpacity>
       </View>
+
+      {mode == "A" ? (
+        <VA20Slider setFieldValue={setFieldValue} isLeft={isLeft} />
+      ) : mode == "B" ? (
+        <VA6Slider setFieldValue={setFieldValue} isLeft={isLeft} />
+      ) : (
+        <VAdecimalSlider setFieldValue={setFieldValue} isLeft={isLeft} />
+      )}
     </View>
+  );
+};
+
+export const VA20Slider = (props) => {
+  const { setFieldValue, isLeft } = props;
+  const [sliderValue, setSliderValue] = useState(0);
+  const VA20Arr = ["20/200", "20/100", "20/80", "20/60", "20/50", "20/40", "20/30", "20/25", "20/20"];
+  return (
+    <>
+      <Text style={AddRecordScreen.sliderText}>{VA20Arr[sliderValue]}</Text>
+      <Slider
+        style={{ width: 300, paddingTop: 30 }}
+        minimumValue={0}
+        maximumValue={VA20Arr.length - 1}
+        step={1}
+        thumbTintColor={"#47CDBD"}
+        minimumTrackTintColor={"white"}
+        maximumTrackTintColor={"#B8CAE4"}
+        onValueChange={(value) => setSliderValue(value)}
+        onSlidingComplete={(value) => {
+          setFieldValue(isLeft ? "L_VA" : "R_VA", VA20Arr[value].toString(), false);
+        }}
+      />
+    </>
+  );
+};
+
+export const VA6Slider = (props) => {
+  const { setFieldValue, isLeft } = props;
+  const [sliderValue, setSliderValue] = useState(0);
+  const VA6Arr = ["6/60", "6/30", "6/24", "6/18", "6/15", "6/12", "6/9", "6/7.5", "6/6"];
+  return (
+    <>
+      <Text style={AddRecordScreen.sliderText}>{VA6Arr[sliderValue]}</Text>
+      <Slider
+        style={{ width: 300, paddingTop: 30 }}
+        minimumValue={0}
+        maximumValue={VA6Arr.length - 1}
+        step={1}
+        thumbTintColor={"#47CDBD"}
+        minimumTrackTintColor={"white"}
+        maximumTrackTintColor={"#B8CAE4"}
+        onValueChange={(value) => setSliderValue(value)}
+        onSlidingComplete={(value) => {
+          setFieldValue(isLeft ? "L_VA" : "R_VA", VA6Arr[value].toString(), false);
+        }}
+      />
+    </>
+  );
+};
+
+export const VAdecimalSlider = (props) => {
+  const { setFieldValue, isLeft } = props;
+  const [sliderValue, setSliderValue] = useState(0);
+
+  return (
+    <>
+      <Text style={AddRecordScreen.sliderText}>{(sliderValue / 10).toFixed(1)}</Text>
+      <Slider
+        style={{ width: 300, paddingTop: 30 }}
+        minimumValue={0}
+        maximumValue={12}
+        step={1}
+        thumbTintColor={"#47CDBD"}
+        minimumTrackTintColor={"white"}
+        maximumTrackTintColor={"#B8CAE4"}
+        onValueChange={(value) => setSliderValue(value)}
+        onSlidingComplete={(value) => {
+          setFieldValue(isLeft ? "L_VA" : "R_VA", (value / 10).toFixed(2), false);
+        }}
+      />
+    </>
   );
 };
 
@@ -712,17 +639,9 @@ export const VAInput = (props) => {
   if (mode) return <VAInputB setFieldValue={setFieldValue} isLeft={isLeft} />;
   return (
     <View style={{ flex: 1 }}>
-      <Text style={AddRecordScreen.questionText}>
-        請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}視力(VA)(e.g. 1.0)
-      </Text>
-      {error != undefined && (
-        <Text style={AddRecordScreen.errortext}>{error}</Text>
-      )}
-      <TextInput
-        onChangeText={handleChange(isLeft ? "L_VA" : "R_VA")}
-        keyboardType="numeric"
-        style={AddRecordScreen.answerInputBox}
-      />
+      <Text style={AddRecordScreen.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}視力(VA)(e.g. 1.0)</Text>
+      {error != undefined && <Text style={AddRecordScreen.errortext}>{error}</Text>}
+      <TextInput onChangeText={handleChange(isLeft ? "L_VA" : "R_VA")} keyboardType="numeric" style={AddRecordScreen.answerInputBox} />
     </View>
   );
 };
@@ -732,17 +651,9 @@ export const PDInput = (props) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <Text style={AddRecordScreen.questionText}>
-        請輸入兩眼瞳孔距離(Pupillary Distance)(mm)
-      </Text>
-      {error != undefined && (
-        <Text style={AddRecordScreen.errortext}>{error}</Text>
-      )}
-      <TextInput
-        onChangeText={handleChange("PD")}
-        keyboardType="numeric"
-        style={AddRecordScreen.answerInputBox}
-      />
+      <Text style={AddRecordScreen.questionText}>請輸入兩眼瞳孔距離(Pupillary Distance)(mm)</Text>
+      {error != undefined && <Text style={AddRecordScreen.errortext}>{error}</Text>}
+      <TextInput onChangeText={handleChange("PD")} keyboardType="numeric" style={AddRecordScreen.answerInputBox} />
     </View>
   );
 };
@@ -753,11 +664,7 @@ export const RemarksInput = (props) => {
     <View style={{ flex: 1, marginBottom: 10 }}>
       <Text style={AddRecordScreen.questionText}>備註</Text>
 
-      <TextInput
-        onChangeText={handleChange("remarks")}
-        multiline={true}
-        style={AddRecordScreen.remarksInputBox}
-      />
+      <TextInput onChangeText={handleChange("remarks")} multiline={true} style={AddRecordScreen.remarksInputBox} />
     </View>
   );
 };
@@ -793,9 +700,7 @@ export const DiseasesInput = (props) => {
 
   return (
     <View>
-      <Text style={[AddRecordScreen.questionText, { marginBottom: 5 }]}>
-        確診眼疾
-      </Text>
+      <Text style={[AddRecordScreen.questionText, { marginBottom: 5 }]}>確診眼疾</Text>
       <MultiSelect
         items={items}
         uniqueKey="id"
@@ -892,11 +797,10 @@ const AddRecordScreen = StyleSheet.create({
     paddingRight: 15,
     paddingBottom: 2,
     paddingTop: 0,
-    color: "white",
+    backgroundColor: "white",
+    color: "#1872a7",
     fontSize: 18,
-    borderBottomWidth: 1.5,
-    borderRightWidth: 1.5,
-    borderColor: "white",
+    borderRadius: 5,
     marginRight: 15,
   },
   remarksInputBox: {
@@ -906,11 +810,10 @@ const AddRecordScreen = StyleSheet.create({
     paddingRight: 15,
     paddingBottom: 2,
     paddingTop: 0,
-    color: "white",
+    backgroundColor: "white",
+    color: "#1872a7",
     fontSize: 18,
-    borderBottomWidth: 1.5,
-    borderRightWidth: 1.5,
-    borderColor: "white",
+    borderRadius: 5,
     marginRight: 15,
   },
   dropDownButton: {
@@ -938,6 +841,26 @@ const AddRecordScreen = StyleSheet.create({
     paddingHorizontal: 10,
     borderRadius: 6,
     paddingBottom: 2,
-    marginTop: 5,
+    marginTop: 15,
+  },
+  selectedRadioButton: {
+    width: 18,
+    height: 18,
+    borderRadius: 10,
+    borderWidth: 2.5,
+    borderColor: "white",
+    backgroundColor: "#47CDBD",
+    marginTop: 4,
+    marginRight: 5,
+  },
+  unselectedRadioButton: {
+    width: 18,
+    height: 18,
+    borderRadius: 10,
+    borderWidth: 2.5,
+    borderColor: "white",
+    backgroundColor: "white",
+    marginTop: 4,
+    marginRight: 5,
   },
 });
