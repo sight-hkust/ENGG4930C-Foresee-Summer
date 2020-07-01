@@ -10,13 +10,11 @@ import {
   Dimensions,
 } from "react-native";
 import React, { Component } from "react";
-import { database } from "../../../src/config/config";
+import { database } from "../src/config/config";
 import { LinearGradient } from "expo-linear-gradient";
-import {
-  ScreenWidth,
-  ScreenHeight,
-  FontScale,
-} from "../../../constant/Constant";
+import { ScreenWidth, ScreenHeight, FontScale } from "../constant/Constant";
+
+const Setting = require("../assets/images/setting.png");
 
 export default class GetEducated extends Component {
   constructor(props) {
@@ -75,9 +73,7 @@ export default class GetEducated extends Component {
             }}
           ></LinearGradient>
         </View>
-        <View>
-          <View style={{ height: 70 }}></View>
-
+        <View style={{ flex: 1 }}>
           <View style={GetEducatedScreen.topArticleContainer}>
             <TouchableOpacity onPress={pressHandler}>
               <Image
@@ -114,20 +110,14 @@ function Item({ item, navigation }) {
   return (
     <TouchableOpacity onPress={pressHandler}>
       <View style={GetEducatedScreen.articleItem}>
-        <View>
-          <Image
-            source={{ uri: item.image }}
-            style={GetEducatedScreen.itemImage}
-          />
-        </View>
-        <View>
-          <View>
-            <Text style={GetEducatedScreen.articleSubject}>{item.subject}</Text>
-            <Text style={GetEducatedScreen.articleDate}>{item.date}</Text>
-            <Text style={GetEducatedScreen.articleAbstract}>
-              {item.abstract}
-            </Text>
-          </View>
+        <Image
+          source={{ uri: item.image }}
+          style={GetEducatedScreen.itemImage}
+        />
+        <View style={{ flex: 1 }}>
+          <Text style={GetEducatedScreen.articleSubject}>{item.subject}</Text>
+          <Text style={GetEducatedScreen.articleDate}>{item.date}</Text>
+          <Text style={GetEducatedScreen.articleAbstract}>{item.abstract}</Text>
         </View>
       </View>
     </TouchableOpacity>
@@ -156,26 +146,24 @@ const GetEducatedScreen = StyleSheet.create({
     width: Dimensions.get("window").width,
   },
   topArticleContainer: {
-    marginTop: 40,
-    marginBottom: 15,
+    marginTop: 90,
   },
   articleListContainer: {
-    marginTop: 5,
-    marginLeft: 30,
-    marginRight: 30,
+    marginHorizontal: 30,
+    marginVertical: 15,
+    flex: 1,
   },
   articleItem: {
     flexDirection: "row",
-    marginTop: 20,
+    marginVertical: 15,
   },
   itemImage: {
     width: 85,
     height: 85,
     borderRadius: 10,
-    marginRight: 25,
+    marginRight: 20,
   },
   articleSubject: {
-    width: 210,
     flexWrap: "wrap",
     fontWeight: "bold",
     fontSize: 18,
@@ -188,29 +176,27 @@ const GetEducatedScreen = StyleSheet.create({
     paddingTop: 2,
   },
   articleAbstract: {
-    width: 200,
     flexWrap: "wrap",
     fontSize: 14,
     color: "#2D9CDB",
-    paddingRight: 10,
     paddingBottom: 10,
     borderBottomWidth: 1,
     borderColor: "#24559E",
   },
   topArticleImage: {
-    width: 300,
-    height: 180,
+    width: ScreenWidth - 60,
+    height: ScreenWidth * 0.6 - 36,
     marginLeft: 30,
     marginRight: 30,
     borderRadius: 14,
   },
   topArticleText: {
     position: "absolute",
-    top: 130,
+    top: ScreenWidth * 0.6 - 86,
     paddingLeft: 20,
     paddingTop: 7,
     left: 30,
-    width: 300,
+    width: ScreenWidth - 60,
     height: 50,
     borderBottomLeftRadius: 14,
     borderBottomRightRadius: 14,
