@@ -85,8 +85,8 @@ export const HotQuestionCard = (props) => {
   };
 
   return (
-    <View style={{ ...styles.hotTopicCard, ...props.style }}>
-      <TouchableOpacity onPress={toggleModal}>
+    <View style={{ ...styles.shadow }}>
+      <TouchableOpacity style={{ ...styles.hotTopicCard, ...props.style }} onPress={toggleModal}>
         <LinearGradientBackground
           colors={[
             `rgb(${RGB[0] + props.counter * 12},${RGB[1] + props.counter * 36}, ${RGB[2] + props.counter * 28})`,
@@ -113,7 +113,7 @@ export const MiniQuestionCard = (props) => {
 
   return (
     <>
-      <TouchableOpacity style={styles.miniQuestion} onPress={toggleModal}>
+      <TouchableOpacity style={{ ...styles.shadow, ...styles.miniQuestion }} onPress={toggleModal}>
         <View style={{ paddingHorizontal: 15, paddingTop: 20, width: '100%' }}>
           <Text style={styles.miniQuestionTitle}>{'問。' + props.faq.question_title}</Text>
           <Text style={styles.miniQuestionContent}>{props.faq.question_content.length > 34 ? props.faq.question_content.substring(0, 38) + ' . . . . ' : props.faq.question_content}</Text>

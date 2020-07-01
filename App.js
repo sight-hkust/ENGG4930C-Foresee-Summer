@@ -1,11 +1,12 @@
 import 'react-native-gesture-handler';
 import React, { useEffect, useState } from 'react';
-import { Image, Dimensions, TouchableOpacity } from 'react-native';
+import { Image, Dimensions, TouchableOpacity, Text, StyleSheet } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { createMaterialBottomTabNavigator } from '@react-navigation/material-bottom-tabs';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import GetEducatedScreen from './src/components/Education/GetEducated';
 import EyeExercise from './src/components/Education/EyeExercise';
@@ -37,99 +38,13 @@ import SettingScreen from './src/components/Setting/Setting';
 import PrivacyPolicy from './src/components/Policy/PrivacyPolicy';
 import TermsAndCondition from './src/components/Policy/TermsAndCondition';
 import { set } from 'react-native-reanimated';
-import { auth } from './src/config/config';
 
-const Tab = createMaterialBottomTabNavigator();
+const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
-
-global.realName = '';
-global.email = '';
-global.password = '';
-global.apiUrl = '';
-
-/** Normal User Screens */
-function UserScreen({ navigation, route }) {
-  return (
-    <Stack.Navigator
-      headerMode="screen"
-      screenOptions={{
-        headerTransparent: true,
-        headerTitleStyle: {
-          fontSize: 31,
-          color: '#E1EDFF',
-          fontWeight: '700',
-        },
-        headerRight: () => <SettingButton navigation={navigation} />,
-      }}
-    >
-      <Stack.Screen name="RecordsScreen" component={RecordsScreen} />
-      <Stack.Screen name="GetEducatedScreen" component={GetEducatedScreen} />
-      <Stack.Screen name="ArticleDetailScreen" component={ArticleDetailScreen} />
-      <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} />
-      <Stack.Screen name="EyeExercise" component={EyeExercise} />
-      <Stack.Screen name="Profile" component={Profile} />
-      <Stack.Screen name="SettingScreen" component={SettingScreen} options={{ title: '設定' }} />
-    </Stack.Navigator>
-  );
-}
-
-//Article list and detailed article
-function Education({ navigation, route }) {
-  return (
-    <Stack.Navigator
-      headerMode="screen"
-      screenOptions={{
-        headerTransparent: true,
-        headerTitleStyle: {
-          fontSize: 31,
-          color: '#E1EDFF',
-          fontWeight: '700',
-        },
-        headerRight: () => <SettingButton navigation={navigation} />,
-      }}
-    >
-      <Stack.Screen name="GetEducatedScreen" component={GetEducatedScreen} />
-      <Stack.Screen name="ArticleDetailScreen" component={ArticleDetailScreen} />
-    </Stack.Navigator>
-  );
-}
-
-function ProfessionalScreen({ navigation, route }) {
-  return (
-    <Stack.Navigator
-      headerMode="screen"
-      screenOptions={{
-        headerTransparent: true,
-        headerTitleStyle: {
-          fontSize: 31,
-          color: '#E1EDFF',
-          fontWeight: '700',
-        },
-        headerRight: () => <SettingButton navigation={navigation} />,
-      }}
-    >
-      <Stack.Screen name="ProfMainMenu" component={ProfMainMenu} options={{ title: '病人名單' }} />
-      <Stack.Screen name="ProfPatientViewScreen" component={ProfPatientViewScreen} options={{ title: '' }} />
-      <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} options={{ title: '新增資料' }} />
-      <Stack.Screen name="SettingScreen" component={SettingScreen} options={{ title: '設定' }} />
-    </Stack.Navigator>
-  );
-}
 
 function ArticleScreen({ navigation, route }) {
   return (
-    <Stack.Navigator
-      headerMode="screen"
-      screenOptions={{
-        headerTransparent: true,
-        headerTitleStyle: {
-          fontSize: 31,
-          color: '#E1EDFF',
-          fontWeight: '700',
-        },
-        headerRight: () => <SettingButton navigation={navigation} />,
-      }}
-    >
+    <Stack.Navigator screenOptions={{ ...headerConfig, headerRight: () => <SettingButton navigation={navigation} /> }}>
       <Stack.Screen name="GetEducatedScreen" component={GetEducatedScreen} options={{ title: '護眼秘笈' }} />
       <Stack.Screen name="ArticleDetailScreen" component={ArticleDetailScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
@@ -138,18 +53,7 @@ function ArticleScreen({ navigation, route }) {
 
 function ExerciseScreen({ navigation, route }) {
   return (
-    <Stack.Navigator
-      headerMode="screen"
-      headerTitleAlign="left"
-      screenOptions={{
-        headerTransparent: true,
-        headerTitleStyle: {
-          color: '#E1EDFF',
-          fontSize: 30,
-        },
-        headerRight: () => <SettingButton navigation={navigation} />,
-      }}
-    >
+    <Stack.Navigator screenOptions={{ ...headerConfig, headerRight: () => <SettingButton navigation={navigation} /> }}>
       <Stack.Screen name="RecordsScreen" component={RecordsScreen} options={{ title: '' }} />
     </Stack.Navigator>
   );
@@ -157,18 +61,7 @@ function ExerciseScreen({ navigation, route }) {
 
 function HomeScreen({ navigation, route }) {
   return (
-    <Stack.Navigator
-      headerMode="screen"
-      headerTitleAlign="left"
-      screenOptions={{
-        headerTransparent: true,
-        headerTitleStyle: {
-          color: '#E1EDFF',
-          fontSize: 30,
-        },
-        headerRight: () => <SettingButton navigation={navigation} />,
-      }}
-    >
+    <Stack.Navigator screenOptions={{ ...headerConfig, headerRight: () => <SettingButton navigation={navigation} /> }}>
       <Stack.Screen name="OverViewScreen" component={OverviewScreen} options={{ title: '' }} />
       <Stack.Screen name="RecordsScreen" component={RecordsScreen} options={{ title: '' }} />
       <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} options={{ title: '新增資料' }} />
@@ -178,19 +71,20 @@ function HomeScreen({ navigation, route }) {
 
 function FaqScreen({ navigation, route }) {
   return (
-    <Stack.Navigator
-      headerMode="screen"
-      screenOptions={{
-        headerTransparent: true,
-        headerTitleStyle: {
-          color: '#E1EDFF',
-          fontSize: 30,
-        },
-        headerRight: () => <SettingButton navigation={navigation} />,
-      }}
-    >
+    <Stack.Navigator screenOptions={{ ...headerConfig, headerRight: () => <SettingButton navigation={navigation} /> }}>
       <Stack.Screen name="AskAnExpertMainScreen" component={AskAnExpertMainScreen} options={{ title: '專家解答' }} />
       <Stack.Screen name="PostQuestion" component={PostQuestion} options={{ title: '撰寫問題' }} />
+    </Stack.Navigator>
+  );
+}
+
+function ProfessionalScreen({ navigation, route }) {
+  return (
+    <Stack.Navigator screenOptions={{ ...headerConfig, headerRight: () => <SettingButton navigation={navigation} /> }}>
+      <Stack.Screen name="ProfMainMenu" component={ProfMainMenu} options={{ title: '病人名單' }} />
+      <Stack.Screen name="ProfPatientViewScreen" component={ProfPatientViewScreen} options={{ title: '' }} />
+      <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} options={{ title: '新增資料' }} />
+      <Stack.Screen name="SettingScreen" component={SettingScreen} options={{ title: '設定' }} />
     </Stack.Navigator>
   );
 }
@@ -198,26 +92,14 @@ function FaqScreen({ navigation, route }) {
 function SettingButton({ route, navigation }) {
   return (
     <>
-      {auth.currentUser.displayName != null && auth.currentUser.displayName == 'professional' ? (
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('SettingScreen');
-            //navigation.navigate('ProfessionalScreen', { screen: 'TutorialScreen' });
-          }}
-          style={{ marginRight: 20 }}
-        >
-          <Icon name="logout" type="material-community" color="white" size={30} />
-        </TouchableOpacity>
-      ) : (
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('SettingScreen');
-          }}
-          style={{ marginRight: 15 }}
-        >
-          <Image source={require('./assets/images/setting.png')} />
-        </TouchableOpacity>
-      )}
+      <TouchableOpacity
+        onPress={() => {
+          auth.currentUser.displayName == 'professional' ? navigation.navigate('SettingScreen') : navigation.navigate('SettingScreen');
+        }}
+        style={{ marginRight: 20 }}
+      >
+        <Icon name={auth.currentUser.displayName == 'professional' ? 'questioncircleo' : 'setting'} type={'antdesign'} color="white" size={30} />
+      </TouchableOpacity>
     </>
   );
 }
@@ -225,62 +107,34 @@ function SettingButton({ route, navigation }) {
 function Main({ route, navigation }) {
   return (
     <Tab.Navigator
-      headerMode="screen"
-      labeled={false}
-      barStyle={{
-        backgroundColor: '#BED8FF',
-        height: Dimensions.get('window').height * 0.1,
-        paddingHorizontal: auth.currentUser != null && auth.currentUser.displayName == 'professional' ? 100 : 30,
+      tabBarOptions={{
+        showLabel: false,
+        activeTintColor: '#003973',
+        inactiveTintColor: '#2D9CDB',
+        style: {
+          backgroundColor: '#BED8FF',
+          height: Dimensions.get('window').height * 0.1,
+          paddingHorizontal: auth.currentUser.displayName == 'professional' ? 100 : 30,
+          borderTopWidth: 0,
+          borderTopColor: 'transparent',
+
+          elevation: 0,
+          shadowColor: '#BED8FF',
+          shadowOpacity: 0,
+          shadowOffset: {
+            height: 0,
+          },
+          shadowRadius: 0,
+        },
       }}
     >
-      {auth.currentUser != null && auth.currentUser.displayName == 'professional' ? (
+      {auth.currentUser.displayName == 'professional' ? (
         <>
           <Tab.Screen
-            name="EmptyScreen"
-            showLabel={false}
-            component={ProfessionalScreen}
-            options={{
-              tabBarIcon: () => (
-                <Icon
-                  type="entypo"
-                  name="tools"
-                  color="white"
-                  style={{
-                    width: 40,
-                    height: 40,
-                    alignSelf: 'center',
-                    justifyContent: 'center',
-                  }}
-                />
-              ),
-            }}
-          />
-          <Tab.Screen
             name="ProfessionalScreen"
-            showLabel={false}
             component={ProfessionalScreen}
             options={{
-              tabBarIcon: () => <Image source={require('./assets/images/Icon_solid.png')} style={{ width: 40, height: 40 }} />,
-            }}
-          />
-          <Tab.Screen
-            name="ProfileScreen"
-            showLabel={false}
-            component={Profile}
-            options={{
-              tabBarIcon: () => (
-                <Icon
-                  type="font-awesome-5"
-                  name="user"
-                  color="white"
-                  style={{
-                    width: 40,
-                    height: 40,
-                    alignSelf: 'center',
-                    justifyContent: 'center',
-                  }}
-                />
-              ),
+              tabBarIcon: () => <Image source={require('./assets/images/Icon_solid.png')} style={{ ...styles.icon, ...{ width: 55, height: 55 } }} />,
             }}
           />
         </>
@@ -288,46 +142,46 @@ function Main({ route, navigation }) {
         <>
           <Tab.Screen
             name="GetEducated"
-            showLabel={false}
             component={ArticleScreen}
             options={{
-              tabBarIcon: () => <Image source={require('./assets/images/Articles_dark.png')} style={{ width: 40, height: 40 }} />,
+              tabBarLabel: '護眼秘笈',
+              tabBarIcon: () => <Image source={require('./assets/images/Articles_dark.png')} style={styles.icon} />,
             }}
           />
 
           <Tab.Screen
             name="ExerciseScreen"
-            showLabel={false}
             component={ExerciseScreen}
             options={{
-              tabBarIcon: () => <Image source={require('./assets/images/Exercise_dark.png')} style={{ width: 40, height: 40 }} />,
+              tabBarLabel: '護眼操',
+              tabBarIcon: () => <Image source={require('./assets/images/Exercise_dark.png')} style={styles.icon} />,
             }}
           />
 
           <Tab.Screen
             name="HomeScreen"
-            showLabel={false}
             component={HomeScreen}
             options={{
-              tabBarIcon: () => <Image source={require('./assets/images/Icon_solid.png')} style={{ width: 40, height: 40 }} />,
+              tabBarLabel: '主頁',
+              tabBarIcon: () => <Image source={require('./assets/images/Icon_solid.png')} style={{ ...styles.icon, ...{ width: 55, height: 55 } }} />,
             }}
           />
 
           <Tab.Screen
             name="FaqScreen"
-            showLabel={false}
             component={FaqScreen}
             options={{
-              tabBarIcon: () => <Image source={require('./assets/images/Qna_dark.png')} style={{ width: 40, height: 40 }} />,
+              tabBarLabel: '專家解答',
+              tabBarIcon: () => <Image source={require('./assets/images/Qna_dark.png')} style={styles.icon} />,
             }}
           />
 
           <Tab.Screen
-            name="ProfessionalScreen"
-            showLabel={false}
-            component={ProfessionalScreen}
+            name="Profile"
+            component={Profile}
             options={{
-              tabBarIcon: () => <Image source={require('./assets/images/Achievement_dark.png')} style={{ width: 40, height: 40 }} />,
+              tabBarLabel: '個人檔案',
+              tabBarIcon: () => <Image source={require('./assets/images/Profile.png')} style={styles.icon} />,
             }}
           />
         </>
@@ -376,5 +230,21 @@ const headerConfig = {
   headerTitleStyle: {
     color: '#E1EDFF',
     fontSize: 25,
+    fontWeight: 'bold',
   },
 };
+
+const styles = StyleSheet.create({
+  icon: {
+    width: 40,
+    height: 40,
+    elevation: 10,
+
+    shadowColor: 'black',
+    shadowOpacity: 0.3,
+    shadowOffset: {
+      height: 2,
+    },
+    shadowRadius: 3,
+  },
+});

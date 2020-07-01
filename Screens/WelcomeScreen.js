@@ -9,8 +9,6 @@ import { ScreenHeight, ScreenWidth, FontScale } from '../constant/Constant';
 const Icon = require('../assets/images/icon_small.png');
 
 const WelcomeScreen = ({ route, navigation }) => {
-  const [isProfessional, setIsProfessional] = useState(true);
-
   auth.onAuthStateChanged((user) => {
     if (user) {
       navigation.navigate('Main');
