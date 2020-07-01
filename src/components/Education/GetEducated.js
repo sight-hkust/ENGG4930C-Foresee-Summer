@@ -10,9 +10,13 @@ import {
   Dimensions,
 } from "react-native";
 import React, { Component } from "react";
-import { database } from "../src/config/config";
+import { database } from "../../config/config";
 import { LinearGradient } from "expo-linear-gradient";
-import { ScreenWidth, ScreenHeight, FontScale } from "../constant/Constant";
+import {
+  ScreenWidth,
+  ScreenHeight,
+  FontScale,
+} from "../../../constant/Constant";
 
 const Setting = require("../assets/images/setting.png");
 

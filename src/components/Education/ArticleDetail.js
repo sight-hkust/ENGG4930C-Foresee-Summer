@@ -8,14 +8,18 @@ import {
   TouchableOpacity,
   ScrollView,
 } from "react-native";
-import { database } from "../src/config/config";
+import { database } from "../../config/config";
 import React, { Component } from "react";
 import { Audio, Video } from "expo-av";
 import { LinearGradient } from "expo-linear-gradient";
 import { Button } from "react-native-elements";
 import { Icon } from "react-native-elements";
 import * as ScreenOrientation from "expo-screen-orientation";
-import { ScreenWidth, ScreenHeight, FontScale } from "../constant/Constant";
+import {
+  ScreenWidth,
+  ScreenHeight,
+  FontScale,
+} from "../../../constant/Constant";
 
 //TODO: STOP VID WHEN LEAVE THE SCREEN!!
 
