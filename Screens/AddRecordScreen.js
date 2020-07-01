@@ -98,17 +98,21 @@ export default class Form extends Component {
                 Lsymbol: true, //true: +, false: -
                 R_SPH: "0",
                 Rsymbol: true,
-                L_VA: "20/200",
-                R_VA: "20/200",
-                L_CYL: "0",
-                R_CYL: "0",
-                L_Axis: "0",
-                R_Axis: "0",
-                PD: "0",
                 L_Myopia: "0",
                 R_Myopia: "0",
                 L_Hyperopia: "0",
                 R_Hyperopia: "0",
+
+                L_CYL: "0",
+                R_CYL: "0",
+                L_Axis: "0",
+                R_Axis: "0",
+
+                L_VA: "20/200",
+                R_VA: "20/200",
+
+                L_PD: "0",
+                R_PD: "0",
                 remarks: "",
                 disease: [],
               }}
@@ -133,7 +137,8 @@ export default class Form extends Component {
                   R_CYL: parseInt(values.R_CYL),
                   L_Axis: values.L_Axis,
                   R_Axis: values.R_Axis,
-                  PD: values.PD,
+                  L_PD: values.L_PD,
+                  R_PD: values.R_PD,
                   remarks: values.remarks,
                   disease: values.disease,
                 };
@@ -218,13 +223,13 @@ export default class Form extends Component {
                   <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} error={errors.L_SPH} mode={mode} refractive={refractive} />
                   <CYLInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} errorA={errors.L_CYL} errorB={errors.L_Axis} mode={mode} />
                   <VAInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} error={errors.L_VA} mode={mode} />
+                  <PDInput handleChange={handleChange} error={errors.PD} isLeft={false} />
+
                   <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} error={errors.R_SPH} mode={mode} refractive={refractive} />
-
                   <CYLInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} errorA={errors.R_CYL} errorB={errors.R_Axis} mode={mode} />
-
                   <VAInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} error={errors.R_VA} mode={mode} />
+                  <PDInput handleChange={handleChange} error={errors.PD} isLeft={true} />
 
-                  <PDInput handleChange={handleChange} error={errors.PD} />
                   <RemarksInput handleChange={handleChange} />
                   {isProfessional && <DiseasesInput setFieldValue={setFieldValue} />}
 
@@ -647,13 +652,13 @@ export const VAInput = (props) => {
 };
 
 export const PDInput = (props) => {
-  const { handleChange, error } = props;
+  const { handleChange, error, isLeft } = props;
 
   return (
     <View style={{ flex: 1 }}>
       <Text style={AddRecordScreen.questionText}>請輸入兩眼瞳孔距離(Pupillary Distance)(mm)</Text>
       {error != undefined && <Text style={AddRecordScreen.errortext}>{error}</Text>}
-      <TextInput onChangeText={handleChange("PD")} keyboardType="numeric" style={AddRecordScreen.answerInputBox} />
+      <TextInput onChangeText={handleChange(isLeft ? "L_PD" : "R_PD")} keyboardType="numeric" style={AddRecordScreen.answerInputBox} />
     </View>
   );
 };
