@@ -61,7 +61,7 @@ export default class RecordsScreen extends Component {
 
   render() {
     const data = this.state.data;
-    console.log("@render() this.state.dates: ", this.state.dates);
+
     const pressHandler = () => {
       this.props.navigation.navigate("AddRecordScreen", {
         isProfessional: false,

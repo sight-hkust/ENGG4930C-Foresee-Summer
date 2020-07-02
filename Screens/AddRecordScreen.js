@@ -8,9 +8,8 @@ import { database } from "../src/config/config";
 import { SchemaRecords } from "../Screens/SchemaRecords";
 import { LinearGradient } from "expo-linear-gradient";
 import { Button } from "react-native-elements";
-import Collapsible from "react-native-collapsible";
 
-import { DateSelect, SPHInput, CYLInput, RenderCollapseItem, VAInput, PDInput, RemarksInput, DiseasesInput } from "../Screens/RecordFormComponents";
+import { DateSelect, SPHInput, CYLInput, RenderCollapseAdj, VAInput, PDInput, RemarksInput, DiseasesInput, RenderCollapseVA, RenderCollapsePD } from "../Screens/RecordFormComponents";
 
 export default class Form extends Component {
   yScroll = new Animated.Value(0);
@@ -232,15 +231,13 @@ export default class Form extends Component {
 
                   <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} error={errors.L_SPH} mode={mode} refractive={refractive} isAdj={false} />
                   <CYLInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} errorA={errors.L_CYL} errorB={errors.L_Axis} mode={mode} />
-                  <VAInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} error={errors.L_VA} mode={mode} />
-                  <PDInput handleChange={handleChange} error={errors.PD} isLeft={false} />
 
                   <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} error={errors.R_SPH} mode={mode} refractive={refractive} isAdj={false} />
                   <CYLInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} errorA={errors.R_CYL} errorB={errors.R_Axis} mode={mode} />
-                  <VAInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} error={errors.R_VA} mode={mode} />
-                  <PDInput handleChange={handleChange} error={errors.PD} isLeft={true} />
 
-                  <RenderCollapseItem handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} error={errors.R_SPH} mode={mode} refractive={refractive} isAdj={false} />
+                  <RenderCollapseAdj handleChange={handleChange} setFieldValue={setFieldValue} error={errors.R_SPH} mode={mode} refractive={refractive} isAdj={true} />
+                  <RenderCollapseVA handleChange={handleChange} setFieldValue={setFieldValue} mode={mode} error={errors.L_VA} />
+                  <RenderCollapsePD handleChange={handleChange} error={errors.PD} />
 
                   <RemarksInput handleChange={handleChange} />
                   {isProfessional && <DiseasesInput setFieldValue={setFieldValue} />}

@@ -7,7 +7,8 @@ import Collapsible from "react-native-collapsible";
 import MultiSelect from "react-native-multiple-select";
 const DropDown = require("../assets/images/DropDown.png");
 import { ListItem, Input, Overlay, Icon, Button } from "react-native-elements";
-import { RoundButton } from "../Utils/RoundButton";
+import { ScreenWidth } from "../constant/Constant";
+import { setMode } from "react-native-sound";
 export const DateSelect = (props) => {
   const { values, setFieldValue } = props;
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -28,14 +29,14 @@ export const DateSelect = (props) => {
 
   return (
     <View>
-      <Text style={AddRecordScreen.questionText}>日期 時間</Text>
+      <Text style={FormItemStyle.questionText}>日期 時間</Text>
 
       <View>
-        <TouchableOpacity onPress={showDatePicker} style={AddRecordScreen.answerContainer}>
-          <View style={AddRecordScreen.dropDownButton}>
+        <TouchableOpacity onPress={showDatePicker} style={FormItemStyle.answerContainer}>
+          <View style={FormItemStyle.dropDownButton}>
             <Image source={DropDown} />
           </View>
-          <Text style={AddRecordScreen.answerText}>{moment(values.date).format("YYYY-MM-DD HH:mm")}</Text>
+          <Text style={FormItemStyle.answerText}>{moment(values.date).format("YYYY-MM-DD HH:mm")}</Text>
         </TouchableOpacity>
       </View>
 
@@ -44,38 +45,89 @@ export const DateSelect = (props) => {
   );
 };
 
-export const RenderCollapseItem = (props) => {
-  const { handleChange, setFieldValue, isLeft, error, mode, refractive, isAdj } = props;
-  const [isCollapse, toggleisCollapse] = useState(false);
+export const RenderCollapseAdj = (props) => {
+  const { handleChange, setFieldValue, error, mode, refractive, isAdj } = props;
+  const [isCollapse, toggleisCollapse] = useState(true);
   return (
     <View>
-      <Button
-        title={"expand"}
+      <TouchableOpacity
         onPress={() => {
           toggleisCollapse(!isCollapse);
-          {
-            console.log("Button isCollapse", isCollapse);
-          }
         }}
-      />
-      <Collapsible collapsed={isCollapse == true}>
-        {console.log("isCollapse", isCollapse)}
-        <SPHInputC handleChange={handleChange} setFieldValue={setFieldValue} isLeft={isLeft} error={error} mode={mode} refractive={refractive} isAdj={isAdj} />
-        {console.log("isCollapse after", isCollapse)}
+        style={FormItemStyle.collapseButton}
+      >
+        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? "展開" : "收起"}輸入調整度數</Text>
+      </TouchableOpacity>
+
+      <Collapsible collapsed={isCollapse}>
+        <View style={FormItemStyle.collpaseContainer}>
+          <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} error={error} mode={mode} refractive={refractive} isAdj={isAdj} />
+          <CYLInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} isAdj={isAdj} />
+
+          <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} error={error} mode={mode} refractive={refractive} isAdj={isAdj} />
+          <CYLInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} isAdj={isAdj} />
+        </View>
       </Collapsible>
     </View>
   );
 };
 
-export const SPHInputC = (props) => {
+export const RenderCollapsePD = (props) => {
+  const { handleChange, error } = props;
+  const [isCollapse, toggleisCollapse] = useState(true);
+  return (
+    <View>
+      <TouchableOpacity
+        onPress={() => {
+          toggleisCollapse(!isCollapse);
+        }}
+        style={FormItemStyle.collapseButton}
+      >
+        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? "展開" : "收起"}輸入瞳孔距離</Text>
+      </TouchableOpacity>
+
+      <Collapsible collapsed={isCollapse}>
+        <View style={FormItemStyle.collpaseContainer}>
+          <PDInput handleChange={handleChange} error={error} isLeft={false} />
+          <PDInput handleChange={handleChange} error={error} isLeft={true} />
+        </View>
+      </Collapsible>
+    </View>
+  );
+};
+
+export const RenderCollapseVA = (props) => {
+  const { handleChange, setFieldValue, error, mode } = props;
+  const [isCollapse, toggleisCollapse] = useState(true);
+  return (
+    <View>
+      <TouchableOpacity
+        onPress={() => {
+          toggleisCollapse(!isCollapse);
+        }}
+        style={FormItemStyle.collapseButton}
+      >
+        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? "展開" : "收起"}輸入視力(VA)</Text>
+      </TouchableOpacity>
+
+      <Collapsible collapsed={isCollapse}>
+        <View style={FormItemStyle.collpaseContainer}>
+          <VAInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} error={error} mode={mode} />
+          <VAInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} error={error} mode={mode} />
+        </View>
+      </Collapsible>
+    </View>
+  );
+};
+
+export const SPHInputB = (props) => {
   const { setFieldValue, isLeft, refractive, isAdj } = props;
-  const [feedback, setFeedback] = useState("");
-  const [alertSuccess, setAlertSuccess] = useState(false);
   const [sliderValue, setSliderValue] = useState(0);
-  const [symbol, Togglesymbol] = useState(true); //true = positive = hyperopia
+  const [symbol, Togglesymbol] = useState(refractive != 0 ? true : false); //true = positive = hyperopia
 
   const SliderHandler = () => {
     if (isAdj) {
+      console.log("symbol", symbol);
       setFieldValue(isLeft ? "Adj_L_SPH" : "Adj_R_SPH", sliderValue, false);
       setFieldValue(isLeft ? "Adj_Lsymbol" : "Adj_Rsymbol", symbol, false);
     } else {
@@ -83,18 +135,26 @@ export const SPHInputC = (props) => {
       setFieldValue(isLeft ? "Lsymbol" : "Rsymbol", symbol, false);
     }
   };
-  let timer = 0;
 
   return (
     <View>
+      <Text style={FormItemStyle.questionText}>
+        請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}
+        {isAdj ? "調整" : ""}球面度數(SPH)
+      </Text>
       <View style={{ flexDirection: "row", paddingLeft: 10 }}>
         <TouchableOpacity
           style={{ flexDirection: "row", marginRight: 20 }}
           onPress={() => {
             Togglesymbol(false);
+            if (isLeft) {
+              setFieldValue(isAdj ? "Adj_Lsymbol" : "L_symbol", false, false);
+            } else {
+              setFieldValue(isAdj ? "Adj_Rsymbol" : "R_symbol", false, false);
+            }
           }}
         >
-          <View style={!symbol ? AddRecordScreen.selectedRadioButton : AddRecordScreen.unselectedRadioButton} />
+          <View style={!symbol ? FormItemStyle.selectedRadioButton : FormItemStyle.unselectedRadioButton} />
           <Text style={{ fontSize: 20, color: "white", fontWeight: "bold" }}>−</Text>
         </TouchableOpacity>
 
@@ -102,18 +162,23 @@ export const SPHInputC = (props) => {
           style={{ flexDirection: "row" }}
           onPress={() => {
             Togglesymbol(true);
+            if (isLeft) {
+              setFieldValue(isAdj ? "Adj_Lsymbol" : "L_symbol", true, false);
+            } else {
+              setFieldValue(isAdj ? "Adj_Rsymbol" : "R_symbol", true, false);
+            }
           }}
         >
-          <View style={symbol ? AddRecordScreen.selectedRadioButton : AddRecordScreen.unselectedRadioButton} />
+          <View style={symbol ? FormItemStyle.selectedRadioButton : FormItemStyle.unselectedRadioButton} />
           <Text style={{ fontSize: 20, color: "white", paddingRight: 10 }}>+</Text>
         </TouchableOpacity>
       </View>
-      <Text style={AddRecordScreen.sliderText}>
+      <Text style={FormItemStyle.sliderText}>
         {symbol ? "+" : "−"}
         {sliderValue}
       </Text>
       <Slider
-        style={{ width: 300, paddingTop: 30 }}
+        style={FormItemStyle.slider}
         minimumValue={0}
         maximumValue={700}
         step={25}
@@ -123,89 +188,6 @@ export const SPHInputC = (props) => {
         onValueChange={(value) => setSliderValue(value)}
         onSlidingComplete={() => SliderHandler()}
       />
-    </View>
-  );
-};
-
-export const SPHInputB = (props) => {
-  const { setFieldValue, isLeft, refractive, isAdj } = props;
-  const [symbol, Togglesymbol] = useState(refractive != 0 ? true : false); //true = positive = hyperopia
-
-  const [sliderValue, setSliderValue] = useState(0);
-
-  const setToTrue = () => {
-    Togglesymbol(true);
-    if (isLeft) {
-      setFieldValue(isAdj ? "Adj_Lsymbol" : "L_symbol", true, false);
-    } else {
-      setFieldValue(isAdj ? "Adj_Rsymbol" : "R_symbol", true, false);
-    }
-  };
-
-  const setToFalse = () => {
-    Togglesymbol(false);
-    if (isLeft) {
-      setFieldValue(isAdj ? "Adj_Lsymbol" : "L_symbol", false, false);
-    } else {
-      setFieldValue(isAdj ? "Adj_Rsymbol" : "R_symbol", false, false);
-    }
-  };
-
-  const SliderHandler = (value) => {
-    if (isAdj) {
-      setFieldValue(isLeft ? "Adj_L_SPH" : "Adj_R_SPH", value, false);
-      setFieldValue(isLeft ? "Adj_Lsymbol" : "Adj_Rsymbol", symbol, false);
-    } else {
-      setFieldValue(isLeft ? "L_SPH" : "R_SPH", value, false);
-      setFieldValue(isLeft ? "Lsymbol" : "Rsymbol", symbol, false);
-    }
-  };
-  return (
-    <View style={{ flex: 1 }}>
-      <Text style={AddRecordScreen.questionText}>
-        請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}
-        {isAdj ? "調整" : ""}球面度數(SPH)
-      </Text>
-
-      <View>
-        <View style={{ flexDirection: "row", paddingLeft: 10 }}>
-          <TouchableOpacity
-            style={{ flexDirection: "row", marginRight: 20 }}
-            onPress={() => {
-              setToFalse();
-            }}
-          >
-            <View style={!symbol ? AddRecordScreen.selectedRadioButton : AddRecordScreen.unselectedRadioButton} />
-            <Text style={{ fontSize: 20, color: "white", fontWeight: "bold" }}>−</Text>
-          </TouchableOpacity>
-
-          <TouchableOpacity
-            style={{ flexDirection: "row" }}
-            onPress={() => {
-              setToTrue();
-            }}
-          >
-            <View style={symbol ? AddRecordScreen.selectedRadioButton : AddRecordScreen.unselectedRadioButton} />
-            <Text style={{ fontSize: 20, color: "white", paddingRight: 10 }}>+</Text>
-          </TouchableOpacity>
-        </View>
-        <Text style={AddRecordScreen.sliderText}>
-          {symbol ? "+" : "−"}
-          {sliderValue}
-        </Text>
-
-        <Slider
-          style={{ width: 300, paddingTop: 30 }}
-          minimumValue={0}
-          maximumValue={700}
-          step={25}
-          thumbTintColor={"#47CDBD"}
-          minimumTrackTintColor={"white"}
-          maximumTrackTintColor={"#B8CAE4"}
-          onValueChange={(value) => setSliderValue(value)}
-          onSlidingComplete={(value) => SliderHandler(value)}
-        />
-      </View>
     </View>
   );
 };
@@ -228,36 +210,39 @@ export const SPHInput = (props) => {
   };
   return (
     <View style={{ flex: 1 }}>
-      <Text style={AddRecordScreen.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}球面度數(SPH) (e.g. 125)</Text>
-      {error != undefined && <Text style={AddRecordScreen.errortext}>{error}</Text>}
+      <Text style={FormItemStyle.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}球面度數(SPH) (e.g. 125)</Text>
+      {error != undefined && <Text style={FormItemStyle.errortext}>{error}</Text>}
 
-      <View style={AddRecordScreen.answerContainer}>
-        <TouchableOpacity style={AddRecordScreen.answerContainer} onPress={pressHandler}>
-          <View style={AddRecordScreen.dropDownButton}>
+      <View style={FormItemStyle.answerContainer}>
+        <TouchableOpacity style={FormItemStyle.answerContainer} onPress={pressHandler}>
+          <View style={FormItemStyle.dropDownButton}>
             <Image source={DropDown} />
           </View>
-          <Text style={AddRecordScreen.answerText}>{symbol ? "+" : "-"}</Text>
+          <Text style={FormItemStyle.answerText}>{symbol ? "+" : "-"}</Text>
         </TouchableOpacity>
-        <TextInput onChangeText={handleChange(isLeft ? "L_SPH" : "R_SPH")} keyboardType="numeric" style={AddRecordScreen.answerInputBox} />
+        <TextInput onChangeText={handleChange(isLeft ? "L_SPH" : "R_SPH")} keyboardType="numeric" style={FormItemStyle.answerInputBox} />
       </View>
     </View>
   );
 };
 
 export const CYLInputB = (props) => {
-  const { setFieldValue, isLeft } = props;
+  const { setFieldValue, isLeft, isAdj } = props;
 
   const [isable, setIsable] = useState(false);
   const [sliderValue, setSliderValue] = useState(0);
 
   return (
-    <View style={{ flex: 1 }}>
-      <Text style={AddRecordScreen.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}散光度數(CYL)</Text>
+    <View>
+      <Text style={FormItemStyle.questionText}>
+        請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}
+        {isAdj ? "調整" : ""}散光度數(CYL)
+      </Text>
 
       <View>
-        <Text style={AddRecordScreen.sliderText}>−{sliderValue}</Text>
+        <Text style={FormItemStyle.sliderText}>−{sliderValue}</Text>
         <Slider
-          style={{ width: 300, paddingTop: 30 }}
+          style={FormItemStyle.slider}
           minimumValue={0}
           maximumValue={600}
           step={25}
@@ -276,25 +261,28 @@ export const CYLInputB = (props) => {
         />
       </View>
 
-      <View>{isable && <AxisInputB setFieldValue={setFieldValue} isLeft={isLeft} />}</View>
+      <View>{isable && <AxisInputB setFieldValue={setFieldValue} isLeft={isLeft} isAdj={isAdj} />}</View>
     </View>
   );
 };
 
 export const CYLInput = (props) => {
-  const { handleChange, setFieldValue, isLeft, errorA, errorB, mode } = props;
+  const { handleChange, setFieldValue, isLeft, errorA, errorB, mode, isAdj } = props;
 
   if (mode) {
-    return <CYLInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={isLeft} />;
+    return <CYLInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={isLeft} isAdj={isAdj} />;
   }
 
   const [isable, setIsable] = useState(false);
   return (
     <View style={{ flex: 1 }}>
-      <Text style={AddRecordScreen.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}散光度數(CYL) (e.g. 125)</Text>
-      {errorA != undefined && <Text style={AddRecordScreen.errortext}>{errorA}</Text>}
-      <View style={AddRecordScreen.answerContainer}>
-        <Text style={AddRecordScreen.answerText}>−</Text>
+      <Text style={FormItemStyle.questionText}>
+        請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}
+        {isAdj ? "調整" : ""}散光度數(CYL) (e.g. 125)
+      </Text>
+      {errorA != undefined && <Text style={FormItemStyle.errortext}>{errorA}</Text>}
+      <View style={FormItemStyle.answerContainer}>
+        <Text style={FormItemStyle.answerText}>−</Text>
 
         <TextInput
           onChangeText={(text) => {
@@ -315,25 +303,28 @@ export const CYLInput = (props) => {
             }
           }}
           keyboardType="numeric"
-          style={AddRecordScreen.answerInputBox}
+          style={FormItemStyle.answerInputBox}
         />
       </View>
-      <View>{isable && <AxisInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={isLeft} error={errorB} />}</View>
+      <View>{isable && <AxisInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={isLeft} error={errorB} isAdj={isAdj} />}</View>
     </View>
   );
 };
 
 export const AxisInputB = (props) => {
-  const { setFieldValue, isLeft } = props;
+  const { setFieldValue, isLeft, isAdj } = props;
   const [sliderValue, setSliderValue] = useState(0);
   return (
-    <View style={{ flex: 1 }}>
-      <Text style={AddRecordScreen.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}散光軸度(Axis)</Text>
+    <View>
+      <Text style={FormItemStyle.questionText}>
+        請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}
+        {isAdj ? "調整" : ""}散光軸度(Axis)
+      </Text>
 
       <View>
-        <Text style={AddRecordScreen.sliderText}>{sliderValue}</Text>
+        <Text style={FormItemStyle.sliderText}>{sliderValue}</Text>
         <Slider
-          style={{ width: 300, paddingTop: 30 }}
+          style={FormItemStyle.slider}
           minimumValue={0}
           maximumValue={180}
           step={1}
@@ -351,15 +342,18 @@ export const AxisInputB = (props) => {
 };
 
 export const AxisInput = (props) => {
-  const { handleChange, setFieldValue, isLeft, error, mode } = props;
+  const { handleChange, setFieldValue, isLeft, error, mode, isAdj } = props;
   if (mode) {
-    return <AxisInputB setFieldValue={setFieldValue} isLeft={isLeft} />;
+    return <AxisInputB setFieldValue={setFieldValue} isLeft={isLeft} isAdj={isAdj} />;
   }
   return (
     <View style={{ flex: 1 }}>
-      <Text style={AddRecordScreen.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}散光軸度(Axis)</Text>
-      {error != undefined && <Text style={AddRecordScreen.errortext}>{error}</Text>}
-      <TextInput onChangeText={handleChange(isLeft ? "L_Axis" : "R_Axis")} keyboardType="numeric" style={AddRecordScreen.answerInputBox} />
+      <Text style={FormItemStyle.questionText}>
+        請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}
+        {isAdj ? "調整" : ""}散光軸度(Axis)
+      </Text>
+      {error != undefined && <Text style={FormItemStyle.errortext}>{error}</Text>}
+      <TextInput onChangeText={handleChange(isLeft ? "L_Axis" : "R_Axis")} keyboardType="numeric" style={FormItemStyle.answerInputBox} />
     </View>
   );
 };
@@ -367,40 +361,45 @@ export const AxisInput = (props) => {
 export const VAInputB = (props) => {
   const { setFieldValue, isLeft } = props;
   const [mode, SetMode] = useState("A"); //A = 20/20, B=6/6, C = decimal
+  const RadioButtonHandler = (value) => {
+    setMode(value);
+    if (value == "C") {
+      setFieldValue(isLeft ? "L_VA" : "R_VA", "0", false);
+    }
+  };
 
   return (
     <View style={{ flex: 1 }}>
-      <Text style={AddRecordScreen.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}視力(VA)</Text>
+      <Text style={FormItemStyle.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}視力(VA)</Text>
 
       <View style={{ flexDirection: "row", paddingLeft: 10 }}>
         <TouchableOpacity
           style={{ flexDirection: "row", marginRight: 15 }}
           onPress={() => {
-            SetMode("A");
+            RadioButtonHandler("A");
           }}
         >
-          <View style={mode == "A" ? AddRecordScreen.selectedRadioButton : AddRecordScreen.unselectedRadioButton} />
+          <View style={mode == "A" ? FormItemStyle.selectedRadioButton : FormItemStyle.unselectedRadioButton} />
           <Text style={{ fontSize: 18, color: "white", paddingRight: 10 }}>20/20</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={{ flexDirection: "row", marginRight: 15 }}
           onPress={() => {
-            SetMode("B");
+            RadioButtonHandler("B");
           }}
         >
-          <View style={mode == "B" ? AddRecordScreen.selectedRadioButton : AddRecordScreen.unselectedRadioButton} />
+          <View style={mode == "B" ? FormItemStyle.selectedRadioButton : FormItemStyle.unselectedRadioButton} />
           <Text style={{ fontSize: 18, color: "white", paddingRight: 10 }}>6/6</Text>
         </TouchableOpacity>
 
         <TouchableOpacity
           style={{ flexDirection: "row" }}
           onPress={() => {
-            SetMode("C");
-            setFieldValue(isLeft ? "L_VA" : "R_VA", "0", false);
+            RadioButtonHandler("C");
           }}
         >
-          <View style={mode == "C" ? AddRecordScreen.selectedRadioButton : AddRecordScreen.unselectedRadioButton} />
+          <View style={mode == "C" ? FormItemStyle.selectedRadioButton : FormItemStyle.unselectedRadioButton} />
           <Text style={{ fontSize: 18, color: "white" }}>1.0</Text>
         </TouchableOpacity>
       </View>
@@ -420,11 +419,14 @@ export const VA20Slider = (props) => {
   const { setFieldValue, isLeft } = props;
   const [sliderValue, setSliderValue] = useState(0);
   const VA20Arr = ["20/200", "20/100", "20/80", "20/60", "20/50", "20/40", "20/30", "20/25", "20/20"];
+  const SliderHandler = () => {
+    setFieldValue(isLeft ? "L_VA" : "R_VA", VA20Arr[sliderValue].toString(), false);
+  };
   return (
     <>
-      <Text style={AddRecordScreen.sliderText}>{VA20Arr[sliderValue]}</Text>
+      <Text style={FormItemStyle.sliderText}>{VA20Arr[sliderValue]}</Text>
       <Slider
-        style={{ width: 300, paddingTop: 30 }}
+        style={FormItemStyle.slider}
         minimumValue={0}
         maximumValue={VA20Arr.length - 1}
         step={1}
@@ -432,9 +434,7 @@ export const VA20Slider = (props) => {
         minimumTrackTintColor={"white"}
         maximumTrackTintColor={"#B8CAE4"}
         onValueChange={(value) => setSliderValue(value)}
-        onSlidingComplete={(value) => {
-          setFieldValue(isLeft ? "L_VA" : "R_VA", VA20Arr[value].toString(), false);
-        }}
+        onSlidingComplete={() => SliderHandler()}
       />
     </>
   );
@@ -446,9 +446,9 @@ export const VA6Slider = (props) => {
   const VA6Arr = ["6/60", "6/30", "6/24", "6/18", "6/15", "6/12", "6/9", "6/7.5", "6/6"];
   return (
     <>
-      <Text style={AddRecordScreen.sliderText}>{VA6Arr[sliderValue]}</Text>
+      <Text style={FormItemStyle.sliderText}>{VA6Arr[sliderValue]}</Text>
       <Slider
-        style={{ width: 300, paddingTop: 30 }}
+        style={FormItemStyle.slider}
         minimumValue={0}
         maximumValue={VA6Arr.length - 1}
         step={1}
@@ -470,9 +470,9 @@ export const VAdecimalSlider = (props) => {
 
   return (
     <>
-      <Text style={AddRecordScreen.sliderText}>{(sliderValue / 10).toFixed(1)}</Text>
+      <Text style={FormItemStyle.sliderText}>{(sliderValue / 10).toFixed(1)}</Text>
       <Slider
-        style={{ width: 300, paddingTop: 30 }}
+        style={FormItemStyle.slider}
         minimumValue={0}
         maximumValue={12}
         step={1}
@@ -493,9 +493,9 @@ export const VAInput = (props) => {
   if (mode) return <VAInputB setFieldValue={setFieldValue} isLeft={isLeft} />;
   return (
     <View style={{ flex: 1 }}>
-      <Text style={AddRecordScreen.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}視力(VA)(e.g. 1.0)</Text>
-      {error != undefined && <Text style={AddRecordScreen.errortext}>{error}</Text>}
-      <TextInput onChangeText={handleChange(isLeft ? "L_VA" : "R_VA")} keyboardType="numeric" style={AddRecordScreen.answerInputBox} />
+      <Text style={FormItemStyle.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}視力(VA)(e.g. 1.0)</Text>
+      {error != undefined && <Text style={FormItemStyle.errortext}>{error}</Text>}
+      <TextInput onChangeText={handleChange(isLeft ? "L_VA" : "R_VA")} keyboardType="numeric" style={FormItemStyle.answerInputBox} />
     </View>
   );
 };
@@ -505,9 +505,9 @@ export const PDInput = (props) => {
 
   return (
     <View style={{ flex: 1 }}>
-      <Text style={AddRecordScreen.questionText}>請輸入{isLeft ? "左眼" : "右眼"}瞳孔距離(Pupillary Distance)(mm)</Text>
-      {error != undefined && <Text style={AddRecordScreen.errortext}>{error}</Text>}
-      <TextInput onChangeText={handleChange(isLeft ? "L_PD" : "R_PD")} keyboardType="numeric" style={AddRecordScreen.answerInputBox} />
+      <Text style={FormItemStyle.questionText}>請輸入{isLeft ? "左眼" : "右眼"}瞳孔距離(Pupillary Distance)(mm)</Text>
+      {error != undefined && <Text style={FormItemStyle.errortext}>{error}</Text>}
+      <TextInput onChangeText={handleChange(isLeft ? "L_PD" : "R_PD")} keyboardType="numeric" style={FormItemStyle.answerInputBox} />
     </View>
   );
 };
@@ -516,9 +516,9 @@ export const RemarksInput = (props) => {
   const { handleChange } = props;
   return (
     <View style={{ flex: 1, marginBottom: 10 }}>
-      <Text style={AddRecordScreen.questionText}>備註</Text>
+      <Text style={FormItemStyle.questionText}>備註</Text>
 
-      <TextInput onChangeText={handleChange("remarks")} multiline={true} style={AddRecordScreen.remarksInputBox} />
+      <TextInput onChangeText={handleChange("remarks")} multiline={true} style={FormItemStyle.remarksInputBox} />
     </View>
   );
 };
@@ -553,7 +553,7 @@ export const DiseasesInput = (props) => {
 
   return (
     <View>
-      <Text style={[AddRecordScreen.questionText, { marginBottom: 5 }]}>確診眼疾</Text>
+      <Text style={[FormItemStyle.questionText, { marginBottom: 5 }]}>確診眼疾</Text>
       <MultiSelect
         items={items}
         uniqueKey="id"
@@ -578,7 +578,7 @@ export const DiseasesInput = (props) => {
   );
 };
 
-const AddRecordScreen = StyleSheet.create({
+const FormItemStyle = StyleSheet.create({
   questionText: {
     color: "white",
     fontSize: 18,
@@ -669,5 +669,28 @@ const AddRecordScreen = StyleSheet.create({
     backgroundColor: "white",
     marginTop: 4,
     marginRight: 5,
+  },
+  slider: {
+    width: ScreenWidth * 0.8,
+    paddingTop: 30,
+  },
+  collapseTitle: {
+    paddingVertical: 5,
+    fontSize: 24,
+    color: "white",
+    textAlign: "center",
+    borderWidth: 1,
+    borderRadius: 5,
+    borderColor: "white",
+  },
+  collapseButton: {
+    paddingTop: 10,
+  },
+  collpaseContainer: {
+    backgroundColor: "rgba(0,0,0,0.15)",
+    borderRadius: 10,
+    paddingLeft: 8,
+    paddingBottom: 15,
+    marginTop: 10,
   },
 });
