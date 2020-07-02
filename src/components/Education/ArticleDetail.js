@@ -6,7 +6,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { Button } from "react-native-elements";
 import { Icon } from "react-native-elements";
 import * as ScreenOrientation from "expo-screen-orientation";
-import { ScreenWidth, ScreenHeight, FontScale } from "../constant/Constant";
+import { ScreenWidth, ScreenHeight, FontScale } from "../../../constant/Constant";
 
 export default class ArticleDetailScreen extends Component {
   constructor(props) {

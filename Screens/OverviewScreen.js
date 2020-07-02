@@ -6,13 +6,14 @@ import { Button } from "react-native-elements";
 import { Icon } from "react-native-elements";
 import moment from "moment";
 
-var patient_id = "2igwzwrRiEYReq9HOaDIraVg55V2";
-// auth.onAuthStateChanged((user) => {
-//   if (user != null) {
-//     patient_id = user.uid;
-//     console.log(patient_id);
-//   }
-// });
+//var patient_id = "2igwzwrRiEYReq9HOaDIraVg55V2";
+var patient_id;
+auth.onAuthStateChanged((user) => {
+  if (user != null) {
+    patient_id = user.uid;
+    console.log(patient_id);
+  }
+});
 
 export default class OverviewScreen extends Component {
   constructor(props) {
