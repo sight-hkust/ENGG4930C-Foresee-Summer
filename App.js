@@ -202,7 +202,7 @@ export default App = (props) => {
   return (
     <Provider store={store}>
       <NavigationContainer>
-        <Stack.Navigator initialRouteName="Tutorial" screenOptions={headerConfig}>
+        <Stack.Navigator initialRouteName="Welcome" screenOptions={headerConfig}>
           {loggedIn ? (
             <>
               <Stack.Screen name="Main" component={Main} options={{ headerShown: false }} />

@@ -49,7 +49,7 @@ const Tutorial = ({ route, navigation }) => {
       {tutorialContent.map((item, index) => {
         return (
           <View style={styles.slide1}>
-            <Image style={styles.image} source={require('../../../assets/images/tutorial_5.png')} />
+            <Image style={styles.image} source={item.image} />
             <Text style={styles.title}>{item.subject}</Text>
             <Text style={styles.content}>{item.content}</Text>
             {index == tutorialContent.length - 1 && <Button type="clear" title="開始使用" onPress={() => navigation.navigate('Welcome')} />}
@@ -68,8 +68,8 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
   },
   image: {
-    height: 300,
-    width: 300,
+    height: 350,
+    width: 350,
     marginBottom: 30,
   },
   title: {
@@ -84,7 +84,7 @@ const styles = StyleSheet.create({
     color: '#2D9CDB',
     fontSize: 20,
     fontWeight: 'bold',
-    marginBottom: 45,
+    marginBottom: 60,
   },
 });
 

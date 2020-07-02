@@ -19,6 +19,7 @@ export const watchQuestionListUpdate = () => {
         snap.forEach((question) => {
           if (question.val()['response'] != null) {
             questionList.push({
+              tags: question.val()['tags'],
               question_title: question.val()['subject'],
               question_content: question.val()['content'],
               answer: question.val()['response']['content'],
@@ -35,7 +36,6 @@ export const watchQuestionListUpdate = () => {
 export const questionList = (state = [], { type, payload }) => {
   switch (type) {
     case UPDATE_QUESTION_LIST:
-      console.log('payload', payload);
       return {
         questionList: payload,
       };
