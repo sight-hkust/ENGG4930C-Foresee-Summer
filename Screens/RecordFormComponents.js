@@ -1,14 +1,13 @@
-import React, { Component, useState } from "react";
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, Slider, Alert, Animated } from "react-native";
+import React, { useState } from "react";
+import { StyleSheet, Text, View, TouchableOpacity, Image, Slider } from "react-native";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import { TextInput } from "react-native-gesture-handler";
 import Collapsible from "react-native-collapsible";
 import MultiSelect from "react-native-multiple-select";
 const DropDown = require("../assets/images/DropDown.png");
-import { ListItem, Input, Overlay, Icon, Button } from "react-native-elements";
 import { ScreenWidth } from "../constant/Constant";
-import { setMode } from "react-native-sound";
+
 export const DateSelect = (props) => {
   const { values, setFieldValue } = props;
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -83,7 +82,7 @@ export const RenderCollapsePD = (props) => {
         }}
         style={FormItemStyle.collapseButton}
       >
-        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? "展開" : "收起"}輸入瞳孔距離</Text>
+        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? "展開" : "收起"}輸入瞳孔距離(PD)</Text>
       </TouchableOpacity>
 
       <Collapsible collapsed={isCollapse}>
@@ -112,8 +111,8 @@ export const RenderCollapseVA = (props) => {
 
       <Collapsible collapsed={isCollapse}>
         <View style={FormItemStyle.collpaseContainer}>
-          <VAInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} error={error} mode={mode} />
-          <VAInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} error={error} mode={mode} />
+          <VAInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} />
+          <VAInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} />
         </View>
       </Collapsible>
     </View>
@@ -362,7 +361,7 @@ export const VAInputB = (props) => {
   const { setFieldValue, isLeft } = props;
   const [mode, SetMode] = useState("A"); //A = 20/20, B=6/6, C = decimal
   const RadioButtonHandler = (value) => {
-    setMode(value);
+    SetMode(value);
     if (value == "C") {
       setFieldValue(isLeft ? "L_VA" : "R_VA", "0", false);
     }
@@ -444,6 +443,9 @@ export const VA6Slider = (props) => {
   const { setFieldValue, isLeft } = props;
   const [sliderValue, setSliderValue] = useState(0);
   const VA6Arr = ["6/60", "6/30", "6/24", "6/18", "6/15", "6/12", "6/9", "6/7.5", "6/6"];
+  const SliderHandler = () => {
+    setFieldValue(isLeft ? "L_VA" : "R_VA", VA6Arr[sliderValue].toString(), false);
+  };
   return (
     <>
       <Text style={FormItemStyle.sliderText}>{VA6Arr[sliderValue]}</Text>
@@ -456,8 +458,8 @@ export const VA6Slider = (props) => {
         minimumTrackTintColor={"white"}
         maximumTrackTintColor={"#B8CAE4"}
         onValueChange={(value) => setSliderValue(value)}
-        onSlidingComplete={(value) => {
-          setFieldValue(isLeft ? "L_VA" : "R_VA", VA6Arr[value].toString(), false);
+        onSlidingComplete={() => {
+          SliderHandler;
         }}
       />
     </>
@@ -467,7 +469,9 @@ export const VA6Slider = (props) => {
 export const VAdecimalSlider = (props) => {
   const { setFieldValue, isLeft } = props;
   const [sliderValue, setSliderValue] = useState(0);
-
+  const SliderHandler = () => {
+    setFieldValue(isLeft ? "L_VA" : "R_VA", (sliderValue / 10).toFixed(2), false);
+  };
   return (
     <>
       <Text style={FormItemStyle.sliderText}>{(sliderValue / 10).toFixed(1)}</Text>
@@ -480,8 +484,8 @@ export const VAdecimalSlider = (props) => {
         minimumTrackTintColor={"white"}
         maximumTrackTintColor={"#B8CAE4"}
         onValueChange={(value) => setSliderValue(value)}
-        onSlidingComplete={(value) => {
-          setFieldValue(isLeft ? "L_VA" : "R_VA", (value / 10).toFixed(2), false);
+        onSlidingComplete={() => {
+          SliderHandler;
         }}
       />
     </>
@@ -615,10 +619,9 @@ const FormItemStyle = StyleSheet.create({
     marginRight: 15,
   },
   remarksInputBox: {
-    width: 270,
+    width: ScreenWidth * 0.8,
+    alignSelf: "center",
     textAlign: "center",
-    paddingLeft: 15,
-    paddingRight: 15,
     paddingBottom: 2,
     paddingTop: 0,
     backgroundColor: "white",
@@ -688,8 +691,9 @@ const FormItemStyle = StyleSheet.create({
   },
   collpaseContainer: {
     backgroundColor: "rgba(0,0,0,0.15)",
+    alignSelf: "center",
+    width: ScreenWidth * 0.8,
     borderRadius: 10,
-    paddingLeft: 8,
     paddingBottom: 15,
     marginTop: 10,
   },

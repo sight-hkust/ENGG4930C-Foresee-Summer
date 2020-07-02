@@ -11,7 +11,7 @@ const Open = require("../assets/images/open.png");
 const Close = require("../assets/images/close.png");
 const BackArrow = require("../assets/images/BackArrow.png");
 const NextArrow = require("../assets/images/NextArrow.png");
-
+import { ScreenWidth, ScreenHeight } from "../constant/Constant";
 //const patient_id = auth.currentUser.uid;
 //const patient_id = "002";
 var patient_id;
@@ -611,10 +611,13 @@ const RecordScreenStyle = StyleSheet.create({
 
   eyesButton: {
     flexDirection: "row",
+    justifyContent: "center",
     paddingTop: 15,
     paddingBottom: 15,
+    //alignSelf: "center",
   },
   datesButton: {
+    alignSelf: "center",
     flexDirection: "row",
     paddingBottom: 2,
   },
@@ -625,16 +628,16 @@ const RecordScreenStyle = StyleSheet.create({
     paddingRight: 15,
   },
   contentContainer: {
+    alignSelf: "center",
     backgroundColor: "white",
-    height: 250,
+    height: ScreenHeight / 3.2,
+    width: ScreenWidth / 1.25,
     borderRadius: 20,
-    marginLeft: 35,
-    marginRight: 35,
-    marginTop: 200,
+    marginTop: ScreenHeight / 3.5,
     paddingBottom: 10,
-    alignItems: "center",
   },
   content: {
+    alignSelf: "center",
     paddingTop: 5,
     paddingBottom: 5,
     alignItems: "center",

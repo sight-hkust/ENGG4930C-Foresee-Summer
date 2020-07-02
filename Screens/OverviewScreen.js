@@ -5,6 +5,7 @@ import { database, auth } from "../src/config/config";
 import { Button } from "react-native-elements";
 import { Icon } from "react-native-elements";
 import moment from "moment";
+import { ScreenWidth, ScreenHeight } from "../constant/Constant";
 
 //var patient_id = "2igwzwrRiEYReq9HOaDIraVg55V2";
 var patient_id;
@@ -79,7 +80,7 @@ export default class OverviewScreen extends Component {
             <View style={OverviewScreenStyle.hiddenreminderContainer}></View>
           )}
           <View style={{ flexDirection: "row" }}>
-            <View>
+            <View style={{ width: ScreenWidth / 2, alignItems: "center" }}>
               <View style={OverviewScreenStyle.greetingContainer}>
                 <Text style={OverviewScreenStyle.greetingText}>您好，</Text>
                 <Text style={OverviewScreenStyle.userName}>{this.state.username}</Text>
@@ -88,7 +89,7 @@ export default class OverviewScreen extends Component {
                 <DisplayDegree data={this.state.data} dateArr={this.state.dateArr} isLeft={true} />
               </View>
             </View>
-            <View>
+            <View style={{ width: ScreenWidth / 2, alignItems: "center" }}>
               <View style={OverviewScreenStyle.rightEyeContainer}>
                 <DisplayDegree data={this.state.data} dateArr={this.state.dateArr} isLeft={false} />
               </View>
@@ -105,7 +106,7 @@ export default class OverviewScreen extends Component {
                     paddingLeft: 2,
                     paddingRight: 0,
                   }}
-                  containerStyle={{ paddingTop: 10, marginLeft: 50 }}
+                  containerStyle={{ alignItems: "center", marginTop: 15 }}
                 />
               </View>
             </View>
@@ -217,7 +218,7 @@ export const RenderIndicator = (props) => {
 const OverviewScreenStyle = StyleSheet.create({
   greetingContainer: {
     paddingTop: 25,
-    paddingLeft: 30,
+    paddingLeft: 0,
   },
   greetingText: {
     fontSize: 30,
@@ -231,18 +232,18 @@ const OverviewScreenStyle = StyleSheet.create({
   },
   leftEyeContainer: {
     backgroundColor: "#E1EDFF",
-    width: 140,
-    height: 250,
+    width: ScreenWidth / 2.8,
+    height: ScreenHeight / 3,
     marginTop: 60,
-    marginLeft: 30,
+    //marginLeft: 30,
     borderRadius: 26,
   },
   rightEyeContainer: {
     backgroundColor: "#E1EDFF",
-    width: 140,
-    height: 250,
-    marginTop: 60,
-    marginLeft: 30,
+    width: ScreenWidth / 2.8,
+    height: ScreenHeight / 3,
+    marginTop: 45,
+    //marginLeft: 30,
     borderRadius: 26,
   },
   topContainer: {
@@ -265,7 +266,6 @@ const OverviewScreenStyle = StyleSheet.create({
   itemContainer: {
     flexDirection: "row",
     paddingTop: 30,
-    marginLeft: 20,
   },
   levelTextContatiner: {
     width: 16,
@@ -289,10 +289,9 @@ const OverviewScreenStyle = StyleSheet.create({
     fontWeight: "bold",
   },
   nextPageContainer: {
-    width: 150,
-    height: 100,
+    width: ScreenWidth / 2,
+    height: ScreenHeight / 6,
     marginTop: 20,
-    marginLeft: 20,
   },
   nextPageText: {
     color: "#FFFFFF",
@@ -301,7 +300,7 @@ const OverviewScreenStyle = StyleSheet.create({
     textAlign: "center",
   },
   dateContainer: {
-    marginTop: 40,
+    marginTop: ScreenHeight / 30,
     alignItems: "center",
   },
   dateText: {
@@ -309,18 +308,18 @@ const OverviewScreenStyle = StyleSheet.create({
     color: "#FFFFFF",
   },
   reminderContainer: {
-    marginTop: 70,
-    height: 60,
-    width: 260,
+    marginTop: 65,
+    height: ScreenHeight / 11,
+    width: ScreenWidth / 1.5,
     borderTopRightRadius: 15,
     borderBottomRightRadius: 15,
     backgroundColor: "#D9FFD8",
     flexDirection: "row",
   },
   hiddenreminderContainer: {
-    marginTop: 70,
-    height: 60,
-    width: 260,
+    marginTop: 65,
+    height: ScreenHeight / 11,
+    width: ScreenWidth / 1.5,
     borderTopRightRadius: 15,
     borderBottomRightRadius: 15,
     flexDirection: "row",
