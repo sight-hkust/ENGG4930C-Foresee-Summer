@@ -236,7 +236,7 @@ export default class Form extends Component {
                   <CYLInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} errorA={errors.R_CYL} errorB={errors.R_Axis} mode={mode} />
 
                   <RenderCollapseAdj handleChange={handleChange} setFieldValue={setFieldValue} error={errors.R_SPH} mode={mode} refractive={refractive} isAdj={true} />
-                  <RenderCollapseVA handleChange={handleChange} setFieldValue={setFieldValue} mode={mode} error={errors.L_VA} />
+                  <RenderCollapseVA setFieldValue={setFieldValue} />
                   <RenderCollapsePD handleChange={handleChange} error={errors.PD} />
 
                   <RemarksInput handleChange={handleChange} />

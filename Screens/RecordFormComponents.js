@@ -87,8 +87,8 @@ export const RenderCollapsePD = (props) => {
 
       <Collapsible collapsed={isCollapse}>
         <View style={FormItemStyle.collpaseContainer}>
-          <PDInput handleChange={handleChange} error={error} isLeft={false} />
-          <PDInput handleChange={handleChange} error={error} isLeft={true} />
+          <PDInput handleChange={handleChange} isLeft={false} />
+          <PDInput handleChange={handleChange} isLeft={true} />
         </View>
       </Collapsible>
     </View>
@@ -96,8 +96,13 @@ export const RenderCollapsePD = (props) => {
 };
 
 export const RenderCollapseVA = (props) => {
-  const { handleChange, setFieldValue, error, mode } = props;
+  const { setFieldValue } = props;
   const [isCollapse, toggleisCollapse] = useState(true);
+  const [mode, SetMode] = useState("A");
+  const RadioButtonHandler = (value) => {
+    SetMode(value);
+  };
+
   return (
     <View>
       <TouchableOpacity
@@ -111,8 +116,55 @@ export const RenderCollapseVA = (props) => {
 
       <Collapsible collapsed={isCollapse}>
         <View style={FormItemStyle.collpaseContainer}>
-          <VAInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} />
-          <VAInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} />
+          <View style={{ flexDirection: "row", paddingTop: 20, justifyContent: "center" }}>
+            <TouchableOpacity
+              style={{ flexDirection: "row", marginRight: 15 }}
+              onPress={() => {
+                RadioButtonHandler("A");
+              }}
+            >
+              <View style={mode == "A" ? FormItemStyle.selectedRadioButton : FormItemStyle.unselectedRadioButton} />
+              <Text style={{ fontSize: 18, color: "white", paddingRight: 10 }}>20/20</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{ flexDirection: "row", marginRight: 15 }}
+              onPress={() => {
+                RadioButtonHandler("B");
+              }}
+            >
+              <View style={mode == "B" ? FormItemStyle.selectedRadioButton : FormItemStyle.unselectedRadioButton} />
+              <Text style={{ fontSize: 18, color: "white", paddingRight: 10 }}>6/6</Text>
+            </TouchableOpacity>
+
+            <TouchableOpacity
+              style={{ flexDirection: "row" }}
+              onPress={() => {
+                RadioButtonHandler("C");
+              }}
+            >
+              <View style={mode == "C" ? FormItemStyle.selectedRadioButton : FormItemStyle.unselectedRadioButton} />
+              <Text style={{ fontSize: 18, color: "white" }}>1.0</Text>
+            </TouchableOpacity>
+          </View>
+          {mode == "A" && (
+            <>
+              <VA20Slider setFieldValue={setFieldValue} isLeft={false} />
+              <VA20Slider setFieldValue={setFieldValue} isLeft={true} />
+            </>
+          )}
+          {mode == "B" && (
+            <>
+              <VA6Slider setFieldValue={setFieldValue} isLeft={false} />
+              <VA6Slider setFieldValue={setFieldValue} isLeft={true} />
+            </>
+          )}
+          {mode == "C" && (
+            <>
+              <VAdecimalSlider setFieldValue={setFieldValue} isLeft={false} />
+              <VAdecimalSlider setFieldValue={setFieldValue} isLeft={true} />
+            </>
+          )}
         </View>
       </Collapsible>
     </View>
@@ -136,7 +188,7 @@ export const SPHInputB = (props) => {
   };
 
   return (
-    <View>
+    <View style={{ alignSelf: "center" }}>
       <Text style={FormItemStyle.questionText}>
         請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}
         {isAdj ? "調整" : ""}球面度數(SPH)
@@ -232,7 +284,7 @@ export const CYLInputB = (props) => {
   const [sliderValue, setSliderValue] = useState(0);
 
   return (
-    <View>
+    <View style={{ alignSelf: "center" }}>
       <Text style={FormItemStyle.questionText}>
         請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}
         {isAdj ? "調整" : ""}散光度數(CYL)
@@ -314,7 +366,7 @@ export const AxisInputB = (props) => {
   const { setFieldValue, isLeft, isAdj } = props;
   const [sliderValue, setSliderValue] = useState(0);
   return (
-    <View>
+    <View style={{ alignSelf: "center" }}>
       <Text style={FormItemStyle.questionText}>
         請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}
         {isAdj ? "調整" : ""}散光軸度(Axis)
@@ -346,7 +398,7 @@ export const AxisInput = (props) => {
     return <AxisInputB setFieldValue={setFieldValue} isLeft={isLeft} isAdj={isAdj} />;
   }
   return (
-    <View style={{ flex: 1 }}>
+    <View>
       <Text style={FormItemStyle.questionText}>
         請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}
         {isAdj ? "調整" : ""}散光軸度(Axis)
@@ -357,138 +409,90 @@ export const AxisInput = (props) => {
   );
 };
 
-export const VAInputB = (props) => {
-  const { setFieldValue, isLeft } = props;
-  const [mode, SetMode] = useState("A"); //A = 20/20, B=6/6, C = decimal
-  const RadioButtonHandler = (value) => {
-    SetMode(value);
-    if (value == "C") {
-      setFieldValue(isLeft ? "L_VA" : "R_VA", "0", false);
-    }
-  };
-
-  return (
-    <View style={{ flex: 1 }}>
-      <Text style={FormItemStyle.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}視力(VA)</Text>
-
-      <View style={{ flexDirection: "row", paddingLeft: 10 }}>
-        <TouchableOpacity
-          style={{ flexDirection: "row", marginRight: 15 }}
-          onPress={() => {
-            RadioButtonHandler("A");
-          }}
-        >
-          <View style={mode == "A" ? FormItemStyle.selectedRadioButton : FormItemStyle.unselectedRadioButton} />
-          <Text style={{ fontSize: 18, color: "white", paddingRight: 10 }}>20/20</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={{ flexDirection: "row", marginRight: 15 }}
-          onPress={() => {
-            RadioButtonHandler("B");
-          }}
-        >
-          <View style={mode == "B" ? FormItemStyle.selectedRadioButton : FormItemStyle.unselectedRadioButton} />
-          <Text style={{ fontSize: 18, color: "white", paddingRight: 10 }}>6/6</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity
-          style={{ flexDirection: "row" }}
-          onPress={() => {
-            RadioButtonHandler("C");
-          }}
-        >
-          <View style={mode == "C" ? FormItemStyle.selectedRadioButton : FormItemStyle.unselectedRadioButton} />
-          <Text style={{ fontSize: 18, color: "white" }}>1.0</Text>
-        </TouchableOpacity>
-      </View>
-
-      {mode == "A" ? (
-        <VA20Slider setFieldValue={setFieldValue} isLeft={isLeft} />
-      ) : mode == "B" ? (
-        <VA6Slider setFieldValue={setFieldValue} isLeft={isLeft} />
-      ) : (
-        <VAdecimalSlider setFieldValue={setFieldValue} isLeft={isLeft} />
-      )}
-    </View>
-  );
-};
-
 export const VA20Slider = (props) => {
   const { setFieldValue, isLeft } = props;
-  const [sliderValue, setSliderValue] = useState(0);
-  const VA20Arr = ["20/200", "20/100", "20/80", "20/60", "20/50", "20/40", "20/30", "20/25", "20/20"];
+  const [sliderValue, setSliderValue] = useState("20/20");
+  const VA20Arr = ["20/800", "20/400", "20/200", "20/100", "20/50", "20/40", "20/30", "20/25", "20/20", "20/16"];
+  //const VA20Arr = ["20/16", "20/20", "20/25", "20/30", "20/40", "20/50", "20/100", "20/200", "20/400", "20/800"];
   const SliderHandler = () => {
-    setFieldValue(isLeft ? "L_VA" : "R_VA", VA20Arr[sliderValue].toString(), false);
+    setFieldValue(isLeft ? "L_VA" : "R_VA", sliderValue.toString(), false);
   };
   return (
-    <>
-      <Text style={FormItemStyle.sliderText}>{VA20Arr[sliderValue]}</Text>
+    <View style={{ alignSelf: "center" }}>
+      <Text style={FormItemStyle.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}視力(VA)</Text>
+      <Text style={FormItemStyle.sliderText}>{sliderValue}</Text>
       <Slider
         style={FormItemStyle.slider}
         minimumValue={0}
-        maximumValue={VA20Arr.length - 1}
+        maximumValue={9}
         step={1}
+        value={8}
         thumbTintColor={"#47CDBD"}
         minimumTrackTintColor={"white"}
         maximumTrackTintColor={"#B8CAE4"}
-        onValueChange={(value) => setSliderValue(value)}
+        onValueChange={(value) => setSliderValue(VA20Arr[value])}
         onSlidingComplete={() => SliderHandler()}
       />
-    </>
+    </View>
   );
 };
 
 export const VA6Slider = (props) => {
   const { setFieldValue, isLeft } = props;
-  const [sliderValue, setSliderValue] = useState(0);
-  const VA6Arr = ["6/60", "6/30", "6/24", "6/18", "6/15", "6/12", "6/9", "6/7.5", "6/6"];
+  const [sliderValue, setSliderValue] = useState("6/6");
+  const VA6Arr = ["6/240", "6/120", "6/60", "6/30", "6/15", "6/12", "6/9", "6/7.5", "6/6", "6/4.8"];
+  //const VA6Arr = ["6/4.8", "6/6", "6/7.5", "6/9", "6/12", "6/15", "6/30", "6/60", "6/120", "6/240"];
   const SliderHandler = () => {
-    setFieldValue(isLeft ? "L_VA" : "R_VA", VA6Arr[sliderValue].toString(), false);
+    setFieldValue(isLeft ? "L_VA" : "R_VA", { sliderValue }.toString(), false);
   };
   return (
-    <>
-      <Text style={FormItemStyle.sliderText}>{VA6Arr[sliderValue]}</Text>
+    <View style={{ alignSelf: "center" }}>
+      <Text style={FormItemStyle.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}視力(VA)</Text>
+      <Text style={FormItemStyle.sliderText}>{sliderValue}</Text>
       <Slider
         style={FormItemStyle.slider}
         minimumValue={0}
-        maximumValue={VA6Arr.length - 1}
+        maximumValue={9}
+        value={8}
         step={1}
         thumbTintColor={"#47CDBD"}
         minimumTrackTintColor={"white"}
         maximumTrackTintColor={"#B8CAE4"}
-        onValueChange={(value) => setSliderValue(value)}
+        onValueChange={(value) => setSliderValue(VA6Arr[value])}
         onSlidingComplete={() => {
-          SliderHandler;
+          SliderHandler();
         }}
       />
-    </>
+    </View>
   );
 };
 
 export const VAdecimalSlider = (props) => {
   const { setFieldValue, isLeft } = props;
-  const [sliderValue, setSliderValue] = useState(0);
+  const [sliderValue, setSliderValue] = useState(10);
   const SliderHandler = () => {
     setFieldValue(isLeft ? "L_VA" : "R_VA", (sliderValue / 10).toFixed(2), false);
   };
   return (
-    <>
+    <View style={{ alignSelf: "center" }}>
+      <Text style={FormItemStyle.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}視力(VA)</Text>
       <Text style={FormItemStyle.sliderText}>{(sliderValue / 10).toFixed(1)}</Text>
       <Slider
         style={FormItemStyle.slider}
+        inverted={true}
         minimumValue={0}
-        maximumValue={12}
+        maximumValue={12.5}
         step={1}
+        value={10}
         thumbTintColor={"#47CDBD"}
         minimumTrackTintColor={"white"}
         maximumTrackTintColor={"#B8CAE4"}
         onValueChange={(value) => setSliderValue(value)}
         onSlidingComplete={() => {
-          SliderHandler;
+          SliderHandler();
         }}
       />
-    </>
+    </View>
   );
 };
 
@@ -496,7 +500,7 @@ export const VAInput = (props) => {
   const { handleChange, setFieldValue, isLeft, error, mode } = props;
   if (mode) return <VAInputB setFieldValue={setFieldValue} isLeft={isLeft} />;
   return (
-    <View style={{ flex: 1 }}>
+    <View>
       <Text style={FormItemStyle.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}視力(VA)(e.g. 1.0)</Text>
       {error != undefined && <Text style={FormItemStyle.errortext}>{error}</Text>}
       <TextInput onChangeText={handleChange(isLeft ? "L_VA" : "R_VA")} keyboardType="numeric" style={FormItemStyle.answerInputBox} />
@@ -505,12 +509,11 @@ export const VAInput = (props) => {
 };
 
 export const PDInput = (props) => {
-  const { handleChange, error, isLeft } = props;
+  const { handleChange, isLeft } = props;
 
   return (
-    <View style={{ flex: 1 }}>
+    <View style={{ alignSelf: "center" }}>
       <Text style={FormItemStyle.questionText}>請輸入{isLeft ? "左眼" : "右眼"}瞳孔距離(Pupillary Distance)(mm)</Text>
-      {error != undefined && <Text style={FormItemStyle.errortext}>{error}</Text>}
       <TextInput onChangeText={handleChange(isLeft ? "L_PD" : "R_PD")} keyboardType="numeric" style={FormItemStyle.answerInputBox} />
     </View>
   );
@@ -588,6 +591,7 @@ const FormItemStyle = StyleSheet.create({
     fontSize: 18,
     paddingTop: 20,
     paddingBottom: 5,
+    paddingLeft: 5,
   },
   answerContainer: {
     flexDirection: "row",
@@ -608,14 +612,15 @@ const FormItemStyle = StyleSheet.create({
   answerInputBox: {
     width: 70,
     textAlign: "center",
-    paddingLeft: 15,
-    paddingRight: 15,
+    paddingLeft: 20,
+    paddingRight: 20,
     paddingBottom: 2,
-    paddingTop: 0,
-    backgroundColor: "white",
-    color: "#1872a7",
+    paddingTop: 1,
+    backgroundColor: "rgba(256,256,256,0.65)",
+    color: "#135a85",
     fontSize: 18,
     borderRadius: 5,
+    marginLeft: 15,
     marginRight: 15,
   },
   remarksInputBox: {
@@ -624,8 +629,8 @@ const FormItemStyle = StyleSheet.create({
     textAlign: "center",
     paddingBottom: 2,
     paddingTop: 0,
-    backgroundColor: "white",
-    color: "#1872a7",
+    backgroundColor: "rgba(256,256,256,0.65)",
+    color: "#135a85",
     fontSize: 18,
     borderRadius: 5,
     marginRight: 15,
@@ -692,8 +697,8 @@ const FormItemStyle = StyleSheet.create({
   collpaseContainer: {
     backgroundColor: "rgba(0,0,0,0.15)",
     alignSelf: "center",
-    width: ScreenWidth * 0.8,
-    borderRadius: 10,
+    width: ScreenWidth * 0.85,
+    borderRadius: 12,
     paddingBottom: 15,
     marginTop: 10,
   },
