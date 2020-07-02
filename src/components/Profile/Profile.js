@@ -79,10 +79,10 @@ export const Profile = ({ navigation, route }) => {
           </Grid>
         </View>
         <View style={styles.bottomMenu}></View>
-        <Button title="詳細設定" type="clear" titleStyle={{ color: '#fff', marginTop: 15 }} />
-        <Button title="程式教學" type="clear" titleStyle={{ color: '#fff', marginTop: 15 }} />
-        <Button title="創建子帳戶" type="clear" titleStyle={{ color: '#fff', marginTop: 15 }} />
-        <Button title="變更個人資料" type="clear" titleStyle={{ color: '#fff', marginTop: 15 }} />
+        <Button title="詳細設定" type="clear" titleStyle={{ color: '#fff', marginTop: 10, fontSize: 18 }} />
+        <Button title="程式教學" type="clear" titleStyle={{ color: '#fff', marginTop: 10, fontSize: 18 }} />
+        <Button title="創建子帳戶" type="clear" titleStyle={{ color: '#fff', marginTop: 10, fontSize: 18 }} />
+        <Button title="變更個人資料" type="clear" titleStyle={{ color: '#fff', marginTop: 10, fontSize: 18 }} />
       </View>
     </MenuScreen>
   );
@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
     width: 300,
     borderRadius: 35,
     backgroundColor: '#fff',
-    marginTop: 100,
+    marginTop: 110,
   },
   nameContainer: {
     width: 90,
@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
   titleContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: 30,
+    height: 25,
   },
   title: {
     color: '#24559E',
