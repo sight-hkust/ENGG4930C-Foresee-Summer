@@ -1,19 +1,16 @@
 import React, { Component, useState } from "react";
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, Slider, Alert, Animated } from "react-native";
+import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Alert, Animated } from "react-native";
 
-import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { Formik } from "formik";
 import moment from "moment";
-import { TextInput } from "react-native-gesture-handler";
+
 import { database } from "../src/config/config";
 import { SchemaRecords } from "../Screens/SchemaRecords";
 import { LinearGradient } from "expo-linear-gradient";
 import { Button } from "react-native-elements";
 import Collapsible from "react-native-collapsible";
-import MultiSelect from "react-native-multiple-select";
-const DropDown = require("../assets/images/DropDown.png");
 
-import { DateSelect, SPHInput, CYLInput, AxisInput, VAInput, PDInput, RemarksInput, DiseasesInput } from "../Screens/RecordFormComponents";
+import { DateSelect, SPHInput, CYLInput, RenderCollapseItem, VAInput, PDInput, RemarksInput, DiseasesInput } from "../Screens/RecordFormComponents";
 
 export default class Form extends Component {
   yScroll = new Animated.Value(0);
@@ -57,7 +54,6 @@ export default class Form extends Component {
 
   render() {
     const mode = this.state.mode;
-    const selectedLabel = this.state.selectedLabel;
     const { isProfessional, professional_id, patient_id, refractive } = this.props.route.params;
 
     return (
@@ -271,25 +267,6 @@ export default class Form extends Component {
     );
   }
 }
-
-export const RenderCollapseItem = (props) => {
-  const { handleChange, setFieldValue, isLeft, error, mode, refractive, isAdj } = props;
-  const [isCollapse, toggleisCollapse] = useState(true);
-  return (
-    <View>
-      <Button
-        title={"expand"}
-        onPress={() => {
-          toggleisCollapse(!isCollapse);
-        }}
-      />
-      <Collapsible collapsed={isCollapse}>
-        {console.log("isCollapse", isCollapse)}
-        <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={isLeft} error={error} mode={mode} refractive={refractive} isAdj={isAdj} />
-      </Collapsible>
-    </View>
-  );
-};
 
 const AddRecordScreen = StyleSheet.create({
   background: {

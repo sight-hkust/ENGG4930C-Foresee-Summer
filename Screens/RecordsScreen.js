@@ -56,11 +56,12 @@ export default class RecordsScreen extends Component {
     ref.child("info/name").once("value", (snapshot) => {
       this.setState({ username: snapshot.val() });
     });
+    console.log("@componentDidMount this.state.dates: ", this.state.dates);
   }
 
   render() {
     const data = this.state.data;
-
+    console.log("@render() this.state.dates: ", this.state.dates);
     const pressHandler = () => {
       this.props.navigation.navigate("AddRecordScreen", {
         isProfessional: false,
@@ -69,12 +70,14 @@ export default class RecordsScreen extends Component {
         refractive: this.state.refractive,
       });
     };
+
     const GetNext = () => {
       const length = this.state.dates.length;
       const value = (this.state.index + 1) % length;
 
       this.setState({ index: value, selectedDate: this.state.dates[value] });
     };
+
     const GetBack = () => {
       if (this.state.index == 0) {
         const length = this.state.dates.length - 1;
@@ -257,16 +260,6 @@ export const RenderContent = (props) => {
           return (
             <View>
               <Text style={RecordScreenStyle.degreeText}>{data[selectedDate].L_Myopia}度</Text>
-
-              <View style={RecordScreenStyle.datesButton}>
-                <TouchableOpacity onPress={GetBack}>
-                  <Image source={BackArrow} />
-                </TouchableOpacity>
-                <Text style={RecordScreenStyle.dateText}>{this.state.selectedDate}</Text>
-                <TouchableOpacity onPress={GetNext}>
-                  <Image source={NextArrow} />
-                </TouchableOpacity>
-              </View>
 
               <RenderWarning degree={data[selectedDate].L_Myopia} refractive={"M"} />
               <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft} />

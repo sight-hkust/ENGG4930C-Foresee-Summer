@@ -3,11 +3,11 @@ import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Image, Slider, Al
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from "moment";
 import { TextInput } from "react-native-gesture-handler";
-import { Button } from "react-native-elements";
 import Collapsible from "react-native-collapsible";
 import MultiSelect from "react-native-multiple-select";
 const DropDown = require("../assets/images/DropDown.png");
-
+import { ListItem, Input, Overlay, Icon, Button } from "react-native-elements";
+import { RoundButton } from "../Utils/RoundButton";
 export const DateSelect = (props) => {
   const { values, setFieldValue } = props;
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
@@ -40,6 +40,89 @@ export const DateSelect = (props) => {
       </View>
 
       <DateTimePickerModal isVisible={isDatePickerVisible} mode="datetime" onConfirm={handleConfirm} onCancel={hideDatePicker} date={moment(values.date).toDate()} maximumDate={new Date()} />
+    </View>
+  );
+};
+
+export const RenderCollapseItem = (props) => {
+  const { handleChange, setFieldValue, isLeft, error, mode, refractive, isAdj } = props;
+  const [isCollapse, toggleisCollapse] = useState(false);
+  return (
+    <View>
+      <Button
+        title={"expand"}
+        onPress={() => {
+          toggleisCollapse(!isCollapse);
+          {
+            console.log("Button isCollapse", isCollapse);
+          }
+        }}
+      />
+      <Collapsible collapsed={isCollapse == true}>
+        {console.log("isCollapse", isCollapse)}
+        <SPHInputC handleChange={handleChange} setFieldValue={setFieldValue} isLeft={isLeft} error={error} mode={mode} refractive={refractive} isAdj={isAdj} />
+        {console.log("isCollapse after", isCollapse)}
+      </Collapsible>
+    </View>
+  );
+};
+
+export const SPHInputC = (props) => {
+  const { setFieldValue, isLeft, refractive, isAdj } = props;
+  const [feedback, setFeedback] = useState("");
+  const [alertSuccess, setAlertSuccess] = useState(false);
+  const [sliderValue, setSliderValue] = useState(0);
+  const [symbol, Togglesymbol] = useState(true); //true = positive = hyperopia
+
+  const SliderHandler = () => {
+    if (isAdj) {
+      setFieldValue(isLeft ? "Adj_L_SPH" : "Adj_R_SPH", sliderValue, false);
+      setFieldValue(isLeft ? "Adj_Lsymbol" : "Adj_Rsymbol", symbol, false);
+    } else {
+      setFieldValue(isLeft ? "L_SPH" : "R_SPH", sliderValue, false);
+      setFieldValue(isLeft ? "Lsymbol" : "Rsymbol", symbol, false);
+    }
+  };
+  let timer = 0;
+
+  return (
+    <View>
+      <View style={{ flexDirection: "row", paddingLeft: 10 }}>
+        <TouchableOpacity
+          style={{ flexDirection: "row", marginRight: 20 }}
+          onPress={() => {
+            Togglesymbol(false);
+          }}
+        >
+          <View style={!symbol ? AddRecordScreen.selectedRadioButton : AddRecordScreen.unselectedRadioButton} />
+          <Text style={{ fontSize: 20, color: "white", fontWeight: "bold" }}>−</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{ flexDirection: "row" }}
+          onPress={() => {
+            Togglesymbol(true);
+          }}
+        >
+          <View style={symbol ? AddRecordScreen.selectedRadioButton : AddRecordScreen.unselectedRadioButton} />
+          <Text style={{ fontSize: 20, color: "white", paddingRight: 10 }}>+</Text>
+        </TouchableOpacity>
+      </View>
+      <Text style={AddRecordScreen.sliderText}>
+        {symbol ? "+" : "−"}
+        {sliderValue}
+      </Text>
+      <Slider
+        style={{ width: 300, paddingTop: 30 }}
+        minimumValue={0}
+        maximumValue={700}
+        step={25}
+        thumbTintColor={"#47CDBD"}
+        minimumTrackTintColor={"white"}
+        maximumTrackTintColor={"#B8CAE4"}
+        onValueChange={(value) => setSliderValue(value)}
+        onSlidingComplete={() => SliderHandler()}
+      />
     </View>
   );
 };
