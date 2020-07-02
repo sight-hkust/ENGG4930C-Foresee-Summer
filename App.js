@@ -78,6 +78,14 @@ function FaqScreen({ navigation, route }) {
   );
 }
 
+function ProfileScreen({ navigation, route }) {
+  return (
+    <Stack.Navigator screenOptions={{ ...headerConfig, headerRight: () => <SettingButton navigation={navigation} /> }}>
+      <Stack.Screen name="Profile" component={Profile} options={{ title: '我的檔案' }} />
+    </Stack.Navigator>
+  );
+}
+
 function ProfessionalScreen({ navigation, route }) {
   return (
     <Stack.Navigator screenOptions={{ ...headerConfig, headerRight: () => <SettingButton navigation={navigation} /> }}>
@@ -177,8 +185,8 @@ function Main({ route, navigation }) {
           />
 
           <Tab.Screen
-            name="Profile"
-            component={Profile}
+            name="ProfileScreen"
+            component={ProfileScreen}
             options={{
               tabBarLabel: '個人檔案',
               tabBarIcon: () => <Image source={require('./assets/images/Profile.png')} style={styles.icon} />,
