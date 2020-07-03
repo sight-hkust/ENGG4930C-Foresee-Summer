@@ -49,16 +49,16 @@ export const RenderNoraml = (props) => {
   return (
     <>
       <SPHInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} refractive={refractive} isAdj={false} setStatus={setStatus} status={status} />
-      <CYLInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} isAdj={false} />
+      <CYLInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} isAdj={false} setStatus={setStatus} status={status} />
 
       <SPHInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} refractive={refractive} isAdj={false} setStatus={setStatus} status={status} />
-      <CYLInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} isAdj={false} />
+      <CYLInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} isAdj={false} setStatus={setStatus} status={status} />
     </>
   );
 };
 
 export const RenderCollapseAdj = (props) => {
-  const { handleChange, setFieldValue, refractive } = props;
+  const { handleChange, setFieldValue, refractive, setStatus, status } = props;
   const [isCollapse, toggleisCollapse] = useState(true);
   return (
     <View>
@@ -73,11 +73,11 @@ export const RenderCollapseAdj = (props) => {
 
       <Collapsible collapsed={isCollapse}>
         <View style={FormItemStyle.collpaseContainer}>
-          <SPHInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} refractive={refractive} isAdj={true} />
-          <CYLInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} isAdj={true} />
+          <SPHInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} refractive={refractive} isAdj={true} setStatus={setStatus} status={status} />
+          <CYLInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} isAdj={true} setStatus={setStatus} status={status} />
 
-          <SPHInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} refractive={refractive} isAdj={true} />
-          <CYLInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} isAdj={true} />
+          <SPHInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} refractive={refractive} isAdj={true} setStatus={setStatus} status={status} />
+          <CYLInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} isAdj={true} setStatus={setStatus} status={status} />
         </View>
       </Collapsible>
     </View>
@@ -198,35 +198,79 @@ export const SPHInputB = (props) => {
   const sliderArr = [0, 25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 300, 400, 425, 450, 475, 500, 525, 550, 575, 600, 625, 650, 675, 700, ">700"];
   const SliderHandler = () => {
     if (sliderValue != ">700") {
+      //remove error
       if (isAdj) {
-        setStatus({ errors: {} });
+        isLeft
+          ? setStatus({ L_SPH_errors: status.L_SPH_errors, R_SPH_errors: status.R_SPH_errors, Adj_L_SPH_errors: "", Adj_R_SPH_errors: status.Adj_R_SPH_errors })
+          : setStatus({ L_SPH_errors: status.L_SPH_errors, R_SPH_errors: status.R_SPH_errors, Adj_L_SPH_errors: status.Adj_L_SPH_errors, Adj_R_SPH_errors: "" });
         setFieldValue(isLeft ? "Adj_L_SPH" : "Adj_R_SPH", sliderValue, false);
         setFieldValue(isLeft ? "Adj_Lsymbol" : "Adj_Rsymbol", symbol, false);
       } else {
-        setStatus({ errors: {} });
+        isLeft
+          ? setStatus({ L_SPH_errors: "", R_SPH_errors: status.R_SPH_errors, Adj_L_SPH_errors: status.Adj_L_SPH_errors, Adj_R_SPH_errors: status.Adj_R_SPH_errors })
+          : setStatus({ L_SPH_errors: status.L_SPH_errors, R_SPH_errors: "", Adj_L_SPH_errors: status.Adj_L_SPH_errors, Adj_R_SPH_errors: status.Adj_R_SPH_errors });
         setFieldValue(isLeft ? "L_SPH" : "R_SPH", sliderValue, false);
         setFieldValue(isLeft ? "Lsymbol" : "Rsymbol", symbol, false);
       }
     } else {
       if (isAdj) {
+        //==">700"
+        isLeft
+          ? setStatus({ L_SPH_errors: status.L_SPH_errors, R_SPH_errors: status.R_SPH_errors, Adj_L_SPH_errors: "empty", Adj_R_SPH_errors: status.Adj_R_SPH_errors })
+          : setStatus({ L_SPH_errors: status.L_SPH_errors, R_SPH_errors: status.R_SPH_errors, Adj_L_SPH_errors: status.Adj_L_SPH_errors, Adj_R_SPH_errors: "empty" });
         setFieldValue(isLeft ? "Adj_Lsymbol" : "Adj_Rsymbol", symbol, false);
       } else {
+        isLeft
+          ? setStatus({ L_SPH_errors: "empty", R_SPH_errors: status.R_SPH_errors, Adj_L_SPH_errors: status.Adj_L_SPH_errors, Adj_R_SPH_errors: status.Adj_R_SPH_errors })
+          : setStatus({ L_SPH_errors: status.L_SPH_errors, R_SPH_errors: "empty", Adj_L_SPH_errors: status.Adj_L_SPH_errors, Adj_R_SPH_errors: status.Adj_R_SPH_errors });
         setFieldValue(isLeft ? "Lsymbol" : "Rsymbol", symbol, false);
       }
     }
   };
   const TextinputHandler = (value) => {
     if (isAdj) {
+      if (value <= 700) {
+        //issue error
+        isLeft
+          ? setStatus({ L_SPH_errors: status.L_SPH_errors, R_SPH_errors: status.R_SPH_errors, Adj_L_SPH_errors: "error", Adj_R_SPH_errors: status.Adj_R_SPH_errors })
+          : setStatus({ L_SPH_errors: status.L_SPH_errors, R_SPH_errors: status.R_SPH_errors, Adj_L_SPH_errors: status.Adj_L_SPH_errors, Adj_R_SPH_errors: "error" });
+      } else {
+        //no error
+        isLeft
+          ? setStatus({ L_SPH_errors: status.L_SPH_errors, R_SPH_errors: status.R_SPH_errors, Adj_L_SPH_errors: "", Adj_R_SPH_errors: status.Adj_R_SPH_errors })
+          : setStatus({ L_SPH_errors: status.L_SPH_errors, R_SPH_errors: status.R_SPH_errors, Adj_L_SPH_errors: status.Adj_L_SPH_errors, Adj_R_SPH_errors: "" });
+      }
       setFieldValue(isLeft ? "Adj_L_SPH" : "Adj_R_SPH", value);
     } else {
       if (value <= 700) {
-        setStatus({ errors: "error" });
+        isLeft
+          ? setStatus({ L_SPH_errors: "error", R_SPH_errors: status.R_SPH_errors, Adj_L_SPH_errors: status.Adj_L_SPH_errors, Adj_R_SPH_errors: status.Adj_L_SPH_errors })
+          : setStatus({ L_SPH_errors: status.L_SPH_errors, R_SPH_errors: "error", Adj_L_SPH_errors: status.Adj_L_SPH_errors, Adj_R_SPH_errors: status.Adj_L_SPH_errors });
       } else {
-        setStatus({ errors: {} });
+        isLeft
+          ? setStatus({ L_SPH_errors: "", R_SPH_errors: status.R_SPH_errors, Adj_L_SPH_errors: status.Adj_L_SPH_errors, Adj_R_SPH_errors: status.Adj_L_SPH_errors })
+          : setStatus({ L_SPH_errors: status.L_SPH_errors, R_SPH_errors: "", Adj_L_SPH_errors: status.Adj_L_SPH_errors, Adj_R_SPH_errors: status.Adj_L_SPH_errors });
       }
       setFieldValue(isLeft ? "L_SPH" : "R_SPH", value);
     }
   };
+
+  const TooSmallError = () => {
+    if (isAdj) {
+      return isLeft ? status.Adj_L_SPH_errors == "error" : status.Adj_R_SPH_errors == "error";
+    } else {
+      return isLeft ? status.L_SPH_errors == "error" : status.R_SPH_errors == "error";
+    }
+  };
+
+  const EmptyError = () => {
+    if (isAdj) {
+      return isLeft ? status.Adj_L_SPH_errors == "empty" : status.Adj_R_SPH_errors == "empty";
+    } else {
+      return isLeft ? status.L_SPH_errors == "empty" : status.R_SPH_errors == "empty";
+    }
+  };
+
   return (
     <View style={{ alignSelf: "center" }}>
       <Text style={FormItemStyle.questionText}>
@@ -288,31 +332,40 @@ export const SPHInputB = (props) => {
             <TextInput onChangeText={(value) => TextinputHandler(value)} keyboardType="numeric" style={FormItemStyle.answerInputBox} />
           </View>
 
-          {status != undefined && status.errors == "error" && <Text style={FormItemStyle.errortext}>大於700度</Text>}
+          {status != undefined && TooSmallError() && <Text style={FormItemStyle.errortext}>應大於700度</Text>}
+          {status != undefined && EmptyError() && <Text style={FormItemStyle.errortext}>此項必填</Text>}
         </>
       )}
-      {console.log(isLeft ? "L sliderValue" : "R SliderValue", sliderValue)}
     </View>
   );
 };
 
 export const CYLInputB = (props) => {
-  const { setFieldValue, isLeft, isAdj, handleChange } = props;
+  const { setFieldValue, isLeft, isAdj, handleChange, setStatus, status } = props;
 
   const [isable, setIsable] = useState(false);
   const [sliderValue, setSliderValue] = useState(0);
   const sliderArr = [0, 25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 300, 400, 425, 450, 475, 500, 525, 550, 575, 600, 625, 650, 675, 700, ">700"];
   const SliderHandler = () => {
     if (sliderValue != ">700") {
+      //remove error
       if (isAdj) {
+        isLeft
+          ? setStatus({ L_CYL_errors: status.L_CYL_errors, R_CYL_errors: status.R_CYL_errors, Adj_L_CYL_errors: "", Adj_R_CYL_errors: status.Adj_R_CYL_errors })
+          : setStatus({ L_CYL_errors: status.L_CYL_errors, R_CYL_errors: status.R_CYL_errors, Adj_L_CYL_errors: status.Adj_L_CYL_errors, Adj_R_CYL_errors: "" });
         setFieldValue(isLeft ? "Adj_L_CYL" : "Adj_R_CYL", sliderValue, false);
+
         if (sliderValue > 0) {
           setIsable(true);
         } else {
           setIsable(false);
         }
       } else {
+        isLeft
+          ? setStatus({ L_CYL_errors: "", R_CYL_errors: status.R_CYL_errors, Adj_L_CYL_errors: status.Adj_L_CYL_errors, Adj_R_CYL_errors: status.Adj_R_CYL_errors })
+          : setStatus({ L_CYL_errors: status.L_CYL_errors, R_CYL_errors: "", Adj_L_CYL_errors: status.Adj_L_CYL_errors, Adj_R_CYL_errors: status.Adj_R_CYL_errors });
         setFieldValue(isLeft ? "L_CYL" : "R_CYL", sliderValue, false);
+
         if (sliderValue > 0) {
           setIsable(true);
         } else {
@@ -321,10 +374,63 @@ export const CYLInputB = (props) => {
       }
     } else {
       if (isAdj) {
+        //==">700"
+        isLeft
+          ? setStatus({ L_CYL_errors: status.L_CYL_errors, R_CYL_errors: status.R_CYL_errors, Adj_L_CYL_errors: "empty", Adj_R_CYL_errors: status.Adj_R_CYL_errors })
+          : setStatus({ L_CYL_errors: status.L_CYL_errors, R_CYL_errors: status.R_CYL_errors, Adj_L_CYL_errors: status.Adj_L_CYL_errors, Adj_R_CYL_errors: "empty" });
+
         setIsable(true);
       } else {
+        isLeft
+          ? setStatus({ L_CYL_errors: "empty", R_CYL_errors: status.R_CYL_errors, Adj_L_CYL_errors: status.Adj_L_CYL_errors, Adj_R_CYL_errors: status.Adj_R_CYL_errors })
+          : setStatus({ L_CYL_errors: status.L_CYL_errors, R_CYL_errors: "empty", Adj_L_CYL_errors: status.Adj_L_CYL_errors, Adj_R_CYL_errors: status.Adj_R_CYL_errors });
+
         setIsable(true);
       }
+    }
+  };
+
+  const TextinputHandler = (value) => {
+    if (isAdj) {
+      if (value <= 700) {
+        //issue error
+        isLeft
+          ? setStatus({ L_CYL_errors: status.L_CYL_errors, R_CYL_errors: status.R_CYL_errors, Adj_L_CYL_errors: "error", Adj_R_CYL_errors: status.Adj_R_CYL_errors })
+          : setStatus({ L_CYL_errors: status.L_CYL_errors, R_CYL_errors: status.R_CYL_errors, Adj_L_CYL_errors: status.Adj_L_CYLerrors, Adj_R_CYL_errors: "error" });
+      } else {
+        //no error
+        isLeft
+          ? setStatus({ L_CYL_errors: status.L_CYL_errors, R_CYL_errors: status.R_CYL_errors, Adj_L_CYL_errors: "", Adj_R_CYL_errors: status.Adj_R_CYL_errors })
+          : setStatus({ L_CYL_errors: status.L_CYL_errors, R_CYL_errors: status.R_CYL_errors, Adj_L_CYL_errors: status.Adj_L_CYL_errors, Adj_R_CYL_errors: "" });
+      }
+      setFieldValue(isLeft ? "Adj_L_CYL" : "Adj_R_CYL", value);
+    } else {
+      if (value <= 700) {
+        isLeft
+          ? setStatus({ L_CYL_errors: "error", R_CYL_errors: status.R_CYL_errors, Adj_L_CYL_errors: status.Adj_L_CYL_errors, Adj_R_CYL_errors: status.Adj_L_CYL_errors })
+          : setStatus({ L_CYL_errors: status.L_CYL_errors, R_CYL_errors: "error", Adj_L_CYL_errors: status.Adj_L_CYL_errors, Adj_R_CYL_errors: status.Adj_L_CYL_errors });
+      } else {
+        isLeft
+          ? setStatus({ L_CYL_errors: "", R_CYL_errors: status.R_CYL_errors, Adj_L_CYL_errors: status.Adj_L_CYL_errors, Adj_R_CYL_errors: status.Adj_L_CYL_errors })
+          : setStatus({ L_CYL_errors: status.L_CYL_errors, R_CYL_errors: "", Adj_L_CYL_errors: status.Adj_L_CYL_errors, Adj_R_CYL_errors: status.Adj_L_CYL_errors });
+      }
+      setFieldValue(isLeft ? "L_CYL" : "R_CYL", value);
+    }
+  };
+
+  const TooSmallError = () => {
+    if (isAdj) {
+      return isLeft ? status.Adj_L_CYL_errors == "error" : status.Adj_R_CYL_errors == "error";
+    } else {
+      return isLeft ? status.L_CYL_errors == "error" : status.R_CYL_errors == "error";
+    }
+  };
+
+  const EmptyError = () => {
+    if (isAdj) {
+      return isLeft ? status.Adj_L_CYL_errors == "empty" : status.Adj_R_CYL_errors == "empty";
+    } else {
+      return isLeft ? status.L_CYL_errors == "empty" : status.R_CYL_errors == "empty";
     }
   };
 
@@ -358,12 +464,14 @@ export const CYLInputB = (props) => {
         <View style={{ flexDirection: "row", justifyContent: "space-around", backgroundColor: "rgba(0,0,0,0.2)", borderRadius: 5, paddingVertical: 8 }}>
           <Text style={{ fontSize: 18, color: "white", paddingLeft: 5 }}>請輸入大於700度的度數: </Text>
           {isAdj ? (
-            <TextInput onChangeText={handleChange(isLeft ? "Adj_L_CYL" : "Adj_R_CYL")} keyboardType="numeric" style={FormItemStyle.answerInputBox} />
+            <TextInput onChangeText={TextinputHandler} keyboardType="numeric" style={FormItemStyle.answerInputBox} />
           ) : (
-            <TextInput onChangeText={handleChange(isLeft ? "L_CYL" : "R_CYL")} keyboardType="numeric" style={FormItemStyle.answerInputBox} />
+            <TextInput onChangeText={TextinputHandler} keyboardType="numeric" style={FormItemStyle.answerInputBox} />
           )}
         </View>
       )}
+      {status != undefined && TooSmallError() && <Text style={FormItemStyle.errortext}>應大於700度</Text>}
+      {status != undefined && EmptyError() && <Text style={FormItemStyle.errortext}>此項必填</Text>}
       <View>{isable && <AxisInputB setFieldValue={setFieldValue} isLeft={isLeft} isAdj={isAdj} />}</View>
     </View>
   );
@@ -628,7 +736,8 @@ const FormItemStyle = StyleSheet.create({
   },
 
   errortext: {
-    fontSize: 14,
+    textAlign: "center",
+    fontSize: 16,
     color: "#9AFF98",
     paddingBottom: 5,
   },

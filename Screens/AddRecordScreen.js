@@ -113,6 +113,17 @@ export default class Form extends Component {
                 remarks: "",
                 disease: [],
               }}
+              initialStatus={{
+                L_SPH_errors: "",
+                R_SPH_errors: "",
+                Adj_L_SPH_errors: "",
+                Adj_R_SPH_errors: "",
+
+                L_CYL_errors: "",
+                R_CYL_errors: "",
+                Adj_L_CYL_errors: "",
+                Adj_R_CYL_errors: "",
+              }}
               //validationSchema={SchemaRecords}
               onSubmit={(values) => {
                 var exist = false;
@@ -248,7 +259,7 @@ export default class Form extends Component {
 
                   <RenderNoraml handleChange={handleChange} setFieldValue={setFieldValue} refractive={refractive} setStatus={setStatus} status={status} />
 
-                  <RenderCollapseAdj handleChange={handleChange} setFieldValue={setFieldValue} refractive={refractive} />
+                  <RenderCollapseAdj handleChange={handleChange} setFieldValue={setFieldValue} refractive={refractive} setStatus={setStatus} status={status} />
                   <RenderCollapseVA setFieldValue={setFieldValue} />
                   <RenderCollapsePD handleChange={handleChange} />
 
@@ -265,8 +276,16 @@ export default class Form extends Component {
                         paddingBottom: 30,
                       }}
                       onPress={handleSubmit}
-
-                      //disabled={Object.keys(errors).length > 0}
+                      disabled={
+                        status.L_SPH_errors == "error" ||
+                        status.R_SPH_errors == "error" ||
+                        status.Adj_L_SPH_errors == "error" ||
+                        status.Adj_R_SPH_errors == "error" ||
+                        status.L_SPH_errors == "empty" ||
+                        status.R_SPH_errors == "empty" ||
+                        status.Adj_L_SPH_errors == "empty" ||
+                        status.Adj_R_SPH_errors == "empty"
+                      }
                     />
                     {console.log("@AddRecordScreen submit button errors", status)}
                   </View>
