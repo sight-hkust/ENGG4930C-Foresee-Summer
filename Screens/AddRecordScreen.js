@@ -110,9 +110,13 @@ export default class Form extends Component {
                 Adj_R_SPH: "0",
                 Adj_Lsymbol: true,
                 Adj_Rsymbol: true,
+                Adj_L_CYL: "0",
+                Adj_R_CYL: "0",
+                Adj_L_Axis: "0",
+                Adj_R_Axis: "0",
 
-                L_VA: "20/200",
-                R_VA: "20/200",
+                L_VA: "20/20",
+                R_VA: "20/20",
 
                 L_PD: "0",
                 R_PD: "0",
@@ -141,10 +145,14 @@ export default class Form extends Component {
                   L_Axis: values.L_Axis,
                   R_Axis: values.R_Axis,
 
-                  Adj_L_SPH: values.Adj_L_SPH,
-                  Adj_R_SPH: values.Adj_R_SPH,
-                  Adj_Lsymbol: values.Adj_Lsymbol,
-                  Adj_Rsymbol: values.Adj_Rsymbol,
+                  Adj_L_Myopia: 0,
+                  Adj_R_Myopia: 0,
+                  Adj_L_Hyperopia: 0,
+                  Adj_R_Hyperopia: 0,
+                  Adj_L_CYL: parseInt(values.Adj_L_CYL),
+                  Adj_R_CYL: parseInt(values.Adj_R_CYL),
+                  Adj_L_Axis: values.Adj_L_Axis,
+                  Adj_R_Axis: values.Adj_R_Axis,
 
                   L_PD: values.L_PD,
                   R_PD: values.R_PD,
@@ -169,6 +177,25 @@ export default class Form extends Component {
                 if (values.R_CYL == 0) {
                   data.R_Axis = 0;
                 }
+
+                if (values.Adj_Lsymbol) {
+                  //true: plus: hyper
+                  data.Adj_L_Hyperopia = parseInt(values.Adj_L_SPH);
+                } else {
+                  data.Adj_L_Myopia = parseInt(values.Adj_L_SPH);
+                }
+                if (values.Adj_Rsymbol) {
+                  data.Adj_R_Hyperopia = parseInt(values.Adj_R_SPH);
+                } else {
+                  data.Adj_R_Myopia = parseInt(values.Adj_R_SPH);
+                }
+                if (values.Adj_L_CYL == 0) {
+                  data.Adj_L_Axis = 0;
+                }
+                if (values.Adj_R_CYL == 0) {
+                  data.Adj_R_Axis = 0;
+                }
+
                 if (isProfessional) {
                   //change, need to also add to users/patient_id/records, but what if the patient doesnt exist? will it automatically create one entry for the patient?
                   // database

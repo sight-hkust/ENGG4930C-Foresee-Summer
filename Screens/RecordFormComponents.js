@@ -100,6 +100,13 @@ export const RenderCollapseVA = (props) => {
   const [isCollapse, toggleisCollapse] = useState(true);
   const [mode, SetMode] = useState("A");
   const RadioButtonHandler = (value) => {
+    if (value == "B") {
+      setFieldValue("L_VA", "6/6", false);
+      setFieldValue("R_VA", "6/6", false);
+    } else if (value == "C") {
+      setFieldValue("L_VA", "1.0", false);
+      setFieldValue("R_VA", "1.0", false);
+    }
     SetMode(value);
   };
 
@@ -282,7 +289,23 @@ export const CYLInputB = (props) => {
 
   const [isable, setIsable] = useState(false);
   const [sliderValue, setSliderValue] = useState(0);
-
+  const SliderHandler = () => {
+    if (isAdj) {
+      setFieldValue(isLeft ? "Adj_L_CYL" : "Adj_R_CYL", sliderValue, false);
+      if (sliderValue > 0) {
+        setIsable(true);
+      } else {
+        setIsable(false);
+      }
+    } else {
+      setFieldValue(isLeft ? "L_CYL" : "R_CYL", sliderValue, false);
+      if (sliderValue > 0) {
+        setIsable(true);
+      } else {
+        setIsable(false);
+      }
+    }
+  };
   return (
     <View style={{ alignSelf: "center" }}>
       <Text style={FormItemStyle.questionText}>
@@ -301,13 +324,8 @@ export const CYLInputB = (props) => {
           minimumTrackTintColor={"white"}
           maximumTrackTintColor={"#B8CAE4"}
           onValueChange={(value) => setSliderValue(value)}
-          onSlidingComplete={(value) => {
-            setFieldValue(isLeft ? "L_CYL" : "R_CYL", value, false);
-            if (value > 0) {
-              setIsable(true);
-            } else {
-              setIsable(false);
-            }
+          onSlidingComplete={() => {
+            SliderHandler();
           }}
         />
       </View>
@@ -365,6 +383,14 @@ export const CYLInput = (props) => {
 export const AxisInputB = (props) => {
   const { setFieldValue, isLeft, isAdj } = props;
   const [sliderValue, setSliderValue] = useState(0);
+  const SliderHandler = () => {
+    if (isAdj) {
+      setFieldValue(isLeft ? "Adj_L_Axis" : "Adj_R_Axis", sliderValue, false);
+    } else {
+      setFieldValue(isLeft ? "L_Axis" : "R_Axis", sliderValue, false);
+    }
+  };
+
   return (
     <View style={{ alignSelf: "center" }}>
       <Text style={FormItemStyle.questionText}>
@@ -384,7 +410,7 @@ export const AxisInputB = (props) => {
           maximumTrackTintColor={"#B8CAE4"}
           onValueChange={(value) => setSliderValue(value)}
           onSlidingComplete={(value) => {
-            setFieldValue(isLeft ? "L_Axis" : "R_Axis", value, false);
+            SliderHandler();
           }}
         />
       </View>

@@ -34,7 +34,7 @@ export default class RecordsScreen extends Component {
       refractive: "0", //0:myopia, 1:hyperopia
       index: "0",
       selectedDate: "0",
-      username: "",
+      username: "", //first name last name
       isModalVisible: false,
     };
   }
@@ -56,13 +56,13 @@ export default class RecordsScreen extends Component {
     });
 
     ref.child("info/name").once("value", (snapshot) => {
+      //currently not in use, for family account
       this.setState({ username: snapshot.val() });
     });
   }
 
   render() {
     const data = this.state.data;
-
     const pressHandler = () => {
       this.props.navigation.navigate("AddRecordScreen", {
         isProfessional: false,
@@ -159,7 +159,7 @@ export default class RecordsScreen extends Component {
               )}
 
               <View style={RecordScreenStyle.addRecordButton}>
-                {data != null && <DetailButton data={data} selectedDate={this.state.selectedDate} />}
+                {data != null && <DetailButton data={data} selectedDate={this.state.selectedDate} isAdj={false} />}
 
                 <Button
                   icon={<Icon name="add" size={25} color="#2D9CDB" />}
@@ -173,21 +173,8 @@ export default class RecordsScreen extends Component {
                     paddingRight: 0,
                   }}
                 />
+                {data != null && <DetailButton data={data} selectedDate={this.state.selectedDate} isAdj={true} />}
 
-                {data != null && (
-                  <Button
-                    icon={<Icon name="eyeglass" type="simple-line-icon" size={22} color="#2D9CDB" />}
-                    buttonStyle={{
-                      backgroundColor: "white",
-                      width: 40,
-                      height: 40,
-                      borderRadius: 24,
-                      paddingLeft: 0,
-                      paddingRight: 0,
-                    }}
-                    containerStyle={{ paddingTop: 5 }}
-                  />
-                )}
                 {/* <RenderIncreaseWarning data={data} dateArr={this.state.dates} index={this.state.index} refractive={this.state.refractive} isLeft={true}/> */}
               </View>
             </View>
@@ -199,7 +186,7 @@ export default class RecordsScreen extends Component {
 }
 
 export const DetailButton = (props) => {
-  const { data, selectedDate } = props;
+  const { data, selectedDate, isAdj } = props;
 
   const [isVisible, setIsVisible] = useState(false);
 
@@ -209,7 +196,7 @@ export const DetailButton = (props) => {
   return (
     <View>
       <Button
-        icon={<Icon name="dehaze" size={22} color="#2D9CDB" />}
+        icon={<Icon name={isAdj ? "eyeglass" : "dehaze"} type={isAdj ? "simple-line-icon" : ""} size={22} color="#2D9CDB" />}
         onPress={toggleModal}
         buttonStyle={{
           backgroundColor: "white",
@@ -221,13 +208,13 @@ export const DetailButton = (props) => {
         }}
         containerStyle={{ paddingTop: 5 }}
       />
-      <RenderModal data={data} selectedDate={selectedDate} isVisible={isVisible} toggleModal={toggleModal} />
+      <RenderModal data={data} selectedDate={selectedDate} isVisible={isVisible} toggleModal={toggleModal} isAdj={isAdj} />
     </View>
   );
 };
 
 export const RenderModal = (props) => {
-  const { data, selectedDate, isVisible, toggleModal } = props;
+  const { data, selectedDate, isVisible, toggleModal, isAdj } = props;
   const curRecord = data[selectedDate];
   //console.log(curRecord);
   return (
@@ -242,7 +229,7 @@ export const RenderModal = (props) => {
         }}
       />
       <Text style={RecordScreenStyle.colHeader}>日期: {selectedDate}</Text>
-      <DisplayRecords curRecord={data[selectedDate]} />
+      <DisplayRecords curRecord={curRecord} isAdj={isAdj} />
     </BottomModal>
   );
 };
