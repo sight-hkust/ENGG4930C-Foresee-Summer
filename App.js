@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
-import React, { useEffect, useState } from 'react';
-import { Image, Dimensions, TouchableOpacity, Text, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { Image, Dimensions, TouchableOpacity, StyleSheet } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
@@ -36,9 +36,10 @@ import WelcomeScreen from './Screens/WelcomeScreen';
 import SettingScreen from './src/components/Setting/Setting';
 import PrivacyPolicy from './src/components/Policy/PrivacyPolicy';
 import TermsAndCondition from './src/components/Policy/TermsAndCondition';
-import { set } from 'react-native-reanimated';
+
 import TutorialScreen from './src/components/Tutorial/Tutorial';
 import QrCode from './src/components/Profile/QrCode';
+import { RegistrationForm } from './src/components/Registration/RegistrationForm/RegistrationForm';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -117,6 +118,7 @@ function SettingButton({ route, navigation }) {
 function Main({ route, navigation }) {
   return (
     <Tab.Navigator
+      initialRouteName={auth.currentUser.displayName == 'professional' ? 'ProfessionalScreen' : 'HomeScreen'}
       tabBarOptions={{
         showLabel: false,
         activeTintColor: '#003973',
@@ -124,7 +126,7 @@ function Main({ route, navigation }) {
         style: {
           backgroundColor: '#BED8FF',
           height: Dimensions.get('window').height * 0.1,
-          paddingHorizontal: auth.currentUser.displayName == 'professional' ? 100 : 30,
+          paddingHorizontal: auth.currentUser.displayName == 'professional' ? 80 : 30,
           borderTopWidth: 0,
           borderTopColor: 'transparent',
 
@@ -141,10 +143,26 @@ function Main({ route, navigation }) {
       {auth.currentUser.displayName == 'professional' ? (
         <>
           <Tab.Screen
+            name="Register"
+            component={RegistrationForm}
+            initialParams={{ isProfessional: true, registerPatient: true }}
+            options={{
+              tabBarIcon: () => <Icon name="md-add-circle-outline" type="ionicon" color="#23559E" size={32.5} containerStyle={styles.icon} />,
+            }}
+          />
+          <Tab.Screen
             name="ProfessionalScreen"
             component={ProfessionalScreen}
             options={{
               tabBarIcon: () => <Image source={require('./assets/images/Icon_solid.png')} style={{ ...styles.icon, ...{ width: 55, height: 55 } }} />,
+            }}
+          />
+          <Tab.Screen
+            name="SettingScreen"
+            component={SettingScreen}
+            initialParams={{ isProfessional: true }}
+            options={{
+              tabBarIcon: () => <Icon name="setting" type="antdesign" color="#23559E" size={32.5} containerStyle={styles.icon} />,
             }}
           />
         </>
@@ -250,6 +268,8 @@ const styles = StyleSheet.create({
     width: 40,
     height: 40,
     elevation: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
 
     shadowColor: 'black',
     shadowOpacity: 0.3,
