@@ -50,17 +50,20 @@ export default class ArticleDetailScreen extends Component {
 
   async _handleVidRef(playing) {
     const { video } = this.state;
-    try {
-      const status = {
-        shouldPlay: playing,
-      };
-      const source = { uri: video };
+    if (video == "假近視的迷思mp4compress.mp4") {
+      console.log("try");
+    } else
+      try {
+        const status = {
+          shouldPlay: playing,
+        };
+        const source = { uri: video };
 
-      await this.video.loadAsync(source, status, false);
-      this.setState({ playbackObject: this.video });
-    } catch (e) {
-      console.log(e);
-    }
+        await this.video.loadAsync(source, status, false);
+        this.setState({ playbackObject: this.video });
+      } catch (e) {
+        console.log(e);
+      }
   }
 
   onFullScreenPressed = () => {
