@@ -9,7 +9,7 @@ import { SchemaRecords } from "../Screens/SchemaRecords";
 import { LinearGradient } from "expo-linear-gradient";
 import { Button } from "react-native-elements";
 
-import { DateSelect, RenderNoraml, SPHInputB, CYLInputB, RenderCollapseAdj, RemarksInput, DiseasesInput, RenderCollapseVA, RenderCollapsePD } from "../Screens/RecordFormComponents";
+import { DateSelect, RenderNoraml, RenderCollapseAdj, RemarksInput, DiseasesInput, RenderCollapseVA, RenderCollapsePD } from "../Screens/RecordFormComponents";
 
 export default class Form extends Component {
   yScroll = new Animated.Value(0);

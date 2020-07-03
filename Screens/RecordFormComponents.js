@@ -48,11 +48,11 @@ export const RenderNoraml = (props) => {
   const { handleChange, setFieldValue, refractive, setStatus, status } = props;
   return (
     <>
-      <SPHInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} refractive={refractive} isAdj={false} setStatus={setStatus} status={status} />
-      <CYLInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} isAdj={false} setStatus={setStatus} status={status} />
+      <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} refractive={refractive} isAdj={false} setStatus={setStatus} status={status} />
+      <CYLInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} isAdj={false} setStatus={setStatus} status={status} />
 
-      <SPHInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} refractive={refractive} isAdj={false} setStatus={setStatus} status={status} />
-      <CYLInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} isAdj={false} setStatus={setStatus} status={status} />
+      <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} refractive={refractive} isAdj={false} setStatus={setStatus} status={status} />
+      <CYLInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} isAdj={false} setStatus={setStatus} status={status} />
     </>
   );
 };
@@ -73,11 +73,11 @@ export const RenderCollapseAdj = (props) => {
 
       <Collapsible collapsed={isCollapse}>
         <View style={FormItemStyle.collpaseContainer}>
-          <SPHInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} refractive={refractive} isAdj={true} setStatus={setStatus} status={status} />
-          <CYLInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} isAdj={true} setStatus={setStatus} status={status} />
+          <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} refractive={refractive} isAdj={true} setStatus={setStatus} status={status} />
+          <CYLInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} isAdj={true} setStatus={setStatus} status={status} />
 
-          <SPHInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} refractive={refractive} isAdj={true} setStatus={setStatus} status={status} />
-          <CYLInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} isAdj={true} setStatus={setStatus} status={status} />
+          <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} refractive={refractive} isAdj={true} setStatus={setStatus} status={status} />
+          <CYLInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} isAdj={true} setStatus={setStatus} status={status} />
         </View>
       </Collapsible>
     </View>
@@ -191,7 +191,7 @@ export const RenderCollapseVA = (props) => {
   );
 };
 
-export const SPHInputB = (props) => {
+export const SPHInput = (props) => {
   const { setFieldValue, isLeft, refractive, isAdj, setStatus, status } = props;
   const [sliderValue, setSliderValue] = useState(0);
   const [symbol, Togglesymbol] = useState(refractive != 0 ? true : false); //true = positive = hyperopia
@@ -340,7 +340,7 @@ export const SPHInputB = (props) => {
   );
 };
 
-export const CYLInputB = (props) => {
+export const CYLInput = (props) => {
   const { setFieldValue, isLeft, isAdj, handleChange, setStatus, status } = props;
 
   const [isable, setIsable] = useState(false);
