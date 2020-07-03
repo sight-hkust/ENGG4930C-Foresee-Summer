@@ -1,6 +1,6 @@
 import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity, ScrollView, FlatList, Image, Dimensions } from "react-native";
 import React, { Component } from "react";
-import { database } from "../../../src/config/config";
+import { database } from "../../config/config";
 import { LinearGradient } from "expo-linear-gradient";
 import { ScreenWidth, ScreenHeight, FontScale } from "../../../constant/Constant";
 
@@ -19,22 +19,24 @@ export default class GetEducated extends Component {
     database
       .ref("contents/articles")
       .orderByChild("article_id")
-      .limitToFirst(4)
-      .once("value", (snapshot) => {
+      .on("value", (snapshot) => {
         var temp = [];
         //console.log(snapshot.toJSON());
         snapshot.forEach((childSnapshot) => {
           var childData = childSnapshot.val();
           //console.log(childData);
           temp.push(childData);
-          this.setState({ data: temp });
         });
+        this.setState({ topArticle: temp[temp.length - 1] });
+        temp.pop();
+        temp.reverse();
+        this.setState({ data: temp });
       });
     database
       .ref("contents/articles")
       .orderByChild("isTop")
       .equalTo(true)
-      .once("value", (snapshot) => {
+      .on("value", (snapshot) => {
         var temp = [];
         //console.log(snapshot.toJSON());
         snapshot.forEach((childSnapshot) => {
@@ -89,7 +91,10 @@ function Item({ item, navigation }) {
   return (
     <TouchableOpacity onPress={pressHandler}>
       <View style={GetEducatedScreen.articleItem}>
-        <Image source={{ uri: item.image }} style={GetEducatedScreen.itemImage} />
+        <Image
+          source={{ uri: item.image }}
+          style={GetEducatedScreen.itemImage}
+        />
         <View style={{ flex: 1 }}>
           <Text style={GetEducatedScreen.articleSubject}>{item.subject}</Text>
           <Text style={GetEducatedScreen.articleDate}>{item.date}</Text>

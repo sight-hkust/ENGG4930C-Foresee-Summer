@@ -153,22 +153,6 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                 })
               )}
             </ScrollView>
-            <View style={{ flexDirection: 'row', height: ScreenHeight * 0.05, justifyContent: 'center', paddingHorizontal: 15 }}>
-              <View style={{ width: ScreenWidth / 2, height: 100, zIndex: 10 }}>
-                <Button
-                  icon={<Icon name="md-add-circle-outline" type="ionicon" size={30} color="white" />}
-                  title="登記病人"
-                  titleStyle={{ marginLeft: 10, color: 'white', fontWeight: 'bold' }}
-                  type="clear"
-                  onPress={() =>
-                    navigation.navigate('Register', {
-                      screen: 'Registration Form',
-                      params: { isProfessional: true, registerPatient: true },
-                    })
-                  }
-                />
-              </View>
-            </View>
           </View>
         )}
       </View>

@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Image, Button } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  Image,
+  Button,
+} from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Audio } from "expo-av";
 import * as Brightness from "expo-brightness";
@@ -84,7 +91,9 @@ export default class EyeExercise extends Component {
         >
           {playingStatus == 0 && (
             <View style={styles.secondaryContainer}>
-              <Text style={styles.text}>{"眼睛離開手機屏幕，\n按下「開始」，\n跟隨聲音導航開始護眼操"}</Text>
+              <Text style={styles.text}>
+                {"眼睛離開手機屏幕，\n按下「開始」，\n跟隨聲音導航開始護眼操"}
+              </Text>
               <View style={{ flex: 1, alignItems: "center" }}>
                 <TouchableOpacity
                   style={styles.boxes}
@@ -107,7 +116,10 @@ export default class EyeExercise extends Component {
             <View style={styles.secondaryContainer}>
               <Text style={styles.text}>你已完成今天的護眼操！</Text>
               <View style={{ flex: 1, alignItems: "center" }}>
-                <TouchableOpacity style={styles.boxes} onPress={() => this.setState({ playingStatus: 0 })}>
+                <TouchableOpacity
+                  style={styles.boxes}
+                  onPress={() => this.setState({ playingStatus: 0 })}
+                >
                   <Text style={styles.buttonText}>再來一組</Text>
                 </TouchableOpacity>
               </View>

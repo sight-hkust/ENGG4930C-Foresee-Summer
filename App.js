@@ -1,43 +1,45 @@
-import "react-native-gesture-handler";
-import React, { useEffect, useState } from "react";
-import { Image, Dimensions, TouchableOpacity, Text, StyleSheet } from "react-native";
-import { Icon } from "react-native-elements";
+import 'react-native-gesture-handler';
+import React, { useState } from 'react';
+import { Image, Dimensions, TouchableOpacity, StyleSheet } from 'react-native';
+import { Icon } from 'react-native-elements';
 
-import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
-import GetEducatedScreen from "./src/components/Education/GetEducated";
-import EyeExerciseScreen from "./src/components/Education/EyeExercise";
-import ArticleDetailScreen from "./src/components/Education/ArticleDetail";
-import PostQuestion from "./src/components/AskAnExpert/PostQuestionScreen";
-import AskAnExpertMainScreen from "./src/components/AskAnExpert/AskAnExpertMainScreen";
+import GetEducatedScreen from './src/components/Education/GetEducated';
+import EyeExerciseScreen from './src/components/Education/EyeExercise';
+import ArticleDetailScreen from './src/components/Education/ArticleDetail';
+import PostQuestion from './src/components/AskAnExpert/PostQuestionScreen';
+import AskAnExpertMainScreen from './src/components/AskAnExpert/AskAnExpertMainScreen';
 
-import RecordsScreen from "./Screens/RecordsScreen";
-import AddRecordScreen from "./Screens/AddRecordScreen";
-import OverviewScreen from "./Screens/OverviewScreen";
+import RecordsScreen from './Screens/RecordsScreen';
+import AddRecordScreen from './Screens/AddRecordScreen';
+import OverviewScreen from './Screens/OverviewScreen';
 
-import { Login } from "./src/components/Login/Login";
-import { Register } from "./src/components/Registration/Register";
-import { Profile } from "./src/components/Profile/Profile";
-import { QRCodeScannerScreen } from "./src/components/QRCodeScannerScreen/QRCodeScannerScreen";
+import { Login } from './src/components/Login/Login';
+import { Register } from './src/components/Registration/Register';
+import Profile from './src/components/Profile/Profile';
+import { QRCodeScannerScreen } from './src/components/QRCodeScannerScreen/QRCodeScannerScreen';
 
-import { auth } from "./src/config/config";
+import { auth } from './src/config/config';
 
-import ProfMainMenu from "./src/components/Professional/ProfMainMenu";
-import ProfPatientViewScreen from "./src/components/Professional/ProfPatientViewScreen";
-import { createStore, applyMiddleware } from "redux";
-import { Provider } from "react-redux";
-import rootReducer from "./src/reducers";
-import logger from "redux-logger";
-import thunk from "redux-thunk";
-import WelcomeScreen from "./Screens/WelcomeScreen";
+import ProfMainMenu from './src/components/Professional/ProfMainMenu';
+import ProfPatientViewScreen from './src/components/Professional/ProfPatientViewScreen';
+import { createStore, applyMiddleware } from 'redux';
+import { Provider } from 'react-redux';
+import rootReducer from './src/reducers';
+import logger from 'redux-logger';
+import thunk from 'redux-thunk';
+import WelcomeScreen from './Screens/WelcomeScreen';
 
-import SettingScreen from "./src/components/Setting/Setting";
-import PrivacyPolicy from "./src/components/Policy/PrivacyPolicy";
-import TermsAndCondition from "./src/components/Policy/TermsAndCondition";
-import { set } from "react-native-reanimated";
+import SettingScreen from './src/components/Setting/Setting';
+import PrivacyPolicy from './src/components/Policy/PrivacyPolicy';
+import TermsAndCondition from './src/components/Policy/TermsAndCondition';
+
+import TutorialScreen from './src/components/Tutorial/Tutorial';
+import QrCode from './src/components/Profile/QrCode';
+import { RegistrationForm } from './src/components/Registration/RegistrationForm/RegistrationForm';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -78,6 +80,15 @@ function FaqScreen({ navigation, route }) {
   );
 }
 
+function ProfileScreen({ navigation, route }) {
+  return (
+    <Stack.Navigator screenOptions={{ ...headerConfig, headerRight: () => <SettingButton navigation={navigation} /> }}>
+      <Stack.Screen name="Profile" component={Profile} options={{ title: '我的檔案' }} />
+      <Stack.Screen name="QrCode" component={QrCode} options={{ headerShown: false }} />
+    </Stack.Navigator>
+  );
+}
+
 function ProfessionalScreen({ navigation, route }) {
   return (
     <Stack.Navigator screenOptions={{ ...headerConfig, headerRight: () => <SettingButton navigation={navigation} /> }}>
@@ -107,14 +118,15 @@ function SettingButton({ route, navigation }) {
 function Main({ route, navigation }) {
   return (
     <Tab.Navigator
+      initialRouteName={auth.currentUser.displayName == 'professional' ? 'ProfessionalScreen' : 'HomeScreen'}
       tabBarOptions={{
         showLabel: false,
         activeTintColor: "#003973",
         inactiveTintColor: "#2D9CDB",
         style: {
-          backgroundColor: "#BED8FF",
-          height: Dimensions.get("window").height * 0.1,
-          paddingHorizontal: auth.currentUser.displayName == "professional" ? 100 : 30,
+          backgroundColor: '#BED8FF',
+          height: Dimensions.get('window').height * 0.1,
+          paddingHorizontal: auth.currentUser.displayName == 'professional' ? 80 : 30,
           borderTopWidth: 0,
           borderTopColor: "transparent",
 
@@ -131,10 +143,26 @@ function Main({ route, navigation }) {
       {auth.currentUser.displayName == "professional" ? (
         <>
           <Tab.Screen
+            name="Register"
+            component={RegistrationForm}
+            initialParams={{ isProfessional: true, registerPatient: true }}
+            options={{
+              tabBarIcon: () => <Icon name="md-add-circle-outline" type="ionicon" color="#23559E" size={32.5} containerStyle={styles.icon} />,
+            }}
+          />
+          <Tab.Screen
             name="ProfessionalScreen"
             component={ProfessionalScreen}
             options={{
               tabBarIcon: () => <Image source={require("./assets/images/Icon_solid.png")} style={{ ...styles.icon, ...{ width: 55, height: 55 } }} />,
+            }}
+          />
+          <Tab.Screen
+            name="SettingScreen"
+            component={SettingScreen}
+            initialParams={{ isProfessional: true }}
+            options={{
+              tabBarIcon: () => <Icon name="setting" type="antdesign" color="#23559E" size={32.5} containerStyle={styles.icon} />,
             }}
           />
         </>
@@ -177,8 +205,8 @@ function Main({ route, navigation }) {
           />
 
           <Tab.Screen
-            name="Profile"
-            component={Profile}
+            name="ProfileScreen"
+            component={ProfileScreen}
             options={{
               tabBarLabel: "個人檔案",
               tabBarIcon: () => <Image source={require("./assets/images/Profile.png")} style={styles.icon} />,
@@ -219,6 +247,7 @@ export default App = (props) => {
             </>
           )}
           <Stack.Screen name="Welcome" component={WelcomeScreen} options={{ headerShown: false }} />
+          <Stack.Screen name="Tutorial" component={TutorialScreen} options={{ headerShown: false }} />
         </Stack.Navigator>
       </NavigationContainer>
     </Provider>
@@ -238,7 +267,9 @@ const styles = StyleSheet.create({
   icon: {
     width: 40,
     height: 40,
-    //elevation: 10,
+    elevation: 10,
+    justifyContent: 'center',
+    alignItems: 'center',
 
     shadowColor: "black",
     shadowOpacity: 0.3,

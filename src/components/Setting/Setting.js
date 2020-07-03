@@ -15,10 +15,10 @@ export default function Setting({ route, navigation }) {
   const [selectedLabel, setSelectedLabel] = useState();
 
   return (
-    <LinearGradientBackground style={{ height: '100%' }} colors={['#1772A6', '#A377FF']} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]}>
+    <MenuScreen backgroundContainer={!route.params?.isProfessional ? { height: ScreenHeight, borderBottomLeftRadius: 0, borderBottomRightRadius: 0 } : {}}>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <ListItem title={'深色主題'} containerStyle={styles.listItem} titleStyle={styles.title} rightIcon={<ThemeSwitch />} />
-        <ListItem Component={TouchableOpacity} title={'程式教學'} containerStyle={styles.listItem} titleStyle={styles.title} chevron={{ size: 30 }} />
+        <ListItem Component={TouchableOpacity} title={'程式教學'} containerStyle={styles.listItem} titleStyle={styles.title} chevron={{ size: 30 }} onPress={() => navigation.navigate('Tutorial')} />
         <ListItem
           Component={TouchableOpacity}
           title={'聯絡我們'}
@@ -80,7 +80,7 @@ export default function Setting({ route, navigation }) {
         />
       </ScrollView>
       <Text style={{ marginTop: 100, color: 'white', alignSelf: 'center', position: 'absolute', bottom: 20 }}>© 2020 ForeSee</Text>
-    </LinearGradientBackground>
+    </MenuScreen>
   );
 }
 

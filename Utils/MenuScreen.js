@@ -15,7 +15,7 @@ export default class MenuScreen extends Component {
     return (
       <View style={{ ...styles.container, backgroundColor: this.state.isLightTheme ? '#BED8FF' : '#2372A5' }}>
         <View style={styles.shadow}>
-          <View style={styles.backgroundContainer}>
+          <View style={{ ...styles.backgroundContainer, ...this.props.backgroundContainer }}>
             <LinearGradientBackground
               style={{ height: '100%' }}
               colors={this.state.isLightTheme ? ['#1772A6', '#A377FF'] : ['#2D404B', '#2D404B']}
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
   },
   backgroundContainer: {
-    height: ScreenHeight * 0.88,
+    height: ScreenHeight * 0.9,
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,
     overflow: 'hidden',

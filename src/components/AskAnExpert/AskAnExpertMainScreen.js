@@ -9,7 +9,17 @@ import { LinearGradientBackground } from '../../../Utils/LinearGradientBackgroun
 import MenuScreen from '../../../Utils/MenuScreen';
 
 import { connect } from 'react-redux';
-import { watchQuestionListUpdate } from '../../reducers/askProfessionalList';
+import { watchQuestionListUpdate, questionList } from '../../reducers/askProfessionalList';
+
+const SPECIAL_TAG_1 = '眼精疼痛';
+const SPECIAL_TAG_2 = '視力模糊';
+const SPECIAL_TAG_3 = '分泌物';
+
+const SPECIAL_TAG_1_COLOR = '#DFB6FF';
+const SPECIAL_TAG_2_COLOR = '#FFED73';
+const SPECIAL_TAG_3_COLOR = '#94DFC9';
+
+const NORMAL_TAG_COLOR = '#B9C6F4';
 
 const AskAnExpertMainScreen = ({ route, navigation, questionListStore }) => {
   let hotTopicCounter = 0;
@@ -114,7 +124,21 @@ export const MiniQuestionCard = (props) => {
   return (
     <>
       <TouchableOpacity style={{ ...styles.shadow, ...styles.miniQuestion }} onPress={toggleModal}>
-        <View style={{ paddingHorizontal: 15, paddingTop: 20, width: '100%' }}>
+        <View style={{ paddingHorizontal: 15, paddingTop: 7.5, width: '100%' }}>
+          <View style={{ flexDirection: 'row', marginBottom: 10, marginTop: 5 }}>
+            {props.faq.tags.map((item) => {
+              switch (item) {
+                case SPECIAL_TAG_1:
+                  return <Label color={SPECIAL_TAG_1_COLOR} text={item} />;
+                case SPECIAL_TAG_2:
+                  return <Label color={SPECIAL_TAG_2_COLOR} text={item} />;
+                case SPECIAL_TAG_3:
+                  return <Label color={SPECIAL_TAG_3_COLOR} text={item} />;
+                default:
+                  return <Label color={NORMAL_TAG_COLOR} text={item} />;
+              }
+            })}
+          </View>
           <Text style={styles.miniQuestionTitle}>{'問。' + props.faq.question_title}</Text>
           <Text style={styles.miniQuestionContent}>{props.faq.question_content.length > 34 ? props.faq.question_content.substring(0, 38) + ' . . . . ' : props.faq.question_content}</Text>
         </View>
@@ -177,6 +201,14 @@ export const QuestionCard = (props) => {
   );
 };
 
+const Label = (props) => {
+  return (
+    <View style={{ ...styles.label, ...{ backgroundColor: props.color } }}>
+      <Text style={{ color: '#1772A6' }}> #{props.text} </Text>
+    </View>
+  );
+};
+
 const styles = StyleSheet.create({
   container: {
     marginTop: 40,
@@ -224,7 +256,7 @@ const styles = StyleSheet.create({
   miniQuestion: {
     backgroundColor: '#E1EDFF',
     borderRadius: 30,
-    height: 110,
+    height: 130,
     alignItems: 'center',
     marginBottom: 15,
   },
@@ -254,6 +286,19 @@ const styles = StyleSheet.create({
   questionCardContent: {
     fontSize: 18,
     color: '#2D9CDB',
+  },
+  labelContainer: {
+    flexDirection: 'row',
+  },
+  label: {
+    height: 27,
+    width: 80,
+    marginRight: 10,
+    backgroundColor: '#94DFC9',
+    justifyContent: 'center',
+    alignItems: 'center',
+    textAlign: 'center',
+    borderRadius: 8,
   },
   shadow: {
     shadowColor: '#000000',

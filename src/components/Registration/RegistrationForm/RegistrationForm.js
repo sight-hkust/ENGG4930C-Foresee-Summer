@@ -1,285 +1,222 @@
-import React, { useState } from "react";
-import { Formik } from "formik";
-import { Keyboard, StyleSheet, View, Platform, Picker, Text, TouchableOpacity } from "react-native";
-import { ScreenHeight, ScreenWidth, FontScale } from "../../../../constant/Constant";
-import { SchemaPatient } from "../Schema/SchemaPatient";
-import { SchemaProfessional } from "../Schema/SchemaProfessional";
-import { ScrollView } from "react-native-gesture-handler";
-import { StyledInput } from "../../../../Utils/StyledInput";
+import React, { useState } from 'react';
+import { Formik } from 'formik';
+import { Keyboard, StyleSheet, View, Platform, Picker, Text, TouchableOpacity } from 'react-native';
+import { ScreenHeight, ScreenWidth, FontScale } from '../../../../constant/Constant';
+import { SchemaPatient } from '../Schema/SchemaPatient';
+import { SchemaProfessional } from '../Schema/SchemaProfessional';
+import { ScrollView } from 'react-native-gesture-handler';
+import { StyledInput } from '../../../../Utils/StyledInput';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import IonIcons from 'react-native-vector-icons/Ionicons'
+import IonIcons from 'react-native-vector-icons/Ionicons';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
-import Feather from 'react-native-vector-icons/Feather'
+import Feather from 'react-native-vector-icons/Feather';
 import moment from 'moment';
-import { createAccount, registerPatientAccount } from "../RegisterAction";
-import { LinearGradientBackground } from "../../../../Utils/LinearGradientBackground";
-import Logo from "../../../../Utils/Logo";
-import { RoundButton } from "../../../../Utils/RoundButton";
-import { StyledDatePickerModal } from "../../../../Utils/StyledDatePickerModal";
-import DateTimePicker from "@react-native-community/datetimepicker"
-import { StyledMultiLinesInput } from "../../../../Utils/StyledMultiLinesInput";
-import { SchemaRegisterPatient } from "../Schema/SchemaRegisterPatient";
-import { StyledDialogPicker } from "../../../../Utils/StyledDialogPicker";
-import { Portal, Dialog, Provider, List } from "react-native-paper";
-import { CheckBox } from "react-native-elements";
-import { KeyIcon, MailIcon } from "../../../utils/icon";
+import { createAccount, registerPatientAccount } from '../RegisterAction';
+import { LinearGradientBackground } from '../../../../Utils/LinearGradientBackground';
+import Logo from '../../../../Utils/Logo';
+import { RoundButton } from '../../../../Utils/RoundButton';
+import { StyledDatePickerModal } from '../../../../Utils/StyledDatePickerModal';
+import DateTimePicker from '@react-native-community/datetimepicker';
+import { StyledMultiLinesInput } from '../../../../Utils/StyledMultiLinesInput';
+import { SchemaRegisterPatient } from '../Schema/SchemaRegisterPatient';
+import { StyledDialogPicker } from '../../../../Utils/StyledDialogPicker';
+import { Portal, Dialog, Provider, List } from 'react-native-paper';
+import { CheckBox } from 'react-native-elements';
+import { KeyIcon, MailIcon } from '../../../utils/icon';
+import MenuScreen from '../../../../Utils/MenuScreen';
 
 export const RegistrationForm = ({ navigation, route }) => {
-    const { isProfessional, registerPatient } = route.params;
-    const [isLoading, setIsLoading] = useState(false);
+  const { isProfessional, registerPatient } = route.params;
+  const [isLoading, setIsLoading] = useState(false);
 
-    return (
-        <LinearGradientBackground>
-            <Formik
-                initialValues={{
-                    lastName: '',
-                    firstName: '',
-                    birthday: '',
-                    email: '',
-                    password: '',
-                    confirmPassword: '',
-                    phone: '',
-                    job: '',
-                    role: '',
-                    history: '',
-                    disease: '',
-                    allowedSearch: false,
-                }}
-                onSubmit={(values) => {
-                    setIsLoading(true);
-                    isProfessional && registerPatient ?
-                        registerPatientAccount({
-                            values,
-                            isProfessional,
-                            registerPatient,
-                            onComplete: () => {
-                                setIsLoading(false);
-                                navigation.goBack();
-                            }
-                        }) :
-                        createAccount({ values, navigation, isProfessional, registerPatient })
-                }}
-                validationSchema={isProfessional ? (registerPatient ? SchemaRegisterPatient : SchemaProfessional) : SchemaPatient}
-                validateOnBlur={false}
-                validateOnChange={false}
-            >
-                {formikProps => (
-                    <FormDetails
-                        formikProps={formikProps}
-                        isProfessional={isProfessional}
-                        registerPatient={registerPatient}
-                        isLoading={isLoading} />
-                )}
-            </Formik >
-        </LinearGradientBackground >
-
-    )
-}
+  return (
+    <LinearGradientBackground>
+      <Formik
+        initialValues={{
+          lastName: '',
+          firstName: '',
+          birthday: '',
+          email: '',
+          password: '',
+          confirmPassword: '',
+          phone: '',
+          job: '',
+          role: '',
+          history: '',
+          disease: '',
+          allowedSearch: false,
+        }}
+        onSubmit={(values) => {
+          setIsLoading(true);
+          isProfessional && registerPatient
+            ? registerPatientAccount({
+                values,
+                isProfessional,
+                registerPatient,
+                onComplete: () => {
+                  setIsLoading(false);
+                  navigation.goBack();
+                },
+              })
+            : createAccount({ values, navigation, isProfessional, registerPatient });
+        }}
+        validationSchema={isProfessional ? (registerPatient ? SchemaRegisterPatient : SchemaProfessional) : SchemaPatient}
+        validateOnBlur={false}
+        validateOnChange={false}
+      >
+        {(formikProps) => <FormDetails formikProps={formikProps} isProfessional={isProfessional} registerPatient={registerPatient} isLoading={isLoading} />}
+      </Formik>
+    </LinearGradientBackground>
+  );
+};
 
 const FormDetails = ({ formikProps, isProfessional, registerPatient, isLoading }) => {
+  const { setFieldValue, values } = formikProps;
+  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+  const [isDialogVisible, setDialogVisibility] = useState(false);
 
-    const { setFieldValue, values } = formikProps;
-    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
-    const [isDialogVisible, setDialogVisibility] = useState(false);
+  const _showDatePicker = () => setDatePickerVisibility(true);
 
-    const _showDatePicker = () => setDatePickerVisibility(true);
+  const _hideDatePicker = () => setDatePickerVisibility(false);
 
-    const _hideDatePicker = () => setDatePickerVisibility(false);
+  const _showDialog = () => setDialogVisibility(true);
+  const _hideDialog = () => setDialogVisibility(false);
 
-    const _showDialog = () => setDialogVisibility(true);
-    const _hideDialog = () => setDialogVisibility(false);
+  const handleDateChange = (event, selectedDate) => {
+    _hideDatePicker();
+    setFieldValue('birthday', moment(selectedDate).format('YYYY-MM-DD'));
+  };
 
-    const handleDateChange = (event, selectedDate) => {
-        _hideDatePicker();
-        setFieldValue('birthday', moment(selectedDate).format('YYYY-MM-DD'));
-    }
+  const handleDialogOption = (value) => {
+    _hideDialog();
+    setFieldValue('role', value);
+  };
 
+  const toggleCheckbox = () => {
+    setFieldValue('allowedSearch', !values.allowedSearch);
+  };
 
-    const handleDialogOption = (value) => {
-        _hideDialog();
-        setFieldValue('role', value)
-    }
+  const roleList = [
+    { key: '0', label: '眼科醫生', value: 'ophthalmologist' },
+    { key: '1', label: '視光師', value: 'optometrist' },
+  ];
 
-    const toggleCheckbox = () => {
-        setFieldValue('allowedSearch', !values.allowedSearch)
-    }
+  const personIcon = <MaterialIcons name="person" color={'white'} size={35} />;
+  const hourGlassIcon = <SimpleLineIcons name="hourglass" color={'white'} size={32} />;
+  const phoneIcon = <Feather name="phone" color={'white'} size={32} />;
+  const jobIcon = <MaterialCommunityIcons name="briefcase" color={'white'} size={35} />;
+  const illnessIcon = <MaterialCommunityIcons name="pill" color={'white'} size={35} />;
+  const historyIcon = <MaterialCommunityIcons name="file" color={'white'} size={35} />;
 
-    const roleList = [
-        { key: '0', label: '眼科醫生', value: 'ophthalmologist' },
-        { key: '1', label: '視光師', value: 'optometrist' },
-    ];
+  return (
+    <>
+      {isProfessional && registerPatient && <MenuScreen />}
 
-    const personIcon = <MaterialIcons name='person' color={'white'} size={35} />
-    const hourGlassIcon = <SimpleLineIcons name='hourglass' color={'white'} size={32} />
-    const phoneIcon = <Feather name='phone' color={'white'} size={32} />
-    const jobIcon = <MaterialCommunityIcons name='briefcase' color={'white'} size={35} />
-    const illnessIcon = <MaterialCommunityIcons name='pill' color={'white'} size={35} />
-    const historyIcon = <MaterialCommunityIcons name='file' color={'white'} size={35} />
+      <ScrollView style={{ paddingHorizontal: ScreenWidth * 0.11, position: 'absolute', width: '100%', top: 0, bottom: 0 }} showsVerticalScrollIndicator={false} keyboardDismissMode="on-drag">
+        {!registerPatient ? <Logo style={styles.logoContainer} /> : <Text style={{ textAlign: 'center', marginVertical: 40, fontSize: 35, fontWeight: 'bold', color: '#fff' }}> 登記病人 </Text>}
+        <View style={{ flexDirection: 'row' }}>
+          <StyledInput containerStyle={{ flex: 1 }} placeholder={'姓'} icon={personIcon} formikProps={formikProps} formikKey="lastName" inputFieldStyle={{ flex: 3 }} hideEmbeddedErrorMessage />
+          <StyledInput containerStyle={{ flex: 1 }} placeholder={'名'} icon={null} formikProps={formikProps} formikKey="firstName" inputFieldStyle={{ flex: 3 }} hideEmbeddedErrorMessage />
+        </View>
+        <View>
+          <Text
+            style={{
+              paddingTop: ScreenWidth * 0.01,
+              paddingLeft: ScreenWidth * 0.08,
+              textAlign: 'left',
+              fontSize: FontScale * 15,
+              fontWeight: '700',
+              color: '#FFFFFF',
+              flexWrap: 'wrap',
+            }}
+          >
+            {formikProps && formikProps.errors['firstName'] ? '* ' + formikProps.errors['firstName'] : null}
+          </Text>
+        </View>
+        {isProfessional && !registerPatient ? (
+          <StyledDialogPicker
+            icon={jobIcon}
+            visible={isDialogVisible}
+            onDismiss={() => _hideDialog()}
+            value={values.role}
+            placeholder={'職業'}
+            formikKey={'role'}
+            formikProps={formikProps}
+            list={roleList}
+            handleDialogOption={handleDialogOption}
+            showDialog={_showDialog}
+          />
+        ) : (
+          <StyledDatePickerModal icon={hourGlassIcon} formikProps={formikProps} formikKey="birthday" showDatePicker={_showDatePicker} value={values.birthday} />
+        )}
 
-    return (
-        <>
-            <ScrollView
-                style={{ paddingHorizontal: ScreenWidth * 0.11 }}
-                showsVerticalScrollIndicator={false}
-                keyboardDismissMode='on-drag'
-            >
-                <Logo style={styles.logoContainer} />
-                <View style={{ flexDirection: "row" }}>
-                    <StyledInput
-                        containerStyle={{ flex: 1 }}
-                        placeholder={'姓'}
-                        icon={personIcon}
-                        formikProps={formikProps}
-                        formikKey="lastName"
-                        inputFieldStyle={{ flex: 3 }}
-                        hideEmbeddedErrorMessage
-                    />
-                    <StyledInput
-                        containerStyle={{ flex: 1 }}
-						placeholder={'名'}
-                        icon={null}
-                        formikProps={formikProps}
-                        formikKey="firstName"
-                        inputFieldStyle={{ flex: 3 }}
-                        hideEmbeddedErrorMessage
-                    />
-                </View>
-                <View>
-                    <Text style={{
-                        paddingTop: ScreenWidth * 0.01,
-                        paddingLeft: ScreenWidth * 0.08,
-                        textAlign: 'left',
-                        fontSize: FontScale * 15,
-                        fontWeight: '700',
-                        color: '#FFFFFF',
-                        flexWrap: 'wrap',
-                    }}>
-                        {formikProps && formikProps.errors['firstName'] ? '* ' + formikProps.errors['firstName'] : null}
-                    </Text>
-                </View>
-                {isProfessional && !registerPatient ?
-                    <StyledDialogPicker
-                        icon={jobIcon}
-                        visible={isDialogVisible}
-                        onDismiss={() => _hideDialog()}
-                        value={values.role}
-                        placeholder={'職業'}
-                        formikKey={'role'}
-                        formikProps={formikProps}
-                        list={roleList}
-                        handleDialogOption={handleDialogOption}
-                        showDialog={_showDialog}
-                    /> :
-                    <StyledDatePickerModal
-                        icon={hourGlassIcon}
-                        formikProps={formikProps}
-                        formikKey="birthday"
-                        showDatePicker={_showDatePicker}
-                        value={values.birthday}
-                    />}
+        <StyledInput containerStyle={{ height: 'auto' }} placeholder={'電子郵件'} icon={MailIcon} formikProps={formikProps} formikKey="email" />
+        <StyledInput placeholder={'電話號碼'} icon={phoneIcon} formikProps={formikProps} formikKey="phone" keyboardType={'numeric'} />
+        {registerPatient ? (
+          <>
+            <StyledInput placeholder="職業（非必須）" icon={jobIcon} formikKey="job" formikProps={formikProps} />
+            <StyledMultiLinesInput label="家庭病史（非必須）" icon={historyIcon} formikKey="history" formikProps={formikProps} />
+            <StyledMultiLinesInput label="已知眼疾（非必須）" icon={illnessIcon} formikKey="disease" formikProps={formikProps} />
+          </>
+        ) : (
+          <>
+            <StyledInput containerStyle={{ height: 'auto' }} placeholder={'密碼'} icon={KeyIcon} formikProps={formikProps} formikKey="password" secureTextEntry />
+            <StyledInput placeholder={'確認密碼'} icon={KeyIcon} formikProps={formikProps} formikKey="confirmPassword" secureTextEntry />
+          </>
+        )}
+        {!isProfessional ? (
+          <CheckBox
+            containerStyle={{
+              backgroundColor: 'transparent',
+              borderWidth: 0,
+            }}
+            textStyle={{
+              textAlign: 'left',
+              fontSize: FontScale * 15,
+              color: '#FFFFFF',
+            }}
+            checkedColor={'#FFFFFF'}
+            uncheckedColor={'#E3E3E3'}
+            fontFamily="Roboto"
+            checked={values.allowedSearch}
+            onPress={toggleCheckbox}
+            center
+            title={'本人同意提供個人資料\n予眼科專家參考'}
+          />
+        ) : null}
 
-                <StyledInput
-                    containerStyle={{ height: 'auto' }}
-                    placeholder={'電子郵件'}
-                    icon={MailIcon}
-                    formikProps={formikProps}
-                    formikKey="email"
-                />
-                <StyledInput
-                    placeholder={'電話號碼'}
-                    icon={phoneIcon}
-                    formikProps={formikProps}
-                    formikKey="phone"
-                    keyboardType={'numeric'}
-                />
-                {registerPatient ? <>
-                    <StyledInput
-                        placeholder="職業（非必須）"
-                        icon={jobIcon}
-                        formikKey="job"
-                        formikProps={formikProps}
-                    />
-                    <StyledMultiLinesInput
-                        label="家庭病史（非必須）"
-                        icon={historyIcon}
-                        formikKey="history"
-                        formikProps={formikProps}
-                    />
-                    <StyledMultiLinesInput
-                        label="已知眼疾（非必須）"
-                        icon={illnessIcon}
-                        formikKey="disease"
-                        formikProps={formikProps}
-                    />
-                </> : <>
-                        <StyledInput
-                            containerStyle={{ height: 'auto' }}
-                            placeholder={'密碼'}
-                            icon={KeyIcon}
-                            formikProps={formikProps}
-                            formikKey="password"
-                            secureTextEntry
-                        />
-                        <StyledInput
-                            placeholder={'確認密碼'}
-                            icon={KeyIcon}
-                            formikProps={formikProps}
-                            formikKey="confirmPassword"
-                            secureTextEntry
-                        />
-                    </>}
-                {!isProfessional ?
-                    <CheckBox
-                        containerStyle={{
-                            backgroundColor: 'transparent',
-                            borderWidth: 0,
-                        }}
-                        textStyle={{
-                            textAlign: "left",
-                            fontSize: FontScale * 15,
-                            color: '#FFFFFF'
-                        }}
-                        checkedColor={'#FFFFFF'}
-                        uncheckedColor={'#E3E3E3'}
-                        fontFamily='Roboto'
-                        checked={values.allowedSearch}
-                        onPress={toggleCheckbox}
-                        center
-                        title={'本人同意提供個人資料\n予眼科專家參考'} /> : null}
+        <RoundButton
+          buttonStyle={{ marginBottom: ScreenHeight * 0.2 }}
+          title="提交"
+          onPress={() => {
+            Keyboard.dismiss();
+            console.log(formikProps.errors);
+            formikProps.handleSubmit();
+          }}
+        />
+      </ScrollView>
 
-                <RoundButton
-                    buttonStyle={{ marginBottom: ScreenHeight * 0.2 }}
-                    title='提交' onPress={() => {
-                        Keyboard.dismiss()
-                        console.log(formikProps.errors);
-                        formikProps.handleSubmit()
-                    }} />
-            </ScrollView>
-            {isDatePickerVisible && <DateTimePicker
-                mode="date"
-                display={Platform.OS === 'android' ? "spinner" : "default"}
-                value={values.birthday === '' ? new Date() : moment(values.birthday).toDate()}
-                onChange={handleDateChange} />}
-            <Provider>
-                <Portal>
-                    <Dialog
-                        visible={isDialogVisible}
-                        onDismiss={_hideDialog}
-                    >
-                        <Dialog.Title>請選擇你的職業</Dialog.Title>
-                        <Dialog.Content>
-                            {roleList.map(data => (
-                                <List.Item
-                                    key={data.key}
-                                    title={data.label}
-                                    onPress={handleDialogOption.bind(this, data.value)} />))}
-                        </Dialog.Content>
-                    </Dialog>
-                    <Dialog
-                        visible={isLoading}
-                    >
-                        {/* <Dialog.Title>請選擇你的職業</Dialog.Title>
+      {isDatePickerVisible && (
+        <DateTimePicker
+          mode="date"
+          display={Platform.OS === 'android' ? 'spinner' : 'default'}
+          value={values.birthday === '' ? new Date() : moment(values.birthday).toDate()}
+          onChange={handleDateChange}
+        />
+      )}
+      <Provider>
+        <Portal>
+          <Dialog visible={isDialogVisible} onDismiss={_hideDialog}>
+            <Dialog.Title>請選擇你的職業</Dialog.Title>
+            <Dialog.Content>
+              {roleList.map((data) => (
+                <List.Item key={data.key} title={data.label} onPress={handleDialogOption.bind(this, data.value)} />
+              ))}
+            </Dialog.Content>
+          </Dialog>
+          <Dialog visible={isLoading}>
+            {/* <Dialog.Title>請選擇你的職業</Dialog.Title>
                         <Dialog.Content>
                             {roleList.map(data => (
                                 <List.Item
@@ -287,15 +224,15 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, isLoading }
                                     title={data.label}
                                     onPress={handleDialogOption.bind(this, data.value)} />))}
                         </Dialog.Content> */}
-                    </Dialog>
-                </Portal>
-            </Provider>
-        </>)
-}
-
+          </Dialog>
+        </Portal>
+      </Provider>
+    </>
+  );
+};
 
 const styles = StyleSheet.create({
-    logoContainer: {
-        marginTop: ScreenHeight * 0.1,
-    }
-})
+  logoContainer: {
+    marginTop: ScreenHeight * 0.1,
+  },
+});
