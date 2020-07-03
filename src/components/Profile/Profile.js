@@ -1,125 +1,100 @@
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
-import React from 'react';
-import { SafeAreaView } from 'react-native-safe-area-context';
 import { Button, Icon } from 'react-native-elements';
-import { auth } from '../../config/config';
-import { useEffect } from 'react';
-import QRCode from 'react-native-qrcode-svg';
-import { ScreenHeight, ScreenWidth, FontScale } from '../../../constant/Constant';
-import { RoundButton } from '../../../Utils/RoundButton';
-import Svg from 'react-native-svg';
-import { LinearGradientBackground } from '../../../Utils/LinearGradientBackground';
-
 import { Grid, Col, Row } from 'react-native-easy-grid';
+import moment from 'moment';
+
+import { ScreenWidth } from '../../../constant/Constant';
 import MenuScreen from '../../../Utils/MenuScreen';
 
-export const Profile = ({ navigation, route }) => {
-  const handleSignOut = () => {
-    auth.signOut();
-  };
+import { connect } from 'react-redux';
+import { watchUserInfoUpdate } from '../../reducers/user';
+
+const Profile = ({ navigation, route, userInfoStore }) => {
+  const [loading, setLoading] = useState(true);
+
+  const { user } = userInfoStore;
+
+  useEffect(() => {
+    if (user != undefined) {
+      setLoading(false);
+    }
+  }, [user]);
+
   return (
     <MenuScreen>
       <View style={styles.container}>
-        <View style={styles.card}>
-          <Grid>
-            <Row style={{ height: 0.1, justifyContent: 'center', alignItems: 'center' }}>
-              <View style={styles.nameContainer}>
-                <Text style={styles.name}>陳</Text>
-              </View>
-            </Row>
-            <Row style={styles.qrCodeIconContainer}>
-              <Icon type="antdesign" name="qrcode" size={40} containerStyle={{ marginRight: 10, marginTop: 10 }} />
-            </Row>
+        {!loading && (
+          <>
+            <View style={styles.card}>
+              <Grid>
+                <Row style={{ height: 0.1, justifyContent: 'center', alignItems: 'center' }}>
+                  <View style={styles.nameContainer}>
+                    <Text style={styles.name}>{user.lastName}</Text>
+                  </View>
+                </Row>
+                <Row style={styles.qrCodeIconContainer}>
+                  <Icon type="antdesign" name="qrcode" size={40} containerStyle={{ marginRight: 15, marginTop: 10 }} onPress={() => navigation.navigate('QrCode')} />
+                </Row>
 
-            <Row style={styles.titleContainer}>
-              <Text style={styles.title}> 陳大文 </Text>
-            </Row>
+                <Row style={styles.titleContainer}>
+                  <Text style={styles.title}> {user.lastName + user.firstName} </Text>
+                </Row>
 
-            <Row style={{ ...styles.titleContainer, ...{ marginBottom: 7.5 } }}>
-              <Text style={styles.subtitle}> 20200204 </Text>
-            </Row>
+                <Row style={{ ...styles.titleContainer, ...{ marginBottom: 7.5 } }}>
+                  <Text style={styles.subtitle}> {user.birthday.split('T')[0]} </Text>
+                </Row>
 
-            <Row style={{ height: 47.5 }}>
-              <Col style={styles.iconContainer}>
-                <Icon type="font-awesome" name="hourglass-o" size={40} containerStyle={{}} />
-              </Col>
-              <Col style={styles.iconContainer}>
-                <Icon type="fontisto" name="email" size={40} containerStyle={{}} />
-              </Col>
-              <Col style={styles.iconContainer}>
-                <Icon type="feather" name="phone" size={40} containerStyle={{}} />
-              </Col>
-            </Row>
+                <Row style={{ height: 47.5 }}>
+                  <Col style={styles.iconContainer}>
+                    <Icon type="font-awesome" name="hourglass-o" size={40} containerStyle={{}} />
+                  </Col>
+                  <Col style={styles.iconContainer}>
+                    <Icon type="fontisto" name="email" size={40} containerStyle={{}} />
+                  </Col>
+                  <Col style={styles.iconContainer}>
+                    <Icon type="feather" name="phone" size={40} containerStyle={{}} />
+                  </Col>
+                </Row>
 
-            <Row style={{ height: 30 }}>
-              <Col>
-                <View style={styles.verticalLine} />
-              </Col>
-              <Col>
-                <View style={{ ...styles.verticalLine, ...{ height: '200%' } }} />
-              </Col>
-              <Col>
-                <View style={styles.verticalLine} />
-              </Col>
-            </Row>
+                <Row style={{ height: 30 }}>
+                  <Col>
+                    <View style={styles.verticalLine} />
+                  </Col>
+                  <Col>
+                    <View style={{ ...styles.verticalLine, ...{ height: '250%' } }} />
+                  </Col>
+                  <Col>
+                    <View style={styles.verticalLine} />
+                  </Col>
+                </Row>
 
-            <Row>
-              <Col style={styles.infoContainer}>
-                <Text style={styles.info}>
-                  <Text style={{ fontSize: 30 }}>45</Text>歲
-                </Text>
-              </Col>
-              <Col style={styles.infoContainer}>
-                <Text style={{ ...styles.info, ...{ position: 'absolute', top: 40, width: ScreenWidth, textAlign: 'center' } }}>chantm@mail.com</Text>
-              </Col>
-              <Col style={styles.infoContainer}>
-                <Text style={styles.info}>99887766</Text>
-              </Col>
-            </Row>
-          </Grid>
-        </View>
-        <View style={styles.bottomMenu}></View>
-        <Button title="詳細設定" type="clear" titleStyle={{ color: '#fff', marginTop: 10, fontSize: 18 }} />
-        <Button title="程式教學" type="clear" titleStyle={{ color: '#fff', marginTop: 10, fontSize: 18 }} />
-        <Button title="創建子帳戶" type="clear" titleStyle={{ color: '#fff', marginTop: 10, fontSize: 18 }} />
-        <Button title="變更個人資料" type="clear" titleStyle={{ color: '#fff', marginTop: 10, fontSize: 18 }} />
+                <Row>
+                  <Col style={styles.infoContainer}>
+                    <Text style={styles.info}>
+                      <Text style={{ fontSize: 30 }}>{moment.duration(moment().diff(user.birthday, 'YYYY')).years()}</Text>歲
+                    </Text>
+                  </Col>
+                  <Col style={styles.infoContainer}>
+                    <Text style={{ ...styles.info, ...{ position: 'absolute', top: 50, width: ScreenWidth, textAlign: 'center' } }}>{user.email}</Text>
+                  </Col>
+                  <Col style={styles.infoContainer}>
+                    <Text style={styles.info}>{user.phone}</Text>
+                  </Col>
+                </Row>
+              </Grid>
+            </View>
+            <View style={styles.bottomMenu}></View>
+            <Button title="詳細設定" type="clear" titleStyle={styles.bottomMenuItem} onPress={() => navigation.navigate('SettingScreen')} />
+            <Button title="程式教學" type="clear" titleStyle={styles.bottomMenuItem} onPress={() => navigation.navigate('Tutorial')} />
+            <Button title="創建子帳戶" type="clear" titleStyle={styles.bottomMenuItem} />
+            <Button title="變更個人資料" type="clear" titleStyle={styles.bottomMenuItem} />
+          </>
+        )}
       </View>
     </MenuScreen>
   );
 };
-
-//   const handleSignOut = () => {
-//     auth.signOut();
-//   };
-/* <View style={{ height: '100%', paddingTop: '10%', marginHorizontal: ScreenWidth * 0.1 }}>
-        <View
-          style={{
-            paddingVertical: '2%',
-            borderRadius: ScreenWidth * 0.02,
-            flex: 2,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: 'white',
-          }}
-        >
-          <QRCode value={auth.currentUser.uid} size={ScreenWidth * 0.75} logoBackgroundColor="transparent" backgroundColor="transparent" />
-        </View>
-        <View style={{ flex: 1, paddingVertical: '2%' }}>
-          <Text
-            style={{
-              fontSize: FontScale * 25,
-              color: '#FFFFFF',
-              fontFamily: 'Roboto',
-              textAlignVertical: 'center',
-              textAlign: 'center',
-              marginBottom: '5%',
-            }}
-          >
-            {'請讓眼科醫生/視光師\n掃描QR Code以進行配對'}
-          </Text>
-          <RoundButton title="登出" onPress={handleSignOut} />
-        </View>
-      </View> */
 
 const styles = StyleSheet.create({
   container: {
@@ -141,15 +116,18 @@ const styles = StyleSheet.create({
     borderRadius: 45,
     alignItems: 'center',
     justifyContent: 'center',
+    textAlign: 'center',
   },
   name: {
-    fontSize: 50,
+    fontSize: 45,
     color: '#fff',
     fontWeight: 'bold',
+    textAlign: 'center',
   },
   qrCodeIconContainer: {
     flexDirection: 'row',
     justifyContent: 'flex-end',
+    height: 60,
   },
   titleContainer: {
     alignItems: 'center',
@@ -189,8 +167,26 @@ const styles = StyleSheet.create({
   },
   bottomMenu: {
     borderTopWidth: 1,
-    marginTop: 30,
+    marginTop: 20,
     borderTopColor: '#8BB5F4',
     width: 250,
   },
+  bottomMenuItem: {
+    color: '#fff',
+    marginTop: 10,
+    fontSize: 18,
+  },
 });
+
+const mapStateToProps = (state) => {
+  return {
+    userInfoStore: state.user,
+  };
+};
+
+const mapDispatchToProps = (dispatch) => {
+  dispatch(watchUserInfoUpdate());
+  return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);

@@ -19,7 +19,7 @@ import OverviewScreen from './Screens/OverviewScreen';
 
 import { Login } from './src/components/Login/Login';
 import { Register } from './src/components/Registration/Register';
-import { Profile } from './src/components/Profile/Profile';
+import Profile from './src/components/Profile/Profile';
 import { QRCodeScannerScreen } from './src/components/QRCodeScannerScreen/QRCodeScannerScreen';
 
 import { auth } from './src/config/config';
@@ -38,6 +38,7 @@ import PrivacyPolicy from './src/components/Policy/PrivacyPolicy';
 import TermsAndCondition from './src/components/Policy/TermsAndCondition';
 import { set } from 'react-native-reanimated';
 import TutorialScreen from './src/components/Tutorial/Tutorial';
+import QrCode from './src/components/Profile/QrCode';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -82,6 +83,7 @@ function ProfileScreen({ navigation, route }) {
   return (
     <Stack.Navigator screenOptions={{ ...headerConfig, headerRight: () => <SettingButton navigation={navigation} /> }}>
       <Stack.Screen name="Profile" component={Profile} options={{ title: '我的檔案' }} />
+      <Stack.Screen name="QrCode" component={QrCode} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
 }
