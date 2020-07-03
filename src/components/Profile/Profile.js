@@ -132,7 +132,7 @@ const styles = StyleSheet.create({
   titleContainer: {
     alignItems: 'center',
     justifyContent: 'center',
-    height: 25,
+    height: 35,
   },
   title: {
     color: '#24559E',
