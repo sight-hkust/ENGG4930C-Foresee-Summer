@@ -44,8 +44,21 @@ export const DateSelect = (props) => {
   );
 };
 
+export const RenderNoraml = (props) => {
+  const { handleChange, setFieldValue, refractive, setStatus, status } = props;
+  return (
+    <>
+      <SPHInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} refractive={refractive} isAdj={false} setStatus={setStatus} status={status} />
+      <CYLInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} isAdj={false} />
+
+      <SPHInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} refractive={refractive} isAdj={false} setStatus={setStatus} status={status} />
+      <CYLInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} isAdj={false} />
+    </>
+  );
+};
+
 export const RenderCollapseAdj = (props) => {
-  const { handleChange, setFieldValue, error, mode, refractive, isAdj } = props;
+  const { handleChange, setFieldValue, refractive } = props;
   const [isCollapse, toggleisCollapse] = useState(true);
   return (
     <View>
@@ -60,11 +73,11 @@ export const RenderCollapseAdj = (props) => {
 
       <Collapsible collapsed={isCollapse}>
         <View style={FormItemStyle.collpaseContainer}>
-          <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} error={error} mode={mode} refractive={refractive} isAdj={isAdj} />
-          <CYLInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} isAdj={isAdj} />
+          <SPHInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} refractive={refractive} isAdj={true} />
+          <CYLInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} isAdj={true} />
 
-          <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} error={error} mode={mode} refractive={refractive} isAdj={isAdj} />
-          <CYLInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} isAdj={isAdj} />
+          <SPHInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} refractive={refractive} isAdj={true} />
+          <CYLInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} isAdj={true} />
         </View>
       </Collapsible>
     </View>
@@ -72,7 +85,7 @@ export const RenderCollapseAdj = (props) => {
 };
 
 export const RenderCollapsePD = (props) => {
-  const { handleChange, error } = props;
+  const { handleChange } = props;
   const [isCollapse, toggleisCollapse] = useState(true);
   return (
     <View>
@@ -179,21 +192,41 @@ export const RenderCollapseVA = (props) => {
 };
 
 export const SPHInputB = (props) => {
-  const { setFieldValue, isLeft, refractive, isAdj } = props;
+  const { setFieldValue, isLeft, refractive, isAdj, setStatus, status } = props;
   const [sliderValue, setSliderValue] = useState(0);
   const [symbol, Togglesymbol] = useState(refractive != 0 ? true : false); //true = positive = hyperopia
-
+  const sliderArr = [0, 25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 300, 400, 425, 450, 475, 500, 525, 550, 575, 600, 625, 650, 675, 700, ">700"];
   const SliderHandler = () => {
-    if (isAdj) {
-      console.log("symbol", symbol);
-      setFieldValue(isLeft ? "Adj_L_SPH" : "Adj_R_SPH", sliderValue, false);
-      setFieldValue(isLeft ? "Adj_Lsymbol" : "Adj_Rsymbol", symbol, false);
+    if (sliderValue != ">700") {
+      if (isAdj) {
+        setStatus({ errors: {} });
+        setFieldValue(isLeft ? "Adj_L_SPH" : "Adj_R_SPH", sliderValue, false);
+        setFieldValue(isLeft ? "Adj_Lsymbol" : "Adj_Rsymbol", symbol, false);
+      } else {
+        setStatus({ errors: {} });
+        setFieldValue(isLeft ? "L_SPH" : "R_SPH", sliderValue, false);
+        setFieldValue(isLeft ? "Lsymbol" : "Rsymbol", symbol, false);
+      }
     } else {
-      setFieldValue(isLeft ? "L_SPH" : "R_SPH", sliderValue, false);
-      setFieldValue(isLeft ? "Lsymbol" : "Rsymbol", symbol, false);
+      if (isAdj) {
+        setFieldValue(isLeft ? "Adj_Lsymbol" : "Adj_Rsymbol", symbol, false);
+      } else {
+        setFieldValue(isLeft ? "Lsymbol" : "Rsymbol", symbol, false);
+      }
     }
   };
-
+  const TextinputHandler = (value) => {
+    if (isAdj) {
+      setFieldValue(isLeft ? "Adj_L_SPH" : "Adj_R_SPH", value);
+    } else {
+      if (value <= 700) {
+        setStatus({ errors: "error" });
+      } else {
+        setStatus({ errors: {} });
+      }
+      setFieldValue(isLeft ? "L_SPH" : "R_SPH", value);
+    }
+  };
   return (
     <View style={{ alignSelf: "center" }}>
       <Text style={FormItemStyle.questionText}>
@@ -232,80 +265,69 @@ export const SPHInputB = (props) => {
         </TouchableOpacity>
       </View>
       <Text style={FormItemStyle.sliderText}>
-        {symbol ? "+" : "−"}
+        {sliderValue != ">700" ? (symbol ? "+" : "−") : ""}
         {sliderValue}
       </Text>
       <Slider
         style={FormItemStyle.slider}
         minimumValue={0}
-        maximumValue={700}
-        step={25}
+        maximumValue={sliderArr.length - 1}
+        step={1}
         thumbTintColor={"#47CDBD"}
         minimumTrackTintColor={"white"}
         maximumTrackTintColor={"#B8CAE4"}
-        onValueChange={(value) => setSliderValue(value)}
+        onValueChange={(value) => setSliderValue(sliderArr[value])}
         onSlidingComplete={() => SliderHandler()}
       />
-    </View>
-  );
-};
+      {sliderValue == ">700" && (
+        <>
+          <View style={{ flexDirection: "row", justifyContent: "space-around", backgroundColor: "rgba(0,0,0,0.2)", borderRadius: 5, paddingVertical: 8 }}>
+            <Text style={{ fontSize: 18, color: "white", paddingLeft: 5 }}>請輸入大於700度的度數: </Text>
+            <Text style={{ fontSize: 18, fontWeight: "bold", color: "white" }}>{symbol ? "+" : "−"}</Text>
 
-export const SPHInput = (props) => {
-  const { handleChange, setFieldValue, isLeft, error, mode, refractive, isAdj } = props;
-
-  if (mode) {
-    return <SPHInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={isLeft} refractive={refractive} isAdj={isAdj} />;
-  }
-
-  const [symbol, Togglesymbol] = useState(refractive == "0" ? false : true); //true = positive = hyperopia
-  const pressHandler = () => {
-    Togglesymbol(!symbol);
-    if (isLeft) {
-      setFieldValue("Lsymbol", !symbol, false);
-    } else {
-      setFieldValue("Rsymbol", !symbol, false);
-    }
-  };
-  return (
-    <View style={{ flex: 1 }}>
-      <Text style={FormItemStyle.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}球面度數(SPH) (e.g. 125)</Text>
-      {error != undefined && <Text style={FormItemStyle.errortext}>{error}</Text>}
-
-      <View style={FormItemStyle.answerContainer}>
-        <TouchableOpacity style={FormItemStyle.answerContainer} onPress={pressHandler}>
-          <View style={FormItemStyle.dropDownButton}>
-            <Image source={DropDown} />
+            <TextInput onChangeText={(value) => TextinputHandler(value)} keyboardType="numeric" style={FormItemStyle.answerInputBox} />
           </View>
-          <Text style={FormItemStyle.answerText}>{symbol ? "+" : "-"}</Text>
-        </TouchableOpacity>
-        <TextInput onChangeText={handleChange(isLeft ? "L_SPH" : "R_SPH")} keyboardType="numeric" style={FormItemStyle.answerInputBox} />
-      </View>
+
+          {status != undefined && status.errors == "error" && <Text style={FormItemStyle.errortext}>大於700度</Text>}
+        </>
+      )}
+      {console.log(isLeft ? "L sliderValue" : "R SliderValue", sliderValue)}
     </View>
   );
 };
 
 export const CYLInputB = (props) => {
-  const { setFieldValue, isLeft, isAdj } = props;
+  const { setFieldValue, isLeft, isAdj, handleChange } = props;
 
   const [isable, setIsable] = useState(false);
   const [sliderValue, setSliderValue] = useState(0);
+  const sliderArr = [0, 25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 300, 400, 425, 450, 475, 500, 525, 550, 575, 600, 625, 650, 675, 700, ">700"];
   const SliderHandler = () => {
-    if (isAdj) {
-      setFieldValue(isLeft ? "Adj_L_CYL" : "Adj_R_CYL", sliderValue, false);
-      if (sliderValue > 0) {
-        setIsable(true);
+    if (sliderValue != ">700") {
+      if (isAdj) {
+        setFieldValue(isLeft ? "Adj_L_CYL" : "Adj_R_CYL", sliderValue, false);
+        if (sliderValue > 0) {
+          setIsable(true);
+        } else {
+          setIsable(false);
+        }
       } else {
-        setIsable(false);
+        setFieldValue(isLeft ? "L_CYL" : "R_CYL", sliderValue, false);
+        if (sliderValue > 0) {
+          setIsable(true);
+        } else {
+          setIsable(false);
+        }
       }
     } else {
-      setFieldValue(isLeft ? "L_CYL" : "R_CYL", sliderValue, false);
-      if (sliderValue > 0) {
+      if (isAdj) {
         setIsable(true);
       } else {
-        setIsable(false);
+        setIsable(true);
       }
     }
   };
+
   return (
     <View style={{ alignSelf: "center" }}>
       <Text style={FormItemStyle.questionText}>
@@ -314,68 +336,35 @@ export const CYLInputB = (props) => {
       </Text>
 
       <View>
-        <Text style={FormItemStyle.sliderText}>−{sliderValue}</Text>
+        <Text style={FormItemStyle.sliderText}>
+          {sliderValue != ">700" ? "−" : ""}
+          {sliderValue}
+        </Text>
         <Slider
           style={FormItemStyle.slider}
           minimumValue={0}
-          maximumValue={600}
-          step={25}
+          maximumValue={sliderArr.length - 1}
+          step={1}
           thumbTintColor={"#47CDBD"}
           minimumTrackTintColor={"white"}
           maximumTrackTintColor={"#B8CAE4"}
-          onValueChange={(value) => setSliderValue(value)}
+          onValueChange={(value) => setSliderValue(sliderArr[value])}
           onSlidingComplete={() => {
             SliderHandler();
           }}
         />
       </View>
-
+      {sliderValue == ">700" && (
+        <View style={{ flexDirection: "row", justifyContent: "space-around", backgroundColor: "rgba(0,0,0,0.2)", borderRadius: 5, paddingVertical: 8 }}>
+          <Text style={{ fontSize: 18, color: "white", paddingLeft: 5 }}>請輸入大於700度的度數: </Text>
+          {isAdj ? (
+            <TextInput onChangeText={handleChange(isLeft ? "Adj_L_CYL" : "Adj_R_CYL")} keyboardType="numeric" style={FormItemStyle.answerInputBox} />
+          ) : (
+            <TextInput onChangeText={handleChange(isLeft ? "L_CYL" : "R_CYL")} keyboardType="numeric" style={FormItemStyle.answerInputBox} />
+          )}
+        </View>
+      )}
       <View>{isable && <AxisInputB setFieldValue={setFieldValue} isLeft={isLeft} isAdj={isAdj} />}</View>
-    </View>
-  );
-};
-
-export const CYLInput = (props) => {
-  const { handleChange, setFieldValue, isLeft, errorA, errorB, mode, isAdj } = props;
-
-  if (mode) {
-    return <CYLInputB handleChange={handleChange} setFieldValue={setFieldValue} isLeft={isLeft} isAdj={isAdj} />;
-  }
-
-  const [isable, setIsable] = useState(false);
-  return (
-    <View style={{ flex: 1 }}>
-      <Text style={FormItemStyle.questionText}>
-        請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}
-        {isAdj ? "調整" : ""}散光度數(CYL) (e.g. 125)
-      </Text>
-      {errorA != undefined && <Text style={FormItemStyle.errortext}>{errorA}</Text>}
-      <View style={FormItemStyle.answerContainer}>
-        <Text style={FormItemStyle.answerText}>−</Text>
-
-        <TextInput
-          onChangeText={(text) => {
-            if (isLeft) {
-              setFieldValue("L_CYL", text);
-              if (text > 0) {
-                setIsable(true);
-              } else {
-                setIsable(false);
-              }
-            } else {
-              setFieldValue("R_CYL", text);
-              if (text > 0) {
-                setIsable(true);
-              } else {
-                setIsable(false);
-              }
-            }
-          }}
-          keyboardType="numeric"
-          style={FormItemStyle.answerInputBox}
-        />
-      </View>
-      <View>{isable && <AxisInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={isLeft} error={errorB} isAdj={isAdj} />}</View>
     </View>
   );
 };
@@ -414,23 +403,6 @@ export const AxisInputB = (props) => {
           }}
         />
       </View>
-    </View>
-  );
-};
-
-export const AxisInput = (props) => {
-  const { handleChange, setFieldValue, isLeft, error, mode, isAdj } = props;
-  if (mode) {
-    return <AxisInputB setFieldValue={setFieldValue} isLeft={isLeft} isAdj={isAdj} />;
-  }
-  return (
-    <View>
-      <Text style={FormItemStyle.questionText}>
-        請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}
-        {isAdj ? "調整" : ""}散光軸度(Axis)
-      </Text>
-      {error != undefined && <Text style={FormItemStyle.errortext}>{error}</Text>}
-      <TextInput onChangeText={handleChange(isLeft ? "L_Axis" : "R_Axis")} keyboardType="numeric" style={FormItemStyle.answerInputBox} />
     </View>
   );
 };
@@ -518,18 +490,6 @@ export const VAdecimalSlider = (props) => {
           SliderHandler();
         }}
       />
-    </View>
-  );
-};
-
-export const VAInput = (props) => {
-  const { handleChange, setFieldValue, isLeft, error, mode } = props;
-  if (mode) return <VAInputB setFieldValue={setFieldValue} isLeft={isLeft} />;
-  return (
-    <View>
-      <Text style={FormItemStyle.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}視力(VA)(e.g. 1.0)</Text>
-      {error != undefined && <Text style={FormItemStyle.errortext}>{error}</Text>}
-      <TextInput onChangeText={handleChange(isLeft ? "L_VA" : "R_VA")} keyboardType="numeric" style={FormItemStyle.answerInputBox} />
     </View>
   );
 };
@@ -646,8 +606,8 @@ const FormItemStyle = StyleSheet.create({
     color: "#135a85",
     fontSize: 18,
     borderRadius: 5,
-    marginLeft: 15,
-    marginRight: 15,
+    marginLeft: 5,
+    marginRight: 5,
   },
   remarksInputBox: {
     width: ScreenWidth * 0.8,

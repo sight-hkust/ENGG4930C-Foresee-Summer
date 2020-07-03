@@ -158,7 +158,7 @@ export default class RecordsScreen extends Component {
                 </View>
               )}
 
-              <View style={RecordScreenStyle.addRecordButton}>
+              <View style={RecordScreenStyle.buttonGroup}>
                 {data != null && <DetailButton data={data} selectedDate={this.state.selectedDate} isAdj={false} />}
 
                 <Button
@@ -194,7 +194,7 @@ export const DetailButton = (props) => {
     setIsVisible(!isVisible);
   };
   return (
-    <View>
+    <View style={{ flexDirection: "column", justifyContent: "center" }}>
       <Button
         icon={<Icon name={isAdj ? "eyeglass" : "dehaze"} type={isAdj ? "simple-line-icon" : ""} size={22} color="#2D9CDB" />}
         onPress={toggleModal}
@@ -206,8 +206,9 @@ export const DetailButton = (props) => {
           paddingLeft: 0,
           paddingRight: 0,
         }}
-        containerStyle={{ paddingTop: 5 }}
+        containerStyle={{ paddingLeft: 10 }}
       />
+      <Text style={{ color: "#135a85", fontSize: 16 }}>{isAdj ? "調整度數" : "真實度數"}</Text>
       <RenderModal data={data} selectedDate={selectedDate} isVisible={isVisible} toggleModal={toggleModal} isAdj={isAdj} />
     </View>
   );
@@ -377,9 +378,10 @@ const RecordScreenStyle = StyleSheet.create({
     alignItems: "center",
   },
 
-  addRecordButton: {
+  buttonGroup: {
     flexDirection: "row",
     justifyContent: "space-around",
+    //justifyContent: "flex-start",
     paddingTop: 15,
     paddingBottom: 15,
     paddingLeft: 50,

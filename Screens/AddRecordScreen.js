@@ -9,7 +9,7 @@ import { SchemaRecords } from "../Screens/SchemaRecords";
 import { LinearGradient } from "expo-linear-gradient";
 import { Button } from "react-native-elements";
 
-import { DateSelect, SPHInput, CYLInput, RenderCollapseAdj, VAInput, PDInput, RemarksInput, DiseasesInput, RenderCollapseVA, RenderCollapsePD } from "../Screens/RecordFormComponents";
+import { DateSelect, RenderNoraml, SPHInputB, CYLInputB, RenderCollapseAdj, RemarksInput, DiseasesInput, RenderCollapseVA, RenderCollapsePD } from "../Screens/RecordFormComponents";
 
 export default class Form extends Component {
   yScroll = new Animated.Value(0);
@@ -79,16 +79,6 @@ export default class Form extends Component {
             ])}
             scrollEventThrottle={1}
           >
-            <View style={AddRecordScreen.selectModeMenu}>
-              <TouchableOpacity onPress={() => this.setState({ mode: true })}>
-                <Text style={mode ? AddRecordScreen.selectedMode : AddRecordScreen.unselectedMode}>簡易輸入</Text>
-              </TouchableOpacity>
-
-              <TouchableOpacity onPress={() => this.setState({ mode: false })}>
-                <Text style={!mode ? AddRecordScreen.selectedMode : AddRecordScreen.unselectedMode}>鍵盤輸入</Text>
-              </TouchableOpacity>
-            </View>
-
             <Formik
               initialValues={{
                 date: moment().format("YYYY-MM-DD HH:mm"),
@@ -123,7 +113,7 @@ export default class Form extends Component {
                 remarks: "",
                 disease: [],
               }}
-              validationSchema={SchemaRecords}
+              //validationSchema={SchemaRecords}
               onSubmit={(values) => {
                 var exist = false;
                 database.ref("users/" + patient_id + "/records/" + values.date).once("value", (snap) => {
@@ -252,19 +242,15 @@ export default class Form extends Component {
                 }
               }}
             >
-              {({ handleSubmit, values, setFieldValue, handleChange, errors }) => (
+              {({ handleSubmit, values, setFieldValue, handleChange, setStatus, status }) => (
                 <View style={AddRecordScreen.formContainer}>
                   <DateSelect values={values} setFieldValue={setFieldValue} />
 
-                  <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} error={errors.L_SPH} mode={mode} refractive={refractive} isAdj={false} />
-                  <CYLInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} errorA={errors.L_CYL} errorB={errors.L_Axis} mode={mode} />
+                  <RenderNoraml handleChange={handleChange} setFieldValue={setFieldValue} refractive={refractive} setStatus={setStatus} status={status} />
 
-                  <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} error={errors.R_SPH} mode={mode} refractive={refractive} isAdj={false} />
-                  <CYLInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} errorA={errors.R_CYL} errorB={errors.R_Axis} mode={mode} />
-
-                  <RenderCollapseAdj handleChange={handleChange} setFieldValue={setFieldValue} error={errors.R_SPH} mode={mode} refractive={refractive} isAdj={true} />
+                  <RenderCollapseAdj handleChange={handleChange} setFieldValue={setFieldValue} refractive={refractive} />
                   <RenderCollapseVA setFieldValue={setFieldValue} />
-                  <RenderCollapsePD handleChange={handleChange} error={errors.PD} />
+                  <RenderCollapsePD handleChange={handleChange} />
 
                   <RemarksInput handleChange={handleChange} />
                   {isProfessional && <DiseasesInput setFieldValue={setFieldValue} />}
@@ -279,8 +265,10 @@ export default class Form extends Component {
                         paddingBottom: 30,
                       }}
                       onPress={handleSubmit}
-                      disabled={Object.keys(errors).length > 0}
+
+                      //disabled={Object.keys(errors).length > 0}
                     />
+                    {console.log("@AddRecordScreen submit button errors", status)}
                   </View>
                 </View>
               )}
@@ -327,7 +315,7 @@ const AddRecordScreen = StyleSheet.create({
   formContainer: {
     paddingLeft: 35,
     paddingRight: 35,
-    paddingTop: 0,
+    paddingTop: 100,
   },
   submitButton: {
     backgroundColor: "white",
