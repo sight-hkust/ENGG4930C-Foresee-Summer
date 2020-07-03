@@ -134,7 +134,6 @@ export default class ArticleDetailScreen extends Component {
       });
   }
 
-    this.state.playbackObject.pauseAsync();
   async componentWillUnmount() {
     await this.state.playbackObject.pauseAsync();
     console.log("unmount");
