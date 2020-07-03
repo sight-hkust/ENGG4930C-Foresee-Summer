@@ -31,22 +31,24 @@ export default class GetEducated extends Component {
     database
       .ref("contents/articles")
       .orderByChild("article_id")
-      .limitToFirst(3)
-      .once("value", (snapshot) => {
+      .on("value", (snapshot) => {
         var temp = [];
         //console.log(snapshot.toJSON());
         snapshot.forEach((childSnapshot) => {
           var childData = childSnapshot.val();
           //console.log(childData);
           temp.push(childData);
-          this.setState({ data: temp });
         });
+        this.setState({ topArticle: temp[temp.length - 1] });
+        temp.pop();
+        temp.reverse();
+        this.setState({ data: temp });
       });
     database
       .ref("contents/articles")
       .orderByChild("isTop")
       .equalTo(true)
-      .once("value", (snapshot) => {
+      .on("value", (snapshot) => {
         var temp = [];
         //console.log(snapshot.toJSON());
         snapshot.forEach((childSnapshot) => {
