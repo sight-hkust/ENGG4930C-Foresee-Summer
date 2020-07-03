@@ -1,12 +1,25 @@
-import { SafeAreaView, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
-import { database } from '../../../src/config/config';
-import React, { Component } from 'react';
-import { Audio, Video } from 'expo-av';
-import { LinearGradient } from 'expo-linear-gradient';
-import { Button } from 'react-native-elements';
-import { Icon } from 'react-native-elements';
-import * as ScreenOrientation from 'expo-screen-orientation';
-import { ScreenWidth, ScreenHeight, FontScale } from '../../../constant/Constant';
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  Image,
+  Dimensions,
+  TouchableOpacity,
+  ScrollView,
+} from "react-native";
+import { database, storage } from "../../config/config";
+import React, { Component } from "react";
+import { Audio, Video } from "expo-av";
+import { LinearGradient } from "expo-linear-gradient";
+import { Button } from "react-native-elements";
+import { Icon } from "react-native-elements";
+import * as ScreenOrientation from "expo-screen-orientation";
+import {
+  ScreenWidth,
+  ScreenHeight,
+  FontScale,
+} from "../../../constant/Constant";
 
 export default class ArticleDetailScreen extends Component {
   constructor(props) {
@@ -119,9 +132,9 @@ export default class ArticleDetailScreen extends Component {
       });
   }
 
-  componentWillUnmount() {
-    this.state.playbackObject.pauseAsync();
-    console.log('unmount');
+  async componentWillUnmount() {
+    await this.state.playbackObject.pauseAsync();
+    console.log("unmount");
   }
 
   render() {
