@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     color: "#2D9CDB99",
     textAlign: "center",
     textAlignVertical: "center",
-    fontSize: FontScale * 28,
+    fontSize: 28,
   },
   wrap: {
     flexDirection: "row",
@@ -134,13 +134,13 @@ const styles = StyleSheet.create({
   code: {
     textAlign: "center",
     textAlignVertical: "center",
-    fontSize: FontScale * 20,
+    fontSize: 20,
   },
   input: {
     position: "absolute",
     top: 0,
     bottom: 0,
-    fontSize: FontScale * 20,
+    fontSize: 20,
     textAlign: "center",
     textAlignVertical: "center",
     height: ScreenHeight * 0.08,

@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     },
     label: {
         flex: 4,
-        fontSize: FontScale * 18,
+        fontSize: 18,
         color: "#fff",
         
         textAlignVertical: 'center'
@@ -45,6 +45,6 @@ const styles = StyleSheet.create({
         padding: ScreenHeight * 0.02,
         
         color: "#fff",
-        fontSize: FontScale * 16,
+        fontSize: 16,
     }
 })

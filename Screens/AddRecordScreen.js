@@ -254,12 +254,12 @@ export default class Form extends Component {
                       }
                       this.props.navigation.goBack();
                     });
-                }
-                if (!exist) {
-                  //no existed record
-                  database
-                    .ref("users/" + patient_id + "/records/" + values.date)
-                    .set(data, (err) => console.log(err));
+                  if (!exist) {
+                    //no existed record
+                    database
+                      .ref("users/" + patient_id + "/records/" + values.date)
+                      .set(data, (err) => console.log(err));
+                  }
                 } else {
                   Alert.alert(
                     "注意！",

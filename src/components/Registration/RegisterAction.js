@@ -16,8 +16,11 @@ const writeUserData = ({
       lastName: values.lastName || "",
       surName: values.surName || "",
       givenName: values.givenName || "",
-      phone: values.tel_country_code + values.tel_number,
+      phone: values.tel_number
+        ? values.tel_country_code + values.tel_number
+        : "",
       uid: patientUUID,
+      inactive: true,
     });
     database.ref("userInfo/" + patientUUID).set({
       uid: patientUUID,
@@ -32,7 +35,12 @@ const writeUserData = ({
     if (!values.parentSelectionDisalbed && values.parent.uid) {
       database
         .ref("userInfo/" + values.parent.uid + "/familyMembers/" + patientUUID)
-        .set(true);
+        .set({
+          firstName: values.firstName,
+          lastName: values.lastName,
+          inactive: true,
+          uid: patientUUID,
+        });
     }
   } else {
     if (!isProfessional) {

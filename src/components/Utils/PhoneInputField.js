@@ -73,12 +73,7 @@ export const PhoneInputField = ({
         <View style={styles.phoneInputFieldContainer}>
           <TouchableOpacity style={styles.button} onPress={_showModal}>
             <Text style={styles.region}>{flag} </Text>
-            <Icon
-              name="caretdown"
-              type="antdesign"
-              color="black"
-              size={FontScale * 12}
-            />
+            <Icon name="caretdown" type="antdesign" color="black" size={12} />
           </TouchableOpacity>
           <TextInput
             style={[styles.textinput, textInputStyle]}
@@ -152,13 +147,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   region: {
-    fontSize: FontScale * 18,
+    fontSize: 18,
     textAlign: "center",
     textAlignVertical: "center",
   },
   textinput: {
     flex: 3.3,
-    fontSize: FontScale * 18,
+    fontSize: 18,
     color: "#FFFFFF",
     textAlignVertical: "center",
   },
@@ -168,13 +163,13 @@ const styles = StyleSheet.create({
   listItem: { flex: 1, flexDirection: "row", height: ScreenHeight * 0.1 },
   listItemFlag: {
     flex: 1,
-    fontSize: FontScale * 20,
+    fontSize: 20,
     textAlign: "center",
     textAlignVertical: "center",
   },
   listItemText: {
     flex: 3,
-    fontSize: FontScale * 18,
+    fontSize:  18,
     textAlign: "left",
     textAlignVertical: "center",
   },

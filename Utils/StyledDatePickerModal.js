@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
         flex: 5,
         textAlign: 'center',
         textAlignVertical: 'center',
-        fontSize: FontScale * 18,
+        fontSize: 18,
         color: "#fff",
         
         paddingRight: ScreenWidth * 0.02,

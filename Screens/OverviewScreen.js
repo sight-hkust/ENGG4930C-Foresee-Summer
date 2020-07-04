@@ -50,7 +50,7 @@ class OverviewScreen extends Component {
   }
 
   render() {
-    const { navigation } = this.props;
+    const { navigation, familyStore } = this.props;
     const calDateDifference = () => {
       if (this.state.dateArr.length < 1) {
         return false;
@@ -144,7 +144,13 @@ class OverviewScreen extends Component {
           <View style={OverviewScreenStyle.dateContainer}>
             <Text
               style={OverviewScreenStyle.dateText}
-              onPress={() => navigation.navigate("Family Overview")}
+              onPress={() => {
+                const { familyMembers } = familyStore;
+                navigation.navigate("Family Router", {
+                  screen: "Family Records",
+                  params: { familyMembers: familyMembers },
+                });
+              }}
             >
               最近驗眼日期:{" "}
               {this.state.dateArr == null
@@ -294,7 +300,7 @@ export const RenderIndicator = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    familyMemberStore: state.familyMembers,
+    familyStore: state.familyMembers,
   };
 };
 const mapDispatchToProps = (dispatch) => {

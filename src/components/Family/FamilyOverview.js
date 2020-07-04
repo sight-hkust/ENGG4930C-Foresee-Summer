@@ -6,7 +6,7 @@ export const FamilyOverview = ({ navigation, route }) => {
   return (
     <View>
       <LinearGradientBackground>
-        <></>
+        <View></View>
       </LinearGradientBackground>
     </View>
   );

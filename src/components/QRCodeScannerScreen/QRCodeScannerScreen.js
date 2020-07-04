@@ -121,7 +121,7 @@ export const QRCodeScannerScreen = ({ navigation, route }) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
+    <View style={styles.container}>
       {!(isFocused && hasCameraPermission) ? (
         <View>
           <Text>{"Requesting for camera permission."}</Text>
@@ -207,7 +207,7 @@ export const QRCodeScannerScreen = ({ navigation, route }) => {
           />
         </View>
       </Modal>
-    </SafeAreaView>
+    </View>
   );
 };
 

@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   },
   label: {
     flex: 8,
-    fontSize: FontScale * 18,
+    fontSize: 18,
     color: "white",
     textAlignVertical: "center",
   },
@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
     paddingTop: ScreenWidth * 0.01,
     paddingLeft: ScreenWidth * 0.08,
     textAlign: "left",
-    fontSize: FontScale * 18,
+    fontSize: 18,
     fontWeight: "700",
     color: "#FFFD78",
     flexWrap: "wrap",

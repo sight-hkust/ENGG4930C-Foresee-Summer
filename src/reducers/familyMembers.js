@@ -15,11 +15,10 @@ export const watchFamilyMembersUpdate = () => {
       .ref("/userInfo/" + auth.currentUser.uid + "/familyMembers")
       .on("value", (snap) => {
         let familyMembers = [];
-        console.log("Inside Family Store", snap);
-        /* snap.forEach((data) => {
+        snap.forEach((data) => {
           familyMembers.push(data.val());
-        }); */
-        /* dispatch(updateFamilyMembers(familyMembers)); */
+        });
+        dispatch(updateFamilyMembers(familyMembers));
       });
   };
 };

@@ -18,7 +18,7 @@ import AddRecordScreen from "./Screens/AddRecordScreen";
 import OverviewScreen from "./Screens/OverviewScreen";
 
 import { Login } from "./src/components/Login/Login";
-import { Register } from "./src/components/Registration/Register";
+import { RegisterRouter } from "./src/components/Registration/RegisterRouter";
 import Profile from "./src/components/Profile/Profile";
 import { QRCodeScannerScreen } from "./src/components/QRCodeScannerScreen/QRCodeScannerScreen";
 
@@ -40,7 +40,7 @@ import TermsAndCondition from "./src/components/Policy/TermsAndCondition";
 import TutorialScreen from "./src/components/Tutorial/Tutorial";
 import QrCode from "./src/components/Profile/QrCode";
 import { RegistrationForm } from "./src/components/Registration/RegistrationForm/RegistrationForm";
-import { FamilyOverview } from "./src/components/Family/FamilyOverview";
+import { FamilyRouter } from "./src/components/Family/FamilyRouter";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -108,8 +108,8 @@ function HomeScreen({ navigation, route }) {
         options={{ title: "新增資料" }}
       />
       <Stack.Screen
-        name="Family Overview"
-        component={FamilyOverview}
+        name="Family Router"
+        component={FamilyRouter}
         options={{ title: "" }}
       />
     </Stack.Navigator>
@@ -432,7 +432,7 @@ export default App = (props) => {
               />
               <Stack.Screen
                 name="Register"
-                component={Register}
+                component={RegisterRouter}
                 options={{ headerShown: false }}
               />
               <Stack.Screen

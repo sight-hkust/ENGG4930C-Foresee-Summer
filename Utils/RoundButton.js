@@ -74,12 +74,12 @@ const styles = StyleSheet.create({
     textAlign: "center",
     textAlignVertical: "center",
     color: "#2D9CDB",
-    fontSize: FontScale * 20,
+    fontSize: 20,
   },
   outlineButtonText: {
     textAlign: "center",
     textAlignVertical: "center",
     color: "white",
-    fontSize: FontScale * 20,
+    fontSize: 20,
   },
 });

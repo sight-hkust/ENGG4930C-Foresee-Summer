@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     color: "white",
     fontWeight: "700",
     textAlignVertical: "center",
-    fontSize: FontScale * 20,
+    fontSize: 20,
     left: ScreenWidth * 0.03,
     flex: 4,
   },

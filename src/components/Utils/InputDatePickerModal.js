@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
     borderRadius: ScreenHeight * 0.035,
     width: "100%",
     paddingHorizontal: "10%",
-    fontSize: FontScale * 18,
+    fontSize:  18,
     color: "#FFFFFF",
     textAlign: "center",
     textAlignVertical: "center",

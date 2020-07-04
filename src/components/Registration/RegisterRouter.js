@@ -8,7 +8,7 @@ import { RegisterExisting } from "./LinkUserInfo/RegisterExisting";
 
 const RegistrationStack = createStackNavigator();
 
-export const Register = (props) => {
+export const RegisterRouter = (props) => {
   return (
     <RegistrationStack.Navigator initialRouteName="Register Options">
       <RegistrationStack.Screen
