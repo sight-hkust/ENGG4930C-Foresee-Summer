@@ -120,6 +120,9 @@ export const RenderContent = (props) => {
           );
         }
       }
+    case "3": {
+      return null;
+    }
   }
 };
 

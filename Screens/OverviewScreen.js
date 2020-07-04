@@ -353,6 +353,7 @@ const OverviewScreenStyle = StyleSheet.create({
     fontWeight: "bold",
   },
   itemContainer: {
+    alignSelf: "center",
     flexDirection: "row",
     paddingTop: 30,
   },

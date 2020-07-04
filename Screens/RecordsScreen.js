@@ -161,6 +161,10 @@ export default class RecordsScreen extends Component {
                   散光
                 </Text>
               </TouchableOpacity>
+
+              <TouchableOpacity onPress={() => this.setState({ refractive: "3" })}>
+                <Text style={this.state.refractive == "3" ? RecordScreenStyle.selectedMenuText : RecordScreenStyle.unselectedMenuText}>視力</Text>
+              </TouchableOpacity>
             </View>
 
             <View style={RecordScreenStyle.linechart}>
@@ -181,11 +185,7 @@ export default class RecordsScreen extends Component {
                     >
                       <Image source={this.state.Leye ? Open : Close} />
                     </TouchableOpacity>
-                    <TouchableOpacity
-                      activeOpacity={0.8}
-                      onPress={() => this.setState({ Leye: false })}
-                      style={{ paddingLeft: 25 }}
-                    >
+                    <TouchableOpacity activeOpacity={0.8} onPress={() => this.setState({ Leye: false })} style={{ paddingLeft: 40 }}>
                       <Image source={this.state.Leye ? Close : Open} />
                     </TouchableOpacity>
                   </View>
@@ -301,7 +301,7 @@ export const DetailButton = (props) => {
 export const RenderModal = (props) => {
   const { data, selectedDate, isVisible, toggleModal, isAdj } = props;
   const curRecord = data[selectedDate];
-  //console.log(curRecord);
+
   return (
     <BottomModal
       isVisible={isVisible}
@@ -372,6 +372,9 @@ export const RenderLineChart = (props) => {
         output.push(isLeft ? dataArr[date].L_CYL : dataArr[date].R_CYL);
       }
       break;
+    }
+    case "3": {
+      return null;
     }
   }
 
@@ -473,11 +476,11 @@ const RecordScreenStyle = StyleSheet.create({
   },
   contentContainer: {
     alignSelf: "center",
-    backgroundColor: "white",
+    backgroundColor: "rgba(255,255,255,0.9)",
     height: ScreenHeight / 3.2,
     width: ScreenWidth / 1.25,
     borderRadius: 20,
-    marginTop: ScreenHeight / 3.5,
+    marginTop: ScreenHeight / 4 + 5,
     paddingBottom: 10,
   },
   content: {
@@ -493,8 +496,8 @@ const RecordScreenStyle = StyleSheet.create({
     //justifyContent: "flex-start",
     paddingTop: 15,
     paddingBottom: 15,
-    paddingLeft: 50,
-    paddingRight: 50,
+    paddingLeft: 40,
+    paddingRight: 40,
   },
   linechart: {
     height: "100%",
