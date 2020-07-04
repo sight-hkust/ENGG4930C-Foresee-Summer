@@ -287,7 +287,6 @@ export default class Form extends Component {
                         status.Adj_R_SPH_errors == "empty"
                       }
                     />
-                    {console.log("@AddRecordScreen submit button errors", status)}
                   </View>
                 </View>
               )}

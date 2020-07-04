@@ -115,10 +115,10 @@ export default class LineChart extends React.Component {
             key={item}
             cx={cx}
             cy={cy}
-            r="8"
-            stroke={item === full_dateArr[selectedIndex] ? "white" : "#2D9CDB"}
+            r="9"
+            stroke={item === full_dateArr[selectedIndex] ? "white" : "#00C2FF"}
             strokeWidth="2"
-            fill={item === full_dateArr[selectedIndex] ? "#00FFFF" : "white"}
+            fill={item === full_dateArr[selectedIndex] ? "#00C2FF" : "white"}
             opacity={item === full_dateArr[selectedIndex] ? "1" : "0.72"}
           />
           <Text x={cx} y={cy + 30} textAnchor="middle" fill="black" fontSize="19" fontWeight="bold">
