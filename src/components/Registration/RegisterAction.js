@@ -29,15 +29,9 @@ const writeUserData = ({
       history: values.history,
       disease: values.disease,
     });
-
-    if (!values.parentSelectionDisalbed && values.values.parent.uid) {
+    if (!values.parentSelectionDisalbed && values.parent.uid) {
       database
-        .ref(
-          "userInfo/" +
-            values.values.parent.uid +
-            "/familyMembers/" +
-            patientUUID
-        )
+        .ref("userInfo/" + values.parent.uid + "/familyMembers/" + patientUUID)
         .set(true);
     }
   } else {

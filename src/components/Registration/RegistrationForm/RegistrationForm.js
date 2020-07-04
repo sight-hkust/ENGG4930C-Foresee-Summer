@@ -87,8 +87,8 @@ export const RegistrationForm = ({ navigation, route }) => {
             values,
             { setSubmitting, resetForm, setStatus, setErrors }
           ) => {
-            console.log("values: ", JSON.stringify(values));
             try {
+              console.log("values: ", JSON.stringify(values));
               isProfessional && registerPatient
                 ? registerPatientAccount({
                     values,
@@ -96,7 +96,7 @@ export const RegistrationForm = ({ navigation, route }) => {
                     registerPatient,
                     onComplete: () => {
                       setIsLoading(false);
-                      navigation.goBack();
+                      navigation.navigate("ProfMainMenu");
                     },
                   })
                 : createAccount({
