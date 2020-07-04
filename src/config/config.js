@@ -1,6 +1,6 @@
 import * as firebase from 'firebase';
 
-const config = {
+export const config = {
         apiKey: "AIzaSyDpGmkF8NyQMyqyjnX8r4GzI0c7alLZVSg",
         authDomain: "foresee-8add2.firebaseapp.com",
         databaseURL: "https://foresee-8add2.firebaseio.com",

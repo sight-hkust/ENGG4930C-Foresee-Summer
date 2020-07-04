@@ -45,6 +45,5 @@ const styles = StyleSheet.create({
         textAlignVertical: 'center',
         fontSize: FontScale * 18,
         color: "#fff",
-        fontFamily: 'Roboto',
     },
 })

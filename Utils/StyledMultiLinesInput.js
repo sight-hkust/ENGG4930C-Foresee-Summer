@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
         flex: 4,
         fontSize: FontScale * 18,
         color: "#fff",
-        fontFamily: 'Roboto',
+        
         textAlignVertical: 'center'
     },
     inputField: {
@@ -43,7 +43,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'white',
         padding: ScreenHeight * 0.02,
-        fontFamily: 'Roboto',
+        
         color: "#fff",
         fontSize: FontScale * 16,
     }

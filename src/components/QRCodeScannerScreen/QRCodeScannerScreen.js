@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
   instruction: {
     flex: 2,
     color: 'white',
-    fontFamily: 'Roboto',
+    
     textAlign: 'center',
     textAlignVertical: 'center',
     fontSize: FontScale * 20,

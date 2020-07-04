@@ -11,7 +11,6 @@ import MenuScreen from '../../../Utils/MenuScreen';
 import { connect } from 'react-redux';
 import { watchPatientListUpdate } from '../../reducers/patientList';
 
-import * as func from 'firebase/firebase-functions';
 /**
  * For Local Search.
  */

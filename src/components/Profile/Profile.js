@@ -44,7 +44,7 @@ export const Profile = ({ navigation, route }) => {
                         <Text style={{
                             fontSize: FontScale * 25,
                             color: '#FFFFFF',
-                            fontFamily: 'Roboto',
+                            
                             textAlignVertical: 'center',
                             textAlign: 'center',
                             marginBottom: '5%'

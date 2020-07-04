@@ -48,6 +48,6 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         fontSize: FontScale * 18,
         color: "#fff",
-        fontFamily: 'Roboto',
+        
     }
 })
