@@ -190,10 +190,32 @@ const FormDetails = ({
   return (
     <>
       <ScrollView
-        style={{ paddingHorizontal: ScreenWidth * 0.11 }}
+        style={{
+          paddingHorizontal: ScreenWidth * 0.11,
+          position: "absolute",
+          width: "100%",
+          top: 0,
+          bottom: 0,
+        }}
         showsVerticalScrollIndicator={false}
         keyboardDismissMode="on-drag"
       >
+        {!registerPatient ? (
+          <Logo style={styles.logoContainer} />
+        ) : (
+          <Text
+            style={{
+              textAlign: "center",
+              marginVertical: 40,
+              fontSize: 35,
+              fontWeight: "bold",
+              color: "#fff",
+            }}
+          >
+            {" "}
+            登記病人{" "}
+          </Text>
+        )}
         <Logo style={styles.logoContainer} />
         <View style={styles.inputFieldsContainer}>
           {selectedNameField === "chi" ? (
