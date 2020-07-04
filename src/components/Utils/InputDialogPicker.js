@@ -32,7 +32,9 @@ export const InputDialogPicker = ({
           <Text style={styles.text}>
             {value === ""
               ? placeholder
-              : list.find((data) => data.value === value).label}
+              : list
+              ? list.find((data) => data.value === value).label
+              : null}
           </Text>
         </TouchableOpacity>
       </InputFieldWrapper>

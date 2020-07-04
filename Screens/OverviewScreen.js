@@ -73,31 +73,58 @@ export default class OverviewScreen extends Component {
         >
           {calDateDifference() ? (
             <View style={OverviewScreenStyle.reminderContainer}>
-              <Icon name="error-outline" color="#24559E" containerStyle={OverviewScreenStyle.iconstyle} />
-              <Text style={OverviewScreenStyle.reminderText}>距離上次驗眼已超過一年，建議盡快預約驗眼</Text>
+              <Icon
+                name="error-outline"
+                color="#24559E"
+                containerStyle={OverviewScreenStyle.iconstyle}
+              />
+              <Text style={OverviewScreenStyle.reminderText}>
+                距離上次驗眼已超過一年，建議盡快預約驗眼
+              </Text>
             </View>
           ) : (
             <View style={OverviewScreenStyle.hiddenreminderContainer}></View>
           )}
+
           <View style={{ flexDirection: "row" }}>
             <View style={{ width: ScreenWidth / 2, alignItems: "center" }}>
               <View style={OverviewScreenStyle.greetingContainer}>
                 <Text style={OverviewScreenStyle.greetingText}>您好，</Text>
-                <Text style={OverviewScreenStyle.userName}>{this.state.username}</Text>
+                <Text style={OverviewScreenStyle.userName}>
+                  {this.state.username}
+                </Text>
               </View>
               <View style={OverviewScreenStyle.leftEyeContainer}>
-                <DisplayDegree data={this.state.data} dateArr={this.state.dateArr} isLeft={true} />
+                <DisplayDegree
+                  data={this.state.data}
+                  dateArr={this.state.dateArr}
+                  isLeft={true}
+                />
               </View>
             </View>
             <View style={{ width: ScreenWidth / 2, alignItems: "center" }}>
               <View style={OverviewScreenStyle.rightEyeContainer}>
-                <DisplayDegree data={this.state.data} dateArr={this.state.dateArr} isLeft={false} />
+                <DisplayDegree
+                  data={this.state.data}
+                  dateArr={this.state.dateArr}
+                  isLeft={false}
+                />
               </View>
               <View style={OverviewScreenStyle.nextPageContainer}>
-                <Text style={OverviewScreenStyle.nextPageText}>詳細度數趨勢/{"\n"}輸入數據</Text>
+                <Text style={OverviewScreenStyle.nextPageText}>
+                  詳細度數趨勢/{"\n"}輸入數據
+                </Text>
                 <Button
-                  icon={<Icon name="keyboard-arrow-right" size={40} color="#24559E" />}
-                  onPress={() => this.props.navigation.navigate("RecordsScreen")}
+                  icon={
+                    <Icon
+                      name="keyboard-arrow-right"
+                      size={40}
+                      color="#24559E"
+                    />
+                  }
+                  onPress={() =>
+                    this.props.navigation.navigate("RecordsScreen")
+                  }
                   buttonStyle={{
                     backgroundColor: "white",
                     width: 45,
@@ -112,7 +139,14 @@ export default class OverviewScreen extends Component {
             </View>
           </View>
           <View style={OverviewScreenStyle.dateContainer}>
-            <Text style={OverviewScreenStyle.dateText}>最近驗眼日期: {this.state.dateArr == null ? "" : moment(this.state.dateArr[this.state.dateArr.length - 1]).format("YYYY-MM-DD")}</Text>
+            <Text style={OverviewScreenStyle.dateText}>
+              最近驗眼日期:{" "}
+              {this.state.dateArr == null
+                ? ""
+                : moment(
+                    this.state.dateArr[this.state.dateArr.length - 1]
+                  ).format("YYYY-MM-DD")}
+            </Text>
           </View>
         </LinearGradient>
       </View>
@@ -125,7 +159,9 @@ export const DisplayDegree = (props) => {
     return (
       <>
         <View style={OverviewScreenStyle.topContainer}>
-          <Text style={OverviewScreenStyle.topText}>{isLeft ? "左" : "右"}</Text>
+          <Text style={OverviewScreenStyle.topText}>
+            {isLeft ? "左" : "右"}
+          </Text>
         </View>
         <View>
           <Text style={OverviewScreenStyle.noRecordText}>暫無數據</Text>
@@ -136,22 +172,36 @@ export const DisplayDegree = (props) => {
   const length = dateArr.length - 1;
   const curData = data[dateArr[length]];
 
-  if (isLeft && curData.L_Myopia == "0" && curData.L_Hyperopia == "0" && curData.L_CYL == "0") {
+  if (
+    isLeft &&
+    curData.L_Myopia == "0" &&
+    curData.L_Hyperopia == "0" &&
+    curData.L_CYL == "0"
+  ) {
     return (
       <>
         <View style={OverviewScreenStyle.topContainer}>
-          <Text style={OverviewScreenStyle.topText}>{isLeft ? "左" : "右"}</Text>
+          <Text style={OverviewScreenStyle.topText}>
+            {isLeft ? "左" : "右"}
+          </Text>
         </View>
         <View>
           <Text style={OverviewScreenStyle.noRecordText}>沒有屈光不正</Text>
         </View>
       </>
     );
-  } else if (!isLeft && curData.R_Myopia == "0" && curData.R_Hyperopia == "0" && curData.R_CYL == "0") {
+  } else if (
+    !isLeft &&
+    curData.R_Myopia == "0" &&
+    curData.R_Hyperopia == "0" &&
+    curData.R_CYL == "0"
+  ) {
     return (
       <>
         <View style={OverviewScreenStyle.topContainer}>
-          <Text style={OverviewScreenStyle.topText}>{isLeft ? "左" : "右"}</Text>
+          <Text style={OverviewScreenStyle.topText}>
+            {isLeft ? "左" : "右"}
+          </Text>
         </View>
         <View>
           <Text style={OverviewScreenStyle.noRecordText}>沒有屈光不正</Text>
@@ -170,11 +220,26 @@ export const DisplayDegree = (props) => {
         <Text style={OverviewScreenStyle.topText}>{isLeft ? "左" : "右"}</Text>
       </View>
 
-      {(isLeft ? curData.L_Myopia != 0 : curData.R_Myopia != 0) && <RenderItem degree={isLeft ? curData.L_Myopia : curData.R_Myopia} refractive={"M"} />}
+      {(isLeft ? curData.L_Myopia != 0 : curData.R_Myopia != 0) && (
+        <RenderItem
+          degree={isLeft ? curData.L_Myopia : curData.R_Myopia}
+          refractive={"M"}
+        />
+      )}
 
-      {(isLeft ? curData.L_Hyperopia != 0 : curData.R_Hyperopia != 0) && <RenderItem degree={isLeft ? curData.L_Hyperopia : curData.R_Hyperopia} refractive={"H"} />}
+      {(isLeft ? curData.L_Hyperopia != 0 : curData.R_Hyperopia != 0) && (
+        <RenderItem
+          degree={isLeft ? curData.L_Hyperopia : curData.R_Hyperopia}
+          refractive={"H"}
+        />
+      )}
 
-      {(isLeft ? curData.L_CYL != 0 : curData.R_CYL != 0) && <RenderItem degree={isLeft ? curData.L_CYL : curData.R_CYL} refractive={"A"} />}
+      {(isLeft ? curData.L_CYL != 0 : curData.R_CYL != 0) && (
+        <RenderItem
+          degree={isLeft ? curData.L_CYL : curData.R_CYL}
+          refractive={"A"}
+        />
+      )}
     </View>
   );
 };
@@ -196,20 +261,26 @@ export const RenderIndicator = (props) => {
     case "M":
       return (
         <View style={OverviewScreenStyle.levelTextContatiner}>
-          <Text style={OverviewScreenStyle.levelText}>{degree < 300 ? "淺近視" : degree < 575 ? "中度近視" : "深近視"}</Text>
+          <Text style={OverviewScreenStyle.levelText}>
+            {degree < 300 ? "淺近視" : degree < 575 ? "中度近視" : "深近視"}
+          </Text>
         </View>
       );
 
     case "H":
       return (
         <View style={OverviewScreenStyle.levelTextContatiner}>
-          <Text style={OverviewScreenStyle.levelText}>{degree < 200 ? "淺遠視" : degree < 500 ? "中度遠視" : "深遠視"}</Text>
+          <Text style={OverviewScreenStyle.levelText}>
+            {degree < 200 ? "淺遠視" : degree < 500 ? "中度遠視" : "深遠視"}
+          </Text>
         </View>
       );
     case "A":
       return (
         <View style={OverviewScreenStyle.levelTextContatiner}>
-          <Text style={OverviewScreenStyle.levelText}>{degree < 75 ? "淺散光" : degree < 175 ? "中度散光" : "深散光"}</Text>
+          <Text style={OverviewScreenStyle.levelText}>
+            {degree < 75 ? "淺散光" : degree < 175 ? "中度散光" : "深散光"}
+          </Text>
         </View>
       );
   }

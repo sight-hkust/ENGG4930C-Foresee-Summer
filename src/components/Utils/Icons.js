@@ -17,14 +17,14 @@ const KeyIcon = (
 const PhoneIcon = (
   <Icon name="phone" type="feather" color="#FFFFFF" size={FontScale * 30} />
 );
-const ScanQRIcon = ({ color, size }) => {
-  return (
-    <MaterialCommunityIcon
-      name="qrcode-scan"
-      color={color}
-      size={FontScale * 25}
-    />
-  );
-};
 
-export { MailIcon, KeyIcon, PhoneIcon };
+const FamilyIcon = (
+  <Icon
+    name="contacts"
+    type="antdesign"
+    color="#FFFFFF"
+    size={FontScale * 30}
+  />
+);
+
+export { MailIcon, KeyIcon, PhoneIcon, FamilyIcon };

@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
     fontSize: FontScale * 18,
     fontWeight: "700",
-    color: "#FFFFFF",
+    color: "#FFFD78",
     flexWrap: "wrap",
   },
 });

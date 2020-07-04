@@ -32,7 +32,6 @@ export const PhoneInputField = ({
   hideEmbbededMessage,
   ...rest
 }) => {
-
   const defaultCountry = data.filter((object) => object.name === "香港")[0];
   const defaultFlag = defaultCountry.flag;
   const defaultDialCode = defaultCountry.dial_code;

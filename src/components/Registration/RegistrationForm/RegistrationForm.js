@@ -7,6 +7,7 @@ import {
   StyleSheet,
   Picker,
   Text,
+  TouchableOpacity,
 } from "react-native";
 import {
   ScreenHeight,
@@ -16,7 +17,7 @@ import {
 import { SchemaPatient } from "../Schema/SchemaPatient";
 import { SchemaProfessional } from "../Schema/SchemaProfessional";
 import { ScrollView } from "react-native-gesture-handler";
-import { RadioButton } from "react-native-paper";
+import { RadioButton, Switch } from "react-native-paper";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import moment from "moment";
@@ -31,9 +32,11 @@ import { Portal, Dialog, Provider, List, Modal } from "react-native-paper";
 import { CheckBox, Icon } from "react-native-elements";
 import { InputTextField } from "../../Utils/InputTextField";
 import { InputDialogPicker } from "../../Utils/InputDialogPicker";
-import { MailIcon, KeyIcon, PhoneIcon } from "../../Utils/Icons";
+import { MailIcon, KeyIcon, PhoneIcon, FamilyIcon } from "../../Utils/Icons";
 import { PhoneInputField } from "../../Utils/PhoneInputField";
 import { InputDatePickerModal } from "../../Utils/InputDatePickerModal";
+import MenuScreen from "../../../../Utils/MenuScreen";
+import PatientSearchPanel from "../../Utils/PatientSearchPanel";
 
 export const RegistrationForm = ({ navigation, route }) => {
   const { isProfessional, registerPatient } = route.params;
@@ -62,11 +65,13 @@ export const RegistrationForm = ({ navigation, route }) => {
             lastName: "",
             surName: "",
             givenName: "",
-            firstNameFilled: false,
+            /* firstNameFilled: false,
             lastNameFilled: false,
             surNameFilled: false,
-            givenNameFilled: false,
+            givenNameFilled: false, */
             birthday: "",
+            parent: {},
+            parentSelectionDisabled: false,
             email: "",
             password: "",
             confirmPassword: "",
@@ -78,25 +83,35 @@ export const RegistrationForm = ({ navigation, route }) => {
             disease: "",
             allowedSearch: false,
           }}
-          onSubmit={(values) => {
-            console.log(values);
-            /* setIsLoading(true); */
-            isProfessional && registerPatient
-              ? registerPatientAccount({
-                  values,
-                  isProfessional,
-                  registerPatient,
-                  onComplete: () => {
-                    setIsLoading(false);
-                    navigation.goBack();
-                  },
-                })
-              : createAccount({
-                  values,
-                  navigation,
-                  isProfessional,
-                  registerPatient,
-                });
+          onSubmit={async (
+            values,
+            { setSubmitting, resetForm, setStatus, setErrors }
+          ) => {
+            console.log("values: ", JSON.stringify(values));
+            try {
+              isProfessional && registerPatient
+                ? registerPatientAccount({
+                    values,
+                    isProfessional,
+                    registerPatient,
+                    onComplete: () => {
+                      setIsLoading(false);
+                      navigation.goBack();
+                    },
+                  })
+                : createAccount({
+                    values,
+                    navigation,
+                    isProfessional,
+                    registerPatient,
+                  });
+              resetForm({});
+              setStatus({ success: true });
+            } catch (error) {
+              setSubmitting(false);
+              setStatus({ success: false });
+              setErrors({ submit: error.message });
+            }
           }}
           validationSchema={
             isProfessional
@@ -146,11 +161,31 @@ const FormDetails = ({
   const [selectedNameField, setSelectedNameField] = useState("chi");
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isRoleDialogVisible, setRoleDialogVisibility] = useState(false);
+  const [isFamilySearchFieldVisible, setFamilySearchFieldVisibility] = useState(
+    false
+  );
+  const [
+    isFamilySearchDialogVisible,
+    setFamilySearchDialogVisibility,
+  ] = useState(false);
+
+  const _toggleFamilySearchSwitch = () =>
+    setFamilySearchFieldVisibility(!isFamilySearchFieldVisible);
+
   const _showDatePicker = () => setDatePickerVisibility(true);
   const _hideDatePicker = () => setDatePickerVisibility(false);
 
   const _showRoleDialog = () => setRoleDialogVisibility(true);
   const _hideRoleDialog = () => setRoleDialogVisibility(false);
+
+  const _showFamilySearchDialog = () => {
+    setFieldValue("parentSelectionDisabled", false);
+    setFamilySearchDialogVisibility(true);
+  };
+  const _hideFamilySearchDialog = () => {
+    setFieldValue("parentSelectionDisabled", true);
+    setFamilySearchDialogVisibility(false);
+  };
 
   const handleDateChange = (event, selectedDate) => {
     _hideDatePicker();
@@ -189,6 +224,8 @@ const FormDetails = ({
 
   return (
     <>
+      {isProfessional && registerPatient && <MenuScreen />}
+
       <ScrollView
         style={{
           paddingHorizontal: ScreenWidth * 0.11,
@@ -216,7 +253,7 @@ const FormDetails = ({
             登記病人{" "}
           </Text>
         )}
-        <Logo style={styles.logoContainer} />
+
         <View style={styles.inputFieldsContainer}>
           {selectedNameField === "chi" ? (
             <View
@@ -354,6 +391,64 @@ const FormDetails = ({
               value={values.birthday}
             />
           )}
+          {registerPatient ? (
+            <>
+              <View
+                style={{
+                  flexDirection: "row",
+                  paddingLeft: "4%",
+                  marginVertical: ScreenHeight * 0.02,
+                }}
+              >
+                <View
+                  style={{
+                    flex: 2,
+                    alignItems: "center",
+                    justifyContent: "center",
+                    alignSelf: "center",
+                  }}
+                >
+                  {FamilyIcon}
+                </View>
+                <Text
+                  style={{
+                    flex: 8,
+                    fontSize: FontScale * 18,
+                    color: "white",
+                    textAlignVertical: "center",
+                  }}
+                >
+                  搜尋病人家屬
+                </Text>
+                <Switch
+                  value={isFamilySearchFieldVisible}
+                  onValueChange={_toggleFamilySearchSwitch}
+                  color="#FFFFFF"
+                />
+              </View>
+              {isFamilySearchFieldVisible && (
+                <View>
+                  <TouchableOpacity onPress={_showFamilySearchDialog}>
+                    <Text
+                      style={{
+                        backgroundColor: "rgba(255, 255, 255, 0.4)",
+                        height: ScreenHeight * 0.065,
+                        borderRadius: ScreenHeight * 0.035,
+                        fontSize: FontScale * 18,
+                        marginBottom: ScreenHeight * 0.01,
+                        paddingHorizontal: "10%",
+                        color: "#FFFFFF",
+                        textAlignVertical: "center",
+                        textAlign: "center",
+                      }}
+                    >
+                      {values.parent ? values.parent["name"] : ""}
+                    </Text>
+                  </TouchableOpacity>
+                </View>
+              )}
+            </>
+          ) : null}
           <PhoneInputField
             label={"電話號碼"}
             icon={PhoneIcon}
@@ -435,7 +530,10 @@ const FormDetails = ({
           title="提交"
           onPress={() => {
             Keyboard.dismiss();
-            console.log(formikProps.errors);
+            console.log(
+              "formikProps.errors: ",
+              JSON.stringify(formikProps.errors)
+            );
             formikProps.handleSubmit();
           }}
         />
@@ -464,6 +562,17 @@ const FormDetails = ({
                   onPress={handleRoleDialogOption.bind(this, data.value)}
                 />
               ))}
+            </Dialog.Content>
+          </Dialog>
+          <Dialog
+            visible={isFamilySearchDialogVisible}
+            onDismiss={_hideFamilySearchDialog}
+          >
+            <Dialog.Content>
+              <PatientSearchPanel
+                setFieldValue={setFieldValue}
+                hideFamilySearchDialog={_hideFamilySearchDialog}
+              />
             </Dialog.Content>
           </Dialog>
           <Dialog visible={isLoading}></Dialog>

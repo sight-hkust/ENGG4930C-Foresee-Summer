@@ -1,15 +1,27 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, View, ScrollView, ActivityIndicator, Image, TouchableOpacity } from 'react-native';
-import { Icon, ListItem, Button, SearchBar } from 'react-native-elements';
-import { Grid, Col, Row } from 'react-native-easy-grid';
+import React, { useState, useEffect } from "react";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  ActivityIndicator,
+  Image,
+  TouchableOpacity,
+} from "react-native";
+import { Icon, ListItem, Button, SearchBar } from "react-native-elements";
+import { Grid, Col, Row } from "react-native-easy-grid";
 //import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { ScreenWidth, ScreenHeight, FontScale } from '../../../constant/Constant';
-import { auth } from '../../config/config';
+import {
+  ScreenWidth,
+  ScreenHeight,
+  FontScale,
+} from "../../../constant/Constant";
+import { auth } from "../../config/config";
 
-import MenuScreen from '../../../Utils/MenuScreen';
-import { connect } from 'react-redux';
-import { watchPatientListUpdate } from '../../reducers/patientList';
+import MenuScreen from "../../../Utils/MenuScreen";
+import { connect } from "react-redux";
+import { watchPatientListUpdate } from "../../reducers/patientList";
 
 /**
  * For Local Search.
@@ -28,14 +40,18 @@ function SearchPatient(key, referenceList) {
 const ProfMainMenu = ({ route, navigation, patientListStore }) => {
   //const [originalList, setOriginalList] = useState([]);
 
-  const [searchContent, setSearchContent] = useState('');
+  const [searchContent, setSearchContent] = useState("");
   const [searchingStatus, setSearchingStatus] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const { patientList } = patientListStore;
   const [showList, setShowList] = useState([]);
 
   useEffect(() => {
-    if (patientList !== null && patientList !== undefined && searchContent === '') {
+    if (
+      patientList !== null &&
+      patientList !== undefined &&
+      searchContent === ""
+    ) {
       setIsLoading(false);
       setShowList(patientList);
     }
@@ -51,7 +67,16 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
           </View>
         ) : (
           <View>
-            <View style={{ marginTop: ScreenHeight * 0.078, height: ScreenHeight * 0.078, width: ScreenWidth, flexDirection: 'row', justifyContent: 'center', alignItems: 'center' }}>
+            <View
+              style={{
+                marginTop: ScreenHeight * 0.078,
+                height: ScreenHeight * 0.078,
+                width: ScreenWidth,
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
               <SearchBar
                 placeholder="尋找病人"
                 onChangeText={(e) => {
@@ -63,35 +88,48 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                 round
                 lightTheme
                 placeholderTextColor="white"
-                leftIconContainerStyle={{ color: 'white' }}
+                leftIconContainerStyle={{ color: "white" }}
                 containerStyle={{
-                  backgroundColor: 'transparent',
+                  backgroundColor: "transparent",
                   width: ScreenWidth * 0.8,
-                  borderBottomColor: 'transparent',
-                  borderTopColor: 'transparent',
+                  borderBottomColor: "transparent",
+                  borderTopColor: "transparent",
                 }}
-                inputContainerStyle={{ backgroundColor: '#A6ACE9', height: 35 }}
+                inputContainerStyle={{ backgroundColor: "#A6ACE9", height: 35 }}
               />
-              <Icon name="qrcode-scan" type="material-community" color="white" size={30} onPress={() => navigation.navigate('QR Scan')} />
+              <Icon
+                name="qrcode-scan"
+                type="material-community"
+                color="white"
+                size={30}
+                onPress={() => navigation.navigate("QR Scan")}
+              />
             </View>
             <ScrollView
               style={{
                 height: ScreenHeight * 0.6,
                 width: ScreenWidth * 0.9,
-                backgroundColor: 'transparent',
-                alignSelf: 'center',
+                backgroundColor: "transparent",
+                alignSelf: "center",
               }}
             >
               {showList.length == 0 ? (
-                <Text style={{ textAlign: 'center', color: 'white', fontSize: 30 }}> 找不到用戶 </Text>
+                <Text
+                  style={{ textAlign: "center", color: "white", fontSize: 30 }}
+                >
+                  {" "}
+                  找不到用戶{" "}
+                </Text>
               ) : (
-                showList.map((data, index) => {
+                showList.map((patient, index) => {
+                  const key = patient.uid;
+                  const phone = patient.phone;
                   return (
                     <>
                       <ListItem
                         key={index}
-                        title={data.lastName + data.firstName}
-                        subtitle={'test'.lastReserveDate}
+                        title={patient.lastName + patient.firstName}
+                        subtitle={"test".lastReserveDate}
                         rightIcon={
                           <>
                             <Icon
@@ -100,14 +138,14 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                               type="feather"
                               color="#88D3E3"
                               containerStyle={{
-                                backgroundColor: 'white',
+                                backgroundColor: "white",
                                 borderRadius: 5,
                                 padding: 3,
                                 marginRight: 5,
                               }}
                               onPress={() => {
-                                navigation.navigate('ProfPatientViewScreen', {
-                                  key: data.phone,
+                                navigation.navigate("ProfPatientViewScreen", {
+                                  key: phone.length === 8 ? phone : key,
                                 });
                               }}
                             />
@@ -117,36 +155,45 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                               type="feather"
                               color="#80A4EB"
                               containerStyle={{
-                                backgroundColor: 'white',
+                                backgroundColor: "white",
                                 borderRadius: 5,
                                 padding: 3,
                               }}
                               onPress={() => {
-                                navigation.navigate('AddRecordScreen', {
+                                navigation.navigate("AddRecordScreen", {
                                   isProfessional: true,
                                   professional_id: auth.currentUser.uid,
-                                  patient_id: data.phone,
+                                  patient_id: phone.length === 8 ? phone : key,
                                 });
                               }}
                             />
                           </>
                         }
                         containerStyle={{
-                          backgroundColor: 'transparent',
+                          backgroundColor: "transparent",
                         }}
                         titleStyle={{
-                          color: 'white',
+                          color: "white",
                           fontSize: 20,
-                          fontWeight: 'bold',
+                          fontWeight: "bold",
                         }}
-                        subtitleStyle={{ color: 'white', fontSize: 13 }}
+                        subtitleStyle={{ color: "white", fontSize: 13 }}
                         onPress={() => {
-                          navigation.navigate('ProfPatientViewScreen', {
-                            key: data.phone,
+                          navigation.navigate("ProfPatientViewScreen", {
+                            key: phone.length === 8 ? phone : key,
                           });
                         }}
                       />
-                      <View style={{ height: 1, width: ScreenWidth * 0.825, borderColor: '#E1EDFF', borderWidth: 1, alignSelf: 'center', borderRadius: 10 }} />
+                      <View
+                        style={{
+                          height: 1,
+                          width: ScreenWidth * 0.825,
+                          borderColor: "#E1EDFF",
+                          borderWidth: 1,
+                          alignSelf: "center",
+                          borderRadius: 10,
+                        }}
+                      />
                     </>
                   );
                 })
@@ -162,41 +209,41 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignContent: 'center',
+    flexDirection: "column",
+    justifyContent: "center",
+    alignContent: "center",
   },
   loadingText: {
-    fontWeight: 'bold',
-    alignSelf: 'center',
+    fontWeight: "bold",
+    alignSelf: "center",
     paddingTop: 30,
-    color: 'white',
+    color: "white",
   },
   title: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 35,
     paddingBottom: 40,
   },
   searchButton: {
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   card: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
+    flexDirection: "row",
+    justifyContent: "space-between",
   },
   label: {
-    width: '50%',
+    width: "50%",
     height: 50,
-    backgroundColor: '#2D89DD',
-    justifyContent: 'center',
+    backgroundColor: "#2D89DD",
+    justifyContent: "center",
   },
   labelText: {
-    textAlign: 'center',
-    color: 'white',
+    textAlign: "center",
+    color: "white",
     fontSize: 20,
   },
   listItemTitle: {
-    color: 'white',
+    color: "white",
   },
 });
 

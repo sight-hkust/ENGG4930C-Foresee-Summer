@@ -12,9 +12,12 @@ const writeUserData = ({
 }) => {
   if (registerPatient) {
     database.ref("professionals/" + uid + "/patients/" + patientUUID).set({
-      firstName: values.firstName,
-      lastName: values.lastName,
+      firstName: values.firstName || "",
+      lastName: values.lastName || "",
+      surName: values.surName || "",
+      givenName: values.givenName || "",
       phone: values.tel_country_code + values.tel_number,
+      uid: patientUUID,
     });
     database.ref("userInfo/" + patientUUID).set({
       uid: patientUUID,
@@ -26,6 +29,17 @@ const writeUserData = ({
       history: values.history,
       disease: values.disease,
     });
+
+    if (!values.parentSelectionDisalbed && values.values.parent.uid) {
+      database
+        .ref(
+          "userInfo/" +
+            values.values.parent.uid +
+            "/familyMembers/" +
+            patientUUID
+        )
+        .set(true);
+    }
   } else {
     if (!isProfessional) {
       database.ref("/users/" + uid).set({
@@ -37,10 +51,14 @@ const writeUserData = ({
         birthday: moment(values.birthday).toJSON(),
         records: {},
       });
-      database.ref("userInfo/" + values.phone).set({
+      database.ref("userInfo/" + uid).set({
+        uid: uid,
         firstName: values.firstName,
         lastName: values.lastName,
+        email: values.email,
+        phone: values.tel_country_code + values.tel_number,
         birthday: moment(values.birthday).toJSON(),
+        allowedSearch: values.allowedSearch,
       });
     } else {
       database.ref("/professionals/" + uid).set({
