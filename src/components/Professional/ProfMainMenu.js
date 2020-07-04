@@ -124,10 +124,10 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                 showList.map((patient, index) => {
                   const key = patient.uid;
                   const phone = patient.phone;
+                  const inactive = patient.inactive;
                   return (
-                    <>
+                    <View key={index}>
                       <ListItem
-                        key={index}
                         title={patient.lastName + patient.firstName}
                         subtitle={"test".lastReserveDate}
                         rightIcon={
@@ -145,11 +145,13 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                               }}
                               onPress={() => {
                                 navigation.navigate("ProfPatientViewScreen", {
+                                  inactive: inactive,
                                   key: phone.length === 8 ? phone : key,
                                 });
                               }}
                             />
                             <Icon
+                              key={index}
                               size={25}
                               name="plus"
                               type="feather"
@@ -164,6 +166,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                                   isProfessional: true,
                                   professional_id: auth.currentUser.uid,
                                   patient_id: phone.length === 8 ? phone : key,
+                                  inactive: inactive,
                                 });
                               }}
                             />
@@ -181,6 +184,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                         onPress={() => {
                           navigation.navigate("ProfPatientViewScreen", {
                             key: phone.length === 8 ? phone : key,
+                            inactive: inactive,
                           });
                         }}
                       />
@@ -194,7 +198,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                           borderRadius: 10,
                         }}
                       />
-                    </>
+                    </View>
                   );
                 })
               )}

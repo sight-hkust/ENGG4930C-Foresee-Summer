@@ -40,6 +40,7 @@ import TermsAndCondition from "./src/components/Policy/TermsAndCondition";
 import TutorialScreen from "./src/components/Tutorial/Tutorial";
 import QrCode from "./src/components/Profile/QrCode";
 import { RegistrationForm } from "./src/components/Registration/RegistrationForm/RegistrationForm";
+import { FamilyOverview } from "./src/components/Family/FamilyOverview";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -105,6 +106,11 @@ function HomeScreen({ navigation, route }) {
         name="AddRecordScreen"
         component={AddRecordScreen}
         options={{ title: "新增資料" }}
+      />
+      <Stack.Screen
+        name="Family Overview"
+        component={FamilyOverview}
+        options={{ title: "" }}
       />
     </Stack.Navigator>
   );
@@ -187,11 +193,12 @@ function ProfessionalScreen({ navigation, route }) {
 }
 
 function SettingButton({ route, navigation }) {
+  const currentUser = auth.currentUser;
   return (
     <>
       <TouchableOpacity
         onPress={() => {
-          auth.currentUser.displayName == "professional"
+          currentUser && currentUser.displayName == "professional"
             ? navigation.navigate("SettingScreen")
             : navigation.navigate("SettingScreen");
         }}
@@ -199,7 +206,7 @@ function SettingButton({ route, navigation }) {
       >
         <Icon
           name={
-            auth.currentUser.displayName == "professional"
+            currentUser && currentUser.displayName == "professional"
               ? "questioncircleo"
               : "setting"
           }
@@ -213,10 +220,11 @@ function SettingButton({ route, navigation }) {
 }
 
 function Main({ route, navigation }) {
+  const user = auth.currentUser;
   return (
     <Tab.Navigator
       initialRouteName={
-        auth.currentUser.displayName == "professional"
+        user && user.displayName == "professional"
           ? "ProfessionalScreen"
           : "HomeScreen"
       }
@@ -463,10 +471,8 @@ const styles = StyleSheet.create({
   icon: {
     width: 40,
     height: 40,
-    elevation: 10,
     justifyContent: "center",
     alignItems: "center",
-
     shadowColor: "black",
     shadowOpacity: 0.3,
     shadowOffset: {

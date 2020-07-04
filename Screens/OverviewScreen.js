@@ -6,6 +6,8 @@ import { Button } from "react-native-elements";
 import { Icon } from "react-native-elements";
 import moment from "moment";
 import { ScreenWidth, ScreenHeight } from "../constant/Constant";
+import { connect } from "react-redux";
+import { watchFamilyMembersUpdate } from "../src/reducers/familyMembers";
 
 //var patient_id = "2igwzwrRiEYReq9HOaDIraVg55V2";
 var patient_id;
@@ -16,7 +18,7 @@ auth.onAuthStateChanged((user) => {
   }
 });
 
-export default class OverviewScreen extends Component {
+class OverviewScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -48,6 +50,7 @@ export default class OverviewScreen extends Component {
   }
 
   render() {
+    const { navigation } = this.props;
     const calDateDifference = () => {
       if (this.state.dateArr.length < 1) {
         return false;
@@ -122,9 +125,9 @@ export default class OverviewScreen extends Component {
                       color="#24559E"
                     />
                   }
-                  onPress={() =>
-                    this.props.navigation.navigate("RecordsScreen")
-                  }
+                  onPress={() => {
+                    this.props.navigation.navigate("RecordsScreen");
+                  }}
                   buttonStyle={{
                     backgroundColor: "white",
                     width: 45,
@@ -139,7 +142,10 @@ export default class OverviewScreen extends Component {
             </View>
           </View>
           <View style={OverviewScreenStyle.dateContainer}>
-            <Text style={OverviewScreenStyle.dateText}>
+            <Text
+              style={OverviewScreenStyle.dateText}
+              onPress={() => navigation.navigate("Family Overview")}
+            >
               最近驗眼日期:{" "}
               {this.state.dateArr == null
                 ? ""
@@ -285,6 +291,18 @@ export const RenderIndicator = (props) => {
       );
   }
 };
+
+const mapStateToProps = (state) => {
+  return {
+    familyMemberStore: state.familyMembers,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  dispatch(watchFamilyMembersUpdate());
+  return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(OverviewScreen);
 
 const OverviewScreenStyle = StyleSheet.create({
   greetingContainer: {

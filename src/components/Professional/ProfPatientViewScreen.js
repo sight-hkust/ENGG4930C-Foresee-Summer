@@ -27,45 +27,41 @@ export default class ProfPatientViewScreen extends Component {
   }
 
   componentDidMount() {
-    const { key } = this.props.route.params;
-    console.log(key);
+    const { key, inactive } = this.props.route.params;
     database.ref("userInfo/" + key).once("value", (snapshot) => {
       this.setState({
         info: snapshot.val(),
       });
     });
-    database
-      .ref(
-        "professionals/" +
-          auth.currentUser.uid +
-          "/patients/" +
-          key +
-          "/records"
-      )
-      .orderByKey()
-      .on("value", (snapshot) => {
-        let records = [];
-        let curRecord = {};
-        snapshot.forEach((child) => {
-          const year = child.key.split("-")[0];
-          curRecord = child.val();
-          curRecord.date = child.key;
-          records.push(curRecord);
-        });
-        this.setState({
-          records: records,
-          recordsIndex: records.length - 1,
-        });
-      });
-  }
 
-  componentDidUpdate(prevProps) {
-    console.log(this.state.info);
+    let recordViewRef = database.ref(
+      "professionals/" + auth.currentUser.uid + "/patients/" + key + "/records"
+    );
+
+    //For temp use with patient no account
+    if (inactive) {
+      recordViewRef = database.ref("userInfo/" + key + "/records");
+    }
+
+    recordViewRef.orderByKey().on("value", (snapshot) => {
+      let records = [];
+      let curRecord = {};
+      snapshot.forEach((child) => {
+        const year = child.key.split("-")[0];
+        curRecord = child.val();
+        curRecord.date = child.key;
+        records.push(curRecord);
+      });
+      this.setState({
+        records: records,
+        recordsIndex: records.length - 1,
+      });
+    });
   }
 
   render() {
+    const { key, inactive } = this.props.route.params;
     const { info } = this.state;
-    console.log(info);
     const records = this.state.records;
     const recordsLen = records.length;
     const recordsIndex = this.state.recordsIndex;
@@ -323,13 +319,14 @@ export default class ProfPatientViewScreen extends Component {
             <View style={{ height: 15 }} />
 
             <TouchableOpacity
-              onPress={() =>
+              onPress={() => {
                 this.props.navigation.navigate("AddRecordScreen", {
                   isProfessional: true,
                   professional_id: auth.currentUser.uid,
-                  patient_id: this.props.route.params.key,
-                })
-              }
+                  patient_id: key,
+                  inactive: inactive,
+                });
+              }}
               style={{
                 backgroundColor: "white",
                 width: 48,
