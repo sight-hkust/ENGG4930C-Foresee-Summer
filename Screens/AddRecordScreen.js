@@ -53,8 +53,7 @@ export default class Form extends Component {
 
   render() {
     const mode = this.state.mode;
-    const { isProfessional, professional_id, patient_id, refractive } = this.props.route.params;
-
+    const { isProfessional, professional_id, patient_id, refractive, inactive } = this.props.route.params;
     return (
       <View style={AddRecordScreen.background}>
         <LinearGradient
@@ -210,24 +209,31 @@ export default class Form extends Component {
                   //   )
                   //   .set(data)
                   //   .catch((error) => console.log(error));
-                  var uid;
-                  database.ref("userInfo/" + patient_id).once("value", (snap) => {
-                    uid = snap.val().uid;
-                  });
-
                   database
-                    .ref("users/" + uid + "/records/" + values.date)
-                    .set(data)
-                    .catch((error) => console.log(error));
-                  this.props.navigation.goBack();
-                }
-                if (!exist) {
-                  //no existed record
-                  database
-                    .ref("users/" + patient_id + "/records/" + values.date)
-                    .set(data)
-                    .catch((error) => console.log(error));
-                  this.props.navigation.goBack();
+                    .ref("userInfo/" + patient_id)
+                    .once("value")
+                    .then(function (snapshot) {
+                      console.log(snapshot.val());
+                      return snapshot.val()["uid"];
+                    })
+                    .then((uid) => {
+                      if (!inactive) {
+                        database
+                          .ref("users/" + uid + "/records/" + values.date)
+                          .set(data)
+                          .catch((error) => console.log(error));
+                      } else {
+                        database
+                          .ref("userInfo/" + uid + "/records/" + values.date)
+                          .set(data)
+                          .catch((error) => console.log(error));
+                      }
+                      this.props.navigation.goBack();
+                    });
+                  if (!exist) {
+                    //no existed record
+                    database.ref("users/" + patient_id + "/records/" + values.date).set(data, (err) => console.log(err));
+                  }
                 } else {
                   Alert.alert(
                     "注意！",
@@ -240,10 +246,11 @@ export default class Form extends Component {
                       {
                         text: "提交",
                         onPress: () => {
-                          database
-                            .ref("users/" + patient_id + "/records/" + values.date)
-                            .set(data)
-                            .catch((error) => console.log(error));
+                          if (!inactive) {
+                            database.ref("users/" + patient_id + "/records/" + values.date).set(data, (error) => console.log(error));
+                          } else {
+                            database.ref("userInfo/" + patient_id + "/records/" + values.date).set(data, (error) => console.log(error));
+                          }
                           this.props.navigation.navigate("RecordsScreen");
                         },
                       },

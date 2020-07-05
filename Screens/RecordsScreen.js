@@ -41,7 +41,8 @@ export default class RecordsScreen extends Component {
   }
 
   componentDidMount() {
-    const ref = database.ref("users/" + patient_id);
+    const { patient_id } = this.props.route.params;
+    let ref = database.ref("users/" + patient_id);
 
     ref.child("records").on("value", (snapshot) => {
       var tempDate = [];
@@ -108,14 +109,10 @@ export default class RecordsScreen extends Component {
           }}
         >
           <View style={RecordScreenStyle.header}>
-            {this.state.refractive == "3" ? (
-              <Text style={RecordScreenStyle.title}>視力趨勢</Text>
-            ) : (
-              <Text style={RecordScreenStyle.title}>
-                {this.state.refractive == "0" ? "近視" : this.state.refractive == "1" ? "遠視" : "散光"}
-                度數趨勢
-              </Text>
-            )}
+            <Text style={RecordScreenStyle.title}>
+              {this.state.refractive == "0" ? "近視" : this.state.refractive == "1" ? "遠視" : "散光"}
+              度數趨勢
+            </Text>
           </View>
 
           <View style={RecordScreenStyle.secondaryContainer}>
