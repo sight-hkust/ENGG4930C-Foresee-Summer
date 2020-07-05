@@ -91,9 +91,7 @@ class OverviewScreen extends Component {
                 距離上次驗眼已超過一年，建議盡快預約驗眼
               </Text>
             </View>
-          ) : (
-            <View style={OverviewScreenStyle.hiddenreminderContainer}></View>
-          )}
+          ) : null}
 
           <View style={{ flexDirection: "row", flex: 10 }}>
             <View
