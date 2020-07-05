@@ -1,5 +1,5 @@
 import "react-native-gesture-handler";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Image, Dimensions, TouchableOpacity, StyleSheet } from "react-native";
 import { Icon } from "react-native-elements";
 
@@ -18,7 +18,6 @@ import AddRecordScreen from "./Screens/AddRecordScreen";
 import OverviewScreen from "./Screens/OverviewScreen";
 
 import { Login } from "./src/components/Login/Login";
-import { RegisterRouter } from "./src/components/Registration/RegisterRouter";
 import Profile from "./src/components/Profile/Profile";
 import { QRCodeScannerScreen } from "./src/components/QRCodeScannerScreen/QRCodeScannerScreen";
 
@@ -31,7 +30,6 @@ import { Provider } from "react-redux";
 import rootReducer from "./src/reducers";
 import logger from "redux-logger";
 import thunk from "redux-thunk";
-import WelcomeScreen from "./Screens/WelcomeScreen";
 
 import SettingScreen from "./src/components/Setting/Setting";
 import PrivacyPolicy from "./src/components/Policy/PrivacyPolicy";
@@ -41,6 +39,8 @@ import TutorialScreen from "./src/components/Tutorial/Tutorial";
 import QrCode from "./src/components/Profile/QrCode";
 import { RegistrationForm } from "./src/components/Registration/RegistrationForm/RegistrationForm";
 import { FamilyRouter } from "./src/components/Family/FamilyRouter";
+import { RegisterNavigator } from "./src/components/Navigators/RegisterNavigator";
+import { SplashScreen } from "./src/components/Splash/SplashScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -382,7 +382,13 @@ function Main({ route, navigation }) {
 const store = createStore(rootReducer, applyMiddleware(/* logger, */ thunk));
 
 export default App = (props) => {
+  const [isLoading, setLoading] = useState(true);
   const [loggedIn, setLoggedIn] = useState();
+  useEffect(() => {
+    setTimeout(() => {
+      setLoading(false);
+    }, 1500);
+  }, []);
 
   auth.onAuthStateChanged(function (user) {
     user ? setLoggedIn(true) : setLoggedIn(false);
@@ -390,75 +396,71 @@ export default App = (props) => {
 
   return (
     <Provider store={store}>
-      <NavigationContainer>
-        <Stack.Navigator
-          initialRouteName="Welcome"
-          screenOptions={headerConfig}
-        >
-          {loggedIn ? (
-            <>
-              <Stack.Screen
-                name="Main"
-                component={Main}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Profile"
-                component={Profile}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="QR Scan"
-                component={QRCodeScannerScreen}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Terms"
-                component={TermsAndCondition}
-                options={{ title: "條款及細則" }}
-              />
-              <Stack.Screen
-                name="Policy"
-                component={PrivacyPolicy}
-                options={{ title: "私隱政策" }}
-              />
-              <Stack.Screen
-                name="SettingScreen"
-                component={SettingScreen}
-                options={{ title: "設定" }}
-              />
-            </>
-          ) : (
-            <>
-              <Stack.Screen
-                name="Login"
-                component={Login}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Register"
-                component={RegisterRouter}
-                options={{ headerShown: false }}
-              />
-              <Stack.Screen
-                name="Profile"
-                component={Profile}
-                options={{ headerShown: false }}
-              />
-            </>
-          )}
-          <Stack.Screen
-            name="Welcome"
-            component={WelcomeScreen}
-            options={{ headerShown: false }}
-          />
-          <Stack.Screen
-            name="Tutorial"
-            component={TutorialScreen}
-            options={{ headerShown: false }}
-          />
-        </Stack.Navigator>
-      </NavigationContainer>
+      {isLoading ? (
+        <SplashScreen />
+      ) : (
+        <NavigationContainer>
+          <Stack.Navigator screenOptions={headerConfig}>
+            {loggedIn ? (
+              <>
+                <Stack.Screen
+                  name="Main"
+                  component={Main}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="Profile"
+                  component={Profile}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="QR Scan"
+                  component={QRCodeScannerScreen}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="Terms"
+                  component={TermsAndCondition}
+                  options={{ title: "條款及細則" }}
+                />
+                <Stack.Screen
+                  name="Policy"
+                  component={PrivacyPolicy}
+                  options={{ title: "私隱政策" }}
+                />
+                <Stack.Screen
+                  name="SettingScreen"
+                  component={SettingScreen}
+                  options={{ title: "設定" }}
+                />
+              </>
+            ) : (
+              <>
+                <Stack.Screen
+                  name="Login"
+                  component={Login}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="Register"
+                  component={RegisterNavigator}
+                  options={{ headerShown: false }}
+                />
+                <Stack.Screen
+                  name="Profile"
+                  component={Profile}
+                  options={{ headerShown: false }}
+                />
+              </>
+            )}
+            <Stack.Screen
+              name="Tutorial"
+              component={TutorialScreen}
+              options={{ headerShown: false }}
+            />
+          </Stack.Navigator>
+        </NavigationContainer>
+      )}
     </Provider>
   );
 };

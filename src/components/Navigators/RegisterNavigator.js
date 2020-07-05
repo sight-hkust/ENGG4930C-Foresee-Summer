@@ -1,14 +1,14 @@
 import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import RegisterOptions from "./RegisterOptions/RegisterOptions";
-import { RegistrationForm } from "./RegistrationForm/RegistrationForm";
-import { LinkExistingUserInfo } from "./LinkUserInfo/LinkExistingUserInfo";
-import { RegisterWithPhoneNumber } from "./LinkUserInfo/RegisterWithPhoneNumber";
-import { RegisterExisting } from "./LinkUserInfo/RegisterExisting";
+import RegisterOptions from "../Registration/RegisterOptions/RegisterOptions";
+import { RegistrationForm } from "../Registration/RegistrationForm/RegistrationForm";
+import { LinkExistingUserInfo } from "../Registration/LinkUserInfo/LinkExistingUserInfo";
+import { RegisterWithPhoneNumber } from "../Registration/LinkUserInfo/RegisterWithPhoneNumber";
+import { RegisterExisting } from "../Registration/LinkUserInfo/RegisterExisting";
 
 const RegistrationStack = createStackNavigator();
 
-export const RegisterRouter = (props) => {
+export const RegisterNavigator = (props) => {
   return (
     <RegistrationStack.Navigator initialRouteName="Register Options">
       <RegistrationStack.Screen

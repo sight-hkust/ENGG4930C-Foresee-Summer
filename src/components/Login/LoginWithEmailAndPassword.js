@@ -24,12 +24,15 @@ import Modal from "react-native-modal";
 
 export const LoginWithEmailAndPassword = ({ navigation, route }) => {
   useEffect(() => {
-    auth.onAuthStateChanged((user) => {
+    const unsubscribe = auth.onAuthStateChanged((user) => {
       if (user) {
         setLoadingState(false);
         navigation.navigate("Main");
       }
     });
+    return () => {
+      unsubscribe();
+    };
   });
 
   const [emailInput, setEmailInput] = useState("");
