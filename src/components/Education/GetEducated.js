@@ -18,8 +18,6 @@ import {
   FontScale,
 } from "../../../constant/Constant";
 
-const Setting = require("../../../assets/images/setting.png");
-
 export default class GetEducated extends Component {
   constructor(props) {
     super(props);
