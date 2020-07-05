@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, FlatList } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { database, auth } from "../src/config/config";
 import { Button } from "react-native-elements";
@@ -8,6 +8,10 @@ import moment from "moment";
 import { ScreenWidth, ScreenHeight, Scale } from "../constant/Constant";
 import { connect } from "react-redux";
 import { watchFamilyMembersUpdate } from "../src/reducers/familyMembers";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { Provider, Portal, Modal } from "react-native-paper";
+import { displayName } from "../src/helpers/displayName";
+import { getRecordsUpdate, records } from "../src/reducers/records";
 
 //var patient_id = "2igwzwrRiEYReq9HOaDIraVg55V2";
 var patient_id;
@@ -23,11 +27,17 @@ class OverviewScreen extends Component {
     this.state = {
       data: null,
       dateArr: [],
-      username: "",
+      accountOwner: null,
+      isFamilyListModalVisible: false,
+      selectedFamily: null,
+      familyList: [],
     };
   }
 
   componentDidMount() {
+    const { familyList } = this.state;
+    const { familyMembers } = this.props.familyStore;
+
     const ref = database.ref("users/" + patient_id);
 
     ref.child("records").on("value", (snapshot) => {
@@ -43,20 +53,50 @@ class OverviewScreen extends Component {
 
     ref.once("value", (snapshot) => {
       const user = snapshot.val();
-      if (user.surName && user.givenName) {
-        this.setState({
-          username: snapshot.val().surName + snapshot.val().givenName,
-        });
-      } else {
-        this.setState({
-          username: snapshot.val().lastName + snapshot.val().firstName,
-        });
-      }
+      familyList.push({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        surName: user.surName,
+        givenName: user.givenName,
+        uid: user.uid,
+        inactive: false,
+      });
+      this.setState({ accountOwner: user, selectedFamily: user });
     });
+
+    familyMembers.forEach((member) => familyList.push(member));
   }
 
+  componentDidUpdate(prevProps, prevState) {
+    if (
+      prevProps.recordStore.records != this.props.recordStore.records &&
+      prevProps.recordStore.dateList != this.props.recordStore.dateList
+    ) {
+      this.setState({
+        data: this.props.recordStore.records,
+        dateArr: this.props.recordStore.dateList,
+      });
+    }
+  }
+
+  _showFamilyListModal = () => {
+    this.setState({ isFamilyListModalVisible: true });
+  };
+  _hideFamilyListModal = () => {
+    this.setState({ isFamilyListModalVisible: false });
+  };
+  _selectFamily = (member) => {
+    const { getRecordsHandler } = this.props;
+    this.setState({
+      selectedFamily: member,
+    });
+    const { uid, inactive } = member;
+    getRecordsHandler(uid, inactive);
+    this._hideFamilyListModal();
+  };
+
   render() {
-    const { navigation, familyStore } = this.props;
+    const { isFamilyListModalVisible, selectedFamily, familyList } = this.state;
     const calDateDifference = () => {
       if (this.state.dateArr.length < 1) {
         return false;
@@ -103,10 +143,37 @@ class OverviewScreen extends Component {
             >
               <View style={OverviewScreenStyle.greetingContainer}>
                 <Text style={OverviewScreenStyle.greetingText}>您好，</Text>
-                <Text style={OverviewScreenStyle.userName}>
-                  {this.state.username}
-                </Text>
+                <TouchableOpacity
+                  style={{
+                    width: "110%",
+                    backgroundColor: "red",
+                    flexDirection: "row",
+                  }}
+                  onPress={this._showFamilyListModal}
+                >
+                  {selectedFamily && (
+                    <>
+                      <Text style={OverviewScreenStyle.userName}>
+                        {displayName(selectedFamily)}
+                      </Text>
+                      <View
+                        style={{
+                          marginLeft: ScreenWidth * 0.02,
+                          justifyContent: "center",
+                        }}
+                      >
+                        <Icon
+                          name="caretdown"
+                          type="antdesign"
+                          size={ScreenWidth * 0.05}
+                          color="black"
+                        />
+                      </View>
+                    </>
+                  )}
+                </TouchableOpacity>
               </View>
+
               <View
                 style={{
                   flex: 2.3,
@@ -149,7 +216,9 @@ class OverviewScreen extends Component {
                     />
                   }
                   onPress={() => {
-                    this.props.navigation.navigate("RecordsScreen");
+                    this.props.navigation.navigate("RecordsScreen", {
+                      patient_id: selectedFamily.uid,
+                    });
                   }}
                   buttonStyle={{
                     backgroundColor: "white",
@@ -164,16 +233,17 @@ class OverviewScreen extends Component {
               </View>
             </View>
           </View>
+
           <View style={OverviewScreenStyle.dateContainer}>
             <Text
               style={OverviewScreenStyle.dateText}
-              onPress={() => {
-                const { familyMembers } = familyStore;
-                navigation.navigate("Family Router", {
-                  screen: "Family Records",
-                  params: { familyMembers: familyMembers },
-                });
-              }}
+              /* onPress={() => {
+              const { familyMembers } = familyStore;
+              navigation.navigate("Family Router", {
+                screen: "Family Records",
+                params: { familyMembers: familyMembers },
+              });
+            }} */
             >
               最近驗眼日期:{" "}
               {this.state.dateArr == null
@@ -184,6 +254,47 @@ class OverviewScreen extends Component {
             </Text>
           </View>
         </LinearGradient>
+        <Provider>
+          <Portal>
+            <Modal
+              visible={isFamilyListModalVisible}
+              onDismiss={this._hideFamilyListModal}
+            >
+              <View
+                style={{
+                  backgroundColor: "white",
+                  marginHorizontal: ScreenWidth * 0.12,
+                  minHeight: ScreenHeight * 0.2,
+                  elevation: 3,
+                  borderRadius: ScreenWidth * 0.02,
+                  padding: ScreenWidth * 0.03,
+                }}
+              >
+                <Text style={{ fontSize: 23 }}>選擇家庭成員</Text>
+                <FlatList
+                  data={familyList}
+                  keyExtractor={(item, index) => index.toString()}
+                  renderItem={({ item }) => (
+                    <TouchableOpacity onPress={() => this._selectFamily(item)}>
+                      <View
+                        style={{
+                          width: "100%",
+                          paddingVertical: ScreenHeight * 0.02,
+                        }}
+                      >
+                        <Text style={{ fontSize: 20, textAlign: "center" }}>
+                          {item.surName && item.givenName
+                            ? item.surName + item.givenName
+                            : item.lastName + item.firstName}
+                        </Text>
+                      </View>
+                    </TouchableOpacity>
+                  )}
+                />
+              </View>
+            </Modal>
+          </Portal>
+        </Provider>
       </View>
     );
   }
@@ -324,11 +435,15 @@ export const RenderIndicator = (props) => {
 const mapStateToProps = (state) => {
   return {
     familyStore: state.familyMembers,
+    recordStore: state.records,
   };
 };
 const mapDispatchToProps = (dispatch) => {
   dispatch(watchFamilyMembersUpdate());
-  return {};
+  return {
+    getRecordsHandler: (uid, inactive) =>
+      dispatch(getRecordsUpdate(uid, inactive)),
+  };
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(OverviewScreen);
@@ -347,7 +462,7 @@ const OverviewScreenStyle = StyleSheet.create({
   },
   userName: {
     textAlignVertical: "center",
-    fontSize: 48,
+    fontSize: 46,
     fontWeight: "bold",
     color: "white",
   },

@@ -56,12 +56,7 @@ const FamilyRecordDetails = ({
     false
   );
 
-  const _showFamilyList = () => {
-    setFamilyListModalVisibility(true);
-  };
-  const _hideFamilyListModal = () => {
-    setFamilyListModalVisibility(false);
-  };
+
 
   const _selectFamily = (member) => {
     const { uid, inactive } = member;
@@ -358,7 +353,7 @@ const FamilyRecordDetails = ({
 
 const mapStateToProps = (state) => {
   return {
-    recordStore: state.records,
+    
   };
 };
 const mapDispatchToProps = (dispatch) => {

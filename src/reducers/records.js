@@ -56,7 +56,7 @@ export const getRecordsUpdate = (uid, inactive) => {
   };
 }; */
 
-const initialState = [];
+const initialState = {};
 export const records = (state = initialState, { type, payload }) => {
   switch (type) {
     /* case GET_EYE_TEST_RECORDS:

@@ -40,10 +40,10 @@ export default class RecordsScreen extends Component {
   }
 
   componentDidMount() {
+    const { patient_id } = this.props.route.params;
     let ref = database.ref("users/" + patient_id);
 
     ref.child("records").on("value", (snapshot) => {
-      console.log(snapshot);
       var tempDate = [];
       for (var key in snapshot.val()) {
         tempDate.push(key);
