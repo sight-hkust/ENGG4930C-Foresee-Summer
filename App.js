@@ -188,6 +188,11 @@ function ProfessionalScreen({ navigation, route }) {
         component={SettingScreen}
         options={{ title: "設定" }}
       />
+      <Stack.Screen
+        name="Login"
+        component={Login}
+        options={{ headerShown: false }}
+      />
     </Stack.Navigator>
   );
 }

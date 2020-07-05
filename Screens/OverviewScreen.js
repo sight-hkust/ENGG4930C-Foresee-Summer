@@ -5,7 +5,7 @@ import { database, auth } from "../src/config/config";
 import { Button } from "react-native-elements";
 import { Icon } from "react-native-elements";
 import moment from "moment";
-import { ScreenWidth, ScreenHeight } from "../constant/Constant";
+import { ScreenWidth, ScreenHeight, Scale } from "../constant/Constant";
 import { connect } from "react-redux";
 import { watchFamilyMembersUpdate } from "../src/reducers/familyMembers";
 
@@ -14,7 +14,6 @@ var patient_id;
 auth.onAuthStateChanged((user) => {
   if (user != null) {
     patient_id = user.uid;
-    console.log(patient_id);
   }
 });
 
@@ -43,9 +42,16 @@ class OverviewScreen extends Component {
     });
 
     ref.once("value", (snapshot) => {
-      this.setState({
-        username: snapshot.val().firstName + snapshot.val().lastName,
-      });
+      const user = snapshot.val();
+      if (user.surName && user.givenName) {
+        this.setState({
+          username: snapshot.val().surName + snapshot.val().givenName,
+        });
+      } else {
+        this.setState({
+          username: snapshot.val().lastName + snapshot.val().firstName,
+        });
+      }
     });
   }
 
@@ -74,7 +80,7 @@ class OverviewScreen extends Component {
             height: "100%",
           }}
         >
-          {calDateDifference() ? (
+          {true /* calDateDifference() */ ? (
             <View style={OverviewScreenStyle.reminderContainer}>
               <Icon
                 name="error-outline"
@@ -89,23 +95,42 @@ class OverviewScreen extends Component {
             <View style={OverviewScreenStyle.hiddenreminderContainer}></View>
           )}
 
-          <View style={{ flexDirection: "row" }}>
-            <View style={{ width: ScreenWidth / 2, alignItems: "center" }}>
+          <View style={{ flexDirection: "row", flex: 10 }}>
+            <View
+              style={{
+                marginTop: ScreenHeight * 0.2,
+                flex: 1,
+                alignItems: "center",
+              }}
+            >
               <View style={OverviewScreenStyle.greetingContainer}>
                 <Text style={OverviewScreenStyle.greetingText}>您好，</Text>
                 <Text style={OverviewScreenStyle.userName}>
                   {this.state.username}
                 </Text>
               </View>
-              <View style={OverviewScreenStyle.leftEyeContainer}>
-                <DisplayDegree
-                  data={this.state.data}
-                  dateArr={this.state.dateArr}
-                  isLeft={true}
-                />
+              <View
+                style={{
+                  flex: 2.3,
+                  alignSelf: "center",
+                }}
+              >
+                <View style={OverviewScreenStyle.leftEyeContainer}>
+                  <DisplayDegree
+                    data={this.state.data}
+                    dateArr={this.state.dateArr}
+                    isLeft={true}
+                  />
+                </View>
               </View>
             </View>
-            <View style={{ width: ScreenWidth / 2, alignItems: "center" }}>
+            <View
+              style={{
+                flex: 1,
+                alignItems: "center",
+                marginTop: ScreenHeight * 0.168,
+              }}
+            >
               <View style={OverviewScreenStyle.rightEyeContainer}>
                 <DisplayDegree
                   data={this.state.data}
@@ -312,16 +337,19 @@ export default connect(mapStateToProps, mapDispatchToProps)(OverviewScreen);
 
 const OverviewScreenStyle = StyleSheet.create({
   greetingContainer: {
-    paddingTop: 25,
-    paddingLeft: 0,
+    flex: 1,
+    width: "100%",
+    paddingLeft: ScreenWidth * 0.035,
   },
   greetingText: {
-    fontSize: 30,
+    textAlignVertical: "center",
+    fontSize: 35,
     fontWeight: "bold",
     color: "white",
   },
   userName: {
-    fontSize: 46,
+    textAlignVertical: "center",
+    fontSize: 48,
     fontWeight: "bold",
     color: "white",
   },
@@ -345,15 +373,17 @@ const OverviewScreenStyle = StyleSheet.create({
     backgroundColor: "#24559E",
     position: "absolute",
     top: -30,
-    height: 60,
-    width: 60,
-    borderRadius: 12,
+    height: ScreenHeight * 0.09,
+    width: ScreenHeight * 0.09,
+    borderRadius: ScreenHeight * 0.015,
     alignSelf: "center",
+    justifyContent: "center",
     marginBottom: 2,
   },
   topText: {
-    fontSize: 40,
+    fontSize: ScreenHeight * 0.05,
     color: "white",
+    textAlignVertical: "center",
     textAlign: "center",
     paddingTop: 3,
     fontWeight: "bold",
@@ -361,20 +391,21 @@ const OverviewScreenStyle = StyleSheet.create({
   itemContainer: {
     alignSelf: "center",
     flexDirection: "row",
-    paddingTop: 30,
+    paddingTop: ScreenHeight * 0.023,
   },
   levelTextContatiner: {
-    width: 16,
+    width: ScreenWidth * 0.1,
   },
   levelText: {
-    fontSize: 16,
+    fontSize: ScreenHeight * 0.025,
+    textAlign: "center",
     color: "#1772A6",
     fontWeight: "bold",
   },
   degreeText: {
-    marginLeft: 8,
-    fontSize: 36,
-    paddingTop: 15,
+    marginLeft: ScreenWidth * 0.015,
+    fontSize: 35,
+    paddingTop: ScreenHeight * 0.02,
     color: "#1772A6",
     fontWeight: "bold",
   },
@@ -396,14 +427,15 @@ const OverviewScreenStyle = StyleSheet.create({
     textAlign: "center",
   },
   dateContainer: {
-    marginTop: ScreenHeight / 30,
     alignItems: "center",
+    flex: 1,
   },
   dateText: {
     fontSize: 18,
     color: "#FFFFFF",
   },
   reminderContainer: {
+    position: "absolute",
     marginTop: 65,
     height: ScreenHeight / 11,
     width: ScreenWidth / 1.5,
@@ -411,6 +443,7 @@ const OverviewScreenStyle = StyleSheet.create({
     borderBottomRightRadius: 15,
     backgroundColor: "#D9FFD8",
     flexDirection: "row",
+    zIndex: 1,
   },
   hiddenreminderContainer: {
     marginTop: 65,

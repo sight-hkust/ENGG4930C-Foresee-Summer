@@ -162,8 +162,18 @@ export default class RecordsScreen extends Component {
                 </Text>
               </TouchableOpacity>
 
-              <TouchableOpacity onPress={() => this.setState({ refractive: "3" })}>
-                <Text style={this.state.refractive == "3" ? RecordScreenStyle.selectedMenuText : RecordScreenStyle.unselectedMenuText}>視力</Text>
+              <TouchableOpacity
+                onPress={() => this.setState({ refractive: "3" })}
+              >
+                <Text
+                  style={
+                    this.state.refractive == "3"
+                      ? RecordScreenStyle.selectedMenuText
+                      : RecordScreenStyle.unselectedMenuText
+                  }
+                >
+                  視力
+                </Text>
               </TouchableOpacity>
             </View>
 
@@ -185,7 +195,11 @@ export default class RecordsScreen extends Component {
                     >
                       <Image source={this.state.Leye ? Open : Close} />
                     </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={0.8} onPress={() => this.setState({ Leye: false })} style={{ paddingLeft: 40 }}>
+                    <TouchableOpacity
+                      activeOpacity={0.8}
+                      onPress={() => this.setState({ Leye: false })}
+                      style={{ paddingLeft: 40 }}
+                    >
                       <Image source={this.state.Leye ? Close : Open} />
                     </TouchableOpacity>
                   </View>

@@ -80,7 +80,7 @@ const styles = StyleSheet.create({
   title: {
     alignSelf: "center",
     textAlign: "center",
-    fontSize: FontScale * 25,
+    fontSize: 25,
     color: "white",
   },
   button: {
@@ -96,6 +96,6 @@ const styles = StyleSheet.create({
   },
   buttonTitle: {
     color: "white",
-    fontSize: FontScale * 18,
+    fontSize: 18,
   },
 });

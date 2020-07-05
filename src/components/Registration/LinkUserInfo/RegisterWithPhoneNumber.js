@@ -65,19 +65,14 @@ export const RegisterWithPhoneNumber = ({ navigation }) => {
                     marginTop: ScreenHeight * 0.05,
                   }}
                 >
-                  <Text
-                    style={[
-                      styles.title,
-                      { flex: 3, fontSize: FontScale * 20 },
-                    ]}
-                  >
+                  <Text style={[styles.title, { flex: 4, fontSize: 20 }]}>
                     +852
                   </Text>
                   <TextInput
                     style={{
                       flex: 8,
                       marginLeft: ScreenWidth * 0.02,
-                      fontSize: FontScale * 20,
+                      fontSize: 20,
                       color: "white",
                     }}
                     onChangeText={formikProps.handleChange("phone")}
@@ -136,7 +131,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   title: {
-    fontSize: FontScale * 22,
+    fontSize: 22,
     color: "white",
   },
   button: {

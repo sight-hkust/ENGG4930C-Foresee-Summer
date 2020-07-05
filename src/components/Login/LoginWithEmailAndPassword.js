@@ -147,8 +147,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   registrationNavText: {
-    fontSize: FontScale * 18,
-
+    fontSize: 18,
     color: "#24559E",
   },
 });

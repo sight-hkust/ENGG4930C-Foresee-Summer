@@ -35,8 +35,6 @@ export const getRecordsUpdate = (uid, inactive) => {
       snap.forEach((data) => {
         date.push(data.key);
       });
-      console.log("snap.toJSON()", snap.toJSON());
-      console.log("date", date);
       dispatch(updateRecords(date, snap.toJSON()));
     });
   };
