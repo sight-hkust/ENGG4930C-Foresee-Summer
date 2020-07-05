@@ -80,7 +80,7 @@ class OverviewScreen extends Component {
             height: "100%",
           }}
         >
-          {true /* calDateDifference() */ ? (
+          {calDateDifference() ? (
             <View style={OverviewScreenStyle.reminderContainer}>
               <Icon
                 name="error-outline"
