@@ -63,11 +63,18 @@ class OverviewScreen extends Component {
       });
       this.setState({ accountOwner: user, selectedFamily: user });
     });
-
-    familyMembers.forEach((member) => familyList.push(member));
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const { familyList } = this.state;
+    const { familyMembers } = this.props.familyStore;
+    if (
+      familyMembers &&
+      familyMembers != prevProps.familyStore.familyMembers
+    ) {
+      familyMembers.forEach((member) => familyList.push(member));
+    }
+
     if (
       prevProps.recordStore.records != this.props.recordStore.records &&
       prevProps.recordStore.dateList != this.props.recordStore.dateList
@@ -146,7 +153,6 @@ class OverviewScreen extends Component {
                 <TouchableOpacity
                   style={{
                     width: "110%",
-                    backgroundColor: "red",
                     flexDirection: "row",
                   }}
                   onPress={this._showFamilyListModal}
@@ -235,16 +241,7 @@ class OverviewScreen extends Component {
           </View>
 
           <View style={OverviewScreenStyle.dateContainer}>
-            <Text
-              style={OverviewScreenStyle.dateText}
-              /* onPress={() => {
-              const { familyMembers } = familyStore;
-              navigation.navigate("Family Router", {
-                screen: "Family Records",
-                params: { familyMembers: familyMembers },
-              });
-            }} */
-            >
+            <Text style={OverviewScreenStyle.dateText}>
               最近驗眼日期:{" "}
               {this.state.dateArr == null
                 ? ""
