@@ -40,9 +40,9 @@ const styles = StyleSheet.create({
         flex: 5,
         textAlign: 'center',
         textAlignVertical: 'center',
-        fontSize: FontScale * 18,
+        fontSize: 18,
         color: "#fff",
-        fontFamily: 'Roboto',
+        
         paddingRight: ScreenWidth * 0.02,
         /* marginTop: ScreenHeight * 0.01,
         paddingHorizontal: ScreenWidth * 0.02,

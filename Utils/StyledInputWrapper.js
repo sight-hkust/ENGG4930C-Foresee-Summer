@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
         paddingTop: ScreenWidth * 0.01,
         paddingLeft: ScreenWidth * 0.08,
         textAlign: 'left',
-        fontSize: FontScale * 15,
+        fontSize: 15,
         fontWeight: '700',
         color: '#FFFFFF',
         flexWrap: 'wrap',

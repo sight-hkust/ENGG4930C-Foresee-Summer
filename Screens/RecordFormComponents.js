@@ -229,7 +229,7 @@ export const SPHInput = (props) => {
   };
   const TextinputHandler = (value) => {
     if (isAdj) {
-      if (value <= 700) {
+      if (value <= 700 || value % 25 != 0) {
         //issue error
         isLeft
           ? setStatus({ L_SPH_errors: status.L_SPH_errors, R_SPH_errors: status.R_SPH_errors, Adj_L_SPH_errors: "error", Adj_R_SPH_errors: status.Adj_R_SPH_errors })
@@ -242,7 +242,7 @@ export const SPHInput = (props) => {
       }
       setFieldValue(isLeft ? "Adj_L_SPH" : "Adj_R_SPH", value);
     } else {
-      if (value <= 700) {
+      if (value <= 700 || value % 25 != 0) {
         isLeft
           ? setStatus({ L_SPH_errors: "error", R_SPH_errors: status.R_SPH_errors, Adj_L_SPH_errors: status.Adj_L_SPH_errors, Adj_R_SPH_errors: status.Adj_L_SPH_errors })
           : setStatus({ L_SPH_errors: status.L_SPH_errors, R_SPH_errors: "error", Adj_L_SPH_errors: status.Adj_L_SPH_errors, Adj_R_SPH_errors: status.Adj_L_SPH_errors });
@@ -332,7 +332,7 @@ export const SPHInput = (props) => {
             <TextInput onChangeText={(value) => TextinputHandler(value)} keyboardType="numeric" style={FormItemStyle.answerInputBox} />
           </View>
 
-          {status != undefined && TooSmallError() && <Text style={FormItemStyle.errortext}>應大於700度</Text>}
+          {status != undefined && TooSmallError() && <Text style={FormItemStyle.errortext}>應大於700度並以00, 25, 50或75作尾</Text>}
           {status != undefined && EmptyError() && <Text style={FormItemStyle.errortext}>此項必填</Text>}
         </>
       )}
@@ -392,7 +392,7 @@ export const CYLInput = (props) => {
 
   const TextinputHandler = (value) => {
     if (isAdj) {
-      if (value <= 700) {
+      if (value <= 700 || value % 25 != 0) {
         //issue error
         isLeft
           ? setStatus({ L_CYL_errors: status.L_CYL_errors, R_CYL_errors: status.R_CYL_errors, Adj_L_CYL_errors: "error", Adj_R_CYL_errors: status.Adj_R_CYL_errors })
@@ -405,7 +405,7 @@ export const CYLInput = (props) => {
       }
       setFieldValue(isLeft ? "Adj_L_CYL" : "Adj_R_CYL", value);
     } else {
-      if (value <= 700) {
+      if (value <= 700 || value % 25 != 0) {
         isLeft
           ? setStatus({ L_CYL_errors: "error", R_CYL_errors: status.R_CYL_errors, Adj_L_CYL_errors: status.Adj_L_CYL_errors, Adj_R_CYL_errors: status.Adj_L_CYL_errors })
           : setStatus({ L_CYL_errors: status.L_CYL_errors, R_CYL_errors: "error", Adj_L_CYL_errors: status.Adj_L_CYL_errors, Adj_R_CYL_errors: status.Adj_L_CYL_errors });
@@ -470,7 +470,7 @@ export const CYLInput = (props) => {
           )}
         </View>
       )}
-      {status != undefined && TooSmallError() && <Text style={FormItemStyle.errortext}>應大於700度</Text>}
+      {status != undefined && TooSmallError() && <Text style={FormItemStyle.errortext}>應大於700度並以00, 25, 50或75作尾</Text>}
       {status != undefined && EmptyError() && <Text style={FormItemStyle.errortext}>此項必填</Text>}
       <View>{isable && <AxisInputB setFieldValue={setFieldValue} isLeft={isLeft} isAdj={isAdj} />}</View>
     </View>
