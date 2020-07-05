@@ -51,7 +51,7 @@ export default class ArticleDetailScreen extends Component {
   async _handleVidRef(playing) {
     const { video } = this.state;
     var vid;
-    if (video == "假近視的迷思mp4compress_trimmed.mp4") {
+    if (video.slice(-16) == "_mp4compress.mp4") {
       vid = await storage.ref(video).getDownloadURL();
       console.log(vid);
     } else vid = video;
