@@ -1,17 +1,10 @@
 import React, { Component } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  FlatList,
-  Image,
-  ScrollView,
-} from "react-native";
+import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image, ScrollView } from "react-native";
 import { database, auth } from "../../config/config";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { LinearGradient } from "expo-linear-gradient";
 import { Button, Icon } from "react-native-elements";
+import DisplayRecords from "../../../helpers/displayRecord";
 import moment from "moment";
 
 export default class ProfPatientViewScreen extends Component {
@@ -23,6 +16,7 @@ export default class ProfPatientViewScreen extends Component {
       },
       records: [],
       recordsIndex: -1,
+      isAdj: true,
     };
   }
 
@@ -34,9 +28,7 @@ export default class ProfPatientViewScreen extends Component {
       });
     });
 
-    let recordViewRef = database.ref(
-      "professionals/" + auth.currentUser.uid + "/patients/" + key + "/records"
-    );
+    let recordViewRef = database.ref("professionals/" + auth.currentUser.uid + "/patients/" + key + "/records");
 
     //For temp use with patient no account
     if (inactive) {
@@ -67,68 +59,6 @@ export default class ProfPatientViewScreen extends Component {
     const recordsIndex = this.state.recordsIndex;
     const curRecord = records[recordsIndex];
 
-    const calSPH = (isLeft) => {
-      if (isLeft) {
-        if (curRecord.L_Myopia != 0) {
-          //myopia, add - sign
-          var num = parseFloat(curRecord.L_Myopia) / 100;
-          return "-" + num.toFixed(2);
-        } else if (curRecord.L_Hyperopia != 0) {
-          //hyperopia, add + sign
-          var num = parseFloat(curRecord.L_Hyperopia) / 100;
-          return "+" + num.toFixed(2);
-        } else {
-          return "0.00";
-        }
-      } else {
-        if (curRecord.R_Myopia != 0) {
-          //myopia, add - sign
-          var num = parseFloat(curRecord.R_Myopia) / 100;
-          return "-" + num.toFixed(2);
-        } else if (curRecord.R_Hyperopia != 0) {
-          //hyperopia, add + sign
-          var num = parseFloat(curRecord.R_Hyperopia) / 100;
-          return "+" + num.toFixed(2);
-        } else {
-          return "0.00";
-        }
-      }
-    };
-
-    const calCYL = (isLeft) => {
-      if (isLeft && curRecord.L_CYL != 0) {
-        var num = parseFloat(curRecord.L_CYL) / 100;
-        return "-" + num.toFixed(2);
-      } else if (!isLeft && curRecord.R_CYL != 0) {
-        var num = parseFloat(curRecord.R_CYL) / 100;
-        return "-" + num.toFixed(2);
-      } else {
-        return "0.00";
-      }
-    };
-
-    const calAxis = (isLeft) => {
-      if (isLeft) {
-        if (curRecord.L_CYL != 0 && curRecord.L_CYL != " ")
-          return curRecord.L_Axis;
-        else return "NA";
-      } else {
-        if (curRecord.R_CYL != 0 && curRecord.R_CYL != " ")
-          return curRecord.R_Axis;
-        else return "NA";
-      }
-    };
-
-    const calVA = (isLeft) => {
-      if (isLeft) {
-        if (curRecord.L_VA != 0 && curRecord.L_VA != " ") return curRecord.L_VA;
-        else return "NA";
-      } else {
-        if (curRecord.R_VA != 0 && curRecord.R_VA != " ") return curRecord.R_VA;
-        else return "NA";
-      }
-    };
-
     return (
       <View style={styles.fullscreen}>
         <LinearGradient
@@ -147,29 +77,13 @@ export default class ProfPatientViewScreen extends Component {
                 {info.firstName}
               </Text>
             </View>
-            <ScrollView
-              style={{ flex: 1, marginVertical: 20, marginHorizontal: 30 }}
-            >
-              <Text style={styles.profileText}>
-                年齡: {Math.abs(moment(info.birthday).diff(moment(), "years"))}
-              </Text>
+            <ScrollView style={{ flex: 1, marginVertical: 20, marginHorizontal: 30 }}>
+              <Text style={styles.profileText}>年齡: {Math.abs(moment(info.birthday).diff(moment(), "years"))}</Text>
               <Text style={styles.profileText}>職業: {info.job}</Text>
-              <Text style={styles.profileText}>家庭病史:</Text>
-              {info.history != "" ? (
-                <Text style={[styles.profileText, { paddingLeft: 20 }]}>
-                  {info.history}
-                </Text>
-              ) : (
-                <></>
-              )}
+              <Text style={styles.profileText}>家族病史:</Text>
+              {info.history != "" ? <Text style={[styles.profileText, { paddingLeft: 20 }]}>{info.history}</Text> : <></>}
               <Text style={styles.profileText}>已知眼疾:</Text>
-              {info.disease != "" ? (
-                <Text style={[styles.profileText, { paddingLeft: 20 }]}>
-                  {info.disease}
-                </Text>
-              ) : (
-                <></>
-              )}
+              {info.disease != "" ? <Text style={[styles.profileText, { paddingLeft: 20 }]}>{info.disease}</Text> : <></>}
             </ScrollView>
           </>
           <View
@@ -184,44 +98,26 @@ export default class ProfPatientViewScreen extends Component {
           >
             <View style={styles.boxes}>
               {recordsLen == 0 ? (
-                <Text style={styles.noDataText}>
-                  {"暫無數據\n請按 + 輸入資料"}
-                </Text>
+                <Text style={styles.noDataText}>{"暫無數據\n請按 + 輸入資料"}</Text>
               ) : (
                 <View style={{ height: "100%" }}>
                   <View style={styles.datesButton}>
                     {recordsLen == 1 ? (
-                      <Icon
-                        name="swapleft"
-                        type="antdesign"
-                        size={36}
-                        color="rgba(45, 156, 259, 0.2)"
-                      />
+                      <Icon name="swapleft" type="antdesign" size={36} color="rgba(45, 156, 259, 0.2)" />
                     ) : (
                       <TouchableOpacity
                         onPress={() =>
                           this.setState({
-                            recordsIndex:
-                              (recordsIndex + recordsLen - 1) % recordsLen,
+                            recordsIndex: (recordsIndex + recordsLen - 1) % recordsLen,
                           })
                         }
                       >
-                        <Icon
-                          name="swapleft"
-                          type="antdesign"
-                          size={36}
-                          color="#2D9CDB"
-                        />
+                        <Icon name="swapleft" type="antdesign" size={36} color="#2D9CDB" />
                       </TouchableOpacity>
                     )}
                     <Text style={styles.dateText}>{curRecord.date}</Text>
                     {recordsLen == 1 ? (
-                      <Icon
-                        name="swapright"
-                        type="antdesign"
-                        size={36}
-                        color="rgba(45, 156, 259, 0.2)"
-                      />
+                      <Icon name="swapright" type="antdesign" size={36} color="rgba(45, 156, 259, 0.2)" />
                     ) : (
                       <TouchableOpacity
                         onPress={() =>
@@ -230,88 +126,12 @@ export default class ProfPatientViewScreen extends Component {
                           })
                         }
                       >
-                        <Icon
-                          name="swapright"
-                          type="antdesign"
-                          size={36}
-                          color="#2D9CDB"
-                        />
+                        <Icon name="swapright" type="antdesign" size={36} color="#2D9CDB" />
                       </TouchableOpacity>
                     )}
                   </View>
-                  <Grid style={{ flex: 5 }}>
-                    <Row>
-                      <Col style={styles.container}></Col>
-                      <Col style={styles.container}>
-                        <Text style={styles.dateText}>O.D.</Text>
-                      </Col>
-                      <Col style={styles.container}>
-                        <Text style={styles.dateText}>O.S.</Text>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridHeader}>SPH:</Text>
-                      </Col>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridText}>{calSPH(false)}</Text>
-                      </Col>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridText}>{calSPH(true)}</Text>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridHeader}>CYL:</Text>
-                      </Col>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridText}>{calCYL(false)}</Text>
-                      </Col>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridText}>{calCYL(true)}</Text>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridHeader}>AXIS:</Text>
-                      </Col>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridText}>{calAxis(false)}</Text>
-                      </Col>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridText}>{calAxis(true)}</Text>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridHeader}>VA:</Text>
-                      </Col>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridText}>{calVA(false)}</Text>
-                      </Col>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridText}>{calVA(true)}</Text>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridHeader}>PD:</Text>
-                      </Col>
-                      <Col style={[styles.container, { flex: 2 }]}>
-                        <Text style={styles.gridText}>
-                          {curRecord.PD == "0" ? "NA" : curRecord.PD + "mm"}
-                        </Text>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridHeader}>備註:</Text>
-                      </Col>
-                      <Col style={[styles.container, { flex: 2 }]}>
-                        <Text style={styles.gridText}>{curRecord.remarks}</Text>
-                      </Col>
-                    </Row>
-                  </Grid>
+                  <DisplayRecords curRecord={curRecord} isAdj={this.state.isAdj} />
+                  <Button title={this.state.isAdj ? "查看真實度數" : "查看調整度數"} onPress={this.setState({ isAdj: !this.state.isAdj })} />
                 </View>
               )}
             </View>
