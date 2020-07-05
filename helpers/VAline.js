@@ -51,17 +51,38 @@ export const renderDots = (config) => {
   };
 
   const y_scale = (L_VA, R_VA) => {
-    if (L_VA == "20/16" || L_VA == "20/20" || L_VA == "20/25") {
-      return height / 3 - 15;
+    if (parseInt(L_VA.substring(0, 1)) == 2) {
+      //used 20/20
+      const L_backNum = parseInt(L_VA.substring(3));
+      const R_backNum = parseInt(R_VA.substring(3));
+      if (L_backNum >= 30 || R_backNum >= 30) {
+        return (height / 3 - 15) * 3;
+      } else if (L_backNum >= 25 || R_backNum >= 25) {
+        return (height / 3 - 15) * 2;
+      } else {
+        return height / 3 - 15;
+      }
+    } else if (parseInt(L_VA.substring(0, 1)) == 6) {
+      //used 6/6
+      const L_backNum = parseInt(L_VA.substring(2));
+      const R_backNum = parseInt(R_VA.substring(2));
+      if (L_backNum >= 9 || R_backNum >= 9) {
+        return (height / 3 - 15) * 3;
+      } else if (L_backNum >= 7.5 || R_backNum >= 7.5) {
+        return (height / 3 - 15) * 2;
+      } else {
+        return height / 3 - 15;
+      }
     }
     //["20/800", "20/400", "20/200", "20/100", "20/50", "20/40", "20/30", "20/25", "20/20", "20/16"];
+    //["6/240", "6/120", "6/60", "6/30", "6/15", "6/12", "6/9", "6/7.5", "6/6", "6/4.8"];
   };
 
   config.dateArr.forEach((item, index) => {
     //console.log("selected index:",full_dateArr[selectedIndex])
     //const cx = paddingRight/2 + (index * (width - paddingRight)) / (data.length-1);
     const cx = x_scale(moment(item, "YYYY-MM-DD").toDate(), dateArr);
-    const cy = y_scale(L_VA[index], R_VA[index]);
+    const cy = y_scale("20/20", R_VA[index]);
 
     //console.log(lastIndex);
     output.push(
@@ -78,10 +99,10 @@ export const renderDots = (config) => {
           opacity={"1"}
         />
 
-        <Text x={cx} y={item === full_dateArr[selectedIndex] ? cy + 87 : cy + 75} textAnchor="middle" fill="white" fontSize={item === full_dateArr[selectedIndex] ? "22" : "18"} fontWeight="bold">
+        <Text x={cx} y={item === full_dateArr[selectedIndex] ? 110 : 100} textAnchor="middle" fill="white" fontSize={item === full_dateArr[selectedIndex] ? "22" : "18"} fontWeight="bold">
           {moment(item).format("YYYY")}
         </Text>
-        <Text x={cx} y={cy + 103} textAnchor="middle" fontSize="16" fill={item === full_dateArr[selectedIndex] ? "white" : "none"}>
+        <Text x={cx} y={125} textAnchor="middle" fontSize="16" fill={item === full_dateArr[selectedIndex] ? "white" : "none"}>
           {moment(item).format("D[/]M")}
         </Text>
       </>
