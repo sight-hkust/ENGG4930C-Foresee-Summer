@@ -82,7 +82,7 @@ export const renderDots = (config) => {
     //console.log("selected index:",full_dateArr[selectedIndex])
     //const cx = paddingRight/2 + (index * (width - paddingRight)) / (data.length-1);
     const cx = x_scale(moment(item, "YYYY-MM-DD").toDate(), dateArr);
-    const cy = y_scale("20/20", R_VA[index]);
+    const cy = y_scale(L_VA[index], R_VA[index]);
 
     //console.log(lastIndex);
     output.push(

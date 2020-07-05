@@ -17,7 +17,7 @@ export const RenderVA = (props) => {
     L_VAData.push(data[item].L_VA);
     R_VAData.push(data[item].R_VA);
   }
-  console.log(parseInt(L_VAData[0].substring(0, 2)));
+  //console.log(data);
 
   return (
     <View>
@@ -90,7 +90,7 @@ export const RenderContent = (props) => {
       style={{
         alignSelf: "center",
         backgroundColor: "rgba(255,255,255,0.9)",
-        height: ScreenHeight / 3.2,
+        height: ScreenHeight / 3.5,
         width: ScreenWidth / 1.25,
         borderRadius: 20,
         marginTop: 20,
@@ -113,25 +113,25 @@ export const RenderRating = (props) => {
     const L_backNum = parseInt(VA.substring(3));
 
     if (L_backNum >= 30) {
-      result = "not normal";
+      result = "不正常視力";
     } else if (L_backNum >= 25) {
-      result = "risky";
+      result = "稍低於正常視力";
     } else {
-      result = "normal";
+      result = "正常視力";
     }
   } else if (parseInt(VA.substring(0, 1)) == 6) {
     //used 6/6
     const L_backNum = parseInt(VA.substring(2));
 
     if (L_backNum >= 9) {
-      result = "not normal";
+      result = "不正常視力";
     } else if (L_backNum >= 7.5) {
-      result = "risky";
+      result = "稍低於正常視力";
     } else {
-      result = "normal";
+      result = "正常視力";
     }
   }
-  return <Text>{result}</Text>;
+  return <Text style={RenderVAStyle.description}>{result}</Text>;
 };
 
 const RenderVAStyle = StyleSheet.create({
@@ -140,6 +140,12 @@ const RenderVAStyle = StyleSheet.create({
     textAlign: "center",
     fontSize: 18,
     fontWeight: "bold",
+    color: "#2D9CDB",
+  },
+  description: {
+    marginTop: 5,
+    textAlign: "center",
+    fontSize: 18,
     color: "#2D9CDB",
   },
 });
