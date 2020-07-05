@@ -1,10 +1,22 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View, ScrollView, ActivityIndicator, Image, TouchableOpacity } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  ActivityIndicator,
+  Image,
+  TouchableOpacity,
+} from "react-native";
 import { Icon, ListItem, Button, SearchBar } from "react-native-elements";
 import { Grid, Col, Row } from "react-native-easy-grid";
 //import Icon from 'react-native-vector-icons/FontAwesome';
 
-import { ScreenWidth, ScreenHeight, FontScale } from "../../../constant/Constant";
+import {
+  ScreenWidth,
+  ScreenHeight,
+  FontScale,
+} from "../../../constant/Constant";
 import { auth } from "../../config/config";
 
 import MenuScreen from "../../../Utils/MenuScreen";
@@ -36,7 +48,11 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
   const [showList, setShowList] = useState([]);
 
   useEffect(() => {
-    if (patientList !== null && patientList !== undefined && searchContent === "") {
+    if (
+      patientList !== null &&
+      patientList !== undefined &&
+      searchContent === ""
+    ) {
       setIsLoading(false);
       setShowList(patientList);
     }
@@ -82,7 +98,13 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                 }}
                 inputContainerStyle={{ backgroundColor: "#A6ACE9", height: 35 }}
               />
-              <Icon name="qrcode-scan" type="material-community" color="white" size={30} onPress={() => navigation.navigate("QR Scan")} />
+              <Icon
+                name="qrcode-scan"
+                type="material-community"
+                color="white"
+                size={30}
+                onPress={() => navigation.navigate("QR Scan")}
+              />
             </View>
             <ScrollView
               style={{
@@ -93,9 +115,15 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
               }}
             >
               {showList.length == 0 ? (
-                <Text style={{ textAlign: "center", color: "white", fontSize: 30 }}> 找不到資料 </Text>
+                <Text
+                  style={{ textAlign: "center", color: "white", fontSize: 30 }}
+                >
+                  {" "}
+                  找不到資料{" "}
+                </Text>
               ) : (
                 showList.map((patient, index) => {
+                  console.log(patient);
                   const key = patient.uid;
                   const phone = patient.phone;
                   const inactive = patient.inactive;

@@ -1,11 +1,20 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, FlatList, Image, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  FlatList,
+  Image,
+  ScrollView,
+} from "react-native";
 import { database, auth } from "../../config/config";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { LinearGradient } from "expo-linear-gradient";
 import { Button, Icon } from "react-native-elements";
 import DisplayRecords from "../../../helpers/displayRecord";
 import moment from "moment";
+import { RoundButton } from "../../../Utils/RoundButton";
 
 export default class ProfPatientViewScreen extends Component {
   constructor(props) {
@@ -22,34 +31,45 @@ export default class ProfPatientViewScreen extends Component {
 
   componentDidMount() {
     const { key, inactive } = this.props.route.params;
-    database.ref("userInfo/" + key).once("value", (snapshot) => {
+    console.log(key);
+
+    let userInfo = database.ref("users/" + key);
+    let recordViewRef = database.ref("/users/" + key + "/records");
+
+    //For temp use with patient no account
+    if (inactive) {
+      recordViewRef = database.ref("/userInfo/" + key + "/records");
+      userInfo = database.ref("userInfo/" + key);
+    }
+    userInfo.once("value").then((snapshot) => {
       this.setState({
         info: snapshot.val(),
       });
     });
 
-    let recordViewRef = database.ref("professionals/" + auth.currentUser.uid + "/patients/" + key + "/records");
-
-    //For temp use with patient no account
-    if (inactive) {
-      recordViewRef = database.ref("userInfo/" + key + "/records");
-    }
-
-    recordViewRef.orderByKey().on("value", (snapshot) => {
-      let records = [];
-      let curRecord = {};
-      snapshot.forEach((child) => {
-        const year = child.key.split("-")[0];
-        curRecord = child.val();
-        curRecord.date = child.key;
-        records.push(curRecord);
-      });
-      this.setState({
-        records: records,
-        recordsIndex: records.length - 1,
-      });
-    });
+    recordViewRef
+      .orderByKey()
+      .once("value")
+      .then((snapshot) => {
+        let records = [];
+        let curRecord = {};
+        snapshot.forEach((child) => {
+          const year = child.key.split("-")[0];
+          curRecord = child.val();
+          curRecord.date = child.key;
+          records.push(curRecord);
+        });
+        return records;
+      })
+      .then((data) => this.setRecords(data));
   }
+
+  setRecords = (records) => {
+    this.setState({
+      records: records,
+      recordsIndex: records.length - 1,
+    });
+  };
 
   render() {
     const { key, inactive } = this.props.route.params;
@@ -77,13 +97,29 @@ export default class ProfPatientViewScreen extends Component {
                 {info.firstName}
               </Text>
             </View>
-            <ScrollView style={{ flex: 1, marginVertical: 20, marginHorizontal: 30 }}>
-              <Text style={styles.profileText}>年齡: {Math.abs(moment(info.birthday).diff(moment(), "years"))}</Text>
+            <ScrollView
+              style={{ flex: 1, marginVertical: 20, marginHorizontal: 30 }}
+            >
+              <Text style={styles.profileText}>
+                年齡: {Math.abs(moment(info.birthday).diff(moment(), "years"))}
+              </Text>
               <Text style={styles.profileText}>職業: {info.job}</Text>
               <Text style={styles.profileText}>家族病史:</Text>
-              {info.history != "" ? <Text style={[styles.profileText, { paddingLeft: 20 }]}>{info.history}</Text> : <></>}
+              {info.history != "" ? (
+                <Text style={[styles.profileText, { paddingLeft: 20 }]}>
+                  {info.history}
+                </Text>
+              ) : (
+                <></>
+              )}
               <Text style={styles.profileText}>已知眼疾:</Text>
-              {info.disease != "" ? <Text style={[styles.profileText, { paddingLeft: 20 }]}>{info.disease}</Text> : <></>}
+              {info.disease != "" ? (
+                <Text style={[styles.profileText, { paddingLeft: 20 }]}>
+                  {info.disease}
+                </Text>
+              ) : (
+                <></>
+              )}
             </ScrollView>
           </>
           <View
@@ -98,26 +134,44 @@ export default class ProfPatientViewScreen extends Component {
           >
             <View style={styles.boxes}>
               {recordsLen == 0 ? (
-                <Text style={styles.noDataText}>{"暫無數據\n請按 + 輸入資料"}</Text>
+                <Text style={styles.noDataText}>
+                  {"暫無數據\n請按 + 輸入資料"}
+                </Text>
               ) : (
                 <View style={{ height: "100%" }}>
                   <View style={styles.datesButton}>
                     {recordsLen == 1 ? (
-                      <Icon name="swapleft" type="antdesign" size={36} color="rgba(45, 156, 259, 0.2)" />
+                      <Icon
+                        name="swapleft"
+                        type="antdesign"
+                        size={36}
+                        color="rgba(45, 156, 259, 0.2)"
+                      />
                     ) : (
                       <TouchableOpacity
                         onPress={() =>
                           this.setState({
-                            recordsIndex: (recordsIndex + recordsLen - 1) % recordsLen,
+                            recordsIndex:
+                              (recordsIndex + recordsLen - 1) % recordsLen,
                           })
                         }
                       >
-                        <Icon name="swapleft" type="antdesign" size={36} color="#2D9CDB" />
+                        <Icon
+                          name="swapleft"
+                          type="antdesign"
+                          size={36}
+                          color="#2D9CDB"
+                        />
                       </TouchableOpacity>
                     )}
                     <Text style={styles.dateText}>{curRecord.date}</Text>
                     {recordsLen == 1 ? (
-                      <Icon name="swapright" type="antdesign" size={36} color="rgba(45, 156, 259, 0.2)" />
+                      <Icon
+                        name="swapright"
+                        type="antdesign"
+                        size={36}
+                        color="rgba(45, 156, 259, 0.2)"
+                      />
                     ) : (
                       <TouchableOpacity
                         onPress={() =>
@@ -126,12 +180,25 @@ export default class ProfPatientViewScreen extends Component {
                           })
                         }
                       >
-                        <Icon name="swapright" type="antdesign" size={36} color="#2D9CDB" />
+                        <Icon
+                          name="swapright"
+                          type="antdesign"
+                          size={36}
+                          color="#2D9CDB"
+                        />
                       </TouchableOpacity>
                     )}
                   </View>
-                  <DisplayRecords curRecord={curRecord} isAdj={this.state.isAdj} />
-                  <Button title={this.state.isAdj ? "查看真實度數" : "查看調整度數"} onPress={this.setState({ isAdj: !this.state.isAdj })} />
+                  <DisplayRecords
+                    curRecord={curRecord}
+                    isAdj={this.state.isAdj}
+                  />
+                  <RoundButton
+                    buttonStyle={{ backgroundColor: "#2D9CDB" }}
+                    textStyle={{ color: "white" }}
+                    title={this.state.isAdj ? "查看真實度數" : "查看調整度數"}
+                    onPress={() => this.setState({ isAdj: !this.state.isAdj })}
+                  />
                 </View>
               )}
             </View>
