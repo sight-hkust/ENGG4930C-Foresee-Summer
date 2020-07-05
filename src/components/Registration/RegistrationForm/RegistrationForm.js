@@ -287,19 +287,19 @@ const FormDetails = ({
               }}
             >
               <InputTextField
-                label={"Surname"}
-                contianerStyle={{ flex: 1, marginRight: "3%" }}
+                label={"Given Name"}
                 iconStyle={{ flex: 0.3 }}
+                contianerStyle={{ flex: 1, marginRight: "3%" }}
                 formikProps={formikProps}
-                formikKey={"surName"}
+                formikKey={"givenName"}
                 hideEmbbededMessage={true}
               />
               <InputTextField
-                label={"Given Name"}
-                iconStyle={{ flex: 0.3 }}
+                label={"Surname"}
                 contianerStyle={{ flex: 1 }}
+                iconStyle={{ flex: 0.3 }}
                 formikProps={formikProps}
-                formikKey={"givenName"}
+                formikKey={"surName"}
                 hideEmbbededMessage={true}
               />
             </View>
@@ -311,7 +311,7 @@ const FormDetails = ({
               <Text
                 style={{
                   textAlignVertical: "center",
-                  fontSize: FontScale * 15,
+                  fontSize: 18,
                   color: "#FFFFFF",
                 }}
               >
@@ -329,7 +329,7 @@ const FormDetails = ({
               <Text
                 style={{
                   textAlignVertical: "center",
-                  fontSize: FontScale * 15,
+                  fontSize: 20,
                   color: "#FFFFFF",
                 }}
               >
@@ -350,7 +350,7 @@ const FormDetails = ({
                 paddingTop: ScreenWidth * 0.01,
                 paddingLeft: ScreenWidth * 0.08,
                 textAlign: "left",
-                fontSize: FontScale * 18,
+                fontSize: FontScale * 20,
                 fontWeight: "700",
                 color: "#FFFFFF",
                 flexWrap: "wrap",
@@ -511,7 +511,7 @@ const FormDetails = ({
               }}
               textStyle={{
                 textAlign: "left",
-                fontSize: FontScale * 15,
+                fontSize: FontScale * 20,
                 color: "#FFFFFF",
               }}
               checkedColor={"#FFFFFF"}

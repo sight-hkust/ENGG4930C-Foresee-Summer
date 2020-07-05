@@ -27,7 +27,11 @@ export const RegisterOptions = ({ navigation }) => {
             </View>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={() => navigation.navigate("Link Exisiting UserInfo")}
+            onPress={() =>
+              navigation.navigate("Registration Form", {
+                isProfessional: false,
+              })
+            }
           >
             <View style={[styles.button]}>
               <Text style={styles.buttonTitle}>普通用戶</Text>
@@ -53,7 +57,7 @@ const styles = StyleSheet.create({
     justifyContent: "flex-start",
   },
   title: {
-    fontSize: 25,
+    fontSize: 32,
     color: "white",
   },
   button: {
@@ -69,6 +73,6 @@ const styles = StyleSheet.create({
   },
   buttonTitle: {
     color: "white",
-    fontSize: 18,
+    fontSize: 22,
   },
 });

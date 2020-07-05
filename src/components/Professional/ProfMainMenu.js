@@ -22,6 +22,7 @@ import { auth } from "../../config/config";
 import MenuScreen from "../../../Utils/MenuScreen";
 import { connect } from "react-redux";
 import { watchPatientListUpdate } from "../../reducers/patientList";
+import { displayName } from "../../helpers/displayName";
 
 /**
  * For Local Search.
@@ -128,7 +129,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                   return (
                     <View key={index}>
                       <ListItem
-                        title={patient.lastName + patient.firstName}
+                        title={displayName(patient)}
                         subtitle={"test".lastReserveDate}
                         rightIcon={
                           <>

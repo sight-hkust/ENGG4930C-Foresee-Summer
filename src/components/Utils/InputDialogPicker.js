@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
     backgroundColor: "rgba(255, 255, 255, 0.4)",
     height: ScreenHeight * 0.065,
     borderRadius: ScreenHeight * 0.035,
-    fontSize:18,
+    fontSize:20,
     paddingHorizontal: "10%",
     color: "#FFFFFF",
     textAlignVertical: "center",
