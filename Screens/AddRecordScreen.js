@@ -1,5 +1,13 @@
 import React, { Component, useState } from "react";
-import { StyleSheet, Text, View, ScrollView, TouchableOpacity, Alert, Animated } from "react-native";
+import {
+  StyleSheet,
+  Text,
+  View,
+  ScrollView,
+  TouchableOpacity,
+  Alert,
+  Animated,
+} from "react-native";
 
 import { Formik } from "formik";
 import moment from "moment";
@@ -9,7 +17,15 @@ import { SchemaRecords } from "../Screens/SchemaRecords";
 import { LinearGradient } from "expo-linear-gradient";
 import { Button } from "react-native-elements";
 
-import { DateSelect, RenderNoraml, RenderCollapseAdj, RemarksInput, DiseasesInput, RenderCollapseVA, RenderCollapsePD } from "../Screens/RecordFormComponents";
+import {
+  DateSelect,
+  RenderNoraml,
+  RenderCollapseAdj,
+  RemarksInput,
+  DiseasesInput,
+  RenderCollapseVA,
+  RenderCollapsePD,
+} from "../Screens/RecordFormComponents";
 
 export default class Form extends Component {
   yScroll = new Animated.Value(0);
@@ -53,8 +69,13 @@ export default class Form extends Component {
 
   render() {
     const mode = this.state.mode;
-    const { isProfessional, professional_id, patient_id, refractive } = this.props.route.params;
-
+    const {
+      isProfessional,
+      professional_id,
+      patient_id,
+      refractive,
+      inactive,
+    } = this.props.route.params;
     return (
       <View style={AddRecordScreen.background}>
         <LinearGradient
@@ -127,10 +148,12 @@ export default class Form extends Component {
               //validationSchema={SchemaRecords}
               onSubmit={(values) => {
                 var exist = false;
-                database.ref("users/" + patient_id + "/records/" + values.date).once("value", (snap) => {
-                  exist = snap.val() !== null;
-                  //console.log(exist);
-                });
+                database
+                  .ref("users/" + patient_id + "/records/" + values.date)
+                  .once("value", (snap) => {
+                    exist = snap.val() !== null;
+                    //console.log(exist);
+                  });
 
                 let data = {
                   L_Myopia: 0,
@@ -210,28 +233,39 @@ export default class Form extends Component {
                   //   )
                   //   .set(data)
                   //   .catch((error) => console.log(error));
-                  var uid;
-                  database.ref("userInfo/" + patient_id).once("value", (snap) => {
-                    uid = snap.val().uid;
-                  });
-
                   database
-                    .ref("users/" + uid + "/records/" + values.date)
-                    .set(data)
-                    .catch((error) => console.log(error));
-                  this.props.navigation.goBack();
-                }
-                if (!exist) {
-                  //no existed record
-                  database
-                    .ref("users/" + patient_id + "/records/" + values.date)
-                    .set(data)
-                    .catch((error) => console.log(error));
-                  this.props.navigation.goBack();
+                    .ref("userInfo/" + patient_id)
+                    .once("value")
+                    .then(function (snapshot) {
+                      console.log(snapshot.val());
+                      return snapshot.val()["uid"];
+                    })
+                    .then((uid) => {
+                      if (!inactive) {
+                        database
+                          .ref("users/" + uid + "/records/" + values.date)
+                          .set(data)
+                          .catch((error) => console.log(error));
+                      } else {
+                        database
+                          .ref("userInfo/" + uid + "/records/" + values.date)
+                          .set(data)
+                          .catch((error) => console.log(error));
+                      }
+                      this.props.navigation.goBack();
+                    });
+                  if (!exist) {
+                    //no existed record
+                    database
+                      .ref("users/" + patient_id + "/records/" + values.date)
+                      .set(data, (err) => console.log(err));
+                  }
                 } else {
                   Alert.alert(
                     "注意！",
-                    "數據庫已存在" + values.date + "的資料，再按提交將會覆蓋舊的資料。",
+                    "數據庫已存在" +
+                      values.date +
+                      "的資料，再按提交將會覆蓋舊的資料。",
                     [
                       {
                         text: "取消",
@@ -240,10 +274,25 @@ export default class Form extends Component {
                       {
                         text: "提交",
                         onPress: () => {
-                          database
-                            .ref("users/" + patient_id + "/records/" + values.date)
-                            .set(data)
-                            .catch((error) => console.log(error));
+                          if (!inactive) {
+                            database
+                              .ref(
+                                "users/" +
+                                  patient_id +
+                                  "/records/" +
+                                  values.date
+                              )
+                              .set(data, (error) => console.log(error));
+                          } else {
+                            database
+                              .ref(
+                                "userInfo/" +
+                                  patient_id +
+                                  "/records/" +
+                                  values.date
+                              )
+                              .set(data, (error) => console.log(error));
+                          }
                           this.props.navigation.navigate("RecordsScreen");
                         },
                       },
@@ -253,18 +302,39 @@ export default class Form extends Component {
                 }
               }}
             >
-              {({ handleSubmit, values, setFieldValue, handleChange, setStatus, status }) => (
+              {({
+                handleSubmit,
+                values,
+                setFieldValue,
+                handleChange,
+                setStatus,
+                status,
+              }) => (
                 <View style={AddRecordScreen.formContainer}>
                   <DateSelect values={values} setFieldValue={setFieldValue} />
 
-                  <RenderNoraml handleChange={handleChange} setFieldValue={setFieldValue} refractive={refractive} setStatus={setStatus} status={status} />
+                  <RenderNoraml
+                    handleChange={handleChange}
+                    setFieldValue={setFieldValue}
+                    refractive={refractive}
+                    setStatus={setStatus}
+                    status={status}
+                  />
 
-                  <RenderCollapseAdj handleChange={handleChange} setFieldValue={setFieldValue} refractive={refractive} setStatus={setStatus} status={status} />
+                  <RenderCollapseAdj
+                    handleChange={handleChange}
+                    setFieldValue={setFieldValue}
+                    refractive={refractive}
+                    setStatus={setStatus}
+                    status={status}
+                  />
                   <RenderCollapseVA setFieldValue={setFieldValue} />
                   <RenderCollapsePD handleChange={handleChange} />
 
                   <RemarksInput handleChange={handleChange} />
-                  {isProfessional && <DiseasesInput setFieldValue={setFieldValue} />}
+                  {isProfessional && (
+                    <DiseasesInput setFieldValue={setFieldValue} />
+                  )}
 
                   <View style={{ paddingTop: 24 }}>
                     <Button
@@ -287,7 +357,10 @@ export default class Form extends Component {
                         status.Adj_R_SPH_errors == "empty"
                       }
                     />
-                    {console.log("@AddRecordScreen submit button errors", status)}
+                    {console.log(
+                      "@AddRecordScreen submit button errors",
+                      status
+                    )}
                   </View>
                 </View>
               )}

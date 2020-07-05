@@ -32,9 +32,9 @@ const styles = StyleSheet.create({
     },
     label: {
         flex: 4,
-        fontSize: FontScale * 18,
+        fontSize: 18,
         color: "#fff",
-        fontFamily: 'Roboto',
+        
         textAlignVertical: 'center'
     },
     inputField: {
@@ -43,8 +43,8 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'white',
         padding: ScreenHeight * 0.02,
-        fontFamily: 'Roboto',
+        
         color: "#fff",
-        fontSize: FontScale * 16,
+        fontSize: 16,
     }
 })
