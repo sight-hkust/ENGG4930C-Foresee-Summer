@@ -68,9 +68,16 @@ export default class EyeExercise extends Component {
       };
       this.setState({ playbackObject: playbackObject });
       playbackObject.setOnPlaybackStatusUpdate(this.onPlaybackStatusUpdate);
-      if (playWhichOne == 0)
+      if (playWhichOne == 0) {
+        //just start, shuffle
+        for (let i = 0; i < audios.length; ++i) {
+          let j = rand(audios.length);
+          let temp = audios[i];
+          audios[i] = audios[j];
+          audios[j] = temp;
+        }
         await playbackObject.loadAsync(intro, status, false);
-      else if (playWhichOne == 1) {
+      } else if (playWhichOne == 1) {
         await playbackObject.loadAsync(audios[audioIndex], status, false);
         this.setState({ audioIndex: audioIndex + 1 });
       } else if (playWhichOne == 2)
@@ -80,13 +87,14 @@ export default class EyeExercise extends Component {
     }
   }
   onPlaybackStatusUpdate = async (status) => {
-    const { playbackObject, playingStatus } = this.state;
+    const { playbackObject, playingStatus, audioIndex } = this.state;
     if (status.didJustFinish) {
       await playbackObject.stopAsync();
       await Brightness.useSystemBrightnessAsync();
       if (playingStatus == 10) this.setState({ playingStatus: 1 });
       else if (playingStatus == 11) {
-        this.setState({ playingStatus: 2 });
+        if (audioIndex == audios.length) this.setState({ playingStatus: 2 });
+        else this.setState({ playingStatus: 1 });
       } else if (playingStatus == 12) this.setState({ playingStatus: 3 });
     }
     this.setState({
@@ -94,15 +102,9 @@ export default class EyeExercise extends Component {
     });
   };
 
-  componentDidMount() {
-    for (let i = 0; i < audios.length; ++i) {
-      let j = rand(audios.length);
-      let temp = audios[i];
-      audios[i] = audios[j];
-      audios[j] = temp;
-    }
+  /*componentDidMount() {
     console.log("mount");
-  }
+  }*/
 
   render() {
     const PressPlayButton = async (playWhichOne) => {
@@ -149,7 +151,14 @@ export default class EyeExercise extends Component {
                 <Text style={styles.text}>
                   你已完成{audioIndex}/{audios.length}段護眼操。{"\n"}想繼續嗎？
                 </Text>
-                <View style={{ flex: 1, alignItems: "center" }}>
+                <View
+                  style={{
+                    flex: 1,
+                    alignItems: "center",
+                    flexDirection: "row",
+                    justifyContent: "space-evenly",
+                  }}
+                >
                   <TouchableOpacity
                     style={styles.boxes}
                     onPress={() => {
@@ -157,6 +166,14 @@ export default class EyeExercise extends Component {
                     }}
                   >
                     <Text style={styles.buttonText}>繼續</Text>
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    style={styles.boxes}
+                    onPress={() => {
+                      if (this.state.isBuffering == false) PressPlayButton(2);
+                    }}
+                  >
+                    <Text style={styles.buttonText}>完前緩和</Text>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -180,7 +197,7 @@ export default class EyeExercise extends Component {
             )}
             {playingStatus == 3 && (
               <View style={styles.secondaryContainer}>
-                <Text style={styles.text}>你已完成今天的護眼操！</Text>
+                <Text style={styles.text}>你已完成這次的護眼操！</Text>
                 <View style={{ flex: 1, alignItems: "center" }}>
                   <TouchableOpacity
                     style={styles.boxes}
