@@ -39,7 +39,7 @@ import TutorialScreen from "./src/components/Tutorial/Tutorial";
 import QrCode from "./src/components/Profile/QrCode";
 import { RegistrationForm } from "./src/components/Registration/RegistrationForm/RegistrationForm";
 import { FamilyRouter } from "./src/components/Family/FamilyRouter";
-import { RegisterNavigator } from "./src/components/Navigators/RegisterNavigator";
+import { RegisterNavigator } from "./src/components/Registration/RegisterNavigator";
 import { SplashScreen } from "./src/components/Splash/SplashScreen";
 
 const Tab = createBottomTabNavigator();

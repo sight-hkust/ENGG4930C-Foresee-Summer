@@ -147,13 +147,13 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   region: {
-    fontSize: 18,
+    fontSize: 20,
     textAlign: "center",
     textAlignVertical: "center",
   },
   textinput: {
     flex: 3.3,
-    fontSize: 18,
+    fontSize: 20,
     color: "#FFFFFF",
     textAlignVertical: "center",
   },
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
   },
   listItemText: {
     flex: 3,
-    fontSize:  18,
+    fontSize:  20,
     textAlign: "left",
     textAlignVertical: "center",
   },

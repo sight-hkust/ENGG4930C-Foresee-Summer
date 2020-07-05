@@ -80,7 +80,7 @@ const PatientSearchPanel = ({
               <View style={{ marginVertical: ScreenHeight * 0.01 }}>
                 <Text
                   style={{
-                    fontSize: 18,
+                    fontSize: 20,
                     textAlignVertical: "center",
                     textAlign: "center",
                   }}

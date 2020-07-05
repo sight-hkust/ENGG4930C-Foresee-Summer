@@ -3,7 +3,7 @@ import React from "react";
 import { InputFieldWrapper } from "./InputFieldWrapper";
 import { TextInput, StyleSheet } from "react-native";
 import { ScreenHeight, FontScale } from "../../../constant/Constant";
-import jsonPathToValue from "./jsonPathToValue";
+import jsonPathToValue from "../../helpers/jsonPathToValue";
 
 export const InputTextField = ({
   contianerStyle,
@@ -59,7 +59,7 @@ const styles = StyleSheet.create({
     borderRadius: ScreenHeight * 0.035,
     width: "100%",
     paddingHorizontal: "10%",
-    fontSize: 18,
+    fontSize: 20,
     color: "#FFFFFF",
     textAlign: "center",
     textAlignVertical: "center",
