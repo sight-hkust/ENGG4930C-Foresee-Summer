@@ -65,6 +65,7 @@ export const RegistrationForm = ({ navigation, route }) => {
             lastName: "",
             surName: "",
             givenName: "",
+            selectedNameField: "chi",
             /* firstNameFilled: false,
             lastNameFilled: false,
             surNameFilled: false,
@@ -319,7 +320,10 @@ const FormDetails = ({
               <RadioButton
                 value="chi"
                 status={selectedNameField === "chi" ? "checked" : "unchecked"}
-                onPress={() => setSelectedNameField("chi")}
+                onPress={() => {
+                  setSelectedNameField("chi");
+                  setFieldValue("selectedNameField", "chi");
+                }}
                 color="#FFFFFF"
                 uncheckedColor="#FFFFFF"
               />
@@ -337,7 +341,10 @@ const FormDetails = ({
               <RadioButton
                 value="eng"
                 status={selectedNameField === "eng" ? "checked" : "unchecked"}
-                onPress={() => setSelectedNameField("eng")}
+                onPress={() => {
+                  setSelectedNameField("eng");
+                  setFieldValue("selectedNameField", "eng");
+                }}
                 color="#FFFFFF"
                 uncheckedColor="#FFFFFF"
               />
