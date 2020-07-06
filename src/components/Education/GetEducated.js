@@ -1,11 +1,22 @@
-import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity, ScrollView, FlatList, Image, Dimensions } from "react-native";
+import {
+  SafeAreaView,
+  StyleSheet,
+  Text,
+  View,
+  TouchableOpacity,
+  ScrollView,
+  FlatList,
+  Image,
+  Dimensions,
+} from "react-native";
 import React, { Component } from "react";
 import { database } from "../../config/config";
 import { LinearGradient } from "expo-linear-gradient";
-import { ScreenWidth, ScreenHeight, FontScale } from "../../../constant/Constant";
-const thumbNail = require("../../../assets/images/interview.png");
-const eyeglasses = require("../../../assets/images/eyeglasses.jpg");
-const Setting = require("../../../assets/images/setting.png");
+import {
+  ScreenWidth,
+  ScreenHeight,
+  FontScale,
+} from "../../../constant/Constant";
 
 export default class GetEducated extends Component {
   constructor(props) {
@@ -56,13 +67,24 @@ export default class GetEducated extends Component {
         <View style={{ flex: 1 }}>
           <View style={GetEducatedScreen.topArticleContainer}>
             <TouchableOpacity onPress={pressHandler}>
-              <Image source={thumbNail} style={GetEducatedScreen.topArticleImage} />
-              <Text style={GetEducatedScreen.topArticleText}>{this.state.topArticle.subject}</Text>
+              <Image
+                source={{ uri: this.state.topArticle.image }}
+                style={GetEducatedScreen.topArticleImage}
+              />
+              <Text style={GetEducatedScreen.topArticleText}>
+                {this.state.topArticle.subject}
+              </Text>
             </TouchableOpacity>
           </View>
 
           <View style={GetEducatedScreen.articleListContainer}>
-            <FlatList data={this.state.data} renderItem={({ item }) => <Item item={item} navigation={this.props.navigation} />} keyExtractor={(item) => item.article_id} />
+            <FlatList
+              data={this.state.data}
+              renderItem={({ item }) => (
+                <Item item={item} navigation={this.props.navigation} />
+              )}
+              keyExtractor={(item) => item.article_id}
+            />
           </View>
         </View>
       </View>
@@ -79,7 +101,10 @@ function Item({ item, navigation }) {
   return (
     <TouchableOpacity onPress={pressHandler}>
       <View style={GetEducatedScreen.articleItem}>
-        <Image source={eyeglasses} style={GetEducatedScreen.itemImage} />
+        <Image
+          source={{ uri: item.image }}
+          style={GetEducatedScreen.itemImage}
+        />
         <View style={{ flex: 1 }}>
           <Text style={GetEducatedScreen.articleSubject}>{item.subject}</Text>
           <Text style={GetEducatedScreen.articleDate}>{item.date}</Text>
