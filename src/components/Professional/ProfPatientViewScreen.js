@@ -193,6 +193,7 @@ export default class ProfPatientViewScreen extends Component {
                     curRecord={curRecord}
                     isAdj={this.state.isAdj}
                   />
+                  <View style={{ height: 20 }} />
                   <RoundButton
                     buttonStyle={{ backgroundColor: "#2D9CDB" }}
                     textStyle={{ color: "white" }}
@@ -284,7 +285,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   datesButton: {
-    flex: 1,
+    flex: 0.25,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",
