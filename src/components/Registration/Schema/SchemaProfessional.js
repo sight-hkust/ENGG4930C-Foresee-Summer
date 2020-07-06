@@ -81,7 +81,40 @@ export const SchemaProfessional = object().shape({
       }),
     otherwise: null,
   }), */
-
+  firstName: string().test({
+    name: "chi_firstname_validation",
+    test: function (val) {
+      let validChineseNameFormat = /^[\u4e00-\u9fa5]$/;
+      if (
+        val === undefined ||
+        val === null ||
+        !validChineseNameFormat.test(val)
+      ) {
+        return this.createError({
+          message: "請輸入有效姓名",
+          path: "lastName",
+        });
+      }
+      return true;
+    },
+  }),
+  lastName: string().test({
+    name: "chi_firstname_validation",
+    test: function (val) {
+      let validChineseNameFormat = /^[\u4e00-\u9fa5]$/;
+      if (
+        val === undefined ||
+        val === null ||
+        !validChineseNameFormat.test(val)
+      ) {
+        return this.createError({
+          message: "請輸入有效姓名",
+          path: "lastName",
+        });
+      }
+      return true;
+    },
+  }),
   role: string().required("請選擇你的角色"),
   /* phone: number()
     .typeError("請輸入數字")

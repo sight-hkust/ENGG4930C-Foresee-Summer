@@ -15,6 +15,7 @@ import { Button, Icon } from "react-native-elements";
 import DisplayRecords from "../../../helpers/displayRecord";
 import moment from "moment";
 import { RoundButton } from "../../../Utils/RoundButton";
+import { displayName } from "../../helpers/displayName";
 
 export default class ProfPatientViewScreen extends Component {
   constructor(props) {
@@ -31,7 +32,8 @@ export default class ProfPatientViewScreen extends Component {
 
   componentDidMount() {
     const { key, inactive } = this.props.route.params;
-    console.log(key);
+
+    console.log(inactive);
 
     let userInfo = database.ref("users/" + key);
     let recordViewRef = database.ref("/users/" + key + "/records");
@@ -73,6 +75,7 @@ export default class ProfPatientViewScreen extends Component {
 
   render() {
     const { key, inactive } = this.props.route.params;
+    console.log(inactive);
     const { info } = this.state;
     const records = this.state.records;
     const recordsLen = records.length;
@@ -92,10 +95,7 @@ export default class ProfPatientViewScreen extends Component {
         >
           <>
             <View style={styles.header}>
-              <Text style={styles.title}>
-                {info.lastName}
-                {info.firstName}
-              </Text>
+              <Text style={styles.title}>{displayName(info)}</Text>
             </View>
             <ScrollView
               style={{ flex: 1, marginVertical: 20, marginHorizontal: 30 }}

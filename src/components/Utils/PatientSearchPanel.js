@@ -10,6 +10,7 @@ import {
   Scale,
 } from "../../../constant/Constant";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { displayName } from "../../helpers/displayName";
 
 const PatientSearchPanel = ({
   patientListStore,
@@ -22,7 +23,7 @@ const PatientSearchPanel = ({
 
   const _handleSelection = (person) => {
     setFieldValue("parent", {
-      name: person.lastName + person.firstName,
+      name: displayName(person),
       uid: person.uid,
     });
     hideFamilySearchDialog();
@@ -41,6 +42,7 @@ const PatientSearchPanel = ({
         (givenName && keyword.includes(givenName))
       );
     });
+    console.log(newResult);
     setResult(newResult);
     setSearch(keyword);
   };
@@ -85,7 +87,7 @@ const PatientSearchPanel = ({
                     textAlign: "center",
                   }}
                 >
-                  {item.lastName + item.firstName}
+                  {displayName(item)}
                 </Text>
               </View>
             </TouchableOpacity>

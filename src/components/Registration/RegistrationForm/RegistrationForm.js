@@ -344,32 +344,26 @@ const FormDetails = ({
               />
             </View>
           </View>
-          {false && (
-            <Text
-              style={{
-                paddingTop: ScreenWidth * 0.01,
-                paddingLeft: ScreenWidth * 0.08,
-                textAlign: "left",
-                fontSize: FontScale * 20,
-                fontWeight: "700",
-                color: "#FFFFFF",
-                flexWrap: "wrap",
-              }}
-            >
-              {formikProps.errors &&
-                (selectedNameField === "chi"
-                  ? formikProps.errors &&
-                    formikProps.errors["name"] &&
-                    formikProps.errors["name"]["lastName"]
-                    ? "* " + formikProps.errors["name"]["lastName"]
-                    : null
-                  : formikProps.errors &&
-                    formikProps.errors["name"] &&
-                    formikProps.errors["name"]["surName"]
-                  ? "* " + formikProps.errors["name"]["surName"]
-                  : null)}
-            </Text>
-          )}
+          <Text
+            style={{
+              paddingTop: ScreenWidth * 0.01,
+              paddingLeft: ScreenWidth * 0.08,
+              textAlign: "left",
+              fontSize: FontScale * 20,
+              fontWeight: "700",
+              color: "#FFFD78",
+              flexWrap: "wrap",
+            }}
+          >
+            {formikProps.errors &&
+              (selectedNameField === "chi"
+                ? formikProps.errors && formikProps.errors["lastName"]
+                  ? "* " + formikProps.errors["lastName"]
+                  : null
+                : formikProps.errors && formikProps.errors["surName"]
+                ? "* " + formikProps.errors["surName"]
+                : null)}
+          </Text>
 
           {isProfessional && !registerPatient ? (
             <InputDialogPicker
