@@ -4,6 +4,7 @@ import { database } from "../../config/config";
 import { LinearGradient } from "expo-linear-gradient";
 import { ScreenWidth, ScreenHeight, FontScale } from "../../../constant/Constant";
 const thumbNail = require("../../../assets/images/interview.png");
+const eyeglasses = require("../../../assets/images/eyeglasses.jpg");
 const Setting = require("../../../assets/images/setting.png");
 
 export default class GetEducated extends Component {
@@ -78,7 +79,7 @@ function Item({ item, navigation }) {
   return (
     <TouchableOpacity onPress={pressHandler}>
       <View style={GetEducatedScreen.articleItem}>
-        <Image source={thumbNail} style={GetEducatedScreen.itemImage} />
+        <Image source={eyeglasses} style={GetEducatedScreen.itemImage} />
         <View style={{ flex: 1 }}>
           <Text style={GetEducatedScreen.articleSubject}>{item.subject}</Text>
           <Text style={GetEducatedScreen.articleDate}>{item.date}</Text>
