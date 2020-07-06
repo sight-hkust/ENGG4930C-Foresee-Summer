@@ -76,7 +76,6 @@ export default class Form extends Component {
       refractive,
       inactive,
     } = this.props.route.params;
-    console.log(inactive, patient_id);
     return (
       <View style={AddRecordScreen.background}>
         <LinearGradient
@@ -238,7 +237,6 @@ export default class Form extends Component {
                     .ref("userInfo/" + patient_id)
                     .once("value")
                     .then(function (snapshot) {
-                      console.log(snapshot.val());
                       return snapshot.val()["uid"];
                     })
                     .then((uid) => {
@@ -258,7 +256,6 @@ export default class Form extends Component {
                   if (!exist) {
                     //no existed record
                     if (!inactive) {
-                      console.log("HERE", inactive);
                       database
                         .ref("users/" + uid + "/records/" + values.date)
                         .set(data)

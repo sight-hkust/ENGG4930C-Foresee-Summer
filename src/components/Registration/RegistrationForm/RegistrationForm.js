@@ -88,7 +88,6 @@ export const RegistrationForm = ({ navigation, route }) => {
             { setSubmitting, resetForm, setStatus, setErrors }
           ) => {
             try {
-              console.log("values: ", JSON.stringify(values));
               isProfessional && registerPatient
                 ? registerPatientAccount({
                     values,
@@ -524,10 +523,6 @@ const FormDetails = ({
           title="提交"
           onPress={() => {
             Keyboard.dismiss();
-            console.log(
-              "formikProps.errors: ",
-              JSON.stringify(formikProps.errors)
-            );
             formikProps.handleSubmit();
           }}
         />

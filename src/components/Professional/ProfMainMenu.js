@@ -123,7 +123,6 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                 </Text>
               ) : (
                 showList.map((patient, index) => {
-                  console.log(patient);
                   const key = patient.uid;
                   const phone = patient.phone;
                   const inactive = patient.inactive;
@@ -148,7 +147,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                               onPress={() => {
                                 navigation.navigate("ProfPatientViewScreen", {
                                   inactive: inactive,
-                                  key: phone.length === 8 ? phone : key,
+                                  key: key,
                                 });
                               }}
                             />
@@ -167,7 +166,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                                 navigation.navigate("AddRecordScreen", {
                                   isProfessional: true,
                                   professional_id: auth.currentUser.uid,
-                                  patient_id: phone.length === 8 ? phone : key,
+                                  patient_id: key,
                                   inactive: inactive,
                                 });
                               }}
@@ -185,7 +184,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                         subtitleStyle={{ color: "white", fontSize: 13 }}
                         onPress={() => {
                           navigation.navigate("ProfPatientViewScreen", {
-                            key: phone.length === 8 ? phone : key,
+                            key: key,
                             inactive: inactive,
                           });
                         }}

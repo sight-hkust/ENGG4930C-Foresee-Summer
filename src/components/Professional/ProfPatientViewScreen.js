@@ -33,8 +33,6 @@ export default class ProfPatientViewScreen extends Component {
   componentDidMount() {
     const { key, inactive } = this.props.route.params;
 
-    console.log(inactive);
-
     let userInfo = database.ref("users/" + key);
     let recordViewRef = database.ref("/users/" + key + "/records");
 
@@ -43,6 +41,7 @@ export default class ProfPatientViewScreen extends Component {
       recordViewRef = database.ref("/userInfo/" + key + "/records");
       userInfo = database.ref("userInfo/" + key);
     }
+
     userInfo.once("value").then((snapshot) => {
       this.setState({
         info: snapshot.val(),
@@ -75,7 +74,6 @@ export default class ProfPatientViewScreen extends Component {
 
   render() {
     const { key, inactive } = this.props.route.params;
-    console.log(inactive);
     const { info } = this.state;
     const records = this.state.records;
     const recordsLen = records.length;
