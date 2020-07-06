@@ -343,26 +343,39 @@ const FormDetails = ({
               />
             </View>
           </View>
-          <Text
-            style={{
-              paddingTop: ScreenWidth * 0.01,
-              paddingLeft: ScreenWidth * 0.08,
-              textAlign: "left",
-              fontSize: FontScale * 20,
-              fontWeight: "700",
-              color: "#FFFD78",
-              flexWrap: "wrap",
-            }}
-          >
-            {formikProps.errors &&
-              (selectedNameField === "chi"
-                ? formikProps.errors && formikProps.errors["lastName"]
-                  ? "* " + formikProps.errors["lastName"]
-                  : null
-                : formikProps.errors && formikProps.errors["surName"]
-                ? "* " + formikProps.errors["surName"]
-                : null)}
-          </Text>
+
+          {formikProps.errors &&
+            (selectedNameField === "chi" ? (
+              formikProps.errors && formikProps.errors["lastName"] ? (
+                <Text
+                  style={{
+                    paddingTop: ScreenWidth * 0.01,
+                    paddingLeft: ScreenWidth * 0.08,
+                    textAlign: "left",
+                    fontSize: FontScale * 20,
+                    fontWeight: "700",
+                    color: "#FFFD78",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  {"* " + formikProps.errors["lastName"]}
+                </Text>
+              ) : null
+            ) : formikProps.errors && formikProps.errors["surName"] ? (
+              <Text
+                style={{
+                  paddingTop: ScreenWidth * 0.01,
+                  paddingLeft: ScreenWidth * 0.08,
+                  textAlign: "left",
+                  fontSize: FontScale * 20,
+                  fontWeight: "700",
+                  color: "#FFFD78",
+                  flexWrap: "wrap",
+                }}
+              >
+                {"* " + formikProps.errors["surName"]}
+              </Text>
+            ) : null)}
 
           {isProfessional && !registerPatient ? (
             <InputDialogPicker

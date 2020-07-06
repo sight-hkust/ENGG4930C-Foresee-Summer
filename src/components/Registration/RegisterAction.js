@@ -107,7 +107,6 @@ export const createAccount = ({
         if (userCreds) {
           userCreds.user.updateProfile({ displayName: "professional" });
         }
-        navigation.navigate("Profile");
         writeUserData({ uid, values, navigation, isProfessional });
       })
       .catch((error) => {
@@ -121,7 +120,6 @@ export const createAccount = ({
         if (userCreds) {
           userCreds.user.updateProfile({ displayName: "user" });
         }
-        navigation.navigate("Profile");
         writeUserData({ uid, values, navigation, isProfessional });
       })
       .catch((error) => {

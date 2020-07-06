@@ -81,40 +81,45 @@ export const SchemaProfessional = object().shape({
       }),
     otherwise: null,
   }), */
-  firstName: string().test({
-    name: "chi_firstname_validation",
-    test: function (val) {
-      let validChineseNameFormat = /^[\u4e00-\u9fa5]$/;
-      if (
-        val === undefined ||
-        val === null ||
-        !validChineseNameFormat.test(val)
-      ) {
-        return this.createError({
-          message: "請輸入有效姓名",
-          path: "lastName",
-        });
-      }
-      return true;
-    },
-  }),
-  lastName: string().test({
-    name: "chi_firstname_validation",
-    test: function (val) {
-      let validChineseNameFormat = /^[\u4e00-\u9fa5]$/;
-      if (
-        val === undefined ||
-        val === null ||
-        !validChineseNameFormat.test(val)
-      ) {
-        return this.createError({
-          message: "請輸入有效姓名",
-          path: "lastName",
-        });
-      }
-      return true;
-    },
-  }),
+  firstName: string()
+    .required("請輸入有效姓名")
+    .test({
+      name: "chi_firstname_validation",
+      test: function (val) {
+        let validChineseNameFormat = /^[\u4E00-\u9FA5]{1,4}$/g;
+        if (
+          val === undefined ||
+          val === null ||
+          !validChineseNameFormat.test(val)
+        ) {
+          console.log(validChineseNameFormat.test(val));
+          return this.createError({
+            message: "請輸入有效姓名",
+            path: "lastName",
+          });
+        }
+        return true;
+      },
+    }),
+  lastName: string()
+    .required("請輸入有效姓名")
+    .test({
+      name: "chi_firstname_validation",
+      test: function (val) {
+        let validChineseNameFormat = /^[\u4E00-\u9FA5]{1,4}$/g;
+        if (
+          val === undefined ||
+          val === null ||
+          !validChineseNameFormat.test(val)
+        ) {
+          return this.createError({
+            message: "請輸入有效姓名",
+            path: "lastName",
+          });
+        }
+        return true;
+      },
+    }),
   role: string().required("請選擇你的角色"),
   /* phone: number()
     .typeError("請輸入數字")
@@ -141,4 +146,5 @@ export const SchemaProfessional = object().shape({
         return this.parent.password && this.parent.password === value;
       }),
   }),
+  email: string().required("請輸入有效電子郵件").email("請輸入有效電子郵件"),
 });
