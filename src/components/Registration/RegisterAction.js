@@ -101,6 +101,7 @@ export const createAccount = ({ values, navigation, isProfessional, registerPati
         if (userCreds) {
           userCreds.user.updateProfile({ displayName: 'user' });
         }
+        navigation.navigate('Tutorial');
         writeUserData({ uid, values, navigation, isProfessional });
       })
       .catch((error) => {
