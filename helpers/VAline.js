@@ -73,7 +73,16 @@ export const renderDots = (config) => {
       } else {
         return height / 3 - 15;
       }
+    } else if (parseInt(L_VA.substring(0, 1) == 0 || parseInt(L_VA.substring(0, 1) == 1))) {
+      //used 1.0
+      const L = parseInt(L_VA);
+      const R = parseInt(R_VA);
+      if (L < 0.8 || R < 0.8) return (height / 3 - 15) * 3;
+      else if (L < 1 || R < 1) return (height / 3 - 15) * 2;
+      else return height / 3 - 15;
     }
+
+    //[0 => 1.25]
     //["20/800", "20/400", "20/200", "20/100", "20/50", "20/40", "20/30", "20/25", "20/20", "20/16"];
     //["6/240", "6/120", "6/60", "6/30", "6/15", "6/12", "6/9", "6/7.5", "6/6", "6/4.8"];
   };

@@ -5,9 +5,11 @@ import { Icon } from "react-native-elements";
 import { ScreenWidth, ScreenHeight } from "../constant/Constant";
 //import { ScrollView } from "react-native-gesture-handler";
 import { RenderDateDots } from "../helpers/VAline";
+import BottomModal from "../Utils/BottomModal";
 const BackArrow = require("../assets/images/BackArrow.png");
 const NextArrow = require("../assets/images/NextArrow.png");
 const VAChart = require("../assets/images/VAChart.png");
+const Tutorial = require("../assets/images/VATutorial.png");
 export const RenderVA = (props) => {
   const { data, dateArr } = props;
   const L_VAData = [];
@@ -99,9 +101,23 @@ export const RenderContent = (props) => {
     >
       <Text style={RenderVAStyle.VAText}>左眼矯正視力：{L_VAData[index]}</Text>
       <RenderRating VA={L_VAData[index]} />
+      <RenderTutorial />
       <Text style={RenderVAStyle.VAText}>右眼矯正視力：{R_VAData[index]}</Text>
       <RenderRating VA={R_VAData[index]} />
+      <RenderTutorial />
     </View>
+  );
+};
+
+export const RenderTutorial = (props) => {
+  cosnt[(isVisible, setVisible)] = useState("false");
+  return (
+    <>
+      <Button title={"?"} onPress={() => setVisible("true")}></Button>
+      <BottomModal style={{ height: 200 }}>
+        <Image source={Tutorial} />
+      </BottomModal>
+    </>
   );
 };
 
