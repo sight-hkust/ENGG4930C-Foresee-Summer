@@ -1,13 +1,19 @@
 import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity, ScrollView, FlatList, Image, Dimensions } from 'react-native';
 import React, { Component } from 'react';
+import Expo from 'expo';
 import { database } from '../../config/config';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ScreenWidth, ScreenHeight, FontScale } from '../../../constant/Constant';
+import HeaderRightButton from '../../../Utils/HeaderRightButton';
 const thumbNail = require('../../../assets/images/interview.png');
 const eyeglasses = require('../../../assets/images/eyeglasses.jpg');
 const Setting = require('../../../assets/images/setting.png');
 
 export default class GetEducated extends Component {
+  static navigationOptions = {
+    title: (navigation) => `Chat with `,
+  };
+
   constructor(props) {
     super(props);
     this.state = {

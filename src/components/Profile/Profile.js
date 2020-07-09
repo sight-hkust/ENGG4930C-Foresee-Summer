@@ -9,8 +9,14 @@ import MenuScreen from '../../../Utils/MenuScreen';
 
 import { connect } from 'react-redux';
 import { watchUserInfoUpdate } from '../../reducers/user';
+import HeaderRightButton from '../../../Utils/HeaderRightButton';
+import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Profile = ({ navigation, route, userInfoStore }) => {
+  navigation.setOptions({
+    headerRight: () => <HeaderRightButton navigation={navigation} type="question" />,
+  });
+
   const [loading, setLoading] = useState(true);
 
   const { user } = userInfoStore;
@@ -85,10 +91,10 @@ const Profile = ({ navigation, route, userInfoStore }) => {
               </Grid>
             </View>
             <View style={styles.bottomMenu}></View>
-            <Button title="詳細設定" type="clear" titleStyle={styles.bottomMenuItem} onPress={() => navigation.navigate('SettingScreen')} />
-            <Button title="程式教學" type="clear" titleStyle={styles.bottomMenuItem} onPress={() => navigation.navigate('Tutorial')} />
-            <Button title="創建子帳戶" type="clear" titleStyle={styles.bottomMenuItem} />
-            <Button title="變更個人資料" type="clear" titleStyle={styles.bottomMenuItem} />
+            <Button title="詳細設定" type="clear" titleStyle={styles.bottomMenuItem} TouchableComponent={TouchableOpacity} onPress={() => navigation.navigate('SettingScreen')} />
+            <Button title="程式教學" type="clear" titleStyle={styles.bottomMenuItem} TouchableComponent={TouchableOpacity} onPress={() => navigation.navigate('Tutorial')} />
+            <Button title="創建子帳戶" type="clear" titleStyle={styles.bottomMenuItem} TouchableComponent={TouchableOpacity} />
+            <Button title="變更個人資料" type="clear" titleStyle={styles.bottomMenuItem} TouchableComponent={TouchableOpacity} />
           </>
         )}
       </View>

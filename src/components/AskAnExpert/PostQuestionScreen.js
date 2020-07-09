@@ -12,6 +12,7 @@ import { RoundButton } from '../../../Utils/RoundButton';
 import { ScreenHeight, ScreenWidth } from '../../../constant/Constant';
 
 import MenuScreen from '../../../Utils/MenuScreen';
+import HeaderRightButton from '../../../Utils/HeaderRightButton';
 
 const PostQuestionSchema = object({
   title: string().required('此項必填'),
@@ -19,6 +20,10 @@ const PostQuestionSchema = object({
 });
 
 const PostQuestionScreen = ({ route, navigation }) => {
+  navigation.setOptions({
+    headerRight: () => <HeaderRightButton navigation={navigation} type="question" />,
+  });
+
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   return (
