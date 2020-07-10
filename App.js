@@ -325,7 +325,7 @@ function Main({ route, navigation }) {
             name="ExerciseScreen"
             component={ExerciseScreen}
             options={{
-              tabBarLabel: "護眼操",
+              tabBarLabel: "護眼運動",
               tabBarIcon: () => (
                 <Image
                   source={require("./assets/images/Exercise_dark.png")}
