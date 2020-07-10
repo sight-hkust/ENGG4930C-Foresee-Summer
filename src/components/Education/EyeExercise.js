@@ -20,18 +20,48 @@ function rand(x) {
 }
 
 var audios = [
-  require("../../../assets/audio/EyeExercise-01.m4a"),
-  require("../../../assets/audio/EyeExercise-02.m4a"),
-  require("../../../assets/audio/EyeExercise-03.m4a"),
-  require("../../../assets/audio/EyeExercise-04.m4a"),
-  require("../../../assets/audio/EyeExercise-05.m4a"),
-  require("../../../assets/audio/EyeExercise-06.m4a"),
-  require("../../../assets/audio/EyeExercise-07.m4a"),
-  require("../../../assets/audio/EyeExercise-08.m4a"),
+  {
+    audio: require("../../../assets/audio/EyeExercise-01.m4a"),
+    image: require("../../../assets/images/EyeExercise-01.gif"),
+  },
+  {
+    audio: require("../../../assets/audio/EyeExercise-02.m4a"),
+    image: require("../../../assets/images/EyeExercise-01.gif"),
+  },
+  {
+    audio: require("../../../assets/audio/EyeExercise-03.m4a"),
+    image: require("../../../assets/images/EyeExercise-01.gif"),
+  },
+  {
+    audio: require("../../../assets/audio/EyeExercise-04.m4a"),
+    image: require("../../../assets/images/EyeExercise-01.gif"),
+  },
+  {
+    audio: require("../../../assets/audio/EyeExercise-05.m4a"),
+    image: require("../../../assets/images/EyeExercise-01.gif"),
+  },
+  {
+    audio: require("../../../assets/audio/EyeExercise-06.m4a"),
+    image: require("../../../assets/images/EyeExercise-01.gif"),
+  },
+  {
+    audio: require("../../../assets/audio/EyeExercise-07.m4a"),
+    image: require("../../../assets/images/EyeExercise-01.gif"),
+  },
+  {
+    audio: require("../../../assets/audio/EyeExercise-08.m4a"),
+    image: require("../../../assets/images/EyeExercise-01.gif"),
+  },
 ];
 
-const intro = require("../../../assets/audio/EyeExercise-Intro.m4a");
-const outro = require("../../../assets/audio/EyeExercise-Outro.m4a");
+const intro = {
+  audio: require("../../../assets/audio/EyeExercise-Intro.m4a"),
+  image: require("../../../assets/images/EyeExercise-Intro.gif"),
+};
+const outro = {
+  audio: require("../../../assets/audio/EyeExercise-Outro.m4a"),
+  image: require("../../../assets/images/EyeExercise-Intro.gif"),
+};
 
 /*
 playingStatus:
@@ -54,12 +84,12 @@ export default class EyeExercise extends Component {
       audioIndex: 0,
       playingStatus: 0,
       isBuffering: false,
+      playingImage: null,
     };
   }
 
   async getAudio(playWhichOne) {
     const { play, volume, audioIndex, playingStatus } = this.state;
-    console.log(audioIndex);
     try {
       const playbackObject = new Audio.Sound();
       const status = {
@@ -67,21 +97,21 @@ export default class EyeExercise extends Component {
         volume,
       };
       this.setState({ playbackObject: playbackObject });
+      var source = null;
       playbackObject.setOnPlaybackStatusUpdate(this.onPlaybackStatusUpdate);
       if (playWhichOne == 0) {
-        //just start, shuffle
+        source = intro;
+        /*
         for (let i = 0; i < audios.length; ++i) {
           let j = rand(audios.length);
           let temp = audios[i];
           audios[i] = audios[j];
           audios[j] = temp;
-        }
-        await playbackObject.loadAsync(intro, status, false);
-      } else if (playWhichOne == 1) {
-        await playbackObject.loadAsync(audios[audioIndex], status, false);
-        this.setState({ audioIndex: audioIndex + 1 });
-      } else if (playWhichOne == 2)
-        await playbackObject.loadAsync(outro, status, false);
+        }*/
+      } else if (playWhichOne == 1) source = audios[audioIndex];
+      else if (playWhichOne == 2) source = outro;
+      await playbackObject.loadAsync(source.audio, status, false);
+      this.setState({ playingImage: source.image });
     } catch (e) {
       console.log(e);
     }
@@ -90,10 +120,12 @@ export default class EyeExercise extends Component {
     const { playbackObject, playingStatus, audioIndex } = this.state;
     if (status.didJustFinish) {
       await playbackObject.stopAsync();
-      await Brightness.useSystemBrightnessAsync();
+      //await Brightness.useSystemBrightnessAsync();
       if (playingStatus == 10) this.setState({ playingStatus: 1 });
       else if (playingStatus == 11) {
-        if (audioIndex == audios.length) this.setState({ playingStatus: 2 });
+        this.setState({ audioIndex: audioIndex + 1 });
+        if (audioIndex == audios.length - 1)
+          this.setState({ playingStatus: 2 });
         else this.setState({ playingStatus: 1 });
       } else if (playingStatus == 12) this.setState({ playingStatus: 3 });
     }
@@ -109,109 +141,129 @@ export default class EyeExercise extends Component {
   render() {
     const PressPlayButton = async (playWhichOne) => {
       await this.getAudio(playWhichOne);
-      await Brightness.setBrightnessAsync(0);
+      //await Brightness.setBrightnessAsync(0);
       const { playbackObject } = this.state;
       await playbackObject.playAsync();
       this.setState({ playingStatus: 10 + playWhichOne });
     };
 
-    const { playingStatus, audioIndex } = this.state;
+    const { playingStatus, audioIndex, playingImage } = this.state;
 
     return (
       <View style={styles.background}>
-        {playingStatus < 10 && (
-          <LinearGradient
-            colors={["#1872a7", "#5a74d1", "#a676ff"]}
-            start={[0, 0.9]}
-            end={[1, 0.1]}
-            locations={[0, 0.5, 1]}
-            style={{
-              height: "100%",
-            }}
-          >
-            {playingStatus == 0 && (
-              <View style={styles.secondaryContainer}>
-                <Text style={styles.text}>
-                  {"眼睛離開手機屏幕，\n按下「開始」，\n跟隨聲音導航開始護眼操"}
-                </Text>
-                <View style={{ flex: 1, alignItems: "center" }}>
-                  <TouchableOpacity
-                    style={styles.boxes}
-                    onPress={() => {
-                      if (this.state.isBuffering == false) PressPlayButton(0);
-                    }}
-                  >
-                    <Text style={styles.buttonText}>開始</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            )}
-            {playingStatus == 1 && (
-              <View style={styles.secondaryContainer}>
-                <Text style={styles.text}>
-                  你已完成{audioIndex}/{audios.length}段護眼操。{"\n"}想繼續嗎？
-                </Text>
-                <View
-                  style={{
-                    flex: 1,
-                    alignItems: "center",
-                    flexDirection: "row",
-                    justifyContent: "space-evenly",
+        <LinearGradient
+          colors={["#1872a7", "#5a74d1", "#a676ff"]}
+          start={[0, 0.9]}
+          end={[1, 0.1]}
+          locations={[0, 0.5, 1]}
+          style={{
+            height: "100%",
+          }}
+        >
+          {playingStatus == 0 && (
+            <View style={styles.secondaryContainer}>
+              <Text style={styles.text}>
+                {"眼睛離開手機屏幕，\n按下「開始」，\n跟隨聲音導航開始護眼操"}
+              </Text>
+              <View style={{ flex: 1, alignItems: "center" }}>
+                <TouchableOpacity
+                  style={styles.boxes}
+                  onPress={() => {
+                    if (this.state.isBuffering == false) PressPlayButton(0);
                   }}
                 >
-                  <TouchableOpacity
-                    style={styles.boxes}
-                    onPress={() => {
-                      if (this.state.isBuffering == false) PressPlayButton(1);
-                    }}
-                  >
-                    <Text style={styles.buttonText}>繼續</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.boxes}
-                    onPress={() => {
-                      if (this.state.isBuffering == false) PressPlayButton(2);
-                    }}
-                  >
-                    <Text style={styles.buttonText}>完前緩和</Text>
-                  </TouchableOpacity>
-                </View>
+                  <Text style={styles.buttonText}>開始</Text>
+                </TouchableOpacity>
               </View>
-            )}
-            {playingStatus == 2 && (
-              <View style={styles.secondaryContainer}>
-                <Text style={styles.text}>
-                  {"你已完成全部護眼操，\n只差讓眼睛緩和的步驟！"}
+            </View>
+          )}
+          {playingStatus == 1 && (
+            <View style={styles.secondaryContainer}>
+              <Text style={styles.text}>
+                你已完成{audioIndex}/{audios.length}段護眼操。{"\n"}
+                <Text style={{ fontSize: 6, lineHeight: 0 }}>
+                  {"甚麼？你看到奇怪的畫面？剛才眼睛要離開手機屏幕哦！\n"}
                 </Text>
-                <View style={{ flex: 1, alignItems: "center" }}>
-                  <TouchableOpacity
-                    style={styles.boxes}
-                    onPress={() => {
-                      if (this.state.isBuffering == false) PressPlayButton(2);
-                    }}
-                  >
-                    <Text style={styles.buttonText}>完前緩和</Text>
-                  </TouchableOpacity>
-                </View>
+                想繼續嗎？
+              </Text>
+              <View
+                style={{
+                  flex: 1,
+                  flexDirection: "row",
+                  justifyContent: "space-evenly",
+                }}
+              >
+                <TouchableOpacity
+                  style={styles.boxes}
+                  onPress={() => {
+                    if (this.state.isBuffering == false) PressPlayButton(1);
+                  }}
+                >
+                  <Text style={styles.buttonText}>繼續</Text>
+                </TouchableOpacity>
+                <TouchableOpacity
+                  style={styles.boxes}
+                  onPress={() => {
+                    if (this.state.isBuffering == false) PressPlayButton(2);
+                  }}
+                >
+                  <Text style={styles.buttonText}>完前緩和</Text>
+                </TouchableOpacity>
               </View>
-            )}
-            {playingStatus == 3 && (
-              <View style={styles.secondaryContainer}>
-                <Text style={styles.text}>你已完成這次的護眼操！</Text>
-                <View style={{ flex: 1, alignItems: "center" }}>
-                  <TouchableOpacity
-                    style={styles.boxes}
-                    onPress={() =>
-                      this.setState({ playingStatus: 0, audioIndex: 0 })
-                    }
-                  >
-                    <Text style={styles.buttonText}>再來一組</Text>
-                  </TouchableOpacity>
-                </View>
+            </View>
+          )}
+          {playingStatus == 2 && (
+            <View style={styles.secondaryContainer}>
+              <Text style={styles.text}>
+                {"你已完成全部護眼操，\n只差讓眼睛緩和的步驟！"}
+              </Text>
+              <View style={{ flex: 1, alignItems: "center" }}>
+                <TouchableOpacity
+                  style={styles.boxes}
+                  onPress={() => {
+                    if (this.state.isBuffering == false) PressPlayButton(2);
+                  }}
+                >
+                  <Text style={styles.buttonText}>完前緩和</Text>
+                </TouchableOpacity>
               </View>
-            )}
-          </LinearGradient>
-        )}
+            </View>
+          )}
+          {playingStatus == 3 && (
+            <View style={styles.secondaryContainer}>
+              <Text style={styles.text}>你已完成這次的護眼操！</Text>
+              <View style={{ flex: 1, alignItems: "center" }}>
+                <TouchableOpacity
+                  style={styles.boxes}
+                  onPress={() =>
+                    this.setState({ playingStatus: 0, audioIndex: 0 })
+                  }
+                >
+                  <Text style={styles.buttonText}>再來一組</Text>
+                </TouchableOpacity>
+              </View>
+            </View>
+          )}
+          {playingStatus >= 10 && (
+            <View style={styles.secondaryContainer}>
+              <View
+                style={{
+                  flex: 4,
+                  alignItems: "center",
+                  padding: 20,
+                  justifyContent: "center",
+                }}
+              >
+                <Image
+                  style={{ width: "100%" }}
+                  source={playingImage}
+                  resizeMode="contain"
+                />
+              </View>
+              <View style={{ flex: 0, alignItems: "center" }} />
+            </View>
+          )}
+        </LinearGradient>
       </View>
     );
   }

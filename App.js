@@ -78,7 +78,7 @@ function ExerciseScreen({ navigation, route }) {
       <Stack.Screen
         name="EyeExerciseScreen"
         component={EyeExerciseScreen}
-        options={{ title: "護眼操" }}
+        options={{ title: "護眼運動" }}
       />
     </Stack.Navigator>
   );
