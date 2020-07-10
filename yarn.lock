@@ -7382,7 +7382,7 @@ react-native-easy-grid@^0.2.2:
   dependencies:
     lodash "^4.17.15"
 
-react-native-elements@^2.0.2:
+react-native-elements@^2.0.4:
   version "2.0.4"
   resolved "https://registry.yarnpkg.com/react-native-elements/-/react-native-elements-2.0.4.tgz#ea5a6bb34cabd48dcd6c6546e4737d2075e40ee3"
   integrity sha512-nIFz47Sk/urOxZX+sqgWF2k7IVL0t9NGsVLg4HC7pN70bsjXMr4VUmS72zioxag3Du8xK1g7lw4vrRX3JQeVYg==
@@ -7572,11 +7572,6 @@ react-native-tags-input@^1.0.10:
   integrity sha512-0uaHZXGZssBpdkYgW/eakk0sa6elVuYAPQePAc617MugoHj3uJtKchMEXe4rf20sKbLKvOnbWV8ku95yyQwkMw==
   dependencies:
     prop-types "^15.7.2"
-
-react-native-tags@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.yarnpkg.com/react-native-tags/-/react-native-tags-2.1.0.tgz#a25ee38075231f75d1ecd4f98160afe81ab2aa16"
-  integrity sha512-B/sPwJedh2ECgjma9txZYPeZUWISRTITJqlRmRtYcmSNCaLim6Aa4zjqgRVrigl3JXk7faeKxds2qaqC6R3+Vg==
 
 react-native-unimodules@~0.9.0:
   version "0.9.1"

@@ -1,15 +1,8 @@
-import React, { Component } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  Image,
-  Button,
-} from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import { Audio } from "expo-av";
-import * as Brightness from "expo-brightness";
+import React, { Component } from 'react';
+import { StyleSheet, Text, View, TouchableOpacity, Image, Button } from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
+import { Audio } from 'expo-av';
+import * as Brightness from 'expo-brightness';
 
 // "https://ia600204.us.archive.org/11/items/hamlet_0911_librivox/hamlet_act5_shakespeare.mp3"
 // "https://ia800500.us.archive.org/10/items/VwFantasiaOngreensleevesmarriner/1-01VaughanWilliams_FantasiaOnGreensleeves.mp3",
@@ -20,18 +13,18 @@ function rand(x) {
 }
 
 var audios = [
-  require("../../../assets/audio/EyeExercise-01.m4a"),
-  require("../../../assets/audio/EyeExercise-02.m4a"),
-  require("../../../assets/audio/EyeExercise-03.m4a"),
-  require("../../../assets/audio/EyeExercise-04.m4a"),
-  require("../../../assets/audio/EyeExercise-05.m4a"),
-  require("../../../assets/audio/EyeExercise-06.m4a"),
-  require("../../../assets/audio/EyeExercise-07.m4a"),
-  require("../../../assets/audio/EyeExercise-08.m4a"),
+  require('../../../assets/audio/EyeExercise-01.m4a'),
+  require('../../../assets/audio/EyeExercise-02.m4a'),
+  require('../../../assets/audio/EyeExercise-03.m4a'),
+  require('../../../assets/audio/EyeExercise-04.m4a'),
+  require('../../../assets/audio/EyeExercise-05.m4a'),
+  require('../../../assets/audio/EyeExercise-06.m4a'),
+  require('../../../assets/audio/EyeExercise-07.m4a'),
+  require('../../../assets/audio/EyeExercise-08.m4a'),
 ];
 
-const intro = require("../../../assets/audio/EyeExercise-Intro.m4a");
-const outro = require("../../../assets/audio/EyeExercise-Outro.m4a");
+const intro = require('../../../assets/audio/EyeExercise-Intro.m4a');
+const outro = require('../../../assets/audio/EyeExercise-Outro.m4a');
 
 /*
 playingStatus:
@@ -80,8 +73,7 @@ export default class EyeExercise extends Component {
       } else if (playWhichOne == 1) {
         await playbackObject.loadAsync(audios[audioIndex], status, false);
         this.setState({ audioIndex: audioIndex + 1 });
-      } else if (playWhichOne == 2)
-        await playbackObject.loadAsync(outro, status, false);
+      } else if (playWhichOne == 2) await playbackObject.loadAsync(outro, status, false);
     } catch (e) {
       console.log(e);
     }
@@ -121,20 +113,18 @@ export default class EyeExercise extends Component {
       <View style={styles.background}>
         {playingStatus < 10 && (
           <LinearGradient
-            colors={["#1872a7", "#5a74d1", "#a676ff"]}
+            colors={['#1872a7', '#5a74d1', '#a676ff']}
             start={[0, 0.9]}
             end={[1, 0.1]}
             locations={[0, 0.5, 1]}
             style={{
-              height: "100%",
+              height: '100%',
             }}
           >
             {playingStatus == 0 && (
               <View style={styles.secondaryContainer}>
-                <Text style={styles.text}>
-                  {"眼睛離開手機屏幕，\n按下「開始」，\n跟隨聲音導航開始護眼操"}
-                </Text>
-                <View style={{ flex: 1, alignItems: "center" }}>
+                <Text style={styles.text}>{'眼睛離開手機屏幕，\n按下「開始」，\n跟隨聲音導航開始護眼操'}</Text>
+                <View style={{ flex: 1, alignItems: 'center' }}>
                   <TouchableOpacity
                     style={styles.boxes}
                     onPress={() => {
@@ -149,14 +139,14 @@ export default class EyeExercise extends Component {
             {playingStatus == 1 && (
               <View style={styles.secondaryContainer}>
                 <Text style={styles.text}>
-                  你已完成{audioIndex}/{audios.length}段護眼操。{"\n"}想繼續嗎？
+                  你已完成{audioIndex}/{audios.length}段護眼操。{'\n'}想繼續嗎？
                 </Text>
                 <View
                   style={{
                     flex: 1,
-                    alignItems: "center",
-                    flexDirection: "row",
-                    justifyContent: "space-evenly",
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                    justifyContent: 'space-evenly',
                   }}
                 >
                   <TouchableOpacity
@@ -180,10 +170,8 @@ export default class EyeExercise extends Component {
             )}
             {playingStatus == 2 && (
               <View style={styles.secondaryContainer}>
-                <Text style={styles.text}>
-                  {"你已完成全部護眼操，\n只差讓眼睛緩和的步驟！"}
-                </Text>
-                <View style={{ flex: 1, alignItems: "center" }}>
+                <Text style={styles.text}>{'你已完成全部護眼操，\n只差讓眼睛緩和的步驟！'}</Text>
+                <View style={{ flex: 1, alignItems: 'center' }}>
                   <TouchableOpacity
                     style={styles.boxes}
                     onPress={() => {
@@ -198,13 +186,8 @@ export default class EyeExercise extends Component {
             {playingStatus == 3 && (
               <View style={styles.secondaryContainer}>
                 <Text style={styles.text}>你已完成這次的護眼操！</Text>
-                <View style={{ flex: 1, alignItems: "center" }}>
-                  <TouchableOpacity
-                    style={styles.boxes}
-                    onPress={() =>
-                      this.setState({ playingStatus: 0, audioIndex: 0 })
-                    }
-                  >
+                <View style={{ flex: 1, alignItems: 'center' }}>
+                  <TouchableOpacity style={styles.boxes} onPress={() => this.setState({ playingStatus: 0, audioIndex: 0 })}>
                     <Text style={styles.buttonText}>再來一組</Text>
                   </TouchableOpacity>
                 </View>
@@ -219,13 +202,13 @@ export default class EyeExercise extends Component {
 
 const styles = StyleSheet.create({
   background: {
-    height: "100%",
-    backgroundColor: "black",
+    height: '100%',
+    backgroundColor: 'black',
   },
   title: {
     fontSize: 30,
-    color: "white",
-    fontWeight: "bold",
+    color: 'white',
+    fontWeight: 'bold',
   },
   secondaryContainer: {
     flex: 1,
@@ -233,28 +216,28 @@ const styles = StyleSheet.create({
     marginTop: 90,
     borderRadius: 30,
     borderWidth: 3,
-    borderColor: "white",
+    borderColor: 'white',
   },
   text: {
     flex: 4,
-    textAlign: "center",
-    textAlignVertical: "center",
+    textAlign: 'center',
+    textAlignVertical: 'center',
     fontSize: 25,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     lineHeight: 32,
-    color: "white",
+    color: 'white',
   },
   boxes: {
     height: 60,
     width: 120,
     borderRadius: 30,
-    backgroundColor: "white",
+    backgroundColor: 'white',
   },
   buttonText: {
     flex: 1,
-    textAlign: "center",
-    textAlignVertical: "center",
+    textAlign: 'center',
+    textAlignVertical: 'center',
     fontSize: 25,
-    color: "#3CA1B7",
+    color: '#3CA1B7',
   },
 });
