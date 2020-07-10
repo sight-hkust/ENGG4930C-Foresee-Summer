@@ -10,6 +10,7 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { Audio } from "expo-av";
 import * as Brightness from "expo-brightness";
+import { ScreenHeight, ScreenWidth } from "../../../constant/Constant";
 
 // "https://ia600204.us.archive.org/11/items/hamlet_0911_librivox/hamlet_act5_shakespeare.mp3"
 // "https://ia800500.us.archive.org/10/items/VwFantasiaOngreensleevesmarriner/1-01VaughanWilliams_FantasiaOnGreensleeves.mp3",
@@ -157,6 +158,7 @@ export default class EyeExercise extends Component {
           locations={[0, 0.5, 1]}
           style={{
             height: "100%",
+            paddingBottom: ScreenHeight * 0.1,
           }}
         >
           {playingStatus == 0 && (
@@ -250,7 +252,7 @@ export default class EyeExercise extends Component {
             /*test*/ playingStatus == 12 && (
               <View
                 style={{
-                  flex: 1,
+                  height: ScreenHeight,
                   justifyContent: "center",
                   backgroundColor: "black",
                 }}
@@ -300,8 +302,9 @@ const styles = StyleSheet.create({
   },
   secondaryContainer: {
     flex: 1,
-    margin: 30,
+    marginHorizontal: 30,
     marginTop: 90,
+    marginBottom: 10,
     borderRadius: 30,
     borderWidth: 3,
     borderColor: "white",

@@ -26,6 +26,7 @@ import {
   RenderCollapseVA,
   RenderCollapsePD,
 } from "../Screens/RecordFormComponents";
+import { ScreenHeight, ScreenWidth } from "../constant/Constant";
 
 export default class Form extends Component {
   yScroll = new Animated.Value(0);
@@ -85,6 +86,7 @@ export default class Form extends Component {
           locations={[0, 0.5, 1]}
           style={{
             height: "100%",
+            paddingBottom: ScreenHeight * 0.1,
           }}
         >
           <ScrollView
@@ -350,7 +352,7 @@ export default class Form extends Component {
                       titleStyle={{ color: "#3CA1B7", fontSize: 18 }}
                       containerStyle={{
                         alignItems: "center",
-                        paddingBottom: 30,
+                        paddingBottom: 10,
                       }}
                       onPress={handleSubmit}
                       disabled={

@@ -241,7 +241,9 @@ function Main({ route, navigation }) {
         activeTintColor: "#003973",
         inactiveTintColor: "#2D9CDB",
         style: {
-          backgroundColor: "#BED8FF",
+          backgroundColor: "transparent",
+          position: "absolute",
+          bottom: 0,
           height: Dimensions.get("window").height * 0.1,
           paddingHorizontal:
             auth.currentUser.displayName == "professional" ? 80 : 30,

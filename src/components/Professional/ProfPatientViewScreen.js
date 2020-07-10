@@ -16,6 +16,7 @@ import DisplayRecords from "../../../helpers/displayRecord";
 import moment from "moment";
 import { RoundButton } from "../../../Utils/RoundButton";
 import { displayName } from "../../helpers/displayName";
+import { ScreenHeight, ScreenWidth } from "../../../constant/Constant";
 
 export default class ProfPatientViewScreen extends Component {
   constructor(props) {
@@ -89,6 +90,7 @@ export default class ProfPatientViewScreen extends Component {
           locations={[0, 0.5, 1]}
           style={{
             height: "100%",
+            paddingBottom: ScreenHeight * 0.1,
           }}
         >
           <>
@@ -126,7 +128,7 @@ export default class ProfPatientViewScreen extends Component {
               justifyContent: "center",
               paddingHorizontal: 30,
               paddingTop: 0,
-              paddingBottom: 15,
+              paddingBottom: 5,
               alignItems: "center",
             }}
           >
@@ -202,7 +204,7 @@ export default class ProfPatientViewScreen extends Component {
               )}
             </View>
 
-            <View style={{ height: 15 }} />
+            <View style={{ height: 20 }} />
 
             <TouchableOpacity
               onPress={() => {
