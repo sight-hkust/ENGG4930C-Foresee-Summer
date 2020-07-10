@@ -26,31 +26,31 @@ var audios = [
   },
   {
     audio: require("../../../assets/audio/EyeExercise-02.m4a"),
-    image: require("../../../assets/images/EyeExercise-01.gif"),
+    image: require("../../../assets/images/EyeExercise-02.gif"),
   },
   {
     audio: require("../../../assets/audio/EyeExercise-03.m4a"),
-    image: require("../../../assets/images/EyeExercise-01.gif"),
+    image: require("../../../assets/images/EyeExercise-03.gif"),
   },
   {
     audio: require("../../../assets/audio/EyeExercise-04.m4a"),
-    image: require("../../../assets/images/EyeExercise-01.gif"),
+    image: require("../../../assets/images/EyeExercise-04.gif"),
   },
   {
     audio: require("../../../assets/audio/EyeExercise-05.m4a"),
-    image: require("../../../assets/images/EyeExercise-01.gif"),
+    image: require("../../../assets/images/EyeExercise-05.gif"),
   },
   {
     audio: require("../../../assets/audio/EyeExercise-06.m4a"),
-    image: require("../../../assets/images/EyeExercise-01.gif"),
+    image: require("../../../assets/images/EyeExercise-06.gif"),
   },
   {
     audio: require("../../../assets/audio/EyeExercise-07.m4a"),
-    image: require("../../../assets/images/EyeExercise-01.gif"),
+    image: require("../../../assets/images/EyeExercise-07.gif"),
   },
   {
     audio: require("../../../assets/audio/EyeExercise-08.m4a"),
-    image: require("../../../assets/images/EyeExercise-01.gif"),
+    image: require("../../../assets/images/EyeExercise-08.gif"),
   },
 ];
 
@@ -60,7 +60,7 @@ const intro = {
 };
 const outro = {
   audio: require("../../../assets/audio/EyeExercise-Outro.m4a"),
-  image: require("../../../assets/images/EyeExercise-Intro.gif"),
+  image: require("../../../assets/images/EyeExercise-Outro.gif"),
 };
 
 /*
@@ -101,13 +101,12 @@ export default class EyeExercise extends Component {
       playbackObject.setOnPlaybackStatusUpdate(this.onPlaybackStatusUpdate);
       if (playWhichOne == 0) {
         source = intro;
-        /*
         for (let i = 0; i < audios.length; ++i) {
           let j = rand(audios.length);
           let temp = audios[i];
           audios[i] = audios[j];
           audios[j] = temp;
-        }*/
+        }
       } else if (playWhichOne == 1) source = audios[audioIndex];
       else if (playWhichOne == 2) source = outro;
       await playbackObject.loadAsync(source.audio, status, false);
@@ -163,7 +162,9 @@ export default class EyeExercise extends Component {
           {playingStatus == 0 && (
             <View style={styles.secondaryContainer}>
               <Text style={styles.text}>
-                {"眼睛離開手機屏幕，\n按下「開始」，\n跟隨聲音導航開始護眼操"}
+                {
+                  "按下「開始」，\n讓眼睛離開手機屏幕，\n跟隨聲音導航開始護眼運動"
+                }
               </Text>
               <View style={{ flex: 1, alignItems: "center" }}>
                 <TouchableOpacity
@@ -180,11 +181,7 @@ export default class EyeExercise extends Component {
           {playingStatus == 1 && (
             <View style={styles.secondaryContainer}>
               <Text style={styles.text}>
-                你已完成{audioIndex}/{audios.length}段護眼操。{"\n"}
-                <Text style={{ fontSize: 6, lineHeight: 0 }}>
-                  {"甚麼？你看到奇怪的畫面？剛才眼睛要離開手機屏幕哦！\n"}
-                </Text>
-                想繼續嗎？
+                你已完成{audioIndex}/{audios.length}段護眼運動。{"\n"}想繼續嗎？
               </Text>
               <View
                 style={{
@@ -215,7 +212,7 @@ export default class EyeExercise extends Component {
           {playingStatus == 2 && (
             <View style={styles.secondaryContainer}>
               <Text style={styles.text}>
-                {"你已完成全部護眼操，\n只差讓眼睛緩和的步驟！"}
+                {"你已完成全部護眼運動，\n只差讓眼睛緩和的步驟！"}
               </Text>
               <View style={{ flex: 1, alignItems: "center" }}>
                 <TouchableOpacity
@@ -231,7 +228,12 @@ export default class EyeExercise extends Component {
           )}
           {playingStatus == 3 && (
             <View style={styles.secondaryContainer}>
-              <Text style={styles.text}>你已完成這次的護眼操！</Text>
+              <Text style={styles.text}>
+                <Text style={{ fontSize: 6, lineHeight: 0 }}>
+                  {"甚麼？你看到奇怪的畫面？剛才眼睛要離開手機屏幕哦！\n"}
+                </Text>
+                你已完成這次的護眼運動！
+              </Text>
               <View style={{ flex: 1, alignItems: "center" }}>
                 <TouchableOpacity
                   style={styles.boxes}
@@ -244,7 +246,24 @@ export default class EyeExercise extends Component {
               </View>
             </View>
           )}
-          {playingStatus >= 10 && (
+          {
+            /*test*/ playingStatus == 12 && (
+              <View
+                style={{
+                  flex: 1,
+                  justifyContent: "center",
+                  backgroundColor: "black",
+                }}
+              >
+                <Image
+                  style={{ width: "100%" }}
+                  source={playingImage}
+                  resizeMode="contain"
+                />
+              </View>
+            )
+          }
+          {playingStatus >= 10 && playingStatus < 12 && (
             <View style={styles.secondaryContainer}>
               <View
                 style={{
