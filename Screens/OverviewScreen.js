@@ -68,10 +68,7 @@ class OverviewScreen extends Component {
   componentDidUpdate(prevProps, prevState) {
     const { familyList } = this.state;
     const { familyMembers } = this.props.familyStore;
-    if (
-      familyMembers &&
-      familyMembers != prevProps.familyStore.familyMembers
-    ) {
+    if (familyMembers && familyMembers != prevProps.familyStore.familyMembers) {
       familyMembers.forEach((member) => familyList.push(member));
     }
 
@@ -125,6 +122,7 @@ class OverviewScreen extends Component {
           locations={[0, 0.5, 1]}
           style={{
             height: "100%",
+            paddingBottom: ScreenHeight * 0.1,
           }}
         >
           {calDateDifference() ? (

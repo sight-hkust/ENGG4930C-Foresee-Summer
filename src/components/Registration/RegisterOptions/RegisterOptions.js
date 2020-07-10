@@ -19,6 +19,7 @@ export const RegisterOptions = ({ navigation }) => {
             onPress={() =>
               navigation.navigate("Registration Form", {
                 isProfessional: true,
+                registerPatient: false,
               })
             }
           >
@@ -30,6 +31,7 @@ export const RegisterOptions = ({ navigation }) => {
             onPress={() =>
               navigation.navigate("Registration Form", {
                 isProfessional: false,
+                registerPatient: false,
               })
             }
           >
