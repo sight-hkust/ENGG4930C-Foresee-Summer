@@ -226,6 +226,9 @@ function SettingButton({ route, navigation }) {
 
 function Main({ route, navigation }) {
   const user = auth.currentUser;
+  useEffect(() => {
+    console.log(auth.currentUser.displayName);
+  }, [auth.currentUser]);
   return (
     <Tab.Navigator
       initialRouteName={

@@ -12,7 +12,10 @@ import { database, auth } from "../../config/config";
 import { Col, Row, Grid } from "react-native-easy-grid";
 import { LinearGradient } from "expo-linear-gradient";
 import { Button, Icon } from "react-native-elements";
+import DisplayRecords from "../../../helpers/displayRecord";
 import moment from "moment";
+import { RoundButton } from "../../../Utils/RoundButton";
+import { displayName } from "../../helpers/displayName";
 
 export default class ProfPatientViewScreen extends Component {
   constructor(props) {
@@ -23,41 +26,51 @@ export default class ProfPatientViewScreen extends Component {
       },
       records: [],
       recordsIndex: -1,
+      isAdj: true,
     };
   }
 
   componentDidMount() {
     const { key, inactive } = this.props.route.params;
-    database.ref("userInfo/" + key).once("value", (snapshot) => {
+
+    let userInfo = database.ref("users/" + key);
+    let recordViewRef = database.ref("/users/" + key + "/records");
+
+    //For temp use with patient no account
+    if (inactive) {
+      recordViewRef = database.ref("/userInfo/" + key + "/records");
+      userInfo = database.ref("userInfo/" + key);
+    }
+
+    userInfo.once("value").then((snapshot) => {
       this.setState({
         info: snapshot.val(),
       });
     });
 
-    let recordViewRef = database.ref(
-      "professionals/" + auth.currentUser.uid + "/patients/" + key + "/records"
-    );
-
-    //For temp use with patient no account
-    if (inactive) {
-      recordViewRef = database.ref("userInfo/" + key + "/records");
-    }
-
-    recordViewRef.orderByKey().on("value", (snapshot) => {
-      let records = [];
-      let curRecord = {};
-      snapshot.forEach((child) => {
-        const year = child.key.split("-")[0];
-        curRecord = child.val();
-        curRecord.date = child.key;
-        records.push(curRecord);
-      });
-      this.setState({
-        records: records,
-        recordsIndex: records.length - 1,
-      });
-    });
+    recordViewRef
+      .orderByKey()
+      .once("value")
+      .then((snapshot) => {
+        let records = [];
+        let curRecord = {};
+        snapshot.forEach((child) => {
+          const year = child.key.split("-")[0];
+          curRecord = child.val();
+          curRecord.date = child.key;
+          records.push(curRecord);
+        });
+        return records;
+      })
+      .then((data) => this.setRecords(data));
   }
+
+  setRecords = (records) => {
+    this.setState({
+      records: records,
+      recordsIndex: records.length - 1,
+    });
+  };
 
   render() {
     const { key, inactive } = this.props.route.params;
@@ -66,68 +79,6 @@ export default class ProfPatientViewScreen extends Component {
     const recordsLen = records.length;
     const recordsIndex = this.state.recordsIndex;
     const curRecord = records[recordsIndex];
-
-    const calSPH = (isLeft) => {
-      if (isLeft) {
-        if (curRecord.L_Myopia != 0) {
-          //myopia, add - sign
-          var num = parseFloat(curRecord.L_Myopia) / 100;
-          return "-" + num.toFixed(2);
-        } else if (curRecord.L_Hyperopia != 0) {
-          //hyperopia, add + sign
-          var num = parseFloat(curRecord.L_Hyperopia) / 100;
-          return "+" + num.toFixed(2);
-        } else {
-          return "0.00";
-        }
-      } else {
-        if (curRecord.R_Myopia != 0) {
-          //myopia, add - sign
-          var num = parseFloat(curRecord.R_Myopia) / 100;
-          return "-" + num.toFixed(2);
-        } else if (curRecord.R_Hyperopia != 0) {
-          //hyperopia, add + sign
-          var num = parseFloat(curRecord.R_Hyperopia) / 100;
-          return "+" + num.toFixed(2);
-        } else {
-          return "0.00";
-        }
-      }
-    };
-
-    const calCYL = (isLeft) => {
-      if (isLeft && curRecord.L_CYL != 0) {
-        var num = parseFloat(curRecord.L_CYL) / 100;
-        return "-" + num.toFixed(2);
-      } else if (!isLeft && curRecord.R_CYL != 0) {
-        var num = parseFloat(curRecord.R_CYL) / 100;
-        return "-" + num.toFixed(2);
-      } else {
-        return "0.00";
-      }
-    };
-
-    const calAxis = (isLeft) => {
-      if (isLeft) {
-        if (curRecord.L_CYL != 0 && curRecord.L_CYL != " ")
-          return curRecord.L_Axis;
-        else return "NA";
-      } else {
-        if (curRecord.R_CYL != 0 && curRecord.R_CYL != " ")
-          return curRecord.R_Axis;
-        else return "NA";
-      }
-    };
-
-    const calVA = (isLeft) => {
-      if (isLeft) {
-        if (curRecord.L_VA != 0 && curRecord.L_VA != " ") return curRecord.L_VA;
-        else return "NA";
-      } else {
-        if (curRecord.R_VA != 0 && curRecord.R_VA != " ") return curRecord.R_VA;
-        else return "NA";
-      }
-    };
 
     return (
       <View style={styles.fullscreen}>
@@ -142,10 +93,7 @@ export default class ProfPatientViewScreen extends Component {
         >
           <>
             <View style={styles.header}>
-              <Text style={styles.title}>
-                {info.lastName}
-                {info.firstName}
-              </Text>
+              <Text style={styles.title}>{displayName(info)}</Text>
             </View>
             <ScrollView
               style={{ flex: 1, marginVertical: 20, marginHorizontal: 30 }}
@@ -154,7 +102,7 @@ export default class ProfPatientViewScreen extends Component {
                 年齡: {Math.abs(moment(info.birthday).diff(moment(), "years"))}
               </Text>
               <Text style={styles.profileText}>職業: {info.job}</Text>
-              <Text style={styles.profileText}>家庭病史:</Text>
+              <Text style={styles.profileText}>家族病史:</Text>
               {info.history != "" ? (
                 <Text style={[styles.profileText, { paddingLeft: 20 }]}>
                   {info.history}
@@ -239,79 +187,17 @@ export default class ProfPatientViewScreen extends Component {
                       </TouchableOpacity>
                     )}
                   </View>
-                  <Grid style={{ flex: 5 }}>
-                    <Row>
-                      <Col style={styles.container}></Col>
-                      <Col style={styles.container}>
-                        <Text style={styles.dateText}>O.D.</Text>
-                      </Col>
-                      <Col style={styles.container}>
-                        <Text style={styles.dateText}>O.S.</Text>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridHeader}>SPH:</Text>
-                      </Col>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridText}>{calSPH(false)}</Text>
-                      </Col>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridText}>{calSPH(true)}</Text>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridHeader}>CYL:</Text>
-                      </Col>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridText}>{calCYL(false)}</Text>
-                      </Col>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridText}>{calCYL(true)}</Text>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridHeader}>AXIS:</Text>
-                      </Col>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridText}>{calAxis(false)}</Text>
-                      </Col>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridText}>{calAxis(true)}</Text>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridHeader}>VA:</Text>
-                      </Col>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridText}>{calVA(false)}</Text>
-                      </Col>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridText}>{calVA(true)}</Text>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridHeader}>PD:</Text>
-                      </Col>
-                      <Col style={[styles.container, { flex: 2 }]}>
-                        <Text style={styles.gridText}>
-                          {curRecord.PD == "0" ? "NA" : curRecord.PD + "mm"}
-                        </Text>
-                      </Col>
-                    </Row>
-                    <Row>
-                      <Col style={styles.container}>
-                        <Text style={styles.gridHeader}>備註:</Text>
-                      </Col>
-                      <Col style={[styles.container, { flex: 2 }]}>
-                        <Text style={styles.gridText}>{curRecord.remarks}</Text>
-                      </Col>
-                    </Row>
-                  </Grid>
+                  <DisplayRecords
+                    curRecord={curRecord}
+                    isAdj={this.state.isAdj}
+                  />
+                  <View style={{ height: 20 }} />
+                  <RoundButton
+                    buttonStyle={{ backgroundColor: "#2D9CDB" }}
+                    textStyle={{ color: "white" }}
+                    title={this.state.isAdj ? "查看真實度數" : "查看調整度數"}
+                    onPress={() => this.setState({ isAdj: !this.state.isAdj })}
+                  />
                 </View>
               )}
             </View>
@@ -397,7 +283,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   datesButton: {
-    flex: 1,
+    flex: 0.25,
     flexDirection: "row",
     justifyContent: "center",
     alignItems: "center",

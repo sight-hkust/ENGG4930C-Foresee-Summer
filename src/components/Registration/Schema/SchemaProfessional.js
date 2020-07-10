@@ -1,87 +1,63 @@
 import { object, string, number } from "yup";
 
 export const SchemaProfessional = object().shape({
-  /* firstName: string().when(["surName", "givenName"], {
-    is: (surName, givenName) => {
-      return  surName === undefined || givenName === undefined;
-    },
-    then: string().test({
-      name: "chi_firstname_validation",
-      test: function (val) {
-        let validChineseNameFormat = /^[\u4e00-\u9fa5]$/;
-        if (
-          val === undefined ||
-          val === null ||
-          !validChineseNameFormat.test(val)
-        ) {
-          return this.createError({
-            message: "請輸入有效姓名",
-            path: "lastName",
-          });
-        }
-        return true;
-      },
-    }),
-    otherwise: null,
-  }), */
-  /* surName: string().when(["lastName", "firstName"], {
-    is: (lastName, firstName) => {
-      return lastName === undefined || firstName === undefined;
-    },
-    then: string() .test({
-      name: "eng_lastname_validation",
-      test: function (val) {
-        let onlyContainEnglishFormat = /^[a-zA-Z ]{3,}$/g;
-        if (!onlyContainEnglishFormat.test(val)) {
-          return this.createError({
-            message: "Please enter a valid name",
-            path: "surName",
-          });
-        }
-        return true;
-      },
-    }),
-    otherwise: null,
-  }), */
-  /* surName: string().when(["firstName", "lastName"], {
-    is: (firstName, lastName) => firstName === "" || lastName === "",
+  firstName: string().when("selectedNameField", {
+    is: (val) => val === "chi",
     then: string()
-      .required("Please enter a valid name")
+      .required("請輸入有效姓名")
       .test({
-        name: "eng_surname_validation",
+        name: "chi_firstname_validation",
         test: function (val) {
-          let onlyContainEnglishFormat = /^[a-zA-Z ]{3,}$/g;
-          if (!onlyContainEnglishFormat.test(val)) {
+          let validChineseNameFormat = /^[\u4E00-\u9FA5]{1,4}$/g;
+          if (
+            val === undefined ||
+            val === null ||
+            !validChineseNameFormat.test(val)
+          ) {
+            console.log(validChineseNameFormat.test(val));
             return this.createError({
-              message: "Please enter a valid name",
-              field: "surName",
+              message: "請輸入有效姓名",
+              path: "lastName",
             });
           }
           return true;
         },
       }),
     otherwise: null,
-  }), */
-  /* lastName: string().when("firstName", {
-    is: (val) => val === "",
-    then: string("Please enter a valid name")
-      .required()
+  }),
+  lastName: string().when("selectedNameField", {
+    is: (val) => val === "chi",
+    then: string()
+      .required("請輸入有效姓名")
       .test({
-        name: "eng_lastname_validation",
+        name: "chi_firstname_validation",
         test: function (val) {
-          let onlyContainEnglishFormat = /^[a-zA-Z ]{3,}$/g;
-          if (!onlyContainEnglishFormat.test(val)) {
+          let validChineseNameFormat = /^[\u4E00-\u9FA5]{1,4}$/g;
+          if (
+            val === undefined ||
+            val === null ||
+            !validChineseNameFormat.test(val)
+          ) {
             return this.createError({
-              message: "Please enter a valid name",
-              field: "surName",
+              message: "請輸入有效姓名",
+              path: "lastName",
             });
           }
           return true;
         },
       }),
     otherwise: null,
-  }), */
-
+  }),
+  surName: string().when("selectedNameField", {
+    is: (val) => val === "eng",
+    then: string().required("Please enter valid name"),
+    otherwise: null,
+  }),
+  lastNameName: string().when("selectedNameField", {
+    is: (val) => val === "eng",
+    then: string().required("Please enter valid name"),
+    otherwise: null,
+  }),
   role: string().required("請選擇你的角色"),
   /* phone: number()
     .typeError("請輸入數字")
@@ -108,4 +84,5 @@ export const SchemaProfessional = object().shape({
         return this.parent.password && this.parent.password === value;
       }),
   }),
+  email: string().required("請輸入有效電子郵件").email("請輸入有效電子郵件"),
 });

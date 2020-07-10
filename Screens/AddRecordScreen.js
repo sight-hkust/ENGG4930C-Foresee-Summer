@@ -237,7 +237,6 @@ export default class Form extends Component {
                     .ref("userInfo/" + patient_id)
                     .once("value")
                     .then(function (snapshot) {
-                      console.log(snapshot.val());
                       return snapshot.val()["uid"];
                     })
                     .then((uid) => {
@@ -256,9 +255,17 @@ export default class Form extends Component {
                     });
                   if (!exist) {
                     //no existed record
-                    database
-                      .ref("users/" + patient_id + "/records/" + values.date)
-                      .set(data, (err) => console.log(err));
+                    if (!inactive) {
+                      database
+                        .ref("users/" + uid + "/records/" + values.date)
+                        .set(data)
+                        .catch((error) => console.log(error));
+                    } else {
+                      database
+                        .ref("userInfo/" + uid + "/records/" + values.date)
+                        .set(data)
+                        .catch((error) => console.log(error));
+                    }
                   }
                 } else {
                   Alert.alert(
@@ -357,10 +364,6 @@ export default class Form extends Component {
                         status.Adj_R_SPH_errors == "empty"
                       }
                     />
-                    {console.log(
-                      "@AddRecordScreen submit button errors",
-                      status
-                    )}
                   </View>
                 </View>
               )}

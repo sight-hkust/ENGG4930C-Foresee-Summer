@@ -65,6 +65,7 @@ export const RegistrationForm = ({ navigation, route }) => {
             lastName: "",
             surName: "",
             givenName: "",
+            selectedNameField: "chi",
             /* firstNameFilled: false,
             lastNameFilled: false,
             surNameFilled: false,
@@ -88,7 +89,6 @@ export const RegistrationForm = ({ navigation, route }) => {
             { setSubmitting, resetForm, setStatus, setErrors }
           ) => {
             try {
-              console.log("values: ", JSON.stringify(values));
               isProfessional && registerPatient
                 ? registerPatientAccount({
                     values,
@@ -320,7 +320,10 @@ const FormDetails = ({
               <RadioButton
                 value="chi"
                 status={selectedNameField === "chi" ? "checked" : "unchecked"}
-                onPress={() => setSelectedNameField("chi")}
+                onPress={() => {
+                  setSelectedNameField("chi");
+                  setFieldValue("selectedNameField", "chi");
+                }}
                 color="#FFFFFF"
                 uncheckedColor="#FFFFFF"
               />
@@ -338,38 +341,48 @@ const FormDetails = ({
               <RadioButton
                 value="eng"
                 status={selectedNameField === "eng" ? "checked" : "unchecked"}
-                onPress={() => setSelectedNameField("eng")}
+                onPress={() => {
+                  setSelectedNameField("eng");
+                  setFieldValue("selectedNameField", "eng");
+                }}
                 color="#FFFFFF"
                 uncheckedColor="#FFFFFF"
               />
             </View>
           </View>
-          {false && (
-            <Text
-              style={{
-                paddingTop: ScreenWidth * 0.01,
-                paddingLeft: ScreenWidth * 0.08,
-                textAlign: "left",
-                fontSize: FontScale * 20,
-                fontWeight: "700",
-                color: "#FFFFFF",
-                flexWrap: "wrap",
-              }}
-            >
-              {formikProps.errors &&
-                (selectedNameField === "chi"
-                  ? formikProps.errors &&
-                    formikProps.errors["name"] &&
-                    formikProps.errors["name"]["lastName"]
-                    ? "* " + formikProps.errors["name"]["lastName"]
-                    : null
-                  : formikProps.errors &&
-                    formikProps.errors["name"] &&
-                    formikProps.errors["name"]["surName"]
-                  ? "* " + formikProps.errors["name"]["surName"]
-                  : null)}
-            </Text>
-          )}
+
+          {formikProps.errors &&
+            (selectedNameField === "chi" ? (
+              formikProps.errors && formikProps.errors["lastName"] ? (
+                <Text
+                  style={{
+                    paddingTop: ScreenWidth * 0.01,
+                    paddingLeft: ScreenWidth * 0.08,
+                    textAlign: "left",
+                    fontSize: FontScale * 20,
+                    fontWeight: "700",
+                    color: "#FFFD78",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  {"* " + formikProps.errors["lastName"]}
+                </Text>
+              ) : null
+            ) : formikProps.errors && formikProps.errors["surName"] ? (
+              <Text
+                style={{
+                  paddingTop: ScreenWidth * 0.01,
+                  paddingLeft: ScreenWidth * 0.08,
+                  textAlign: "left",
+                  fontSize: FontScale * 20,
+                  fontWeight: "700",
+                  color: "#FFFD78",
+                  flexWrap: "wrap",
+                }}
+              >
+                {"* " + formikProps.errors["surName"]}
+              </Text>
+            ) : null)}
 
           {isProfessional && !registerPatient ? (
             <InputDialogPicker
@@ -530,10 +543,6 @@ const FormDetails = ({
           title="提交"
           onPress={() => {
             Keyboard.dismiss();
-            console.log(
-              "formikProps.errors: ",
-              JSON.stringify(formikProps.errors)
-            );
             formikProps.handleSubmit();
           }}
         />

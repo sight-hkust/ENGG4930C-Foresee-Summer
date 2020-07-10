@@ -1,28 +1,20 @@
-import { auth, database } from "../../config/config";
-import moment from "moment";
-import * as Random from "expo-random";
-import { nanoid } from "nanoid/async/index.native";
+import { auth, database } from '../../config/config';
+import moment from 'moment';
+import * as Random from 'expo-random';
+import { nanoid } from 'nanoid/async/index.native';
 
-const writeUserData = ({
-  uid = null,
-  values,
-  isProfessional,
-  patientUUID,
-  registerPatient = false,
-}) => {
+const writeUserData = ({ uid = null, values, isProfessional, patientUUID, registerPatient = false }) => {
   if (registerPatient) {
-    database.ref("professionals/" + uid + "/patients/" + patientUUID).set({
-      firstName: values.firstName || "",
-      lastName: values.lastName || "",
-      surName: values.surName || "",
-      givenName: values.givenName || "",
-      phone: values.tel_number
-        ? values.tel_country_code + values.tel_number
-        : "",
+    database.ref('professionals/' + uid + '/patients/' + patientUUID).set({
+      firstName: values.firstName || '',
+      lastName: values.lastName || '',
+      surName: values.surName || '',
+      givenName: values.givenName || '',
+      phone: values.tel_number ? values.tel_country_code + values.tel_number : '',
       uid: patientUUID,
       inactive: true,
     });
-    database.ref("userInfo/" + patientUUID).set({
+    database.ref('userInfo/' + patientUUID).set({
       uid: patientUUID,
       firstName: values.firstName,
       lastName: values.lastName,
@@ -33,18 +25,16 @@ const writeUserData = ({
       disease: values.disease,
     });
     if (!values.parentSelectionDisalbed && values.parent.uid) {
-      database
-        .ref("userInfo/" + values.parent.uid + "/familyMembers/" + patientUUID)
-        .set({
-          firstName: values.firstName,
-          lastName: values.lastName,
-          inactive: true,
-          uid: patientUUID,
-        });
+      database.ref('userInfo/' + values.parent.uid + '/familyMembers/' + patientUUID).set({
+        firstName: values.firstName,
+        lastName: values.lastName,
+        inactive: true,
+        uid: patientUUID,
+      });
     }
   } else {
     if (!isProfessional) {
-      database.ref("/users/" + uid).set({
+      database.ref('/users/' + uid).set({
         uid: uid,
         email: values.email,
         phone: values.tel_country_code + values.tel_number,
@@ -53,7 +43,7 @@ const writeUserData = ({
         birthday: moment(values.birthday).toJSON(),
         records: {},
       });
-      database.ref("userInfo/" + uid).set({
+      database.ref('userInfo/' + uid).set({
         uid: uid,
         firstName: values.firstName,
         lastName: values.lastName,
@@ -63,7 +53,7 @@ const writeUserData = ({
         allowedSearch: values.allowedSearch,
       });
     } else {
-      database.ref("/professionals/" + uid).set({
+      database.ref('/professionals/' + uid).set({
         uid: uid,
         firstName: values.firstName,
         lastName: values.lastName,
@@ -75,12 +65,7 @@ const writeUserData = ({
   }
 };
 
-export const registerPatientAccount = async ({
-  values,
-  isProfessional,
-  registerPatient,
-  onComplete,
-}) => {
+export const registerPatientAccount = async ({ values, isProfessional, registerPatient, onComplete }) => {
   const uid = auth.currentUser.uid;
   const patientUUID = await nanoid();
   writeUserData({
@@ -93,21 +78,16 @@ export const registerPatientAccount = async ({
   onComplete();
 };
 
-export const createAccount = ({
-  values,
-  navigation,
-  isProfessional,
-  registerPatient,
-}) => {
+export const createAccount = ({ values, navigation, isProfessional, registerPatient }) => {
   if (isProfessional) {
     auth
       .createUserWithEmailAndPassword(values.email, values.password)
       .then(function (userCreds) {
         const uid = userCreds.user.uid;
         if (userCreds) {
-          userCreds.user.updateProfile({ displayName: "professional" });
+          userCreds.user.updateProfile({ displayName: 'professional' });
         }
-        navigation.navigate("Profile");
+        navigation.navigate('Tutorial');
         writeUserData({ uid, values, navigation, isProfessional });
       })
       .catch((error) => {
@@ -119,9 +99,9 @@ export const createAccount = ({
       .then(function (userCreds) {
         const uid = userCreds.user.uid;
         if (userCreds) {
-          userCreds.user.updateProfile({ displayName: "user" });
+          userCreds.user.updateProfile({ displayName: 'user' });
         }
-        navigation.navigate("Profile");
+        navigation.navigate('Tutorial');
         writeUserData({ uid, values, navigation, isProfessional });
       })
       .catch((error) => {

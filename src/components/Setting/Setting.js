@@ -16,7 +16,6 @@ import { auth } from "../../config/config";
 import { RoundButton } from "../../../Utils/RoundButton";
 import { Grid, Col, Row } from "react-native-easy-grid";
 
-
 export default function Setting({ route, navigation }) {
   const [selectedLabel, setSelectedLabel] = useState();
 
