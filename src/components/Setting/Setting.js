@@ -43,7 +43,7 @@ export default function Setting({ route, navigation }) {
           title={"程式教學"}
           containerStyle={styles.listItem}
           titleStyle={styles.title}
-          chevron={{ size: 30, color: "#E1EDFF" }}
+          chevron={{ size: 30 }}
           onPress={() => navigation.navigate("Tutorial")}
         />
         <ListItem
@@ -51,7 +51,7 @@ export default function Setting({ route, navigation }) {
           title={"聯絡我們"}
           containerStyle={styles.listItem}
           titleStyle={styles.title}
-          chevron={{ size: 30, color: "#E1EDFF" }}
+          chevron={{ size: 30 }}
           onPress={() =>
             setSelectedLabel(selectedLabel == "contact-us" ? "" : "contact-us")
           }
@@ -64,7 +64,7 @@ export default function Setting({ route, navigation }) {
           title={"意見反饋"}
           containerStyle={styles.listItem}
           titleStyle={styles.title}
-          chevron={{ size: 30, color: "#E1EDFF" }}
+          chevron={{ size: 30 }}
           onPress={() =>
             setSelectedLabel(selectedLabel == "feedback" ? "" : "feedback")
           }
@@ -77,7 +77,7 @@ export default function Setting({ route, navigation }) {
           title={"權限"}
           containerStyle={styles.listItem}
           titleStyle={styles.title}
-          chevron={{ size: 30, color: "#E1EDFF" }}
+          chevron={{ size: 30 }}
           onPress={() =>
             setSelectedLabel(selectedLabel == "permission" ? "" : "permission")
           }
@@ -90,7 +90,7 @@ export default function Setting({ route, navigation }) {
           title={"條款及細則"}
           containerStyle={styles.listItem}
           titleStyle={{ fontSize: 20, color: "white" }}
-          chevron={{ size: 30, color: "#E1EDFF" }}
+          chevron={{ size: 30 }}
           onPress={() => navigation.navigate("Terms")}
         />
         <ListItem
@@ -98,7 +98,7 @@ export default function Setting({ route, navigation }) {
           title={"私隱政策"}
           containerStyle={styles.listItem}
           titleStyle={{ fontSize: 20, color: "white" }}
-          chevron={{ size: 30, color: "#E1EDFF" }}
+          chevron={{ size: 30 }}
           onPress={() => navigation.navigate("Policy")}
         />
         <ListItem
@@ -106,7 +106,7 @@ export default function Setting({ route, navigation }) {
           title={"登出"}
           containerStyle={styles.listItem}
           titleStyle={styles.title}
-          chevron={{ size: 30, color: "#E1EDFF" }}
+          chevron={{ size: 30 }}
           onPress={() => {
             auth.signOut();
           }}
