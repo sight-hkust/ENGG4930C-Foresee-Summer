@@ -101,16 +101,15 @@ export const RenderContent = (props) => {
     >
       <Text style={RenderVAStyle.VAText}>左眼矯正視力：{L_VAData[index]}</Text>
       <RenderRating VA={L_VAData[index]} />
-      <RenderTutorial />
+
       <Text style={RenderVAStyle.VAText}>右眼矯正視力：{R_VAData[index]}</Text>
       <RenderRating VA={R_VAData[index]} />
-      <RenderTutorial />
     </View>
   );
 };
 
 export const RenderTutorial = (props) => {
-  cosnt[(isVisible, setVisible)] = useState("false");
+  const [isVisible, setVisible] = useState("false");
   return (
     <>
       <Button title={"?"} onPress={() => setVisible("true")}></Button>

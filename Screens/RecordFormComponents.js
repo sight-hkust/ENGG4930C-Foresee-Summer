@@ -707,8 +707,8 @@ const FormItemStyle = StyleSheet.create({
   answerInputBox: {
     width: 70,
     textAlign: "center",
-    paddingLeft: 20,
-    paddingRight: 20,
+    paddingLeft: 5,
+    paddingRight: 5,
     paddingBottom: 2,
     paddingTop: 1,
     backgroundColor: "rgba(256,256,256,0.65)",

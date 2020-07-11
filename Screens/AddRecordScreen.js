@@ -128,7 +128,8 @@ export default class Form extends Component {
                 var exist = false;
                 database.ref("users/" + patient_id + "/records/" + values.date).once("value", (snap) => {
                   exist = snap.val() !== null;
-                  //console.log(exist);
+
+                  console.log(exist);
                 });
 
                 let data = {
@@ -197,6 +198,7 @@ export default class Form extends Component {
                 }
 
                 if (isProfessional) {
+                  //professional user
                   //change, need to also add to users/patient_id/records, but what if the patient doesnt exist? will it automatically create one entry for the patient?
                   // database
                   //   .ref(
@@ -230,33 +232,36 @@ export default class Form extends Component {
                       }
                       this.props.navigation.goBack();
                     });
+                } else {
+                  //not professional user
                   if (!exist) {
                     //no existed record
                     database.ref("users/" + patient_id + "/records/" + values.date).set(data, (err) => console.log(err));
-                  }
-                } else {
-                  Alert.alert(
-                    "注意！",
-                    "數據庫已存在" + values.date + "的資料，再按提交將會覆蓋舊的資料。",
-                    [
-                      {
-                        text: "取消",
-                        style: "cancel",
-                      },
-                      {
-                        text: "提交",
-                        onPress: () => {
-                          if (!inactive) {
-                            database.ref("users/" + patient_id + "/records/" + values.date).set(data, (error) => console.log(error));
-                          } else {
-                            database.ref("userInfo/" + patient_id + "/records/" + values.date).set(data, (error) => console.log(error));
-                          }
-                          this.props.navigation.navigate("RecordsScreen");
+                    this.props.navigation.goBack();
+                  } else {
+                    Alert.alert(
+                      "注意！",
+                      "數據庫已存在" + values.date + "的資料，再按提交將會覆蓋舊的資料。",
+                      [
+                        {
+                          text: "取消",
+                          style: "cancel",
                         },
-                      },
-                    ],
-                    { cancelable: false }
-                  );
+                        {
+                          text: "提交",
+                          onPress: () => {
+                            if (!inactive) {
+                              database.ref("users/" + patient_id + "/records/" + values.date).set(data, (error) => console.log(error));
+                            } else {
+                              database.ref("userInfo/" + patient_id + "/records/" + values.date).set(data, (error) => console.log(error));
+                            }
+                            this.props.navigation.goBack();
+                          },
+                        },
+                      ],
+                      { cancelable: false }
+                    );
+                  }
                 }
               }}
             >
