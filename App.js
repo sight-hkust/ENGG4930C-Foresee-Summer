@@ -41,6 +41,8 @@ import { RegistrationForm } from './src/components/Registration/RegistrationForm
 import { FamilyRouter } from './src/components/Family/FamilyRouter';
 import { RegisterNavigator } from './src/components/Registration/RegisterNavigator';
 import { SplashScreen } from './src/components/Splash/SplashScreen';
+import HeaderRightButton from './Utils/HeaderRightButton';
+import { RecordTutorial, AddRecordTutorial } from './src/components/Tutorial/MiniTutorial';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -65,9 +67,13 @@ function ExerciseScreen({ navigation, route }) {
 function HomeScreen({ navigation, route }) {
   return (
     <Stack.Navigator screenOptions={headerConfig}>
-      <Stack.Screen name="OverViewScreen" component={OverviewScreen} options={{ title: '' }} />
-      <Stack.Screen name="RecordsScreen" component={RecordsScreen} options={{ title: '' }} />
-      <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} options={{ title: '新增資料' }} />
+      <Stack.Screen name="OverViewScreen" component={OverviewScreen} options={{ title: '', headerRight: () => <HeaderRightButton navigation={navigation} /> }} />
+      <Stack.Screen name="RecordsScreen" component={RecordsScreen} options={{ title: '', headerRight: () => <HeaderRightButton navigation={navigation} type="question" content={RecordTutorial} /> }} />
+      <Stack.Screen
+        name="AddRecordScreen"
+        component={AddRecordScreen}
+        options={{ title: '新增資料', headerRight: () => <HeaderRightButton navigation={navigation} type="question" content={AddRecordTutorial} /> }}
+      />
       <Stack.Screen name="Family Router" component={FamilyRouter} options={{ title: '' }} />
     </Stack.Navigator>
   );
