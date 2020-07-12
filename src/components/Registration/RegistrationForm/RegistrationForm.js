@@ -229,6 +229,8 @@ const FormDetails = ({
       <ScrollView
         style={{
           paddingHorizontal: ScreenWidth * 0.11,
+          marginBottom:
+            ScreenHeight * 0.1 * (isProfessional && registerPatient),
           position: "absolute",
           width: "100%",
           top: 0,
@@ -539,7 +541,7 @@ const FormDetails = ({
         </View>
 
         <RoundButton
-          buttonStyle={{ marginBottom: ScreenHeight * 0.2 }}
+          buttonStyle={{ marginBottom: ScreenHeight * 0.1 }}
           title="提交"
           onPress={() => {
             Keyboard.dismiss();

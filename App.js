@@ -56,8 +56,17 @@ function ArticleScreen({ navigation, route }) {
 
 function ExerciseScreen({ navigation, route }) {
   return (
-    <Stack.Navigator screenOptions={headerConfig}>
-      <Stack.Screen name="EyeExerciseScreen" component={EyeExerciseScreen} options={{ title: '護眼操' }} />
+    <Stack.Navigator
+      screenOptions={{
+        ...headerConfig,
+        headerRight: () => <SettingButton navigation={navigation} />,
+      }}
+    >
+      <Stack.Screen
+        name="EyeExerciseScreen"
+        component={EyeExerciseScreen}
+        options={{ title: "護眼運動" }}
+      />
     </Stack.Navigator>
   );
 }
@@ -112,8 +121,12 @@ function Main({ route, navigation }) {
         activeTintColor: '#003973',
         inactiveTintColor: '#2D9CDB',
         style: {
-          backgroundColor: '#BED8FF',
-          height: Dimensions.get('window').height * 0.1,
+          backgroundColor: "transparent",
+          position: "absolute",
+          bottom: 0,
+          height: Dimensions.get("window").height * 0.1,
+          paddingHorizontal:
+            auth.currentUser.displayName == "professional" ? 80 : 30,
           borderTopWidth: 0,
           borderTopColor: 'transparent',
           paddingHorizontal: auth.currentUser.displayName == 'professional' ? 80 : 30,
@@ -168,8 +181,13 @@ function Main({ route, navigation }) {
             name="ExerciseScreen"
             component={ExerciseScreen}
             options={{
-              tabBarLabel: '護眼操',
-              tabBarIcon: () => <Image source={require('./assets/images/Exercise_dark.png')} style={styles.icon} />,
+              tabBarLabel: "護眼運動",
+              tabBarIcon: () => (
+                <Image
+                  source={require("./assets/images/Exercise_dark.png")}
+                  style={styles.icon}
+                />
+              ),
             }}
           />
 

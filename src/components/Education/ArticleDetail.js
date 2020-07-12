@@ -261,6 +261,7 @@ const ArticleDetailStyles = StyleSheet.create({
     fontSize: 18,
     color: "#4D8AE4",
     textAlign: "justify",
+    width: "100%",
   },
   videoContent: {
     paddingTop: 70,
@@ -269,6 +270,8 @@ const ArticleDetailStyles = StyleSheet.create({
     paddingBottom: 15,
     fontSize: 18,
     color: "#4D8AE4",
+    textAlign: "justify",
+    width: "100%",
   },
   playButton: {
     backgroundColor: "#8BB5F4",
