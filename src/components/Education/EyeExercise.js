@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, TouchableOpacity, Image, Button } from 'react-n
 import { LinearGradient } from 'expo-linear-gradient';
 import { Audio } from 'expo-av';
 import * as Brightness from 'expo-brightness';
+import FABView from '../../../Utils/FAB';
 
 // "https://ia600204.us.archive.org/11/items/hamlet_0911_librivox/hamlet_act5_shakespeare.mp3"
 // "https://ia800500.us.archive.org/10/items/VwFantasiaOngreensleevesmarriner/1-01VaughanWilliams_FantasiaOnGreensleeves.mp3",
@@ -195,6 +196,7 @@ export default class EyeExercise extends Component {
             )}
           </LinearGradient>
         )}
+        <FABView />
       </View>
     );
   }

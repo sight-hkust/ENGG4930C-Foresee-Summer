@@ -155,7 +155,7 @@ function Main({ route, navigation }) {
             component={SettingScreen}
             initialParams={{ isProfessional: true }}
             options={{
-              tabBarIcon: () => <Icon name="setting" type="antdesign" color="#23559E" size={32.5} containerStyle={styles.icon} Component={TouchableOpacity} />,
+              tabBarIcon: () => <Icon name="setting" type="antdesign" color="#23559E" size={32.5} containerStyle={styles.icon} />,
             }}
           />
         </>

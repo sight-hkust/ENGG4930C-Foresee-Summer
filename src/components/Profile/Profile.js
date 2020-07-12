@@ -9,7 +9,6 @@ import MenuScreen from '../../../Utils/MenuScreen';
 
 import { connect } from 'react-redux';
 import { watchUserInfoUpdate } from '../../reducers/user';
-import HeaderRightButton from '../../../Utils/HeaderRightButton';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Profile = ({ navigation, route, userInfoStore }) => {
