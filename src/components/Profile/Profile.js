@@ -13,10 +13,6 @@ import HeaderRightButton from '../../../Utils/HeaderRightButton';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 const Profile = ({ navigation, route, userInfoStore }) => {
-  navigation.setOptions({
-    headerRight: () => <HeaderRightButton navigation={navigation} type="question" />,
-  });
-
   const [loading, setLoading] = useState(true);
 
   const { user } = userInfoStore;

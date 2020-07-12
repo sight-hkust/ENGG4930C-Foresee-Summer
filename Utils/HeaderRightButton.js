@@ -15,13 +15,13 @@ export default function HeaderRightButton({ navigation, route, type, content }) 
           <Modal isVisible={isVisible} animationIn="slideInDown" onBackdropPress={() => setIsVisible(false)}>
             <View style={styles.contentContainer}>
               <Button
-                icon={<Icon name="swapleft" type="antdesign" color="#fff" size={40} />}
+                icon={<Icon name="swapleft" type="antdesign" color="#4674C4" size={40} />}
                 type="clear"
                 TouchableComponent={TouchableOpacity}
                 onPress={() => setIsVisible(false)}
                 containerStyle={{ position: 'absolute', left: 20 }}
               />
-              <View style={styles.tutorialContainer}>{content}</View>
+              <View style={styles.tutorialContainer}>{content()}</View>
             </View>
           </Modal>
         </>
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
     height: ScreenHeight * 0.7,
   },
   contentContainer: {
-    backgroundColor: '#4674C4',
+    backgroundColor: '#fff',
     width: ScreenWidth * 0.9,
     height: ScreenHeight * 0.8,
     borderRadius: 20,
@@ -54,5 +54,6 @@ const styles = StyleSheet.create({
     height: '90%',
     overflow: 'hidden',
     alignContent: 'center',
+    textAlign: 'center',
   },
 });
