@@ -4,24 +4,63 @@ export const SchemaPatient = object().shape({
   selectedNameFields: string().test({
     name: "name_validation",
     test: function (val) {
+      const {
+        firstName,
+        lastName,
+        surName,
+        givenName,
+        selectedNameFields,
+      } = this.parent;
+
+      if (selectedNameFields == "chi") {
+        if (!firstName && !lastName && !surName && !givenName) {
+          return this.createError({
+            message: "請輸入姓名",
+            path: "chineseNameError",
+          });
+        }
+        if (!firstName && lastName) {
+          return this.createError({
+            message: "請輸入有效姓名",
+            path: "chineseNameError",
+          });
+        }
+        if (!surName && givenName) {
+          return this.createError({
+            message: "Please enter a valid name",
+            path: "englishNameError",
+          });
+        }
+      } else {
+        if (!firstName && !lastName && !surName && !givenName) {
+          return this.createError({
+            message: "Please enter a valid name",
+            path: "englishNameError",
+          });
+        }
+        if (!firstName && lastName) {
+          return this.createError({
+            message: "請輸入有效姓名",
+            path: "chineseNameError",
+          });
+        }
+        if (!surName && givenName) {
+          return this.createError({
+            message: "Please enter a valid name",
+            path: "englishNameError",
+          });
+        }
+      }
+
       let chineseValidationFormat = /^[\u4E00-\u9FA5]{1,4}$/;
       let englishValidationFormat = /^[a-zA-Z][0-9a-zA-Z .,'-]*$/;
       let chineseNameValidationError = null;
       let englishNameValidationError = null;
-      const { firstName, lastName, surName, givenName } = this.parent;
+
       if (firstName || lastName) {
         let chineseValidationResult =
           chineseValidationFormat.test(lastName) &&
           chineseValidationFormat.test(firstName);
-        console.log(
-          "chineseValidationFormat.test(lastName)",
-          chineseValidationFormat.test(lastName)
-        );
-        console.log(
-          "chineseValidationFormat.test(firstName)",
-          chineseValidationFormat.test(firstName)
-        );
-        console.log("chineseValidationResult", chineseValidationResult);
         if (chineseValidationResult == false) {
           chineseNameValidationError = "請輸入有效中文姓名";
         }
@@ -37,13 +76,13 @@ export const SchemaPatient = object().shape({
       if (chineseNameValidationError) {
         return this.createError({
           message: chineseNameValidationError,
-          path: "selectedNameFields",
+          path: "chineseNameError",
         });
       } else {
         if (englishNameValidationError) {
           return this.createError({
             message: englishNameValidationError,
-            path: "selectedNameFields",
+            path: "englishNameError",
           });
         }
       }
