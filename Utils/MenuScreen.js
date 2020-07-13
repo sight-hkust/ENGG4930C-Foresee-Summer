@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
   },
   backgroundContainer: {
-    height: ScreenHeight * 0.9,
+    height: ScreenHeight * 0.92,
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,
     overflow: 'hidden',
