@@ -8,14 +8,23 @@ import MenuScreen from '../../../Utils/MenuScreen';
 import { auth } from '../../config/config';
 import { RoundButton } from '../../../Utils/RoundButton';
 import { Grid, Col, Row } from 'react-native-easy-grid';
-
-import { LinearGradientBackground } from '../../../Utils/LinearGradientBackground';
+import { Snackbar } from 'react-native-paper';
 
 export default function Setting({ route, navigation }) {
   const [selectedLabel, setSelectedLabel] = useState();
 
   return (
-    <MenuScreen backgroundContainer={!route.params?.isProfessional ? { height: ScreenHeight, borderBottomLeftRadius: 0, borderBottomRightRadius: 0 } : {}}>
+    <MenuScreen
+      backgroundContainer={
+        !route.params?.isProfessional
+          ? {
+              height: ScreenHeight,
+              borderBottomLeftRadius: 0,
+              borderBottomRightRadius: 0,
+            }
+          : {}
+      }
+    >
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
         <ListItem title={'深色主題'} containerStyle={styles.listItem} titleStyle={styles.title} rightIcon={<ThemeSwitch />} />
         <ListItem Component={TouchableOpacity} title={'程式教學'} containerStyle={styles.listItem} titleStyle={styles.title} chevron={{ size: 30 }} onPress={() => navigation.navigate('Tutorial')} />
@@ -73,13 +82,23 @@ export default function Setting({ route, navigation }) {
           title={'登出'}
           containerStyle={styles.listItem}
           titleStyle={styles.title}
-          chevron={{ size: 30 }}
+          chevron={{ size: 30, color: "#E1EDFF" }}
           onPress={() => {
             auth.signOut();
           }}
         />
       </ScrollView>
-      <Text style={{ marginTop: 100, color: 'white', alignSelf: 'center', position: 'absolute', bottom: 20 }}>© 2020 ForeSee</Text>
+      <Text
+        style={{
+          marginTop: 100,
+          color: 'white',
+          alignSelf: 'center',
+          position: 'absolute',
+          bottom: 20,
+        }}
+      >
+        © 2020 ForeSee
+      </Text>
     </MenuScreen>
   );
 }
@@ -95,9 +114,18 @@ const ThemeSwitch = () => {
   );
 };
 
-const ContactUs = () => {
+export const ContactUs = () => {
   return (
-    <View style={{ width: '90%', alignSelf: 'center', padding: 10, backgroundColor: 'rgba(0,0,0,0.05)', borderRadius: 4 }}>
+    <View
+      style={{
+        width: '90%',
+        alignSelf: 'center',
+        padding: 10,
+        backgroundColor: 'rgba(0,0,0,0.05)',
+        borderRadius: 4,
+        height: '100%',
+      }}
+    >
       <Grid>
         <Row style={styles.contactUsRow}>
           <Col style={styles.contactUsLeftCol}>
@@ -143,7 +171,7 @@ const ContactUs = () => {
   );
 };
 
-const Feedback = () => {
+export const Feedback = () => {
   const [feedback, setFeedback] = useState('');
   const [alertSuccess, setAlertSuccess] = useState(false);
 
@@ -182,10 +210,18 @@ const Feedback = () => {
         buttonStyle={{ width: 96 }}
         textStyle={{ color: '#3CA1B7' }}
       />
-
-      <Overlay isVisible={alertSuccess} borderRadius={10}>
-        <Button icon={<Icon size={24} color="green" name="done" type="material-icon" />} title=" 你的回應已提交，感謝你寶貴的意見！" type="clear" titleStyle={{ color: 'green' }} />
-      </Overlay>
+      <Snackbar
+        visible={alertSuccess}
+        onDismiss={() => setAlertSuccess(false)}
+        action={{
+          label: '確認',
+          onPress: () => {
+            setAlertSuccess(false);
+          },
+        }}
+      >
+        你的回應已被提交，感謝你的寶貴意見！
+      </Snackbar>
     </View>
   );
 };
@@ -198,7 +234,15 @@ const PermissionSetting = () => {
   const toggleAllowSearchSwitch = () => setAllowSearch((previousState) => !previousState);
 
   return (
-    <View style={{ width: '90%', alignSelf: 'center', padding: 10, backgroundColor: 'rgba(0,0,0,0.05)', borderRadius: 4 }}>
+    <View
+      style={{
+        width: '90%',
+        alignSelf: 'center',
+        padding: 10,
+        backgroundColor: 'rgba(0,0,0,0.05)',
+        borderRadius: 4,
+      }}
+    >
       <Grid>
         <Row style={styles.contactUsRow}>
           <Col>

@@ -1,15 +1,93 @@
-import { object, string, number } from "yup"
+import { object, string, number } from "yup";
 export const SchemaRegisterPatient = object().shape({
-    firstName: string().required('請輸入病人姓名'),
-    lastName: string().required('請輸入病人姓名'),
-    birthday: string().required('請輸入病人出生日期'),
-    email: string().email('電郵地址無效，請以有效格式輸入電郵(例如：foresee@gmail.com)').required('請輸入電郵地址'),
-    phone: number().typeError('請輸入數字').required('請輸入聯絡電話').test('len', '請輸入有效的電話號碼(8位數字)',
-        val => {
-            if (val !== null && val !== undefined) {
-                return val.toString().length === 8;
-            }
-            else
-                return true;
-        }),
-})
+  selectedNameFields: string().test({
+    name: "name_validation",
+    test: function (val) {
+      const {
+        firstName,
+        lastName,
+        surName,
+        givenName,
+        selectedNameFields,
+      } = this.parent;
+
+      if (selectedNameFields == "chi") {
+        if (!firstName && !lastName && !surName && !givenName) {
+          return this.createError({
+            message: "請輸入姓名",
+            path: "chineseNameError",
+          });
+        }
+        if (!firstName && lastName) {
+          return this.createError({
+            message: "請輸入有效姓名",
+            path: "chineseNameError",
+          });
+        }
+        if (!surName && givenName) {
+          return this.createError({
+            message: "Please enter a valid name",
+            path: "englishNameError",
+          });
+        }
+      } else {
+        if (!firstName && !lastName && !surName && !givenName) {
+          return this.createError({
+            message: "Please enter a valid name",
+            path: "englishNameError",
+          });
+        }
+        if (!firstName && lastName) {
+          return this.createError({
+            message: "請輸入有效姓名",
+            path: "chineseNameError",
+          });
+        }
+        if (!surName && givenName) {
+          return this.createError({
+            message: "Please enter a valid name",
+            path: "englishNameError",
+          });
+        }
+      }
+
+      let chineseValidationFormat = /^[\u4E00-\u9FA5]{1,4}$/;
+      let englishValidationFormat = /^[a-zA-Z][0-9a-zA-Z .,'-]*$/;
+      let chineseNameValidationError = null;
+      let englishNameValidationError = null;
+
+      if (firstName || lastName) {
+        let chineseValidationResult =
+          chineseValidationFormat.test(lastName) &&
+          chineseValidationFormat.test(firstName);
+        if (chineseValidationResult == false) {
+          chineseNameValidationError = "請輸入有效中文姓名";
+        }
+      }
+      if (surName || givenName) {
+        let englishValidationResult =
+          englishValidationFormat.test(surName) &&
+          englishValidationFormat.test(givenName);
+        if (englishValidationResult == false) {
+          englishNameValidationError = "Please enter a valid name";
+        }
+      }
+      if (chineseNameValidationError) {
+        return this.createError({
+          message: chineseNameValidationError,
+          path: "chineseNameError",
+        });
+      } else {
+        if (englishNameValidationError) {
+          return this.createError({
+            message: englishNameValidationError,
+            path: "englishNameError",
+          });
+        }
+      }
+      return true;
+    },
+  }),
+  birthday: string().required("請輸入病人出生日期"),
+  email: string().required("請輸入有效電子郵件").email("請輸入有效電郵"),
+});

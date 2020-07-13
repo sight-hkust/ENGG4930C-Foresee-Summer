@@ -10,6 +10,8 @@ import MenuScreen from '../../../Utils/MenuScreen';
 
 import { connect } from 'react-redux';
 import { watchQuestionListUpdate, questionList } from '../../reducers/askProfessionalList';
+import HeaderRightButton from '../../../Utils/HeaderRightButton';
+import FABView from '../../../Utils/FAB';
 
 const SPECIAL_TAG_1 = '眼精疼痛';
 const SPECIAL_TAG_2 = '視力模糊';
@@ -35,7 +37,13 @@ const AskAnExpertMainScreen = ({ route, navigation, questionListStore }) => {
       {questionList != null && (
         <>
           <View style={styles.linearbackgorundContainer}>
-            <LinearGradientBackground style={{ height: '100%' }} colors={['#1772A6', '#A377FF']} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]} />
+            <LinearGradientBackground
+              style={{ height: ScreenHeight }}
+              colors={["#1772A6", "#A377FF"]}
+              start={[0, 1]}
+              end={[1, 0]}
+              locations={[0.12, 0.92]}
+            />
           </View>
           <View style={styles.container}>
             <View style={{ width: ScreenWidth, marginTop: 50, zIndex: 1 }}>
@@ -54,7 +62,18 @@ const AskAnExpertMainScreen = ({ route, navigation, questionListStore }) => {
                 horizontal={true}
                 renderItem={({ item }) => {
                   hotTopicCounter++;
-                  return <HotQuestionCard style={hotTopicCounter == 1 && { marginLeft: ScreenWidth * 0.03 }} faq={item} key={item.id} counter={hotTopicCounter - 1} />;
+                  return (
+                    <HotQuestionCard
+                      style={
+                        hotTopicCounter == 1 && {
+                          marginLeft: ScreenWidth * 0.03,
+                        }
+                      }
+                      faq={item}
+                      key={item.id}
+                      counter={hotTopicCounter - 1}
+                    />
+                  );
                 }}
                 keyExtractor={(item) => item.id}
                 style={{ marginTop: 26, height: 180 }}
@@ -63,24 +82,39 @@ const AskAnExpertMainScreen = ({ route, navigation, questionListStore }) => {
             </View>
 
             <View style={styles.background}>
-              <Grid style={{ bottom: ScreenHeight * 0.5, position: 'absolute', width: ScreenWidth }}>
+              <Grid
+                style={{
+                  bottom: ScreenHeight * 0.5,
+                  position: 'absolute',
+                  width: ScreenWidth,
+                }}
+              >
                 <Col style={{ paddingLeft: ScreenWidth * 0.1 }}>
-                  <Text style={{ color: '#24559E', fontWeight: 'bold', fontSize: 25 }}>最新</Text>
+                  <Text
+                    style={{
+                      color: '#24559E',
+                      fontWeight: 'bold',
+                      fontSize: 25,
+                    }}
+                  >
+                    最新
+                  </Text>
                 </Col>
                 <Col style={{ paddingLeft: ScreenWidth * 0.1 }}>
-                  <Icon size={35} name="edit" type="feather" color="black" onPress={() => navigation.navigate('PostQuestion')} />
+                  <Icon size={35} name="edit" type="feather" color="black" onPress={() => navigation.navigate('PostQuestion')} Component={TouchableOpacity} />
                 </Col>
               </Grid>
 
               <ScrollView style={styles.scrollView} showsVerticalScrollIndicator={true}>
-                {questionList.map((item) => {
-                  return <MiniQuestionCard faq={item} />;
+                {questionList.map((item, index) => {
+                  return <MiniQuestionCard key={index} faq={item} />;
                 })}
               </ScrollView>
             </View>
           </View>
         </>
       )}
+      <FABView />
     </MenuScreen>
   );
 };

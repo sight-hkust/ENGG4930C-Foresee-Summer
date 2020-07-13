@@ -3,32 +3,37 @@ import { View, StyleSheet, Dimensions } from "react-native";
 import Svg, { Defs, Stop, Circle, Rect, G, Path, LinearGradient, Text } from "react-native-svg";
 import { scaleLinear, scaleTime } from "d3-scale";
 import moment from "moment";
+import { ScreenWidth, ScreenHeight } from "../constant/Constant";
 
 export default class LineChart extends React.Component {
-  x_scale = (val, dateArr, paddingRight, width) => {
+  x_scale = (val, dateArr, paddingRight) => {
     const x = scaleTime()
       .domain([moment(dateArr[0], "YYYY-MM-DD").toDate(), moment(dateArr[dateArr.length - 1], "YYYY-MM-DD").toDate()])
-      .range([paddingRight / 2 + 25, width - paddingRight * 1.5 - 25]);
+      .range([paddingRight / 2 + 25, ScreenWidth - paddingRight * 1.5 - 25]);
 
     return x(val);
   };
 
-  y_scale = (val, data, height, paddingTop) => {
+  y_scale = (val, paddingTop) => {
     //const min = Math.min(...data);
     //const max = Math.max(...data);
-    const y = scaleLinear().domain([0, 800]).range([170, 10]);
+    //const y = scaleLinear().domain([0, 800]).range([170, 10]);
+    const y = scaleLinear()
+      .domain([0, 900, 1800])
+      .range([ScreenHeight / 5, 15, 15]);
     return Math.floor((y(val) / 4) * 3 + paddingTop);
   };
-
+  //alternative colour code: red: #FF676C, yellow: #FFDF4D, green: #5BC0AD
+  //Alternative colour code: red: #fe7470, yellow: #ffdf54, green: #7be0a3
   CalColourScale = (refractive) => {
     switch (refractive) {
       case "0": //Myopia
-        return scaleLinear().domain([0, 375, 600, 1000]).range(["#7be0a3", "#ffdf54", "#fe7470", "#fe7470"]);
+        return scaleLinear().domain([0, 375, 600, 1000]).range(["#5BC0AD", "#FFDF4D", "#FF676C", "#FF676C"]);
 
       case "1":
-        return scaleLinear().domain([0, 225, 525, 1000]).range(["#7be0a3", "#ffdf54", "#fe7470", "#fe7470"]);
+        return scaleLinear().domain([0, 225, 525, 1000]).range(["#5BC0AD", "#FFDF4D", "#FF676C", "#FF676C"]);
       case "2":
-        return scaleLinear().domain([0, 100, 200, 600]).range(["#7be0a3", "#ffdf54", "#fe7470", "#fe7470"]);
+        return scaleLinear().domain([0, 100, 200, 600]).range(["#5BC0AD", "#FFDF4D", "#FF676C", "#FF676C"]);
     }
   };
 
@@ -41,36 +46,36 @@ export default class LineChart extends React.Component {
 
     const output = [];
     dateArr.forEach((item, index) => {
-      output.push(<Stop key={index} offset={offsetScale(this.x_scale(moment(item, "YYYY-MM-DD").toDate(), dateArr, paddingRight, width))} stopColor={colourScale(data[index])} />);
+      output.push(<Stop key={index} offset={offsetScale(this.x_scale(moment(item, "YYYY-MM-DD").toDate(), dateArr, paddingRight))} stopColor={colourScale(data[index])} />);
     });
     return output;
   };
 
   renderDefs = (config) => {
-    const { dateArr, width, data, paddingRight, refractive } = config;
+    const { dateArr, data, paddingRight, refractive } = config;
 
     return (
       <Defs>
-        <LinearGradient id="fillGradient" x1={0} y1={0} x2={width} y2={0} gradientUnits="userSpaceOnUse">
-          {this.renderStop(data, dateArr, width, paddingRight, refractive)}
+        <LinearGradient id="fillGradient" x1={0} y1={0} x2={ScreenWidth} y2={0} gradientUnits="userSpaceOnUse">
+          {this.renderStop(data, dateArr, ScreenWidth, paddingRight, refractive)}
         </LinearGradient>
       </Defs>
     );
   };
 
   getLinePoints = (datas, config) => {
-    const { dateArr, width, height, paddingRight, paddingTop } = config;
+    const { dateArr, height, paddingRight, paddingTop } = config;
 
     const x = (i) => {
-      return this.x_scale(moment(dateArr[i], "YYYY-MM-DD").toDate(), dateArr, paddingRight, width);
+      return this.x_scale(moment(dateArr[i], "YYYY-MM-DD").toDate(), dateArr, paddingRight);
     };
 
     const y = (i) => {
-      return this.y_scale(datas[i], datas, height, paddingTop);
+      return this.y_scale(datas[i], paddingTop);
     };
     const startingPoint = 2;
     const verticalPoint = y(0) + 13;
-    const horizontalLine = config.width - config.paddingRight;
+    const horizontalLine = ScreenWidth - config.paddingRight;
     const lastPoint = y(dateArr.length - 1);
     return [`M${startingPoint},750 V${verticalPoint} Q ${startingPoint}, ${y(0)}, ${x(0)}, ${y(0)} `]
       .concat(
@@ -91,7 +96,7 @@ export default class LineChart extends React.Component {
   };
 
   renderDots = (config) => {
-    const { data, dateArr, full_dateArr, selectedIndex, width, height, paddingTop, paddingRight } = config;
+    const { data, dateArr, full_dateArr, selectedIndex, height, paddingTop, paddingRight } = config;
 
     //const baseHeight = height;
     const output = [];
@@ -100,20 +105,20 @@ export default class LineChart extends React.Component {
     config.dateArr.forEach((item, index) => {
       //console.log("selected index:",full_dateArr[selectedIndex])
       //const cx = paddingRight/2 + (index * (width - paddingRight)) / (data.length-1);
-      const cx = this.x_scale(moment(item, "YYYY-MM-DD").toDate(), dateArr, paddingRight, width);
-      const cy = this.y_scale(data[index], data, height, paddingTop);
+      const cx = this.x_scale(moment(item, "YYYY-MM-DD").toDate(), dateArr, paddingRight);
+      const cy = this.y_scale(data[index], paddingTop);
 
       //console.log(lastIndex);
       output.push(
-        <>
+        <G key={index}>
           <Circle
             key={item}
             cx={cx}
             cy={cy}
-            r="8"
-            stroke={item === full_dateArr[selectedIndex] ? "white" : "#2D9CDB"}
+            r="9"
+            stroke={item === full_dateArr[selectedIndex] ? "white" : "#00C2FF"}
             strokeWidth="2"
-            fill={item === full_dateArr[selectedIndex] ? "#00FFFF" : "white"}
+            fill={item === full_dateArr[selectedIndex] ? "#00C2FF" : "white"}
             opacity={item === full_dateArr[selectedIndex] ? "1" : "0.72"}
           />
           <Text x={cx} y={cy + 30} textAnchor="middle" fill="black" fontSize="19" fontWeight="bold">
@@ -122,7 +127,7 @@ export default class LineChart extends React.Component {
           <Text x={cx} y={cy + 45} textAnchor="middle" fontSize="14" fill={item === full_dateArr[selectedIndex] ? "black" : "none"}>
             {moment(item).format("D[/]M")}
           </Text>
-        </>
+        </G>
       );
     });
     return output;
@@ -130,17 +135,17 @@ export default class LineChart extends React.Component {
 
   render() {
     const { data, dateArr, selectedIndex, refractive, full_dateArr } = this.props;
-    const height = "750";
+    //const height = "750";
+    const height = ScreenHeight;
     if (data == null) {
       return null;
     } else {
       return (
         <View>
-          <Svg height={height} width={Dimensions.get("window").width - 20} position="absolute">
+          <Svg height={height} width={ScreenWidth} position="absolute">
             <Rect width="100%" height="100%" fill="none" />
             <G>
               {this.renderDefs({
-                width: Dimensions.get("window").width,
                 data: data,
                 paddingRight: 20,
                 dateArr: dateArr,
@@ -149,7 +154,6 @@ export default class LineChart extends React.Component {
             </G>
             <G>
               {this.renderLine({
-                width: Dimensions.get("window").width,
                 height: height,
                 data: data,
                 dateArr: dateArr,
@@ -159,7 +163,6 @@ export default class LineChart extends React.Component {
             </G>
             <G>
               {this.renderDots({
-                width: Dimensions.get("window").width,
                 height: height,
                 data: data,
                 dateArr: dateArr,

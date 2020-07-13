@@ -52,7 +52,7 @@ const Tutorial = ({ route, navigation }) => {
             <Image style={styles.image} source={item.image} />
             <Text style={styles.title}>{item.subject}</Text>
             <Text style={styles.content}>{item.content}</Text>
-            {index == tutorialContent.length - 1 && <Button type="clear" title="開始使用" onPress={() => navigation.navigate('Welcome')} />}
+            {index == tutorialContent.length - 1 && <Button type="clear" title="開始使用" onPress={() => navigation.navigate('Main')} />}
           </View>
         );
       })}
@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'white',
+    backgroundColor: '#fff',
   },
   image: {
     height: 350,
