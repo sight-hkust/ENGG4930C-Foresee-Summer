@@ -87,18 +87,22 @@ export default function DisplayRecords(props) {
   const calAxis = (isLeft) => {
     if (isAdj) {
       if (isLeft) {
-        if (curRecord.Adj_L_CYL != 0 && curRecord.Adj_L_CYL != " ") return curRecord.Adj_L_Axis;
+        if (curRecord.Adj_L_CYL != 0 && curRecord.Adj_L_CYL != " ")
+          return curRecord.Adj_L_Axis;
         else return "NA";
       } else {
-        if (curRecord.Adj_R_CYL != 0 && curRecord.Adj_R_CYL != " ") return curRecord.Adj_R_Axis;
+        if (curRecord.Adj_R_CYL != 0 && curRecord.Adj_R_CYL != " ")
+          return curRecord.Adj_R_Axis;
         else return "NA";
       }
     } else {
       if (isLeft) {
-        if (curRecord.L_CYL != 0 && curRecord.L_CYL != " ") return curRecord.L_Axis;
+        if (curRecord.L_CYL != 0 && curRecord.L_CYL != " ")
+          return curRecord.L_Axis;
         else return "NA";
       } else {
-        if (curRecord.R_CYL != 0 && curRecord.R_CYL != " ") return curRecord.R_Axis;
+        if (curRecord.R_CYL != 0 && curRecord.R_CYL != " ")
+          return curRecord.R_Axis;
         else return "NA";
       }
     }
@@ -137,7 +141,6 @@ export default function DisplayRecords(props) {
             <Text style={DisplayRecordsStyle.colHeader}>O.S.</Text>
           </Col>
         </Row>
-
         <Row>
           <Col style={DisplayRecordsStyle.gridContainer}>
             <Text style={DisplayRecordsStyle.rowHeader}>SPH:</Text>

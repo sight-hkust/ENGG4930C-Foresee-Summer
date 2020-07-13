@@ -2,9 +2,19 @@ import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView, View } from "react-native";
 
-export const LinearGradientBackground = ({ children, ...props }) => {
+export const LinearGradientBackground = ({
+  children,
+  safeAreaViewEnable = true,
+  ...props
+}) => {
+  const LGView = ({ children }) =>
+    safeAreaViewEnable ? (
+      <SafeAreaView>{children}</SafeAreaView>
+    ) : (
+      <View>{children}</View>
+    );
   return (
-    <View>
+    <LGView>
       <LinearGradient
         colors={["#2D9CDB", "#48B3BA", "#0ED984"]}
         start={[0, 0.3]}
@@ -17,6 +27,6 @@ export const LinearGradientBackground = ({ children, ...props }) => {
       >
         {children}
       </LinearGradient>
-    </View>
+    </LGView>
   );
 };

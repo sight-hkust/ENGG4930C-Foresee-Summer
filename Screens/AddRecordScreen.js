@@ -1,10 +1,8 @@
 import React, { Component, useState } from "react";
 import {
   StyleSheet,
-  Text,
   View,
   ScrollView,
-  TouchableOpacity,
   Alert,
   Animated,
 } from "react-native";
@@ -75,7 +73,6 @@ export default class Form extends Component {
       professional_id,
       patient_id,
       refractive,
-      inactive,
     } = this.props.route.params;
     return (
       <View style={AddRecordScreen.background}>
@@ -150,11 +147,13 @@ export default class Form extends Component {
               //validationSchema={SchemaRecords}
               onSubmit={(values) => {
                 var exist = false;
-                database.ref("users/" + patient_id + "/records/" + values.date).once("value", (snap) => {
-                  exist = snap.val() !== null;
+                database
+                  .ref("users/" + patient_id + "/records/" + values.date)
+                  .once("value", (snap) => {
+                    exist = snap.val() !== null;
 
-                  console.log(exist);
-                });
+                    console.log(exist);
+                  });
 
                 let data = {
                   L_Myopia: 0,
@@ -236,35 +235,32 @@ export default class Form extends Component {
                   //   .set(data)
                   //   .catch((error) => console.log(error));
                   database
-                    .ref("userInfo/" + patient_id)
+                    .ref("users/" + patient_id)
                     .once("value")
                     .then(function (snapshot) {
                       return snapshot.val()["uid"];
                     })
                     .then((uid) => {
-                      if (!inactive) {
-                        database
-                          .ref("users/" + uid + "/records/" + values.date)
-                          .set(data)
-                          .catch((error) => console.log(error));
-                      } else {
-                        database
-                          .ref("userInfo/" + uid + "/records/" + values.date)
-                          .set(data)
-                          .catch((error) => console.log(error));
-                      }
+                      database
+                        .ref("users/" + uid + "/records/" + values.date)
+                        .set(data)
+                        .catch((error) => console.log(error));
                       this.props.navigation.goBack();
                     });
                 } else {
                   //not professional user
                   if (!exist) {
                     //no existed record
-                    database.ref("users/" + patient_id + "/records/" + values.date).set(data, (err) => console.log(err));
+                    database
+                      .ref("users/" + patient_id + "/records/" + values.date)
+                      .set(data, (err) => console.log(err));
                     this.props.navigation.goBack();
                   } else {
                     Alert.alert(
                       "注意！",
-                      "數據庫已存在" + values.date + "的資料，再按提交將會覆蓋舊的資料。",
+                      "數據庫已存在" +
+                        values.date +
+                        "的資料，再按提交將會覆蓋舊的資料。",
                       [
                         {
                           text: "取消",
@@ -273,11 +269,14 @@ export default class Form extends Component {
                         {
                           text: "提交",
                           onPress: () => {
-                            if (!inactive) {
-                              database.ref("users/" + patient_id + "/records/" + values.date).set(data, (error) => console.log(error));
-                            } else {
-                              database.ref("userInfo/" + patient_id + "/records/" + values.date).set(data, (error) => console.log(error));
-                            }
+                            database
+                              .ref(
+                                "users/" +
+                                  patient_id +
+                                  "/records/" +
+                                  values.date
+                              )
+                              .set(data, (error) => console.log(error));
                             this.props.navigation.goBack();
                           },
                         },

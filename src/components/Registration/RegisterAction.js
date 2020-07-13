@@ -1,21 +1,29 @@
-import { auth, database } from '../../config/config';
-import moment from 'moment';
-import * as Random from 'expo-random';
-import { nanoid } from 'nanoid/async/index.native';
+import { auth, database } from "../../config/config";
+import moment from "moment";
+import * as firebase from "firebase";
+require("firebase/functions");
 
-const writeUserData = ({ uid = null, values, isProfessional, patientUUID, registerPatient = false }) => {
+const writeUserData = ({
+  uid = null,
+  values,
+  isProfessional,
+  patientUid,
+  registerPatient = false,
+}) => {
   if (registerPatient) {
-    database.ref('professionals/' + uid + '/patients/' + patientUUID).set({
-      firstName: values.firstName || '',
-      lastName: values.lastName || '',
-      surName: values.surName || '',
-      givenName: values.givenName || '',
-      phone: values.tel_number ? values.tel_country_code + values.tel_number : '',
-      uid: patientUUID,
+    database.ref("professionals/" + uid + "/patients/" + patientUid).set({
+      firstName: values.firstName || "",
+      lastName: values.lastName || "",
+      surName: values.surName || "",
+      givenName: values.givenName || "",
+      phone: values.tel_number
+        ? values.tel_country_code + values.tel_number
+        : "",
+      uid: patientUid,
       inactive: true,
     });
-    database.ref('userInfo/' + patientUUID).set({
-      uid: patientUUID,
+    database.ref("users/" + patientUid).set({
+      uid: patientUid,
       firstName: values.firstName,
       lastName: values.lastName,
       email: values.email,
@@ -23,18 +31,21 @@ const writeUserData = ({ uid = null, values, isProfessional, patientUUID, regist
       job: values.job,
       history: values.history,
       disease: values.disease,
+      inactive: true,
     });
     if (!values.parentSelectionDisalbed && values.parent.uid) {
-      database.ref('userInfo/' + values.parent.uid + '/familyMembers/' + patientUUID).set({
-        firstName: values.firstName,
-        lastName: values.lastName,
-        inactive: true,
-        uid: patientUUID,
-      });
+      database
+        .ref("users/" + values.parent.uid + "/familyMembers/" + patientUid)
+        .set({
+          firstName: values.firstName,
+          lastName: values.lastName,
+          inactive: true,
+          uid: patientUid,
+        });
     }
   } else {
     if (!isProfessional) {
-      database.ref('/users/' + uid).set({
+      database.ref("/users/" + uid).set({
         uid: uid,
         email: values.email,
         phone: values.tel_country_code + values.tel_number,
@@ -43,7 +54,7 @@ const writeUserData = ({ uid = null, values, isProfessional, patientUUID, regist
         birthday: moment(values.birthday).toJSON(),
         records: {},
       });
-      database.ref('userInfo/' + uid).set({
+      database.ref("userInfo/" + uid).set({
         uid: uid,
         firstName: values.firstName,
         lastName: values.lastName,
@@ -53,7 +64,7 @@ const writeUserData = ({ uid = null, values, isProfessional, patientUUID, regist
         allowedSearch: values.allowedSearch,
       });
     } else {
-      database.ref('/professionals/' + uid).set({
+      database.ref("/professionals/" + uid).set({
         uid: uid,
         firstName: values.firstName,
         lastName: values.lastName,
@@ -65,29 +76,44 @@ const writeUserData = ({ uid = null, values, isProfessional, patientUUID, regist
   }
 };
 
-export const registerPatientAccount = async ({ values, isProfessional, registerPatient, onComplete }) => {
-  const uid = auth.currentUser.uid;
-  const patientUUID = await nanoid();
-  writeUserData({
-    uid,
-    values,
-    patientUUID,
-    isProfessional,
-    registerPatient,
-  });
-  onComplete();
+export const registerPatientAccount = async ({
+  values,
+  registerPatient,
+  returnOnComplete,
+}) => {
+  let createPatientAccount = firebase
+    .functions()
+    .httpsCallable("createPatientAccount");
+  createPatientAccount({
+    email: values.email,
+  })
+    .then((response) => {
+      writeUserData({
+        uid: auth.currentUser.uid,
+        values,
+        patientUid: response.data.uid,
+        registerPatient,
+      });
+      returnOnComplete();
+    })
+    .catch((error) => console.error(error));
 };
 
-export const createAccount = ({ values, navigation, isProfessional, registerPatient }) => {
+export const createAccount = ({
+  values,
+  navigation,
+  isProfessional,
+  registerPatient,
+}) => {
   if (isProfessional) {
     auth
       .createUserWithEmailAndPassword(values.email, values.password)
       .then(function (userCreds) {
         const uid = userCreds.user.uid;
         if (userCreds) {
-          userCreds.user.updateProfile({ displayName: 'professional' });
+          userCreds.user.updateProfile({ displayName: "professional" });
         }
-        navigation.navigate('Tutorial');
+        navigation.navigate("Tutorial");
         writeUserData({ uid, values, navigation, isProfessional });
       })
       .catch((error) => {
@@ -99,9 +125,9 @@ export const createAccount = ({ values, navigation, isProfessional, registerPati
       .then(function (userCreds) {
         const uid = userCreds.user.uid;
         if (userCreds) {
-          userCreds.user.updateProfile({ displayName: 'user' });
+          userCreds.user.updateProfile({ displayName: "user" });
         }
-        navigation.navigate('Tutorial');
+        navigation.navigate("Tutorial");
         writeUserData({ uid, values, navigation, isProfessional });
       })
       .catch((error) => {

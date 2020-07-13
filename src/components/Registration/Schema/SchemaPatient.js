@@ -1,62 +1,54 @@
 import { object, string, number, bool } from "yup";
 
 export const SchemaPatient = object().shape({
-  firstName: string().when("selectedNameField", {
-    is: (val) => val === "chi",
-    then: string()
-      .required("請輸入有效姓名")
-      .test({
-        name: "chi_firstname_validation",
-        test: function (val) {
-          let validChineseNameFormat = /^[\u4E00-\u9FA5]{1,4}$/g;
-          if (
-            val === undefined ||
-            val === null ||
-            !validChineseNameFormat.test(val)
-          ) {
-            console.log(validChineseNameFormat.test(val));
-            return this.createError({
-              message: "請輸入有效姓名",
-              path: "lastName",
-            });
-          }
-          return true;
-        },
-      }),
-    otherwise: null,
-  }),
-  lastName: string().when("selectedNameField", {
-    is: (val) => val === "chi",
-    then: string()
-      .required("請輸入有效姓名")
-      .test({
-        name: "chi_firstname_validation",
-        test: function (val) {
-          let validChineseNameFormat = /^[\u4E00-\u9FA5]{1,4}$/g;
-          if (
-            val === undefined ||
-            val === null ||
-            !validChineseNameFormat.test(val)
-          ) {
-            return this.createError({
-              message: "請輸入有效姓名",
-              path: "lastName",
-            });
-          }
-          return true;
-        },
-      }),
-    otherwise: null,
-  }),
-  surName: string().when("selectedNameField", {
-    is: (val) => val === "eng",
-    then: string().required("Please enter valid name"),
-    otherwise: null,
-  }),
-  lastNameName: string().when("selectedNameField", {
-    is: (val) => val === "eng",
-    then: string().required("Please enter valid name"),
-    otherwise: null,
+  selectedNameFields: string().test({
+    name: "name_validation",
+    test: function (val) {
+      let chineseValidationFormat = /^[\u4E00-\u9FA5]{1,4}$/;
+      let englishValidationFormat = /^[a-zA-Z][0-9a-zA-Z .,'-]*$/;
+      let chineseNameValidationError = null;
+      let englishNameValidationError = null;
+      const { firstName, lastName, surName, givenName } = this.parent;
+      if (firstName || lastName) {
+        let chineseValidationResult =
+          chineseValidationFormat.test(lastName) &&
+          chineseValidationFormat.test(firstName);
+        console.log(
+          "chineseValidationFormat.test(lastName)",
+          chineseValidationFormat.test(lastName)
+        );
+        console.log(
+          "chineseValidationFormat.test(firstName)",
+          chineseValidationFormat.test(firstName)
+        );
+        console.log("chineseValidationResult", chineseValidationResult);
+        if (chineseValidationResult == false) {
+          chineseNameValidationError = "請輸入有效中文姓名";
+        }
+      }
+      if (surName || givenName) {
+        let englishValidationResult =
+          englishValidationFormat.test(surName) &&
+          englishValidationFormat.test(givenName);
+        if (englishValidationResult == false) {
+          englishNameValidationError = "Please enter a valid name";
+        }
+      }
+      if (chineseNameValidationError) {
+        return this.createError({
+          message: chineseNameValidationError,
+          path: "selectedNameFields",
+        });
+      } else {
+        if (englishNameValidationError) {
+          return this.createError({
+            message: englishNameValidationError,
+            path: "selectedNameFields",
+          });
+        }
+      }
+      return true;
+    },
   }),
   birthday: string().required("請輸入出生年份和月份"),
   email: string()
