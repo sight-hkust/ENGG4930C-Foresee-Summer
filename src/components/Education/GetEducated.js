@@ -10,6 +10,7 @@ import {
   Dimensions,
 } from "react-native";
 import React, { Component } from "react";
+import Expo from "expo";
 import { database } from "../../config/config";
 import { LinearGradient } from "expo-linear-gradient";
 import {
@@ -17,6 +18,8 @@ import {
   ScreenHeight,
   FontScale,
 } from "../../../constant/Constant";
+import HeaderRightButton from "../../../Utils/HeaderRightButton";
+import FABView from "../../../Utils/FAB";
 const thumbNail = require("../../../assets/images/interview.png");
 const eyeglasses = require("../../../assets/images/eyeglasses.jpg");
 const Setting = require("../../../assets/images/setting.png");
@@ -59,48 +62,51 @@ export default class GetEducated extends Component {
       this.props.navigation.navigate("ArticleDetailScreen", { article_id: id });
     };
     return (
-      <View
-        style={{
-          backgroundColor: "#E1EDFF",
-          height: "100%",
-          paddingBottom: ScreenHeight * 0.1,
-        }}
-      >
-        <View style={GetEducatedScreen.headerContainer}>
-          <LinearGradient
-            colors={["#1872a7", "#5a74d1", "#a676ff"]}
-            start={[0, 0.9]}
-            end={[1, 0.1]}
-            locations={[0, 0.5, 1]}
-            style={{
-              height: ScreenHeight,
-            }}
-          ></LinearGradient>
-        </View>
-        <View style={{ flex: 1 }}>
-          <View style={GetEducatedScreen.topArticleContainer}>
-            <TouchableOpacity onPress={pressHandler}>
-              <Image
-                source={{ uri: this.state.topArticle.image }}
-                style={GetEducatedScreen.topArticleImage}
-              />
-              <Text style={GetEducatedScreen.topArticleText}>
-                {this.state.topArticle.subject}
-              </Text>
-            </TouchableOpacity>
+      <>
+        <FABView />
+        <View
+          style={{
+            backgroundColor: "#E1EDFF",
+            height: "100%",
+            paddingBottom: ScreenHeight * 0.1,
+          }}
+        >
+          <View style={GetEducatedScreen.headerContainer}>
+            <LinearGradient
+              colors={["#1872a7", "#5a74d1", "#a676ff"]}
+              start={[0, 0.9]}
+              end={[1, 0.1]}
+              locations={[0, 0.5, 1]}
+              style={{
+                height: ScreenHeight,
+              }}
+            ></LinearGradient>
           </View>
+          <View style={{ flex: 1 }}>
+            <View style={GetEducatedScreen.topArticleContainer}>
+              <TouchableOpacity onPress={pressHandler}>
+                <Image
+                  source={{ uri: this.state.topArticle.image }}
+                  style={GetEducatedScreen.topArticleImage}
+                />
+                <Text style={GetEducatedScreen.topArticleText}>
+                  {this.state.topArticle.subject}
+                </Text>
+              </TouchableOpacity>
+            </View>
 
-          <View style={GetEducatedScreen.articleListContainer}>
-            <FlatList
-              data={this.state.data}
-              renderItem={({ item }) => (
-                <Item item={item} navigation={this.props.navigation} />
-              )}
-              keyExtractor={(item) => item.article_id}
-            />
+            <View style={GetEducatedScreen.articleListContainer}>
+              <FlatList
+                data={this.state.data}
+                renderItem={({ item }) => (
+                  <Item item={item} navigation={this.props.navigation} />
+                )}
+                keyExtractor={(item) => item.article_id}
+              />
+            </View>
           </View>
         </View>
-      </View>
+      </>
     );
   }
 }

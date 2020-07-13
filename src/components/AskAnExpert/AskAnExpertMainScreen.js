@@ -11,6 +11,7 @@ import MenuScreen from '../../../Utils/MenuScreen';
 import { connect } from 'react-redux';
 import { watchQuestionListUpdate, questionList } from '../../reducers/askProfessionalList';
 import HeaderRightButton from '../../../Utils/HeaderRightButton';
+import FABView from '../../../Utils/FAB';
 
 const SPECIAL_TAG_1 = '眼精疼痛';
 const SPECIAL_TAG_2 = '視力模糊';
@@ -23,10 +24,6 @@ const SPECIAL_TAG_3_COLOR = '#94DFC9';
 const NORMAL_TAG_COLOR = '#B9C6F4';
 
 const AskAnExpertMainScreen = ({ route, navigation, questionListStore }) => {
-  navigation.setOptions({
-    headerRight: () => <HeaderRightButton navigation={navigation} type="question" />,
-  });
-
   let hotTopicCounter = 0;
 
   const { questionList } = questionListStore;
@@ -117,6 +114,7 @@ const AskAnExpertMainScreen = ({ route, navigation, questionListStore }) => {
           </View>
         </>
       )}
+      <FABView />
     </MenuScreen>
   );
 };
