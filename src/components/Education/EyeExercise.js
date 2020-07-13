@@ -10,8 +10,8 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { Audio } from "expo-av";
 import * as Brightness from "expo-brightness";
+import { ScreenHeight, ScreenWidth } from "../../../constant/Constant";
 import FABView from "../../../Utils/FAB";
-import { ScreenHeight } from "../../../constant/Constant";
 
 // "https://ia600204.us.archive.org/11/items/hamlet_0911_librivox/hamlet_act5_shakespeare.mp3"
 // "https://ia800500.us.archive.org/10/items/VwFantasiaOngreensleevesmarriner/1-01VaughanWilliams_FantasiaOnGreensleeves.mp3",
@@ -152,7 +152,6 @@ export default class EyeExercise extends Component {
 
     return (
       <>
-        <FABView />
         <View style={styles.background}>
           <LinearGradient
             colors={["#1872a7", "#5a74d1", "#a676ff"]}
@@ -234,12 +233,7 @@ export default class EyeExercise extends Component {
             )}
             {playingStatus == 3 && (
               <View style={styles.secondaryContainer}>
-                <Text style={styles.text}>
-                  <Text style={{ fontSize: 6, lineHeight: 0 }}>
-                    {"甚麼？你看到奇怪的畫面？剛才眼睛要離開手機屏幕哦！\n"}
-                  </Text>
-                  你已完成這次的護眼運動！
-                </Text>
+                <Text style={styles.text}>你已完成這次的護眼運動！</Text>
                 <View style={{ flex: 1, alignItems: "center" }}>
                   <TouchableOpacity
                     style={styles.boxes}
@@ -252,83 +246,16 @@ export default class EyeExercise extends Component {
                 </View>
               </View>
             )}
-            {
-              /*test*/ playingStatus == 12 && (
-                <View
-                  style={{
-                    height: ScreenHeight,
-                    justifyContent: "center",
-                    backgroundColor: "black",
-                  }}
-                >
-                  <Image
-                    style={{ width: "100%" }}
-                    source={playingImage}
-                    resizeMode="contain"
-                  />
-                </View>
-              )
-            }
-            {playingStatus >= 10 && playingStatus < 12 && (
+            {playingStatus >= 10 && (
               <View style={styles.secondaryContainer}>
-                <View
-                  style={{
-                    flex: 4,
-                    alignItems: "center",
-                    padding: 20,
-                    justifyContent: "center",
-                  }}
-                >
-                  <Image
-                    style={{ width: "100%" }}
-                    source={playingImage}
-                    resizeMode="contain"
-                  />
-                </View>
+                <Text style={[styles.text, { fontSize: 72 }]}>{"👁️  👁️"}</Text>
                 <View style={{ flex: 0, alignItems: "center" }} />
               </View>
-            </View>
-          )}
-          {playingStatus == 2 && (
-            <View style={styles.secondaryContainer}>
-              <Text style={styles.text}>
-                {"你已完成全部護眼運動，\n只差讓眼睛緩和的步驟！"}
-              </Text>
-              <View style={{ flex: 1, alignItems: "center" }}>
-                <TouchableOpacity
-                  style={styles.boxes}
-                  onPress={() => {
-                    if (this.state.isBuffering == false) PressPlayButton(2);
-                  }}
-                >
-                  <Text style={styles.buttonText}>完前緩和</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          )}
-          {playingStatus == 3 && (
-            <View style={styles.secondaryContainer}>
-              <Text style={styles.text}>你已完成這次的護眼運動！</Text>
-              <View style={{ flex: 1, alignItems: "center" }}>
-                <TouchableOpacity
-                  style={styles.boxes}
-                  onPress={() =>
-                    this.setState({ playingStatus: 0, audioIndex: 0 })
-                  }
-                >
-                  <Text style={styles.buttonText}>再來一組</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          )}
-          {playingStatus >= 10 && (
-            <View style={styles.secondaryContainer}>
-              <Text style={[styles.text, { fontSize: 72 }]}>{"👁️  👁️"}</Text>
-              <View style={{ flex: 0, alignItems: "center" }} />
-            </View>
-          )}
-        </LinearGradient>
-      </View>
+            )}
+          </LinearGradient>
+        </View>
+        <FABView />
+      </>
     );
   }
 }

@@ -45,12 +45,25 @@ export const RegistrationForm = ({ navigation, route }) => {
     isRegisterMethodDialogVisible,
     setRegisterMethodDialogVisibility,
   ] = useState(true);
+  const [errorMessageFromServer, setErrorMessageFromServer] = useState("");
 
   const _showRegisterMethodDialog = () =>
     setRegisterMethodDialogVisibility(true);
 
   const _hideRegisterMethodDialog = () =>
     setRegisterMethodDialogVisibility(false);
+
+  const setServerError = (error) => {
+    console.log(error.code);
+    switch (error.code) {
+      case "auth/email-already-in-use":
+        setErrorMessageFromServer("電子郵件已註冊");
+        break;
+      default:
+        setErrorMessageFromServer(error.code + " " + error.message);
+        break;
+    }
+  };
 
   const registerMethods = [
     { key: "0", label: "以電子郵件註冊" },
@@ -96,12 +109,14 @@ export const RegistrationForm = ({ navigation, route }) => {
                       setIsLoading(false);
                       navigation.navigate("ProfMainMenu");
                     },
+                    setServerError: setServerError,
                   })
                 : createAccount({
                     values,
                     navigation,
                     isProfessional,
                     registerPatient,
+                    setServerError: setServerError,
                   });
               resetForm({});
               setStatus({ success: true });
@@ -127,6 +142,7 @@ export const RegistrationForm = ({ navigation, route }) => {
               isProfessional={isProfessional}
               registerPatient={registerPatient}
               isLoading={isLoading}
+              errorMessageFromServer={errorMessageFromServer}
             />
           )}
         </Formik>
@@ -143,6 +159,7 @@ const FormDetails = ({
   isProfessional,
   registerPatient,
   isLoading,
+  errorMessageFromServer,
 }) => {
   const selectedNameFieldsOnRefresh =
     (selectedNameFields == selectedNameFields) == "eng" &&
@@ -157,6 +174,7 @@ const FormDetails = ({
   const [isFamilySearchFieldVisible, setFamilySearchFieldVisibility] = useState(
     false
   );
+
   const [
     isFamilySearchDialogVisible,
     setFamilySearchDialogVisibility,
@@ -519,7 +537,20 @@ const FormDetails = ({
             />
           ) : null}
         </View>
-
+        {errorMessageFromServer != "" && (
+          <Text
+            style={{
+              paddingBottom: ScreenWidth * 0.02,
+              textAlign: "center",
+              fontSize: 20,
+              fontWeight: "700",
+              color: "#F34555D3",
+              flexWrap: "wrap",
+            }}
+          >
+            {errorMessageFromServer}
+          </Text>
+        )}
         <RoundButton
           buttonStyle={{ marginBottom: ScreenHeight * 0.1 }}
           title="提交"

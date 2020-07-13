@@ -96,14 +96,16 @@ export const registerPatientAccount = async ({
       });
       returnOnComplete();
     })
-    .catch((error) => console.error(error));
+    .catch((error) => {
+      setServerError(error);
+    });
 };
 
 export const createAccount = ({
   values,
   navigation,
   isProfessional,
-  registerPatient,
+  setServerError,
 }) => {
   if (isProfessional) {
     auth
@@ -117,7 +119,7 @@ export const createAccount = ({
         writeUserData({ uid, values, navigation, isProfessional });
       })
       .catch((error) => {
-        console.log(error.code, error.message);
+        setServerError(error);
       });
   } else {
     auth
@@ -131,7 +133,7 @@ export const createAccount = ({
         writeUserData({ uid, values, navigation, isProfessional });
       })
       .catch((error) => {
-        console.log(error.code, error.message);
+        setServerError(error);
       });
   }
 };

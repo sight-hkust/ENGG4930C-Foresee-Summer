@@ -63,7 +63,6 @@ export default class GetEducated extends Component {
     };
     return (
       <>
-        <FABView />
         <View
           style={{
             backgroundColor: "#E1EDFF",
@@ -106,6 +105,7 @@ export default class GetEducated extends Component {
             </View>
           </View>
         </View>
+        <FABView />
       </>
     );
   }

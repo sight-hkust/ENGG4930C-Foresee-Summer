@@ -101,90 +101,98 @@ class ProfPatientRecordView extends Component {
             alignItems: "center",
           }}
         >
-          <View style={styles.boxes}>
-            {!(records && dateList && currentRecords) ? (
-              <Text style={styles.noDataText}>
-                {"暫無數據\n請按 + 輸入資料"}
-              </Text>
-            ) : (
-              <View style={{ height: "100%" }}>
-                <RoundButton
-                  buttonStyle={{ backgroundColor: "#2D9CDB" }}
-                  textStyle={{ color: "white" }}
-                  title={this.state.isAdj ? "查看真實度數" : "查看調整度數"}
-                  onPress={() => this.setState({ isAdj: !this.state.isAdj })}
-                />
-                <View style={styles.datePickerContainer}>
-                  {dateList.length < 2 ? null : (
-                    <TouchableOpacity
+          {info && (
+            <>
+              <View style={styles.boxes}>
+                {!(records && dateList && currentRecords) ? (
+                  <Text style={styles.noDataText}>
+                    {"暫無數據\n請按 + 輸入資料"}
+                  </Text>
+                ) : (
+                  <View style={{ height: "100%" }}>
+                    <RoundButton
+                      buttonStyle={{ backgroundColor: "#2D9CDB" }}
+                      textStyle={{ color: "white" }}
+                      title={this.state.isAdj ? "查看真實度數" : "查看調整度數"}
                       onPress={() =>
-                        this.setState({
-                          selectedIndex:
-                            (selectedIndex + recordsLen - 1) % recordsLen,
-                        })
+                        this.setState({ isAdj: !this.state.isAdj })
                       }
-                    >
-                      <Icon
-                        name="swapleft"
-                        type="antdesign"
-                        size={ScreenWidth * 0.1}
-                        color="#2D9CDB"
-                      />
-                    </TouchableOpacity>
-                  )}
-                  <Text style={styles.dateText}>{dateList[selectedIndex]}</Text>
-                  {dateList.length < 2 ? null : (
-                    <TouchableOpacity
-                      onPress={() =>
-                        this.setState({
-                          selectedIndex: (selectedIndex + 1) % recordsLen,
-                        })
-                      }
-                    >
-                      <Icon
-                        name="swapright"
-                        type="antdesign"
-                        size={ScreenWidth * 0.1}
-                        color="#2D9CDB"
-                      />
-                    </TouchableOpacity>
-                  )}
-                </View>
-                <DisplayRecords
-                  curRecord={currentRecords}
-                  isAdj={this.state.isAdj}
-                />
-                <View style={{ height: 20 }} />
+                    />
+                    <View style={styles.datePickerContainer}>
+                      {dateList.length < 2 ? null : (
+                        <TouchableOpacity
+                          onPress={() =>
+                            this.setState({
+                              selectedIndex:
+                                (selectedIndex + recordsLen - 1) % recordsLen,
+                            })
+                          }
+                        >
+                          <Icon
+                            name="swapleft"
+                            type="antdesign"
+                            size={ScreenWidth * 0.1}
+                            color="#2D9CDB"
+                          />
+                        </TouchableOpacity>
+                      )}
+                      <Text style={styles.dateText}>
+                        {dateList[selectedIndex]}
+                      </Text>
+                      {dateList.length < 2 ? null : (
+                        <TouchableOpacity
+                          onPress={() =>
+                            this.setState({
+                              selectedIndex: (selectedIndex + 1) % recordsLen,
+                            })
+                          }
+                        >
+                          <Icon
+                            name="swapright"
+                            type="antdesign"
+                            size={ScreenWidth * 0.1}
+                            color="#2D9CDB"
+                          />
+                        </TouchableOpacity>
+                      )}
+                    </View>
+                    <DisplayRecords
+                      curRecord={currentRecords}
+                      isAdj={this.state.isAdj}
+                    />
+                    <View style={{ height: 20 }} />
+                  </View>
+                )}
               </View>
-            )}
-          </View>
-          <View
-            style={{
-              flex: 0.2,
-              alignContent: "center",
-              justifyContent: "center",
-            }}
-          >
-            <TouchableOpacity
-              onPress={() => {
-                this.props.navigation.navigate("AddRecordScreen", {
-                  isProfessional: true,
-                  professional_id: auth.currentUser.uid,
-                  patient_id: key,
-                  inactive: inactive,
-                });
-              }}
-              style={{
-                backgroundColor: "white",
-                width: 48,
-                height: 48,
-                borderRadius: 24,
-                justifyContent: "center",
-              }}
-            >
-              <Icon name="add" size={25} color="#2D9CDB" />
-            </TouchableOpacity>
-          </View>
+              <View
+                style={{
+                  flex: 0.2,
+                  alignContent: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <TouchableOpacity
+                  onPress={() => {
+                    this.props.navigation.navigate("AddRecordScreen", {
+                      isProfessional: true,
+                      professional_id: auth.currentUser.uid,
+                      patient_id: key,
+                      inactive: inactive,
+                    });
+                  }}
+                  style={{
+                    backgroundColor: "white",
+                    width: 48,
+                    height: 48,
+                    borderRadius: 24,
+                    justifyContent: "center",
+                  }}
+                >
+                  <Icon name="add" size={25} color="#2D9CDB" />
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
         </View>
       </LinearGradientBackground>
     );
