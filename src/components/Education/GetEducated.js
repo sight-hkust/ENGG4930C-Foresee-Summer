@@ -7,6 +7,7 @@ import { ScreenWidth, ScreenHeight, FontScale } from '../../../constant/Constant
 import HeaderRightButton from '../../../Utils/HeaderRightButton';
 import FABView from '../../../Utils/FAB';
 import MenuScreen from '../../../Utils/MenuScreen';
+import { actionCounter } from '../../helpers/actionCounter';
 const thumbNail = require('../../../assets/images/interview.png');
 const eyeglasses = require('../../../assets/images/eyeglasses.jpg');
 const Setting = require('../../../assets/images/setting.png');
@@ -32,7 +33,9 @@ export default class GetEducated extends Component {
         var temp = [];
         //console.log(snapshot.toJSON());
         snapshot.forEach((childSnapshot) => {
-          var childData = childSnapshot.val();
+          var item = childSnapshot.val();
+          var key = { _uid: childSnapshot.key };
+          var childData = { ...item, ...key };
           console.log(childData);
           temp.push(childData);
         });
@@ -47,6 +50,7 @@ export default class GetEducated extends Component {
     const pressHandler = () => {
       const id = this.state.topArticle.article_id;
       this.props.navigation.navigate('ArticleDetailScreen', { article_id: id });
+      actionCounter('articles', this.state.topArticle._uid, 'views');
     };
     return (
       <>
@@ -94,6 +98,7 @@ function Item({ item, navigation }) {
   const id = item.article_id;
   const pressHandler = () => {
     navigation.navigate('ArticleDetailScreen', { article_id: id });
+    actionCounter('articles', item._uid, 'views');
   };
   return (
     <TouchableOpacity onPress={pressHandler}>

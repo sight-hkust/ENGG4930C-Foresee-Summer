@@ -12,6 +12,7 @@ import { connect } from 'react-redux';
 import { watchQuestionListUpdate, questionList } from '../../reducers/askProfessionalList';
 import HeaderRightButton from '../../../Utils/HeaderRightButton';
 import FABView from '../../../Utils/FAB';
+import { actionCounter } from '../../helpers/actionCounter';
 
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
@@ -135,7 +136,13 @@ export const HotQuestionCard = (props) => {
 
   return (
     <View style={{ ...styles.shadow }}>
-      <TouchableOpacity style={{ ...styles.hotTopicCard, ...props.style }} onPress={toggleModal}>
+      <TouchableOpacity
+        style={{ ...styles.hotTopicCard, ...props.style }}
+        onPress={() => {
+          toggleModal();
+          actionCounter('askProf', props.faq.question_id, 'views');
+        }}
+      >
         <LinearGradientBackground
           colors={[
             `rgb(${RGB[0] + props.counter * 12},${RGB[1] + props.counter * 36}, ${RGB[2] + props.counter * 28})`,
@@ -162,7 +169,13 @@ export const MiniQuestionCard = (props) => {
 
   return (
     <>
-      <TouchableOpacity style={{ ...styles.shadow, ...styles.miniQuestion }} onPress={toggleModal}>
+      <TouchableOpacity
+        style={{ ...styles.shadow, ...styles.miniQuestion }}
+        onPress={() => {
+          toggleModal();
+          actionCounter('askProf', props.faq.question_id, 'views');
+        }}
+      >
         <View style={{ paddingHorizontal: wp('3%'), paddingTop: hp('1%'), width: '100%' }}>
           <View style={{ flexDirection: 'row', marginBottom: 10, marginTop: 5 }}>
             {props.faq.tags.map((item) => {

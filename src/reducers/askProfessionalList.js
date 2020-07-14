@@ -19,6 +19,7 @@ export const watchQuestionListUpdate = () => {
         snap.forEach((question) => {
           if (question.val()['response'] != null) {
             questionList.push({
+              question_id: question.key,
               tags: question.val()['tags'],
               question_title: question.val()['subject'],
               question_content: question.val()['content'],
@@ -28,6 +29,7 @@ export const watchQuestionListUpdate = () => {
             });
           }
         });
+        console.log(questionList);
         dispatch(updateQuestionList(questionList));
       });
   };
