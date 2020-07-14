@@ -19,17 +19,17 @@ const tutorialContent = [
   },
   {
     image: IMAGE_1,
-    subject: "如何切換不同眼睛的紀錄？",
+    subject: "如何切換不同眼睛的紀錄?",
     content: "按下眼睛圖像切換左右眼睛\n打開的眼睛代表現正顯示的紀錄",
   },
   {
     image: IMAGE_2,
-    subject: "顏色代表甚麼？",
+    subject: "顏色代表甚麼?",
     content: "視力趨勢圖中不同顏色\n代表視力的深淺",
   },
   {
     image: IMAGE_3,
-    subject: "數字代表甚麼？",
+    subject: "數字代表甚麼?",
     content:
       "負數代表近視 正數代表遠視\n數字(排除正負號)越大\n眼屈光不正程度越嚴重",
   },
@@ -76,7 +76,6 @@ const Tutorial = ({ route, navigation }) => {
       {tutorialContent.map((item, index) => {
         return (
           <View style={styles.slide1}>
-            <View style={{ height: ScreenHeight * 0.18 }} />
             <Image
               style={[
                 styles.image,
@@ -86,14 +85,37 @@ const Tutorial = ({ route, navigation }) => {
               ]}
               source={item.image}
             />
-            <Text style={styles.title}>{item.subject}</Text>
+            <View
+              style={{ height: ScreenHeight * 0.12, justifyContent: "center" }}
+            >
+              <Text style={styles.title}>{item.subject}</Text>
+            </View>
             <Text style={styles.content}>{item.content}</Text>
             {index == tutorialContent.length - 1 && (
-              <Button
-                type="clear"
-                title="開始使用"
-                onPress={() => navigation.navigate("Main")}
-              />
+              <View
+                style={{
+                  position: "absolute",
+                  width: ScreenWidth,
+                  bottom: ScreenHeight * 0.14,
+                  flex: 1,
+                  alignItems: "center",
+                }}
+              >
+                <Button
+                  buttonStyle={{
+                    borderWidth: 1,
+                    borderColor: "#8BB5F4",
+                    borderRadius: 18,
+                    height: 36,
+                    paddingHorizontal: 18,
+                    justifyContent: "center",
+                  }}
+                  titleStyle={{ fontSize: 14 }}
+                  type="clear"
+                  title="開始使用"
+                  onPress={() => navigation.navigate("Main")}
+                />
+              </View>
             )}
           </View>
         );
@@ -105,28 +127,27 @@ const Tutorial = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   slide1: {
     flex: 1,
-    justifyContent: "flex-start",
+    justifyContent: "flex-end",
     alignItems: "center",
     backgroundColor: "#fff",
+    paddingBottom: ScreenHeight * 0.15,
   },
   image: {
     height: (ScreenWidth * 5) / 7,
     width: (ScreenWidth * 6) / 7,
-    marginBottom: 30,
   },
   title: {
     color: "#1772A6",
-    fontSize: 30,
+    fontSize: 26,
     fontWeight: "bold",
     textAlign: "center",
-    marginBottom: 30,
   },
   content: {
     textAlign: "center",
     color: "#2D9CDB",
-    fontSize: 20,
+    fontSize: 18,
     fontWeight: "bold",
-    marginBottom: 20,
+    height: ScreenHeight * 0.18,
   },
 });
 
