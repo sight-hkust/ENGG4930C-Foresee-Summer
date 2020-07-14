@@ -4,10 +4,10 @@ import { Button } from 'react-native-elements';
 import { ScreenWidth, ScreenHeight } from '../../../constant/Constant';
 import Swiper from 'react-native-swiper';
 import { Grid, Row, Col } from 'react-native-easy-grid';
-import { color } from 'react-native-reanimated';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const RECORD_IMAGE_0 = require('../../../assets/images/Record_normal.png');
-const RECORD_IMAGE_1 = require('../../../assets/images/test.png');
+const RECORD_IMAGE_1 = require('../../../assets/images/Record_disease.png');
 const RECORD_IMAGE_2 = require('../../../assets/images/Record_supervision.png');
 
 const ADD_RECORD_IMAGE_0 = require('../../../assets/images/AddRecord_0.png');
@@ -60,7 +60,7 @@ const AddRecordTutorialContent = [
 
 export function RecordTutorial() {
   return (
-    <Swiper loop={true} paginationStyle={{ marginBottom: 10 }}>
+    <Swiper loop={false} showsButtons={true} showsPagination={false}>
       {RecordTutorialContent.map((item, index) => {
         return (
           <ScrollView style={{ paddingBottom: 20 }}>
@@ -105,7 +105,7 @@ export function AddRecordTutorial() {
       </Row>
       <Row>
         {index === 0 ? (
-          <Swiper loop={false} paginationStyle={{ marginBottom: 20 }}>
+          <Swiper loop={false} showsButtons={true} showsPagination={false}>
             {AddRecordTutorialContent.map((item, index) => {
               return (
                 <ScrollView>
@@ -176,15 +176,15 @@ const recordStyle = StyleSheet.create({
     backgroundColor: 'transparent',
   },
   image: {
-    height: 250,
-    width: 250,
+    height: wp('50%'),
+    width: wp('50%'),
     alignSelf: 'center',
     resizeMode: 'contain',
     marginBottom: 10,
   },
   title: {
     color: '#1772A6',
-    fontSize: 25,
+    fontSize: wp('7%'),
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 10,
@@ -192,21 +192,21 @@ const recordStyle = StyleSheet.create({
   content: {
     textAlign: 'center',
     color: '#2D9CDB',
-    fontSize: 16.5,
+    fontSize: wp('5%'),
     fontWeight: 'bold',
     marginBottom: 60,
-    paddingHorizontal: 30,
+    paddingHorizontal: wp('10%'),
   },
 });
 
 const addRecordStyle = StyleSheet.create({
   title: {
-    fontSize: 20,
+    fontSize: wp('7%'),
     fontWeight: 'bold',
     color: '#1772A6',
   },
   content: {
-    fontSize: 15,
+    fontSize: wp('5%'),
     color: '#2D9CDB',
   },
 });

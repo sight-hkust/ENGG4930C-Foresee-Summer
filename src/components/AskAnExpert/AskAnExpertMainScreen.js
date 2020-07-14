@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity, FlatList, Image } from 'react-native';
-import { Icon } from 'react-native-elements';
+import { Icon, Button } from 'react-native-elements';
 import { Grid, Col } from 'react-native-easy-grid';
 import Modal from 'react-native-modal';
 
@@ -42,7 +42,7 @@ const AskAnExpertMainScreen = ({ route, navigation, questionListStore }) => {
             <LinearGradientBackground style={{ height: ScreenHeight }} colors={['#1772A6', '#A377FF']} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]} />
           </View>
           <View style={styles.container}>
-            <View style={{ width: ScreenWidth, marginTop: hp('7.5%'), zIndex: 1 }}>
+            <View style={{ width: ScreenWidth, marginTop: hp('7.5%'), zIndex: 3, height: hp('27%') }}>
               <Text
                 style={{
                   color: 'white',
@@ -72,7 +72,7 @@ const AskAnExpertMainScreen = ({ route, navigation, questionListStore }) => {
                   );
                 }}
                 keyExtractor={(item) => item.id}
-                style={{ marginTop: hp('3%'), height: 180 }}
+                style={{ marginTop: hp('3%'), height: 180, zIndex: 4 }}
                 showsHorizontalScrollIndicator={false}
               />
             </View>
@@ -86,18 +86,27 @@ const AskAnExpertMainScreen = ({ route, navigation, questionListStore }) => {
                 }}
               >
                 <Col style={{ paddingLeft: ScreenWidth * 0.1 }}>
-                  <Text
-                    style={{
-                      color: '#24559E',
-                      fontWeight: 'bold',
-                      fontSize: hp('3%'),
-                    }}
-                  >
-                    最新
-                  </Text>
+                  <Button
+                    title="最新"
+                    type="clear"
+                    onPress={() => navigation.navigate('PostQuestion')}
+                    titleStyle={{ color: '#24559E', fontWeight: 'bold', fontSize: hp('3%') }}
+                    containerStyle={{ width: wp('20%') }}
+                    size={15}
+                    disabled={true}
+                  />
                 </Col>
-                <Col style={{ paddingLeft: ScreenWidth * 0.1 }}>
-                  <Icon size={wp('7%')} name="edit" type="feather" color="black" onPress={() => navigation.navigate('PostQuestion')} />
+                <Col style={{ paddingLeft: ScreenWidth * 0.1, zIndex: 3 }}>
+                  <Button
+                    title=" 發問"
+                    icon={<Icon size={wp('7%')} name="edit" type="ionicons" color="#1772A6" />}
+                    type="clear"
+                    onPress={() => navigation.navigate('PostQuestion')}
+                    titleStyle={{ color: '#1772A6', fontSize: hp('3%') }}
+                    containerStyle={{ marginRight: wp('7%') }}
+                    size={15}
+                    TouchableComponent={TouchableOpacity}
+                  />
                 </Col>
               </Grid>
 
@@ -243,7 +252,7 @@ const styles = StyleSheet.create({
     width: ScreenWidth,
     height: hp('32%'),
     position: 'absolute',
-    zIndex: 1,
+    zIndex: 2,
   },
   background: {
     backgroundColor: 'white',
@@ -252,7 +261,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
-    zIndex: 0,
+    zIndex: 1,
+    borderWidth: 1,
   },
   scrollView: {
     height: ScreenHeight * 0.45,
@@ -266,6 +276,7 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     overflow: 'hidden',
     marginRight: 20,
+    zIndex: 3,
   },
   hotTopicCardText: {
     fontSize: hp('2.4%'),
@@ -340,6 +351,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
+    zIndex: 3,
   },
 });
 
