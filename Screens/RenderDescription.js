@@ -1,5 +1,5 @@
 import React, { Component, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
 
 export const RenderContent = (props) => {
   const { isLeft, ddlValue, data, selectedDate, index, dateArr } = props;
@@ -13,12 +13,12 @@ export const RenderContent = (props) => {
       if (isLeft) {
         if (data[selectedDate].L_Myopia != "0") {
           return (
-            <View>
+            <ScrollView>
               <Text style={DescriptionStyle.degreeText}>{data[selectedDate].L_Myopia}度</Text>
 
               <RenderWarning degree={data[selectedDate].L_Myopia} refractive={"M"} />
               <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft} />
-            </View>
+            </ScrollView>
           );
         } else {
           return (
@@ -221,10 +221,10 @@ export const RenderIncreaseWarning = (props) => {
   const calDiff = (cur, prev) => {
     const diff = prev - cur;
     if (diff > 0) {
-      return "淺了" + diff + "度，";
+      return "淺了" + diff + "度";
     } else if (diff < 0) {
-      return "深了" + Math.abs(diff) + "度，";
-    } else return "度數不變。";
+      return "深了" + Math.abs(diff) + "度";
+    } else return "度數不變";
   };
 
   if (isLeft) {

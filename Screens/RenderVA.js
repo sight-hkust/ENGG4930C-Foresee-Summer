@@ -92,7 +92,7 @@ export const RenderContent = (props) => {
       style={{
         alignSelf: "center",
         backgroundColor: "rgba(255,255,255,0.9)",
-        height: ScreenHeight / 3.5,
+        height: ScreenHeight / 3.9,
         width: ScreenWidth / 1.25,
         borderRadius: 20,
         marginTop: 20,
