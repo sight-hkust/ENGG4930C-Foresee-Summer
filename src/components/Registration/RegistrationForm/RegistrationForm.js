@@ -21,7 +21,11 @@ import { RadioButton, Switch } from "react-native-paper";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import moment from "moment";
-import { createAccount, registerPatientAccount } from "../RegisterAction";
+import {
+  createAccount,
+  registerPatientAccount,
+  registerChildAccount,
+} from "../RegisterAction";
 import { LinearGradientBackground } from "../../../../Utils/LinearGradientBackground";
 import Logo from "../../../../Utils/Logo";
 import { RoundButton } from "../../../../Utils/RoundButton";
@@ -37,9 +41,10 @@ import { PhoneInputField } from "../../Utils/PhoneInputField";
 import { InputDatePickerModal } from "../../Utils/InputDatePickerModal";
 import MenuScreen from "../../../../Utils/MenuScreen";
 import PatientSearchPanel from "../../Utils/PatientSearchPanel";
+import { SchemaRegisterChild } from "../Schema/SchemaRegisterChild";
 
 export const RegistrationForm = ({ navigation, route }) => {
-  const { isProfessional, registerPatient } = route.params;
+  const { isProfessional, registerPatient, registerChild } = route.params;
   const [isLoading, setIsLoading] = useState(false);
   const [
     isRegisterMethodDialogVisible,
@@ -100,7 +105,46 @@ export const RegistrationForm = ({ navigation, route }) => {
             { setSubmitting, resetForm, setStatus, setErrors }
           ) => {
             try {
-              isProfessional && registerPatient
+              switch (true) {
+                case registerChild:
+                  registerChildAccount({
+                    values,
+                    registerChild,
+                    returnOnComplete: () => {
+                      setIsLoading(false);
+                      navigation.navigate("HomeScreen");
+                      resetForm({});
+                      setStatus({ success: true });
+                    },
+                  });
+                  break;
+                case registerPatient:
+                  registerPatientAccount({
+                    values,
+                    returnOnComplete: () => {
+                      setIsLoading(false);
+                      navigation.navigate("ProfMainMenu");
+                      resetForm({});
+                      setStatus({ success: true });
+                    },
+                    setServerError: setServerError,
+                  });
+                  break;
+                default:
+                  createAccount({
+                    values,
+                    navigation,
+                    isProfessional,
+                    setServerError: setServerError,
+                    returnOnComplete: () => {
+                      setIsLoading(false);
+                      resetForm({});
+                      setStatus({ success: true });
+                    },
+                  });
+                  break;
+              }
+              /* isProfessional && registerPatient
                 ? registerPatientAccount({
                     values,
                     isProfessional,
@@ -115,11 +159,10 @@ export const RegistrationForm = ({ navigation, route }) => {
                     values,
                     navigation,
                     isProfessional,
-                    registerPatient,
                     setServerError: setServerError,
                   });
               resetForm({});
-              setStatus({ success: true });
+              setStatus({ success: true }); */
             } catch (error) {
               setSubmitting(false);
               setStatus({ success: false });
@@ -131,6 +174,8 @@ export const RegistrationForm = ({ navigation, route }) => {
               ? registerPatient
                 ? SchemaRegisterPatient
                 : SchemaProfessional
+              : registerChild
+              ? SchemaRegisterChild
               : SchemaPatient
           }
           validateOnBlur={false}
@@ -143,6 +188,7 @@ export const RegistrationForm = ({ navigation, route }) => {
               registerPatient={registerPatient}
               isLoading={isLoading}
               errorMessageFromServer={errorMessageFromServer}
+              registerChild={registerChild}
             />
           )}
         </Formik>
@@ -158,6 +204,7 @@ const FormDetails = ({
   formikProps,
   isProfessional,
   registerPatient,
+  registerChild,
   isLoading,
   errorMessageFromServer,
 }) => {
@@ -235,7 +282,10 @@ const FormDetails = ({
 
   return (
     <>
-      {isProfessional && registerPatient && <MenuScreen />}
+      {(isProfessional && registerPatient) ||
+      (!isProfessional && registerChild) ? (
+        <MenuScreen />
+      ) : null}
 
       <ScrollView
         style={{
@@ -251,7 +301,22 @@ const FormDetails = ({
         keyboardDismissMode="on-drag"
       >
         {!registerPatient ? (
-          <Logo style={styles.logoContainer} />
+          !registerChild ? (
+            <Logo style={styles.logoContainer} />
+          ) : (
+            <Text
+              style={{
+                textAlign: "center",
+                marginVertical: ScreenHeight * 0.045,
+                fontSize: 30,
+                fontWeight: "bold",
+                color: "#fff",
+              }}
+            >
+              {" "}
+              登記子女帳號{" "}
+            </Text>
+          )
         ) : (
           <Text
             style={{
@@ -463,20 +528,24 @@ const FormDetails = ({
               )}
             </>
           ) : null}
-          <PhoneInputField
-            label={"電話號碼"}
-            icon={PhoneIcon}
-            formikProps={formikProps}
-            formikKey="tel_number"
-            keyboardType="phone-pad"
-          />
-          <InputTextField
-            label={"電子郵件"}
-            icon={MailIcon}
-            formikProps={formikProps}
-            formikKey={"email"}
-          />
-          {registerPatient ? (
+          {!registerChild ? (
+            <>
+              <PhoneInputField
+                label={"電話號碼"}
+                icon={PhoneIcon}
+                formikProps={formikProps}
+                formikKey="tel_number"
+                keyboardType="phone-pad"
+              />
+              <InputTextField
+                label={"電子郵件"}
+                icon={MailIcon}
+                formikProps={formikProps}
+                formikKey={"email"}
+              />
+            </>
+          ) : null}
+          {registerPatient || registerChild ? (
             <>
               <InputTextField
                 label="職業（非必須）"
@@ -523,8 +592,8 @@ const FormDetails = ({
                 borderWidth: 0,
               }}
               textStyle={{
-                textAlign: "left",
-                fontSize: FontScale * 20,
+                textAlign: "center",
+                fontSize: 20,
                 color: "#FFFFFF",
               }}
               checkedColor={"#FFFFFF"}
@@ -533,7 +602,7 @@ const FormDetails = ({
               checked={values.allowedSearch}
               onPress={toggleCheckbox}
               center
-              title={"本人同意提供個人資料\n予眼科專家參考"}
+              title={"本人同意提供個人資料予眼科專家參考"}
             />
           ) : null}
         </View>
