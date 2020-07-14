@@ -20,10 +20,6 @@ const PostQuestionSchema = object({
 });
 
 const PostQuestionScreen = ({ route, navigation }) => {
-  navigation.setOptions({
-    headerRight: () => <HeaderRightButton navigation={navigation} type="question" />,
-  });
-
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   return (

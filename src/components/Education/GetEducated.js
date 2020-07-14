@@ -1,28 +1,15 @@
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ScrollView,
-  FlatList,
-  Image,
-  Dimensions,
-} from "react-native";
-import React, { Component } from "react";
-import Expo from "expo";
-import { database } from "../../config/config";
-import { LinearGradient } from "expo-linear-gradient";
-import {
-  ScreenWidth,
-  ScreenHeight,
-  FontScale,
-} from "../../../constant/Constant";
-import HeaderRightButton from "../../../Utils/HeaderRightButton";
-import FABView from "../../../Utils/FAB";
-const thumbNail = require("../../../assets/images/interview.png");
-const eyeglasses = require("../../../assets/images/eyeglasses.jpg");
-const Setting = require("../../../assets/images/setting.png");
+import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity, ScrollView, FlatList, Image, Dimensions } from 'react-native';
+import React, { Component } from 'react';
+import Expo from 'expo';
+import { database } from '../../config/config';
+import { LinearGradient } from 'expo-linear-gradient';
+import { ScreenWidth, ScreenHeight, FontScale } from '../../../constant/Constant';
+import HeaderRightButton from '../../../Utils/HeaderRightButton';
+import FABView from '../../../Utils/FAB';
+import MenuScreen from '../../../Utils/MenuScreen';
+const thumbNail = require('../../../assets/images/interview.png');
+const eyeglasses = require('../../../assets/images/eyeglasses.jpg');
+const Setting = require('../../../assets/images/setting.png');
 
 export default class GetEducated extends Component {
   static navigationOptions = {
@@ -33,15 +20,15 @@ export default class GetEducated extends Component {
     super(props);
     this.state = {
       data: [],
-      topArticle: "",
+      topArticle: '',
     };
   }
 
   componentDidMount() {
     database
-      .ref("contents/articles")
-      .orderByChild("article_id")
-      .on("value", (snapshot) => {
+      .ref('contents/articles')
+      .orderByChild('article_id')
+      .on('value', (snapshot) => {
         var temp = [];
         //console.log(snapshot.toJSON());
         snapshot.forEach((childSnapshot) => {
@@ -59,53 +46,44 @@ export default class GetEducated extends Component {
   render() {
     const pressHandler = () => {
       const id = this.state.topArticle.article_id;
-      this.props.navigation.navigate("ArticleDetailScreen", { article_id: id });
+      this.props.navigation.navigate('ArticleDetailScreen', { article_id: id });
     };
     return (
       <>
-        <View
-          style={{
-            backgroundColor: "#E1EDFF",
-            height: "100%",
-            paddingBottom: ScreenHeight * 0.1,
-          }}
-        >
-          <View style={GetEducatedScreen.headerContainer}>
-            <LinearGradient
-              colors={["#1872a7", "#5a74d1", "#a676ff"]}
-              start={[0, 0.9]}
-              end={[1, 0.1]}
-              locations={[0, 0.5, 1]}
-              style={{
-                height: ScreenHeight,
-              }}
-            ></LinearGradient>
-          </View>
-          <View style={{ flex: 1 }}>
-            <View style={GetEducatedScreen.topArticleContainer}>
-              <TouchableOpacity onPress={pressHandler}>
-                <Image
-                  source={{ uri: this.state.topArticle.image }}
-                  style={GetEducatedScreen.topArticleImage}
-                />
-                <Text style={GetEducatedScreen.topArticleText}>
-                  {this.state.topArticle.subject}
-                </Text>
-              </TouchableOpacity>
+        <MenuScreen>
+          <View
+            style={{
+              backgroundColor: '#E1EDFF',
+              height: '100%',
+              paddingBottom: ScreenHeight * 0.1,
+            }}
+          >
+            <View style={GetEducatedScreen.headerContainer}>
+              <LinearGradient
+                colors={['#1872a7', '#5a74d1', '#a676ff']}
+                start={[0, 0.9]}
+                end={[1, 0.1]}
+                locations={[0, 0.5, 1]}
+                style={{
+                  height: ScreenHeight,
+                }}
+              ></LinearGradient>
             </View>
+            <View style={{ flex: 1 }}>
+              <View style={GetEducatedScreen.topArticleContainer}>
+                <TouchableOpacity onPress={pressHandler}>
+                  <Image source={{ uri: this.state.topArticle.image }} style={GetEducatedScreen.topArticleImage} />
+                  <Text style={GetEducatedScreen.topArticleText}>{this.state.topArticle.subject}</Text>
+                </TouchableOpacity>
+              </View>
 
-            <View style={GetEducatedScreen.articleListContainer}>
-              <FlatList
-                data={this.state.data}
-                renderItem={({ item }) => (
-                  <Item item={item} navigation={this.props.navigation} />
-                )}
-                keyExtractor={(item) => item.article_id}
-              />
+              <View style={GetEducatedScreen.articleListContainer}>
+                <FlatList data={this.state.data} renderItem={({ item }) => <Item item={item} navigation={this.props.navigation} />} keyExtractor={(item) => item.article_id} />
+              </View>
             </View>
           </View>
-        </View>
-        <FABView />
+          <FABView />
+        </MenuScreen>
       </>
     );
   }
@@ -115,15 +93,12 @@ function Item({ item, navigation }) {
   //console.log(item.article_id)
   const id = item.article_id;
   const pressHandler = () => {
-    navigation.navigate("ArticleDetailScreen", { article_id: id });
+    navigation.navigate('ArticleDetailScreen', { article_id: id });
   };
   return (
     <TouchableOpacity onPress={pressHandler}>
       <View style={GetEducatedScreen.articleItem}>
-        <Image
-          source={{ uri: item.image }}
-          style={GetEducatedScreen.itemImage}
-        />
+        <Image source={{ uri: item.image }} style={GetEducatedScreen.itemImage} />
         <View style={{ flex: 1 }}>
           <Text style={GetEducatedScreen.articleSubject}>{item.subject}</Text>
           <Text style={GetEducatedScreen.articleDate}>{item.date}</Text>
@@ -138,22 +113,22 @@ const GetEducatedScreen = StyleSheet.create({
   header: {
     paddingTop: 40,
     marginHorizontal: 30,
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
   },
   title: {
     fontSize: 30,
-    color: "white",
-    fontWeight: "bold",
+    color: 'white',
+    fontWeight: 'bold',
   },
   headerContainer: {
-    overflow: "hidden",
+    overflow: 'hidden',
     borderBottomLeftRadius: 35,
     borderBottomRightRadius: 35,
-    position: "absolute",
+    position: 'absolute',
     height: 210,
-    width: Dimensions.get("window").width,
+    width: Dimensions.get('window').width,
   },
   topArticleContainer: {
     marginTop: 90,
@@ -164,7 +139,7 @@ const GetEducatedScreen = StyleSheet.create({
     flex: 1,
   },
   articleItem: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginVertical: 15,
   },
   itemImage: {
@@ -174,24 +149,24 @@ const GetEducatedScreen = StyleSheet.create({
     marginRight: 20,
   },
   articleSubject: {
-    flexWrap: "wrap",
-    fontWeight: "bold",
+    flexWrap: 'wrap',
+    fontWeight: 'bold',
     fontSize: 18,
-    color: "#24559E",
+    color: '#24559E',
   },
   articleDate: {
     fontSize: 12,
-    color: "#1772A6",
+    color: '#1772A6',
     paddingBottom: 5,
     paddingTop: 2,
   },
   articleAbstract: {
-    flexWrap: "wrap",
+    flexWrap: 'wrap',
     fontSize: 14,
-    color: "#2D9CDB",
+    color: '#2D9CDB',
     paddingBottom: 10,
     borderBottomWidth: 1,
-    borderColor: "#24559E",
+    borderColor: '#24559E',
   },
   topArticleImage: {
     width: ScreenWidth - 60,
@@ -201,7 +176,7 @@ const GetEducatedScreen = StyleSheet.create({
     borderRadius: 14,
   },
   topArticleText: {
-    position: "absolute",
+    position: 'absolute',
     top: ScreenWidth * 0.6 - 86,
     paddingLeft: 20,
     paddingTop: 7,
@@ -211,8 +186,8 @@ const GetEducatedScreen = StyleSheet.create({
     borderBottomLeftRadius: 14,
     borderBottomRightRadius: 14,
     fontSize: 24,
-    fontWeight: "bold",
-    color: "white",
-    backgroundColor: "rgba(0, 0, 0, 0.4)",
+    fontWeight: 'bold',
+    color: 'white',
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',
   },
 });
