@@ -4,7 +4,7 @@ import { Button, Icon } from "react-native-elements";
 import { Grid, Col, Row } from "react-native-easy-grid";
 import moment from "moment";
 
-import { ScreenWidth } from "../../../constant/Constant";
+import { ScreenWidth, ScreenHeight } from "../../../constant/Constant";
 import MenuScreen from "../../../Utils/MenuScreen";
 
 import { connect } from "react-redux";
@@ -65,7 +65,6 @@ const Profile = ({ navigation, route, userInfoStore }) => {
                     {user.birthday.split("T")[0]}{" "}
                   </Text>
                 </Row>
-
                 <Row style={{ height: 47.5 }}>
                   <Col style={styles.iconContainer}>
                     <Icon
@@ -93,7 +92,7 @@ const Profile = ({ navigation, route, userInfoStore }) => {
                   </Col>
                 </Row>
 
-                <Row style={{ height: 30 }}>
+                <Row style={{ height: 20 }}>
                   <Col>
                     <View style={styles.verticalLine} />
                   </Col>
@@ -179,23 +178,23 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   card: {
-    height: 300,
-    width: 300,
+    height: ScreenWidth * 0.8,
+    width: ScreenWidth * 0.8,
     borderRadius: 35,
     backgroundColor: "#fff",
-    marginTop: 110,
+    marginTop: ScreenHeight * 0.16,
   },
   nameContainer: {
-    width: 90,
-    height: 90,
+    width: ScreenWidth * 0.22,
+    height: ScreenWidth * 0.22,
     backgroundColor: "#BED8FF",
-    borderRadius: 45,
+    borderRadius: ScreenWidth * 0.11,
     alignItems: "center",
     justifyContent: "center",
     textAlign: "center",
   },
   name: {
-    fontSize: 45,
+    fontSize: 35,
     color: "#fff",
     fontWeight: "bold",
     textAlign: "center",
@@ -203,7 +202,7 @@ const styles = StyleSheet.create({
   qrCodeIconContainer: {
     flexDirection: "row",
     justifyContent: "flex-end",
-    height: 60,
+    height: ScreenHeight * 0.08,
   },
   titleContainer: {
     alignItems: "center",
@@ -249,7 +248,6 @@ const styles = StyleSheet.create({
   },
   bottomMenuItem: {
     color: "#fff",
-    marginTop: 10,
     fontSize: 18,
   },
 });

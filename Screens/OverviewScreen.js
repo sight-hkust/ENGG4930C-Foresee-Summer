@@ -132,7 +132,7 @@ class OverviewScreen extends Component {
           }}
         >
           <View style={{ flex: 3 }}>
-            {true ? (
+            {calDateDifference() ? (
               <View style={OverviewScreenStyle.reminderContainer}>
                 <Icon
                   name="error-outline"
@@ -507,7 +507,7 @@ const OverviewScreenStyle = StyleSheet.create({
     paddingTop: ScreenHeight * 0.045,
   },
   levelTextContatiner: {
-    width: ScreenWidth * 0.1,
+    width: ScreenWidth * 0.08,
   },
   levelText: {
     fontSize: ScreenHeight * 0.025,
@@ -516,7 +516,7 @@ const OverviewScreenStyle = StyleSheet.create({
     fontWeight: "bold",
   },
   degreeText: {
-    marginLeft: ScreenWidth * 0.015,
+    marginLeft: ScreenWidth * 0.01,
     fontSize: 35,
     paddingTop: ScreenHeight * 0.02,
     color: "#1772A6",
