@@ -21,6 +21,7 @@ export const watchQuestionListUpdate = () => {
             questionList.push({
               question_id: question.key,
               tags: question.val()['tags'],
+              views: question.val()['views'],
               question_title: question.val()['subject'],
               question_content: question.val()['content'],
               answer: question.val()['response']['content'],
@@ -29,7 +30,6 @@ export const watchQuestionListUpdate = () => {
             });
           }
         });
-        console.log(questionList);
         dispatch(updateQuestionList(questionList));
       });
   };

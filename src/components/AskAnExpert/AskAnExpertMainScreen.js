@@ -10,11 +10,11 @@ import MenuScreen from '../../../Utils/MenuScreen';
 
 import { connect } from 'react-redux';
 import { watchQuestionListUpdate, questionList } from '../../reducers/askProfessionalList';
-import HeaderRightButton from '../../../Utils/HeaderRightButton';
 import FABView from '../../../Utils/FAB';
 import { actionCounter } from '../../helpers/actionCounter';
 
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { set } from 'react-native-reanimated';
 
 const SPECIAL_TAG_1 = '眼睛疼痛';
 const SPECIAL_TAG_2 = '視力模糊';
@@ -31,13 +31,26 @@ const AskAnExpertMainScreen = ({ route, navigation, questionListStore }) => {
 
   const { questionList } = questionListStore;
 
+  const [loaded, setLoaded] = useState(false);
+
+  const [hotQuestionlist, setHotQuestionlist] = useState([]);
+
   useEffect(() => {
     hotTopicCounter = 0;
-  }, []);
+    if (questionList && !loaded) {
+      setHotQuestionlist(
+        questionList.sort(function (a, b) {
+          return b.views - a.views;
+        })
+      );
+
+      setLoaded(true);
+    }
+  }, [questionList]);
 
   return (
     <MenuScreen style={{ height: 0 }}>
-      {questionList != null && (
+      {questionList && loaded && (
         <>
           <View style={styles.linearbackgorundContainer}>
             <LinearGradientBackground style={{ height: ScreenHeight }} colors={['#1772A6', '#A377FF']} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]} />
@@ -54,28 +67,30 @@ const AskAnExpertMainScreen = ({ route, navigation, questionListStore }) => {
               >
                 熱門
               </Text>
-              <FlatList
-                data={questionList.slice(0, 4)}
-                horizontal={true}
-                renderItem={({ item }) => {
-                  hotTopicCounter++;
-                  return (
-                    <HotQuestionCard
-                      style={
-                        hotTopicCounter == 1 && {
-                          marginLeft: ScreenWidth * 0.03,
+              {hotQuestionlist && (
+                <FlatList
+                  data={hotQuestionlist.slice(0, 4)}
+                  horizontal={true}
+                  renderItem={({ item }) => {
+                    hotTopicCounter++;
+                    return (
+                      <HotQuestionCard
+                        style={
+                          hotTopicCounter == 1 && {
+                            marginLeft: ScreenWidth * 0.03,
+                          }
                         }
-                      }
-                      faq={item}
-                      key={item.id}
-                      counter={hotTopicCounter - 1}
-                    />
-                  );
-                }}
-                keyExtractor={(item) => item.id}
-                style={{ marginTop: hp('3%'), height: 180, zIndex: 4 }}
-                showsHorizontalScrollIndicator={false}
-              />
+                        faq={item}
+                        key={item.id}
+                        counter={hotTopicCounter - 1}
+                      />
+                    );
+                  }}
+                  keyExtractor={(item) => item.id}
+                  style={{ marginTop: hp('3%'), height: 180, zIndex: 4 }}
+                  showsHorizontalScrollIndicator={false}
+                />
+              )}
             </View>
 
             <View style={styles.background}>
