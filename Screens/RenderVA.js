@@ -59,7 +59,8 @@ export const RenderDatesButton = (props) => {
 
   return (
     <>
-      <View style={{ flexDirection: "row", alignSelf: "center", marginTop: 30, marginBottom: 10 }}>
+      <RenderDateDots L_VAData={L_VAData} R_VAData={R_VAData} dateArr={dateArr} selected={index} />
+      <View style={{ flexDirection: "row", alignSelf: "center", marginTop: ScreenHeight / 50, marginBottom: ScreenHeight / 60 }}>
         <TouchableOpacity onPress={GetBack}>
           <Image source={BackArrow} />
         </TouchableOpacity>
@@ -68,19 +69,8 @@ export const RenderDatesButton = (props) => {
           <Image source={NextArrow} />
         </TouchableOpacity>
       </View>
-      <RenderDateDots L_VAData={L_VAData} R_VAData={R_VAData} dateArr={dateArr} selected={index} />
-      <RenderContent L_VAData={L_VAData} R_VAData={R_VAData} index={index} />
-    </>
-  );
-};
 
-export const RenderVAChart = (props) => {
-  return (
-    <>
-      <View style={{ flex: 1 }}>
-        <Image source={VAChart} style={{ alignSelf: "center", marginBottom: 160, height: 350, resizeMode: "contain" }} />
-        <View style={{ position: "absolute", top: 60, left: 50, backgroundColor: "rgba(91, 192, 173, 0.48)", width: 200, height: 30, borderRadius: 8 }}></View>
-      </View>
+      <RenderContent L_VAData={L_VAData} R_VAData={R_VAData} index={index} />
     </>
   );
 };
@@ -95,8 +85,7 @@ export const RenderContent = (props) => {
         height: ScreenHeight / 3.9,
         width: ScreenWidth / 1.25,
         borderRadius: 20,
-        marginTop: 20,
-        paddingBottom: 10,
+        marginTop: ScreenHeight / 50,
       }}
     >
       <Text style={RenderVAStyle.VAText}>左眼矯正視力：{L_VAData[index]}</Text>
@@ -151,7 +140,7 @@ export const RenderRating = (props) => {
 
 const RenderVAStyle = StyleSheet.create({
   VAText: {
-    marginTop: 20,
+    marginTop: ScreenHeight / 40,
     textAlign: "center",
     fontSize: 18,
     fontWeight: "bold",

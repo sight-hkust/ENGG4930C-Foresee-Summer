@@ -145,10 +145,10 @@ export default class RecordsScreen extends Component {
                 <View style={RecordScreenStyle.contentContainer}>
                   <View style={RecordScreenStyle.eyesButton}>
                     <TouchableOpacity activeOpacity={0.8} onPress={() => this.setState({ Leye: true })}>
-                      <Image source={this.state.Leye ? Open : Close} />
+                      <Image source={this.state.Leye ? Open : Close} style={{ height: ScreenHeight / 10, resizeMode: "contain" }} />
                     </TouchableOpacity>
                     <TouchableOpacity activeOpacity={0.8} onPress={() => this.setState({ Leye: false })} style={{ paddingLeft: 40 }}>
-                      <Image source={this.state.Leye ? Close : Open} />
+                      <Image source={this.state.Leye ? Close : Open} style={{ height: ScreenHeight / 10, resizeMode: "contain" }} />
                     </TouchableOpacity>
                   </View>
 
@@ -172,12 +172,12 @@ export default class RecordsScreen extends Component {
                 {data != null && <DetailButton data={data} selectedDate={this.state.selectedDate} isAdj={false} refractive={this.state.refractive} />}
 
                 <Button
-                  icon={<Icon name="add" size={25} color="#2D9CDB" />}
+                  icon={<Icon name="add" size={ScreenHeight / 20} color="#2D9CDB" />}
                   onPress={pressHandler}
                   buttonStyle={{
                     backgroundColor: "white",
-                    width: 48,
-                    height: 48,
+                    width: ScreenHeight / 15,
+                    height: ScreenHeight / 15,
                     borderRadius: 24,
                     paddingLeft: 0,
                     paddingRight: 0,
@@ -210,15 +210,15 @@ export const DetailButton = (props) => {
         onPress={toggleModal}
         buttonStyle={{
           backgroundColor: "white",
-          width: 40,
-          height: 40,
+          width: ScreenHeight / 15,
+          height: ScreenHeight / 15,
           borderRadius: 24,
           paddingLeft: 0,
           paddingRight: 0,
         }}
-        containerStyle={{ paddingLeft: 10 }}
+        containerStyle={{ paddingLeft: ScreenWidth / 40 }}
       />
-      <Text style={{ color: refractive == "3" ? "white" : "#135a85", fontSize: 16 }}>{isAdj ? "調整度數" : "真實度數"}</Text>
+      <Text style={{ color: refractive == "3" ? "white" : "#135a85", fontSize: ScreenHeight / 40 }}>{isAdj ? "調整度數" : "真實度數"}</Text>
       <RenderModal data={data} selectedDate={selectedDate} isVisible={isVisible} toggleModal={toggleModal} isAdj={isAdj} />
     </View>
   );
@@ -362,8 +362,8 @@ const RecordScreenStyle = StyleSheet.create({
   eyesButton: {
     flexDirection: "row",
     justifyContent: "center",
-    paddingTop: 15,
-    paddingBottom: 15,
+    paddingTop: ScreenHeight / 38,
+    paddingBottom: ScreenHeight / 38,
     //alignSelf: "center",
   },
   datesButton: {
@@ -373,7 +373,7 @@ const RecordScreenStyle = StyleSheet.create({
   },
   dateText: {
     color: "#2D9CDB",
-    fontSize: 18,
+    fontSize: ScreenHeight / 35,
     paddingLeft: 15,
     paddingRight: 15,
   },
@@ -388,19 +388,19 @@ const RecordScreenStyle = StyleSheet.create({
   },
   content: {
     alignSelf: "center",
-    paddingTop: 5,
-    paddingBottom: 5,
+    paddingTop: 0,
+    paddingBottom: 0,
     alignItems: "center",
   },
 
   buttonGroup: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-evenly",
     //justifyContent: "flex-start",
-    paddingTop: 15,
+    paddingTop: ScreenHeight / 100,
     paddingBottom: 15,
-    paddingLeft: 40,
-    paddingRight: 40,
+    paddingLeft: 0,
+    paddingRight: 0,
   },
   linechart: {
     height: "100%",

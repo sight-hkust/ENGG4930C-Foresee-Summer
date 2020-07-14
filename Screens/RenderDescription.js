@@ -1,5 +1,6 @@
 import React, { Component, useState } from "react";
 import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { ScreenWidth, ScreenHeight } from "../constant/Constant";
 
 export const RenderContent = (props) => {
   const { isLeft, ddlValue, data, selectedDate, index, dateArr } = props;
@@ -13,12 +14,12 @@ export const RenderContent = (props) => {
       if (isLeft) {
         if (data[selectedDate].L_Myopia != "0") {
           return (
-            <ScrollView>
+            <View>
               <Text style={DescriptionStyle.degreeText}>{data[selectedDate].L_Myopia}度</Text>
 
               <RenderWarning degree={data[selectedDate].L_Myopia} refractive={"M"} />
               <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft} />
-            </ScrollView>
+            </View>
           );
         } else {
           return (
@@ -261,14 +262,14 @@ export const RenderIncreaseWarning = (props) => {
 const DescriptionStyle = StyleSheet.create({
   degreeText: {
     color: "#2D9CDB",
-    fontSize: 20,
+    fontSize: ScreenWidth / 20,
     fontWeight: "bold",
     textAlign: "center",
   },
   contentText: {
     textAlign: "center",
     color: "#2D9CDB",
-    fontSize: 16,
+    fontSize: ScreenWidth / 25,
   },
   warningText: {
     marginLeft: 10,

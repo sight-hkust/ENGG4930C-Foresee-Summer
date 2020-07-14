@@ -15,7 +15,7 @@ export const RenderDateDots = (config) => {
 
   return (
     <View>
-      <Svg height={height + 20} width={ScreenWidth}>
+      <Svg height={height + 15} width={ScreenWidth}>
         <Rect width="100%" height="100%" fill="none" />
 
         <G>
@@ -96,7 +96,7 @@ export const renderDots = (config) => {
     //console.log(lastIndex);
     output.push(
       <>
-        {item === full_dateArr[selectedIndex] && <Path key={Math.random()} d={`M${cx} ${cy} V${85} Z`} stroke="white" strokeWidth={3} strokeLinecap="round" />}
+        {item === full_dateArr[selectedIndex] && <Path key={Math.random()} d={`M${cx} ${cy} V${ScreenHeight / 9} Z`} stroke="white" strokeWidth={3} strokeLinecap="round" />}
         <Circle
           key={Math.random()}
           cx={cx}
@@ -108,10 +108,17 @@ export const renderDots = (config) => {
           opacity={"1"}
         />
 
-        <Text x={cx} y={item === full_dateArr[selectedIndex] ? 110 : 100} textAnchor="middle" fill="white" fontSize={item === full_dateArr[selectedIndex] ? "22" : "18"} fontWeight="bold">
+        <Text
+          x={cx}
+          y={item === full_dateArr[selectedIndex] ? ScreenHeight / 6.5 : ScreenHeight / 7.3}
+          textAnchor="middle"
+          fill="white"
+          fontSize={item === full_dateArr[selectedIndex] ? ScreenHeight / 26 : ScreenHeight / 35}
+          fontWeight="bold"
+        >
           {moment(item).format("YYYY")}
         </Text>
-        <Text x={cx} y={125} textAnchor="middle" fontSize="16" fill={item === full_dateArr[selectedIndex] ? "white" : "none"}>
+        <Text x={cx} y={ScreenHeight / 6.6 + ScreenHeight / 35} textAnchor="middle" fontSize={ScreenHeight / 38} fill={item === full_dateArr[selectedIndex] ? "white" : "none"}>
           {moment(item).format("D[/]M")}
         </Text>
       </>
