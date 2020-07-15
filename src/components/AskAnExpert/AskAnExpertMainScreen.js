@@ -22,9 +22,9 @@ import {
   questionList,
 } from "../../reducers/askProfessionalList";
 
-const SPECIAL_TAG_1 = "眼精疼痛";
-const SPECIAL_TAG_2 = "視力模糊";
-const SPECIAL_TAG_3 = "分泌物";
+const SPECIAL_TAG_1 = '眼睛疼痛';
+const SPECIAL_TAG_2 = '視力模糊';
+const SPECIAL_TAG_3 = '分泌物';
 
 const SPECIAL_TAG_1_COLOR = "#DFB6FF";
 const SPECIAL_TAG_2_COLOR = "#FFED73";
@@ -46,13 +46,7 @@ const AskAnExpertMainScreen = ({ route, navigation, questionListStore }) => {
       {questionList != null && (
         <>
           <View style={styles.linearbackgorundContainer}>
-            <LinearGradientBackground
-              style={{ height: "100%" }}
-              colors={["#1772A6", "#A377FF"]}
-              start={[0, 1]}
-              end={[1, 0]}
-              locations={[0.12, 0.92]}
-            />
+            <LinearGradientBackground style={{ height: ScreenHeight }} colors={['#1772A6', '#A377FF']} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]} />
           </View>
           <View style={styles.container}>
             <View style={{ width: ScreenWidth, marginTop: 50, zIndex: 1 }}>
@@ -331,8 +325,8 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   hotTopicCard: {
-    width: 140,
-    height: 140,
+    width: ScreenWidth * 0.2825,
+    height: ScreenHeight * 0.17,
     borderRadius: 30,
     overflow: "hidden",
     marginRight: 20,
