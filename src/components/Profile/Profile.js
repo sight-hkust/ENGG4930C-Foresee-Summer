@@ -91,7 +91,6 @@ const Profile = ({ navigation, route, userInfoStore }) => {
                     />
                   </Col>
                 </Row>
-
                 <Row style={{ height: 20 }}>
                   <Col>
                     <View style={styles.verticalLine} />
@@ -137,39 +136,40 @@ const Profile = ({ navigation, route, userInfoStore }) => {
                 </Row>
               </Grid>
             </View>
-            <View style={styles.bottomMenu}></View>
-            <Button
-              title="詳細設定"
-              type="clear"
-              titleStyle={styles.bottomMenuItem}
-              TouchableComponent={TouchableOpacity}
-              onPress={() => navigation.navigate("SettingScreen")}
-            />
-            <Button
-              title="程式教學"
-              type="clear"
-              titleStyle={styles.bottomMenuItem}
-              TouchableComponent={TouchableOpacity}
-              onPress={() => navigation.navigate("Tutorial")}
-            />
-            <Button
-              title="創建子帳戶"
-              type="clear"
-              titleStyle={styles.bottomMenuItem}
-              TouchableComponent={TouchableOpacity}
-              onPress={() =>
-                navigation.navigate("Register", {
-                  isProfessional: false,
-                  registerChild: true,
-                })
-              }
-            />
-            <Button
-              title="變更個人資料"
-              type="clear"
-              titleStyle={styles.bottomMenuItem}
-              TouchableComponent={TouchableOpacity}
-            />
+            <View style={styles.bottomMenu}>
+              <Button
+                title="詳細設定"
+                type="clear"
+                titleStyle={styles.bottomMenuItem}
+                TouchableComponent={TouchableOpacity}
+                onPress={() => navigation.navigate("SettingScreen")}
+              />
+              <Button
+                title="程式教學"
+                type="clear"
+                titleStyle={styles.bottomMenuItem}
+                TouchableComponent={TouchableOpacity}
+                onPress={() => navigation.navigate("Tutorial")}
+              />
+              <Button
+                title="創建子帳戶"
+                type="clear"
+                titleStyle={styles.bottomMenuItem}
+                TouchableComponent={TouchableOpacity}
+                onPress={() =>
+                  navigation.navigate("Register", {
+                    isProfessional: false,
+                    registerChild: true,
+                  })
+                }
+              />
+              <Button
+                title="變更個人資料"
+                type="clear"
+                titleStyle={styles.bottomMenuItem}
+                TouchableComponent={TouchableOpacity}
+              />
+            </View>
           </>
         )}
       </View>
@@ -184,23 +184,23 @@ const styles = StyleSheet.create({
     justifyContent: "center",
   },
   card: {
-    height: ScreenWidth * 0.8,
-    width: ScreenWidth * 0.8,
-    borderRadius: 35,
+    height: ScreenHeight * 0.45,
+    width: ScreenHeight * 0.45,
+    borderRadius: ScreenHeight * 0.06,
     backgroundColor: "#fff",
     marginTop: ScreenHeight * 0.16,
   },
   nameContainer: {
-    width: ScreenWidth * 0.22,
-    height: ScreenWidth * 0.22,
+    width: ScreenWidth * 0.2,
+    height: ScreenWidth * 0.2,
     backgroundColor: "#BED8FF",
-    borderRadius: ScreenWidth * 0.11,
+    borderRadius: ScreenWidth * 0.1,
     alignItems: "center",
     justifyContent: "center",
     textAlign: "center",
   },
   name: {
-    fontSize: 35,
+    fontSize: ScreenWidth * 0.1,
     color: "#fff",
     fontWeight: "bold",
     textAlign: "center",
@@ -213,21 +213,25 @@ const styles = StyleSheet.create({
   titleContainer: {
     alignItems: "center",
     justifyContent: "center",
-    height: 35,
+    height: ScreenHeight * 0.05,
   },
   title: {
     color: "#24559E",
-    fontSize: 30,
+    fontSize: ScreenHeight * 0.05,
     fontWeight: "bold",
+    textAlign: "center",
+    textAlignVertical: "center",
   },
   subtitle: {
     color: "#1772A6",
-    fontSize: 15,
+    fontSize: ScreenHeight * 0.025,
+    textAlign: "center",
+    textAlignVertical: "center",
   },
   iconContainer: {
     alignItems: "center",
     justifyContent: "center",
-    height: 40,
+    height: ScreenHeight * 0.07,
   },
   verticalLine: {
     borderRightWidth: 2,
@@ -248,7 +252,7 @@ const styles = StyleSheet.create({
   },
   bottomMenu: {
     borderTopWidth: 1,
-    marginTop: 20,
+    marginVertical: ScreenHeight * 0.025,
     borderTopColor: "#8BB5F4",
     width: 250,
   },
