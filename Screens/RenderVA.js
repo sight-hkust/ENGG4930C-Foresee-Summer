@@ -23,23 +23,13 @@ export const RenderVA = (props) => {
 
   return (
     <View>
-      <RenderDatesButton dateArr={dateArr} L_VAData={L_VAData} R_VAData={R_VAData} />
-
-      {/*
-      <RenderDatesButton dateArr={dateArr} L_VAData={L_VAData} R_VAData={R_VAData} />
-       <RenderVAChart curData={curData} />
-       
-       <==Need to change state 
-      <RenderVAChart curData={curData} />
-      <RenderContent curData={curData} />
-      <RenderDateDots L_VAData={L_VAData} dateArr={dateArr} selected={selectedIndex} /> 
-      */}
+      <RenderDatesButton dateArr={dateArr} L_VAData={L_VAData} R_VAData={R_VAData} data={data} />
     </View>
   );
 };
 
 export const RenderDatesButton = (props) => {
-  const { dateArr, L_VAData, R_VAData } = props;
+  const { dateArr, L_VAData, R_VAData, data } = props;
   const [index, setIndex] = useState(dateArr.length - 1);
   const GetNext = () => {
     const length = dateArr.length;
@@ -56,10 +46,31 @@ export const RenderDatesButton = (props) => {
       setIndex(value - 1);
     }
   };
+  var L_output = [];
+  var R_output = [];
 
+  const calSubArray = () => {
+    var end = 0;
+    var start = 0;
+    if (dateArr.length < 4) {
+      return dateArr;
+    } else if (index > dateArr.length - 4) {
+      return dateArr.slice(-4);
+    } else if (index <= dateArr.length - 4) {
+      start = index;
+      end = index + 4;
+      return dateArr.slice(start, end);
+    }
+  };
+  for (const date of calSubArray()) {
+    L_output.push(data[date].L_VA);
+    R_output.push(data[date].R_VA);
+  }
+  console.log(data[dateArr[1]].L_VA);
   return (
     <>
-      <View style={{ flexDirection: "row", alignSelf: "center", marginTop: 30, marginBottom: 10 }}>
+      <RenderDateDots data={data} dateArr={dateArr} selected={index} />
+      <View style={{ flexDirection: "row", alignSelf: "center", marginTop: ScreenHeight / 50, marginBottom: ScreenHeight / 60 }}>
         <TouchableOpacity onPress={GetBack}>
           <Image source={BackArrow} />
         </TouchableOpacity>
@@ -68,55 +79,32 @@ export const RenderDatesButton = (props) => {
           <Image source={NextArrow} />
         </TouchableOpacity>
       </View>
-      <RenderDateDots L_VAData={L_VAData} R_VAData={R_VAData} dateArr={dateArr} selected={index} />
-      <RenderContent L_VAData={L_VAData} R_VAData={R_VAData} index={index} />
-    </>
-  );
-};
 
-export const RenderVAChart = (props) => {
-  return (
-    <>
-      <View style={{ flex: 1 }}>
-        <Image source={VAChart} style={{ alignSelf: "center", marginBottom: 160, height: 350, resizeMode: "contain" }} />
-        <View style={{ position: "absolute", top: 60, left: 50, backgroundColor: "rgba(91, 192, 173, 0.48)", width: 200, height: 30, borderRadius: 8 }}></View>
-      </View>
+      <RenderContent data={data} index={index} dateArr={dateArr} />
     </>
   );
 };
 
 export const RenderContent = (props) => {
-  const { L_VAData, R_VAData, index } = props;
+  const { data, index, dateArr } = props;
+  //console.log(index);
   return (
     <View
       style={{
         alignSelf: "center",
         backgroundColor: "rgba(255,255,255,0.9)",
-        height: ScreenHeight / 3.5,
+        height: ScreenHeight / 3.9,
         width: ScreenWidth / 1.25,
         borderRadius: 20,
-        marginTop: 20,
-        paddingBottom: 10,
+        marginTop: ScreenHeight / 50,
       }}
     >
-      <Text style={RenderVAStyle.VAText}>左眼矯正視力：{L_VAData[index]}</Text>
-      <RenderRating VA={L_VAData[index]} />
+      <Text style={RenderVAStyle.VAText}>右眼矯正視力：{data[dateArr[index]].R_VA}</Text>
+      <RenderRating VA={data[dateArr[index]].R_VA} />
 
-      <Text style={RenderVAStyle.VAText}>右眼矯正視力：{R_VAData[index]}</Text>
-      <RenderRating VA={R_VAData[index]} />
+      <Text style={RenderVAStyle.VAText}>左眼矯正視力：{data[dateArr[index]].L_VA}</Text>
+      <RenderRating VA={data[dateArr[index]].L_VA} />
     </View>
-  );
-};
-
-export const RenderTutorial = (props) => {
-  const [isVisible, setVisible] = useState("false");
-  return (
-    <>
-      <Button title={"?"} onPress={() => setVisible("true")}></Button>
-      <BottomModal style={{ height: 200 }}>
-        <Image source={Tutorial} />
-      </BottomModal>
-    </>
   );
 };
 
@@ -151,7 +139,7 @@ export const RenderRating = (props) => {
 
 const RenderVAStyle = StyleSheet.create({
   VAText: {
-    marginTop: 20,
+    marginTop: ScreenHeight / 40,
     textAlign: "center",
     fontSize: 18,
     fontWeight: "bold",
