@@ -153,7 +153,7 @@ function ProfileScreen({ navigation, route }) {
   return (
     <Stack.Navigator screenOptions={headerConfig}>
       <Stack.Screen
-        name="Profile"
+        name="ProfileTabMain"
         component={Profile}
         options={{ title: "我的檔案" }}
       />
@@ -170,7 +170,7 @@ function ProfileScreen({ navigation, route }) {
           headerLeft: () => (
             <BackButton
               onPress={() => {
-                navigation.goBack("Profile");
+                navigation.navigate("ProfileTabMain");
               }}
             />
           ),
