@@ -73,7 +73,6 @@ function ExerciseScreen({ navigation, route }) {
     <Stack.Navigator
       screenOptions={{
         ...headerConfig,
-        headerRight: () => <SettingButton navigation={navigation} />,
       }}
     >
       <Stack.Screen
@@ -87,12 +86,7 @@ function ExerciseScreen({ navigation, route }) {
 
 function HomeScreen({ navigation, route }) {
   return (
-    <Stack.Navigator
-      screenOptions={{
-        ...headerConfig,
-        headerRight: () => <SettingButton navigation={navigation} />,
-      }}
-    >
+    <Stack.Navigator screenOptions={headerConfig}>
       <Stack.Screen
         name="OverViewScreen"
         component={OverviewScreen}
@@ -220,38 +214,7 @@ function ProfessionalScreen({ navigation, route }) {
   );
 }
 
-function SettingButton({ route, navigation }) {
-  const currentUser = auth.currentUser;
-  return (
-    <>
-      <TouchableOpacity
-        onPress={() => {
-          currentUser && currentUser.displayName == "professional"
-            ? navigation.navigate("SettingScreen")
-            : navigation.navigate("SettingScreen");
-        }}
-        style={{ marginRight: 20 }}
-      >
-        <Icon
-          name={
-            currentUser && currentUser.displayName == "professional"
-              ? "questioncircleo"
-              : "setting"
-          }
-          type={"antdesign"}
-          color="white"
-          size={30}
-        />
-      </TouchableOpacity>
-    </>
-  );
-}
-
 function Main({ route, navigation }) {
-  const user = auth.currentUser;
-  useEffect(() => {
-    console.log(auth.currentUser.displayName);
-  }, [auth.currentUser]);
   return (
     <Tab.Navigator
       initialRouteName={
@@ -409,6 +372,7 @@ const store = createStore(rootReducer, applyMiddleware(/* logger, */ thunk));
 export default App = (props) => {
   const [isLoading, setLoading] = useState(true);
   const [loggedIn, setLoggedIn] = useState();
+
   useEffect(() => {
     setTimeout(() => {
       setLoading(false);

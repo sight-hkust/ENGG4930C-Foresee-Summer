@@ -27,16 +27,16 @@ export const updateRecords = (dateList, records) => {
 export const getRecordsUpdate = (uid, inactive) => {
   return (dispatch) => {
     let recordsRef = database.ref("/users/" + uid + "/records");
-    if (inactive) {
-      recordsRef = database.ref("/userInfo/" + uid + "/records");
-    }
-    recordsRef.once("value").then((snap) => {
-      let date = [];
-      snap.forEach((data) => {
-        date.push(data.key);
+    recordsRef
+      .orderByKey()
+      .once("value")
+      .then((snap) => {
+        let date = [];
+        snap.forEach((data) => {
+          date.push(data.key);
+        });
+        dispatch(updateRecords(date, snap.toJSON()));
       });
-      dispatch(updateRecords(date, snap.toJSON()));
-    });
   };
 };
 

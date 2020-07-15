@@ -12,6 +12,7 @@ import { RoundButton } from '../../../Utils/RoundButton';
 import { ScreenHeight, ScreenWidth } from '../../../constant/Constant';
 
 import MenuScreen from '../../../Utils/MenuScreen';
+import HeaderRightButton from '../../../Utils/HeaderRightButton';
 
 const PostQuestionSchema = object({
   title: string().required('此項必填'),
@@ -158,7 +159,7 @@ class Tag extends React.Component {
     this.state = {
       tags: {
         tag: '',
-        tagsArray: ['眼精疼痛', '視力模糊', '分泌物'],
+        tagsArray: ['眼睛疼痛', '視力模糊'],
       },
     };
   }
@@ -195,7 +196,7 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 80,
     width: '100%',
-    height: ScreenHeight * 0.8,
+    height: ScreenHeight * 1.1,
     alignSelf: 'center',
   },
   form: {

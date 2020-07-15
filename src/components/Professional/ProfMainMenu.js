@@ -5,18 +5,10 @@ import {
   View,
   ScrollView,
   ActivityIndicator,
-  Image,
-  TouchableOpacity,
 } from "react-native";
-import { Icon, ListItem, Button, SearchBar } from "react-native-elements";
-import { Grid, Col, Row } from "react-native-easy-grid";
-//import Icon from 'react-native-vector-icons/FontAwesome';
+import { Icon, ListItem, SearchBar } from "react-native-elements";
 
-import {
-  ScreenWidth,
-  ScreenHeight,
-  FontScale,
-} from "../../../constant/Constant";
+import { ScreenWidth, ScreenHeight } from "../../../constant/Constant";
 import { auth } from "../../config/config";
 
 import MenuScreen from "../../../Utils/MenuScreen";
@@ -124,8 +116,6 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
               ) : (
                 showList.map((patient, index) => {
                   const key = patient.uid;
-                  const phone = patient.phone;
-                  const inactive = patient.inactive;
                   return (
                     <View key={index}>
                       <ListItem
@@ -145,8 +135,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                                 marginRight: 5,
                               }}
                               onPress={() => {
-                                navigation.navigate("ProfPatientViewScreen", {
-                                  inactive: inactive,
+                                navigation.navigate("Patient Record", {
                                   key: key,
                                 });
                               }}
@@ -183,9 +172,8 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                         }}
                         subtitleStyle={{ color: "white", fontSize: 13 }}
                         onPress={() => {
-                          navigation.navigate("ProfPatientViewScreen", {
+                          navigation.navigate("Patient Record", {
                             key: key,
-                            inactive: inactive,
                           });
                         }}
                       />

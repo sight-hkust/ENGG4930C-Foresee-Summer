@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik } from "formik";
 import {
   Keyboard,
@@ -50,12 +50,25 @@ export const RegistrationForm = ({ navigation, route }) => {
     isRegisterMethodDialogVisible,
     setRegisterMethodDialogVisibility,
   ] = useState(true);
+  const [errorMessageFromServer, setErrorMessageFromServer] = useState("");
 
   const _showRegisterMethodDialog = () =>
     setRegisterMethodDialogVisibility(true);
 
   const _hideRegisterMethodDialog = () =>
     setRegisterMethodDialogVisibility(false);
+
+  const setServerError = (error) => {
+    console.log(error.code);
+    switch (error.code) {
+      case "auth/email-already-in-use":
+        setErrorMessageFromServer("電子郵件已註冊");
+        break;
+      default:
+        setErrorMessageFromServer(error.code + " " + error.message);
+        break;
+    }
+  };
 
   const registerMethods = [
     { key: "0", label: "以電子郵件註冊" },
@@ -70,11 +83,9 @@ export const RegistrationForm = ({ navigation, route }) => {
             lastName: "",
             surName: "",
             givenName: "",
-            selectedNameField: "chi",
-            /* firstNameFilled: false,
-            lastNameFilled: false,
-            surNameFilled: false,
-            givenNameFilled: false, */
+            selectedNameFields: "chi",
+            chineseNameError: "",
+            englishNameError: "",
             birthday: "",
             parent: {},
             parentSelectionDisabled: false,
@@ -138,10 +149,11 @@ export const RegistrationForm = ({ navigation, route }) => {
                     values,
                     isProfessional,
                     registerPatient,
-                    onComplete: () => {
+                    returnOnComplete: () => {
                       setIsLoading(false);
                       navigation.navigate("ProfMainMenu");
                     },
+                    setServerError: setServerError,
                   })
                 : createAccount({
                     values,
@@ -181,17 +193,6 @@ export const RegistrationForm = ({ navigation, route }) => {
           )}
         </Formik>
       </LinearGradientBackground>
-
-      {/* <Modal
-        visible={isRegisterMethodDialogVisible}
-        transparent={true}
-        onRequestClose={_hideRegisterMethodDialog}
-        onDismiss={_hideRegisterMethodDialog}
-      >
-        <View style={styles.centeredView}>
-          <View style={styles.modalView}></View>
-        </View>
-      </Modal> */}
       <Provider>
         <Modal visible={isRegisterMethodDialogVisible}></Modal>
       </Provider>
@@ -205,14 +206,22 @@ const FormDetails = ({
   registerPatient,
   registerChild,
   isLoading,
+  errorMessageFromServer,
 }) => {
+  const selectedNameFieldsOnRefresh =
+    (selectedNameFields == selectedNameFields) == "eng" &&
+    !formikProps.errors["englishNameError"] &&
+    formikProps.errors["chineseNameError"]
+      ? "eng"
+      : "chi";
   const { setFieldValue, values } = formikProps;
-  const [selectedNameField, setSelectedNameField] = useState("chi");
+  const [selectedNameFields, setSelectedNameFields] = useState("chi");
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isRoleDialogVisible, setRoleDialogVisibility] = useState(false);
   const [isFamilySearchFieldVisible, setFamilySearchFieldVisibility] = useState(
     false
   );
+
   const [
     isFamilySearchDialogVisible,
     setFamilySearchDialogVisibility,
@@ -281,6 +290,8 @@ const FormDetails = ({
       <ScrollView
         style={{
           paddingHorizontal: ScreenWidth * 0.11,
+          marginBottom:
+            ScreenHeight * 0.1 * (isProfessional && registerPatient),
           position: "absolute",
           width: "100%",
           top: 0,
@@ -322,7 +333,7 @@ const FormDetails = ({
         )}
 
         <View style={styles.inputFieldsContainer}>
-          {selectedNameField === "chi" ? (
+          {selectedNameFields === "chi" ? (
             <View
               style={{
                 flexDirection: "row",
@@ -347,7 +358,7 @@ const FormDetails = ({
               />
             </View>
           ) : null}
-          {selectedNameField === "eng" ? (
+          {selectedNameFields === "eng" ? (
             <View
               style={{
                 flexDirection: "row",
@@ -386,10 +397,10 @@ const FormDetails = ({
               </Text>
               <RadioButton
                 value="chi"
-                status={selectedNameField === "chi" ? "checked" : "unchecked"}
+                status={selectedNameFields === "chi" ? "checked" : "unchecked"}
                 onPress={() => {
-                  setSelectedNameField("chi");
-                  setFieldValue("selectedNameField", "chi");
+                  setSelectedNameFields("chi");
+                  setFieldValue("selectedNameFields", "chi");
                 }}
                 color="#FFFFFF"
                 uncheckedColor="#FFFFFF"
@@ -407,10 +418,10 @@ const FormDetails = ({
               </Text>
               <RadioButton
                 value="eng"
-                status={selectedNameField === "eng" ? "checked" : "unchecked"}
+                status={selectedNameFields === "eng" ? "checked" : "unchecked"}
                 onPress={() => {
-                  setSelectedNameField("eng");
-                  setFieldValue("selectedNameField", "eng");
+                  setSelectedNameFields("eng");
+                  setFieldValue("selectedNameFields", "eng");
                 }}
                 color="#FFFFFF"
                 uncheckedColor="#FFFFFF"
@@ -419,37 +430,25 @@ const FormDetails = ({
           </View>
 
           {formikProps.errors &&
-            (selectedNameField === "chi" ? (
-              formikProps.errors && formikProps.errors["lastName"] ? (
-                <Text
-                  style={{
-                    paddingTop: ScreenWidth * 0.01,
-                    paddingLeft: ScreenWidth * 0.08,
-                    textAlign: "left",
-                    fontSize: FontScale * 20,
-                    fontWeight: "700",
-                    color: "#FFFD78",
-                    flexWrap: "wrap",
-                  }}
-                >
-                  {"* " + formikProps.errors["lastName"]}
-                </Text>
-              ) : null
-            ) : formikProps.errors && formikProps.errors["surName"] ? (
-              <Text
-                style={{
-                  paddingTop: ScreenWidth * 0.01,
-                  paddingLeft: ScreenWidth * 0.08,
-                  textAlign: "left",
-                  fontSize: FontScale * 20,
-                  fontWeight: "700",
-                  color: "#FFFD78",
-                  flexWrap: "wrap",
-                }}
-              >
-                {"* " + formikProps.errors["surName"]}
-              </Text>
-            ) : null)}
+          (formikProps.errors["chineseNameError"] ||
+            formikProps.errors["englishNameError"]) ? (
+            <Text
+              style={{
+                paddingTop: ScreenWidth * 0.01,
+                paddingLeft: ScreenWidth * 0.08,
+                textAlign: "left",
+                fontSize: FontScale * 20,
+                fontWeight: "700",
+                color: "#FFFD78",
+                flexWrap: "wrap",
+              }}
+            >
+              {"* " +
+                (formikProps.errors["chineseNameError"]
+                  ? formikProps.errors["chineseNameError"]
+                  : formikProps.errors["englishNameError"])}
+            </Text>
+          ) : null}
 
           {isProfessional && !registerPatient ? (
             <InputDialogPicker
@@ -607,9 +606,22 @@ const FormDetails = ({
             />
           ) : null}
         </View>
-
+        {errorMessageFromServer != "" && (
+          <Text
+            style={{
+              paddingBottom: ScreenWidth * 0.02,
+              textAlign: "center",
+              fontSize: 20,
+              fontWeight: "700",
+              color: "#F34555D3",
+              flexWrap: "wrap",
+            }}
+          >
+            {errorMessageFromServer}
+          </Text>
+        )}
         <RoundButton
-          buttonStyle={{ marginBottom: ScreenHeight * 0.2 }}
+          buttonStyle={{ marginBottom: ScreenHeight * 0.1 }}
           title="提交"
           onPress={() => {
             Keyboard.dismiss();

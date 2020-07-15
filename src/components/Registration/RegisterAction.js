@@ -153,14 +153,14 @@ export const createAccount = ({
       .then(function (userCreds) {
         const uid = userCreds.user.uid;
         if (userCreds) {
-          userCreds.user.updateProfile({ displayName: 'professional' });
+          userCreds.user.updateProfile({ displayName: "professional" });
         }
-        navigation.navigate('Tutorial');
+        navigation.navigate("Tutorial");
         writeUserData({ uid, values, navigation, isProfessional });
         returnOnComplete();
       })
       .catch((error) => {
-        console.log(error.code, error.message);
+        setServerError(error);
       });
   } else {
     auth
@@ -168,14 +168,14 @@ export const createAccount = ({
       .then(function (userCreds) {
         const uid = userCreds.user.uid;
         if (userCreds) {
-          userCreds.user.updateProfile({ displayName: 'user' });
+          userCreds.user.updateProfile({ displayName: "user" });
         }
-        navigation.navigate('Tutorial');
+        navigation.navigate("Tutorial");
         writeUserData({ uid, values, navigation, isProfessional });
         returnOnComplete();
       })
       .catch((error) => {
-        console.log(error.code, error.message);
+        setServerError(error);
       });
   }
 };

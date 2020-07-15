@@ -80,12 +80,12 @@ export default class EyeExercise extends Component {
       audioIndex: 0,
       playingStatus: 0,
       isBuffering: false,
+      playingImage: null,
     };
   }
 
   async getAudio(playWhichOne) {
     const { play, volume, audioIndex, playingStatus } = this.state;
-    console.log(audioIndex);
     try {
       const playbackObject = new Audio.Sound();
       const status = {
@@ -93,21 +93,20 @@ export default class EyeExercise extends Component {
         volume,
       };
       this.setState({ playbackObject: playbackObject });
+      var source = null;
       playbackObject.setOnPlaybackStatusUpdate(this.onPlaybackStatusUpdate);
       if (playWhichOne == 0) {
-        //just start, shuffle
+        source = intro;
         for (let i = 0; i < audios.length; ++i) {
           let j = rand(audios.length);
           let temp = audios[i];
           audios[i] = audios[j];
           audios[j] = temp;
         }
-        await playbackObject.loadAsync(intro, status, false);
-      } else if (playWhichOne == 1) {
-        await playbackObject.loadAsync(audios[audioIndex], status, false);
-        this.setState({ audioIndex: audioIndex + 1 });
-      } else if (playWhichOne == 2)
-        await playbackObject.loadAsync(outro, status, false);
+      } else if (playWhichOne == 1) source = audios[audioIndex];
+      else if (playWhichOne == 2) source = outro;
+      await playbackObject.loadAsync(source.audio, status, false);
+      this.setState({ playingImage: source.image });
     } catch (e) {
       console.log(e);
     }
@@ -116,7 +115,7 @@ export default class EyeExercise extends Component {
     const { playbackObject, playingStatus, audioIndex } = this.state;
     if (status.didJustFinish) {
       await playbackObject.stopAsync();
-      await Brightness.useSystemBrightnessAsync();
+      //await Brightness.useSystemBrightnessAsync();
       if (playingStatus == 10) this.setState({ playingStatus: 1 });
       else if (playingStatus == 11) {
         this.setState({ audioIndex: audioIndex + 1 });
@@ -136,13 +135,13 @@ export default class EyeExercise extends Component {
   render() {
     const PressPlayButton = async (playWhichOne) => {
       await this.getAudio(playWhichOne);
-      await Brightness.setBrightnessAsync(0);
+      //await Brightness.setBrightnessAsync(0);
       const { playbackObject } = this.state;
       await playbackObject.playAsync();
       this.setState({ playingStatus: 10 + playWhichOne });
     };
 
-    const { playingStatus, audioIndex } = this.state;
+    const { playingStatus, audioIndex, playingImage } = this.state;
 
     return (
       <>
@@ -257,8 +256,9 @@ const styles = StyleSheet.create({
   },
   secondaryContainer: {
     flex: 1,
-    margin: 30,
+    marginHorizontal: 30,
     marginTop: 90,
+    marginBottom: 10,
     borderRadius: 30,
     borderWidth: 3,
     borderColor: 'white',
