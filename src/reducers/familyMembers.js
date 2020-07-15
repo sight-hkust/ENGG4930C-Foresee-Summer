@@ -12,7 +12,7 @@ export const updateFamilyMembers = (familyMembers) => {
 export const watchFamilyMembersUpdate = () => {
   return (dispatch) => {
     database
-      .ref("/userInfo/" + auth.currentUser.uid + "/familyMembers")
+      .ref("/users/" + auth.currentUser.uid + "/familyMembers")
       .on("value", (snap) => {
         let familyMembers = [];
         snap.forEach((data) => {

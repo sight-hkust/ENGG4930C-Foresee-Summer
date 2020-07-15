@@ -18,11 +18,11 @@ import { RenderVA } from "../Screens/RenderVA";
 //const patient_id = auth.currentUser.uid;
 //const patient_id = "002";
 var patient_id;
-auth.onAuthStateChanged((user) => {
+/* auth.onAuthStateChanged((user) => {
   if (user != null) {
     patient_id = user.uid;
   }
-});
+}); */
 const UpperDisplayLimit = 3; //3 for testing, real is 4
 
 export default class RecordsScreen extends Component {
@@ -64,6 +64,7 @@ export default class RecordsScreen extends Component {
   }
 
   render() {
+    const { patient_id } = this.props.route.params;
     const data = this.state.data;
     const pressHandler = () => {
       this.props.navigation.navigate("AddRecordScreen", {

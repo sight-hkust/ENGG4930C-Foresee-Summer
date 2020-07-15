@@ -157,6 +157,12 @@ const Profile = ({ navigation, route, userInfoStore }) => {
               type="clear"
               titleStyle={styles.bottomMenuItem}
               TouchableComponent={TouchableOpacity}
+              onPress={() =>
+                navigation.navigate("Register", {
+                  isProfessional: false,
+                  registerChild: true,
+                })
+              }
             />
             <Button
               title="變更個人資料"
