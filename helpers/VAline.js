@@ -9,9 +9,31 @@ import { scaleLinear, scaleTime } from "d3-scale";
 import moment from "moment";
 
 export const RenderDateDots = (config) => {
-  const { L_VAData, R_VAData, dateArr, selected } = config;
+  const { data, dateArr, selected } = config;
   const height = ScreenHeight / 6;
   const padding = 25;
+
+  var L_output = [];
+  var R_output = [];
+
+  const calSubArray = () => {
+    var end = 0;
+    var start = 0;
+    if (dateArr.length < 4) {
+      return dateArr;
+    } else if (selected > dateArr.length - 4) {
+      return dateArr.slice(-4);
+    } else if (selected <= dateArr.length - 4) {
+      start = selected;
+      end = selected + 4;
+      return dateArr.slice(start, end);
+    }
+  };
+  for (const date of calSubArray()) {
+    L_output.push(data[date].L_VA);
+    R_output.push(data[date].R_VA);
+  }
+  //console.log(L_output);
 
   return (
     <View>
@@ -25,9 +47,9 @@ export const RenderDateDots = (config) => {
         </G>
         <G>
           {renderDots({
-            L_VA: L_VAData,
-            R_VA: R_VAData,
-            dateArr: dateArr,
+            L_VA: L_output,
+            R_VA: R_output,
+            dateArr: calSubArray(),
             full_dateArr: dateArr,
             height: height,
             selectedIndex: selected,
@@ -40,7 +62,8 @@ export const RenderDateDots = (config) => {
 
 export const renderDots = (config) => {
   const { L_VA, R_VA, dateArr, full_dateArr, selectedIndex, height } = config;
-
+  console.log("full_dateArr", full_dateArr);
+  console.log("dateArr", dateArr);
   const output = [];
   const x_scale = (val) => {
     const x = scaleTime()
@@ -50,11 +73,12 @@ export const renderDots = (config) => {
     return x(val);
   };
 
-  const y_scale = (L_VA, R_VA) => {
-    if (parseInt(L_VA.substring(0, 1)) == 2) {
+  const y_scale = (L_VA_point, R_VA_point) => {
+    console.log(L_VA_point);
+    if (parseInt(L_VA_point.substring(0, 1)) == 2) {
       //used 20/20
-      const L_backNum = parseInt(L_VA.substring(3));
-      const R_backNum = parseInt(R_VA.substring(3));
+      const L_backNum = parseInt(L_VA_point.substring(3));
+      const R_backNum = parseInt(R_VA_point.substring(3));
       if (L_backNum >= 30 || R_backNum >= 30) {
         return (height / 3 - 15) * 3;
       } else if (L_backNum >= 25 || R_backNum >= 25) {
@@ -62,10 +86,10 @@ export const renderDots = (config) => {
       } else {
         return height / 3 - 15;
       }
-    } else if (parseInt(L_VA.substring(0, 1)) == 6) {
+    } else if (parseInt(L_VA_point.substring(0, 1)) == 6) {
       //used 6/6
-      const L_backNum = parseInt(L_VA.substring(2));
-      const R_backNum = parseInt(R_VA.substring(2));
+      const L_backNum = parseInt(L_VA_point.substring(2));
+      const R_backNum = parseInt(L_VA_point.substring(2));
       if (L_backNum >= 9 || R_backNum >= 9) {
         return (height / 3 - 15) * 3;
       } else if (L_backNum >= 7.5 || R_backNum >= 7.5) {
@@ -73,10 +97,10 @@ export const renderDots = (config) => {
       } else {
         return height / 3 - 15;
       }
-    } else if (parseInt(L_VA.substring(0, 1) == 0 || parseInt(L_VA.substring(0, 1) == 1))) {
+    } else if (parseInt(L_VA_point.substring(0, 1) == 0 || parseInt(L_VA_point.substring(0, 1) == 1))) {
       //used 1.0
-      const L = parseInt(L_VA);
-      const R = parseInt(R_VA);
+      const L = parseInt(L_VA_point);
+      const R = parseInt(R_VA_point);
       if (L < 0.8 || R < 0.8) return (height / 3 - 15) * 3;
       else if (L < 1 || R < 1) return (height / 3 - 15) * 2;
       else return height / 3 - 15;
@@ -90,7 +114,7 @@ export const renderDots = (config) => {
   config.dateArr.forEach((item, index) => {
     //console.log("selected index:",full_dateArr[selectedIndex])
     //const cx = paddingRight/2 + (index * (width - paddingRight)) / (data.length-1);
-    const cx = x_scale(moment(item, "YYYY-MM-DD").toDate(), dateArr);
+    const cx = x_scale(moment(item, "YYYY-MM-DD").toDate());
     const cy = y_scale(L_VA[index], R_VA[index]);
 
     //console.log(lastIndex);

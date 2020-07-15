@@ -23,7 +23,7 @@ auth.onAuthStateChanged((user) => {
     patient_id = user.uid;
   }
 });
-const UpperDisplayLimit = 3; //3 for testing, real is 4
+//const UpperDisplayLimit = 3; //3 for testing, real is 4
 
 export default class RecordsScreen extends Component {
   constructor(props) {

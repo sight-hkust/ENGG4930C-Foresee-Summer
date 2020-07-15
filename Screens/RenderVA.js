@@ -23,23 +23,13 @@ export const RenderVA = (props) => {
 
   return (
     <View>
-      <RenderDatesButton dateArr={dateArr} L_VAData={L_VAData} R_VAData={R_VAData} />
-
-      {/*
-      <RenderDatesButton dateArr={dateArr} L_VAData={L_VAData} R_VAData={R_VAData} />
-       <RenderVAChart curData={curData} />
-       
-       <==Need to change state 
-      <RenderVAChart curData={curData} />
-      <RenderContent curData={curData} />
-      <RenderDateDots L_VAData={L_VAData} dateArr={dateArr} selected={selectedIndex} /> 
-      */}
+      <RenderDatesButton dateArr={dateArr} L_VAData={L_VAData} R_VAData={R_VAData} data={data} />
     </View>
   );
 };
 
 export const RenderDatesButton = (props) => {
-  const { dateArr, L_VAData, R_VAData } = props;
+  const { dateArr, L_VAData, R_VAData, data } = props;
   const [index, setIndex] = useState(dateArr.length - 1);
   const GetNext = () => {
     const length = dateArr.length;
@@ -56,10 +46,30 @@ export const RenderDatesButton = (props) => {
       setIndex(value - 1);
     }
   };
+  var L_output = [];
+  var R_output = [];
 
+  const calSubArray = () => {
+    var end = 0;
+    var start = 0;
+    if (dateArr.length < 4) {
+      return dateArr;
+    } else if (index > dateArr.length - 4) {
+      return dateArr.slice(-4);
+    } else if (index <= dateArr.length - 4) {
+      start = index;
+      end = index + 4;
+      return dateArr.slice(start, end);
+    }
+  };
+  for (const date of calSubArray()) {
+    L_output.push(data[date].L_VA);
+    R_output.push(data[date].R_VA);
+  }
+  console.log(data[dateArr[1]].L_VA);
   return (
     <>
-      <RenderDateDots L_VAData={L_VAData} R_VAData={R_VAData} dateArr={dateArr} selected={index} />
+      <RenderDateDots data={data} dateArr={dateArr} selected={index} />
       <View style={{ flexDirection: "row", alignSelf: "center", marginTop: ScreenHeight / 50, marginBottom: ScreenHeight / 60 }}>
         <TouchableOpacity onPress={GetBack}>
           <Image source={BackArrow} />
@@ -70,13 +80,14 @@ export const RenderDatesButton = (props) => {
         </TouchableOpacity>
       </View>
 
-      <RenderContent L_VAData={L_VAData} R_VAData={R_VAData} index={index} />
+      <RenderContent data={data} index={index} dateArr={dateArr} />
     </>
   );
 };
 
 export const RenderContent = (props) => {
-  const { L_VAData, R_VAData, index } = props;
+  const { data, index, dateArr } = props;
+  //console.log(index);
   return (
     <View
       style={{
@@ -88,24 +99,12 @@ export const RenderContent = (props) => {
         marginTop: ScreenHeight / 50,
       }}
     >
-      <Text style={RenderVAStyle.VAText}>左眼矯正視力：{L_VAData[index]}</Text>
-      <RenderRating VA={L_VAData[index]} />
+      <Text style={RenderVAStyle.VAText}>右眼矯正視力：{data[dateArr[index]].R_VA}</Text>
+      <RenderRating VA={data[dateArr[index]].R_VA} />
 
-      <Text style={RenderVAStyle.VAText}>右眼矯正視力：{R_VAData[index]}</Text>
-      <RenderRating VA={R_VAData[index]} />
+      <Text style={RenderVAStyle.VAText}>左眼矯正視力：{data[dateArr[index]].L_VA}</Text>
+      <RenderRating VA={data[dateArr[index]].L_VA} />
     </View>
-  );
-};
-
-export const RenderTutorial = (props) => {
-  const [isVisible, setVisible] = useState("false");
-  return (
-    <>
-      <Button title={"?"} onPress={() => setVisible("true")}></Button>
-      <BottomModal style={{ height: 200 }}>
-        <Image source={Tutorial} />
-      </BottomModal>
-    </>
   );
 };
 
