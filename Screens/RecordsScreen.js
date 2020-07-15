@@ -18,12 +18,12 @@ import { RenderVA } from "../Screens/RenderVA";
 //const patient_id = auth.currentUser.uid;
 //const patient_id = "002";
 var patient_id;
-/* auth.onAuthStateChanged((user) => {
+auth.onAuthStateChanged((user) => {
   if (user != null) {
     patient_id = user.uid;
   }
-}); */
-const UpperDisplayLimit = 3; //3 for testing, real is 4
+});
+//const UpperDisplayLimit = 3; //3 for testing, real is 4
 
 export default class RecordsScreen extends Component {
   constructor(props) {
@@ -64,7 +64,6 @@ export default class RecordsScreen extends Component {
   }
 
   render() {
-    const { patient_id } = this.props.route.params;
     const data = this.state.data;
     const pressHandler = () => {
       this.props.navigation.navigate("AddRecordScreen", {
@@ -111,71 +110,27 @@ export default class RecordsScreen extends Component {
         >
           <View style={RecordScreenStyle.header}>
             <Text style={RecordScreenStyle.title}>
-              {this.state.refractive == "0"
-                ? "近視"
-                : this.state.refractive == "1"
-                ? "遠視"
-                : "散光"}
-              度數趨勢
+              {this.state.refractive == "0" ? "近視度數" : this.state.refractive == "1" ? "遠視度數" : this.state.refractive == "2" ? "散光度數" : "視力"}
+              趨勢
             </Text>
           </View>
 
           <View style={RecordScreenStyle.secondaryContainer}>
             <View style={RecordScreenStyle.refractiveMenu}>
-              <TouchableOpacity
-                onPress={() => this.setState({ refractive: "3" })}
-              >
-                <Text
-                  style={
-                    this.state.refractive == "3"
-                      ? RecordScreenStyle.selectedMenuText
-                      : RecordScreenStyle.unselectedMenuText
-                  }
-                >
-                  視力
-                </Text>
+              <TouchableOpacity onPress={() => this.setState({ refractive: "3" })}>
+                <Text style={this.state.refractive == "3" ? RecordScreenStyle.selectedMenuText : RecordScreenStyle.unselectedMenuText}>視力</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity
-                onPress={() => this.setState({ refractive: "1" })}
-              >
-                <Text
-                  style={
-                    this.state.refractive == "1"
-                      ? RecordScreenStyle.selectedMenuText
-                      : RecordScreenStyle.unselectedMenuText
-                  }
-                >
-                  遠視
-                </Text>
+              <TouchableOpacity onPress={() => this.setState({ refractive: "1" })}>
+                <Text style={this.state.refractive == "1" ? RecordScreenStyle.selectedMenuText : RecordScreenStyle.unselectedMenuText}>遠視</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity
-                onPress={() => this.setState({ refractive: "0" })}
-              >
-                <Text
-                  style={
-                    this.state.refractive == "0"
-                      ? RecordScreenStyle.selectedMenuText
-                      : RecordScreenStyle.unselectedMenuText
-                  }
-                >
-                  近視
-                </Text>
+              <TouchableOpacity onPress={() => this.setState({ refractive: "0" })}>
+                <Text style={this.state.refractive == "0" ? RecordScreenStyle.selectedMenuText : RecordScreenStyle.unselectedMenuText}>近視</Text>
               </TouchableOpacity>
 
-              <TouchableOpacity
-                onPress={() => this.setState({ refractive: "2" })}
-              >
-                <Text
-                  style={
-                    this.state.refractive == "2"
-                      ? RecordScreenStyle.selectedMenuText
-                      : RecordScreenStyle.unselectedMenuText
-                  }
-                >
-                  散光
-                </Text>
+              <TouchableOpacity onPress={() => this.setState({ refractive: "2" })}>
+                <Text style={this.state.refractive == "2" ? RecordScreenStyle.selectedMenuText : RecordScreenStyle.unselectedMenuText}>散光</Text>
               </TouchableOpacity>
             </View>
             {data != null && this.state.refractive == "3" && (
@@ -184,29 +139,16 @@ export default class RecordsScreen extends Component {
               </View>
             )}
             <View style={RecordScreenStyle.linechart}>
-              <RenderLineChart
-                dataArr={data}
-                dateArr={this.state.dates}
-                refractive={this.state.refractive}
-                isLeft={this.state.Leye}
-                selectedIndex={this.state.index}
-              />
+              <RenderLineChart dataArr={data} dateArr={this.state.dates} refractive={this.state.refractive} isLeft={this.state.Leye} selectedIndex={this.state.index} />
 
               {data != null && this.state.refractive != "3" && (
                 <View style={RecordScreenStyle.contentContainer}>
                   <View style={RecordScreenStyle.eyesButton}>
-                    <TouchableOpacity
-                      activeOpacity={0.8}
-                      onPress={() => this.setState({ Leye: true })}
-                    >
-                      <Image source={this.state.Leye ? Open : Close} />
+                    <TouchableOpacity activeOpacity={0.8} onPress={() => this.setState({ Leye: true })}>
+                      <Image source={this.state.Leye ? Open : Close} style={{ height: ScreenHeight / 10, resizeMode: "contain" }} />
                     </TouchableOpacity>
-                    <TouchableOpacity
-                      activeOpacity={0.8}
-                      onPress={() => this.setState({ Leye: false })}
-                      style={{ paddingLeft: 40 }}
-                    >
-                      <Image source={this.state.Leye ? Close : Open} />
+                    <TouchableOpacity activeOpacity={0.8} onPress={() => this.setState({ Leye: false })} style={{ paddingLeft: 40 }}>
+                      <Image source={this.state.Leye ? Close : Open} style={{ height: ScreenHeight / 10, resizeMode: "contain" }} />
                     </TouchableOpacity>
                   </View>
 
@@ -214,60 +156,37 @@ export default class RecordsScreen extends Component {
                     <TouchableOpacity onPress={GetBack}>
                       <Image source={BackArrow} />
                     </TouchableOpacity>
-                    <Text style={RecordScreenStyle.dateText}>
-                      {this.state.selectedDate}
-                    </Text>
+                    <Text style={RecordScreenStyle.dateText}>{this.state.selectedDate}</Text>
                     <TouchableOpacity onPress={GetNext}>
                       <Image source={NextArrow} />
                     </TouchableOpacity>
                   </View>
 
                   <View style={RecordScreenStyle.content}>
-                    <RenderContent
-                      isLeft={this.state.Leye}
-                      ddlValue={this.state.refractive}
-                      data={data}
-                      selectedDate={this.state.selectedDate}
-                      index={this.state.index}
-                      dateArr={this.state.dates}
-                    />
+                    <RenderContent isLeft={this.state.Leye} ddlValue={this.state.refractive} data={data} selectedDate={this.state.selectedDate} index={this.state.index} dateArr={this.state.dates} />
                   </View>
                 </View>
               )}
 
-              {this.state.refractive != "3" && (
-                <View style={RecordScreenStyle.buttonGroup}>
-                  {data != null && (
-                    <DetailButton
-                      data={data}
-                      selectedDate={this.state.selectedDate}
-                      isAdj={false}
-                    />
-                  )}
+              <View style={RecordScreenStyle.buttonGroup}>
+                {data != null && <DetailButton data={data} selectedDate={this.state.selectedDate} isAdj={false} refractive={this.state.refractive} />}
 
-                  <Button
-                    icon={<Icon name="add" size={25} color="#2D9CDB" />}
-                    onPress={pressHandler}
-                    buttonStyle={{
-                      backgroundColor: "white",
-                      width: 48,
-                      height: 48,
-                      borderRadius: 24,
-                      paddingLeft: 0,
-                      paddingRight: 0,
-                    }}
-                  />
-                  {data != null && (
-                    <DetailButton
-                      data={data}
-                      selectedDate={this.state.selectedDate}
-                      isAdj={true}
-                    />
-                  )}
+                <Button
+                  icon={<Icon name="add" size={ScreenHeight / 20} color="#2D9CDB" />}
+                  onPress={pressHandler}
+                  buttonStyle={{
+                    backgroundColor: "white",
+                    width: ScreenHeight / 15,
+                    height: ScreenHeight / 15,
+                    borderRadius: 24,
+                    paddingLeft: 0,
+                    paddingRight: 0,
+                  }}
+                />
+                {data != null && <DetailButton data={data} selectedDate={this.state.selectedDate} isAdj={true} refractive={this.state.refractive} />}
 
-                  {/* <RenderIncreaseWarning data={data} dateArr={this.state.dates} index={this.state.index} refractive={this.state.refractive} isLeft={true}/> */}
-                </View>
-              )}
+                {/* <RenderIncreaseWarning data={data} dateArr={this.state.dates} index={this.state.index} refractive={this.state.refractive} isLeft={true}/> */}
+              </View>
             </View>
           </View>
         </LinearGradient>
@@ -277,7 +196,7 @@ export default class RecordsScreen extends Component {
 }
 
 export const DetailButton = (props) => {
-  const { data, selectedDate, isAdj } = props;
+  const { data, selectedDate, isAdj, refractive } = props;
 
   const [isVisible, setIsVisible] = useState(false);
 
@@ -287,35 +206,20 @@ export const DetailButton = (props) => {
   return (
     <View style={{ flexDirection: "column", justifyContent: "center" }}>
       <Button
-        icon={
-          <Icon
-            name={isAdj ? "eyeglass" : "dehaze"}
-            type={isAdj ? "simple-line-icon" : ""}
-            size={22}
-            color="#2D9CDB"
-          />
-        }
+        icon={<Icon name={isAdj ? "eyeglass" : "dehaze"} type={isAdj ? "simple-line-icon" : ""} size={22} color="#2D9CDB" />}
         onPress={toggleModal}
         buttonStyle={{
           backgroundColor: "white",
-          width: 40,
-          height: 40,
+          width: ScreenHeight / 15,
+          height: ScreenHeight / 15,
           borderRadius: 24,
           paddingLeft: 0,
           paddingRight: 0,
         }}
-        containerStyle={{ paddingLeft: 10 }}
+        containerStyle={{ paddingLeft: ScreenWidth / 40 }}
       />
-      <Text style={{ color: "#135a85", fontSize: 16 }}>
-        {isAdj ? "調整度數" : "真實度數"}
-      </Text>
-      <RenderModal
-        data={data}
-        selectedDate={selectedDate}
-        isVisible={isVisible}
-        toggleModal={toggleModal}
-        isAdj={isAdj}
-      />
+      <Text style={{ color: refractive == "3" ? "white" : "#135a85", fontSize: ScreenHeight / 40 }}>{isAdj ? "調整度數" : "真實度數"}</Text>
+      <RenderModal data={data} selectedDate={selectedDate} isVisible={isVisible} toggleModal={toggleModal} isAdj={isAdj} />
     </View>
   );
 };
@@ -325,11 +229,7 @@ export const RenderModal = (props) => {
   const curRecord = data[selectedDate];
 
   return (
-    <BottomModal
-      isVisible={isVisible}
-      toggleModal={toggleModal}
-      style={{ backgroundColor: "#FFFFFF", height: 350 }}
-    >
+    <BottomModal isVisible={isVisible} toggleModal={toggleModal} style={{ backgroundColor: "#FFFFFF", height: 350 }}>
       <View
         style={{
           backgroundColor: "#1772A6",
@@ -349,11 +249,7 @@ export const RenderLineChart = (props) => {
   const { dataArr, dateArr, refractive, isLeft, selectedIndex } = props;
 
   if (dataArr == null) {
-    return (
-      <Text style={RecordScreenStyle.noDataText}>
-        暫無數據，請按“+”輸入資料
-      </Text>
-    );
+    return <Text style={RecordScreenStyle.noDataText}>暫無數據，請按“+”輸入資料</Text>;
   }
   if (refractive == "3") {
     return null;
@@ -386,9 +282,7 @@ export const RenderLineChart = (props) => {
 
     case "1": {
       for (const date of calSubArray()) {
-        output.push(
-          isLeft ? dataArr[date].L_Hyperopia : dataArr[date].R_Hyperopia
-        );
+        output.push(isLeft ? dataArr[date].L_Hyperopia : dataArr[date].R_Hyperopia);
       }
       break;
     }
@@ -404,26 +298,11 @@ export const RenderLineChart = (props) => {
   }
 
   if (output.length > 0) {
-    return (
-      <LineChart
-        data={output}
-        dateArr={calSubArray()}
-        full_dateArr={dateArr}
-        selectedIndex={selectedIndex}
-        refractive={refractive}
-      />
-    );
+    return <LineChart data={output} dateArr={calSubArray()} full_dateArr={dateArr} selectedIndex={selectedIndex} refractive={refractive} />;
   }
 
   if (output.length > 0) {
-    return (
-      <LineChart
-        data={output}
-        dateArr={dateArr}
-        selectedIndex={selectedIndex}
-        refractive={refractive}
-      />
-    );
+    return <LineChart data={output} dateArr={dateArr} selectedIndex={selectedIndex} refractive={refractive} />;
   } else {
     return null;
   }
@@ -435,14 +314,14 @@ const RecordScreenStyle = StyleSheet.create({
     backgroundColor: "#24559E",
   },
   header: {
-    paddingTop: 40,
+    paddingTop: 38,
     marginLeft: 50,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
   title: {
-    fontSize: 30,
+    fontSize: 28,
     color: "white",
     fontWeight: "bold",
   },
@@ -483,8 +362,8 @@ const RecordScreenStyle = StyleSheet.create({
   eyesButton: {
     flexDirection: "row",
     justifyContent: "center",
-    paddingTop: 15,
-    paddingBottom: 15,
+    paddingTop: ScreenHeight / 38,
+    paddingBottom: ScreenHeight / 38,
     //alignSelf: "center",
   },
   datesButton: {
@@ -494,7 +373,7 @@ const RecordScreenStyle = StyleSheet.create({
   },
   dateText: {
     color: "#2D9CDB",
-    fontSize: 18,
+    fontSize: ScreenHeight / 35,
     paddingLeft: 15,
     paddingRight: 15,
   },
@@ -509,19 +388,19 @@ const RecordScreenStyle = StyleSheet.create({
   },
   content: {
     alignSelf: "center",
-    paddingTop: 5,
-    paddingBottom: 5,
+    paddingTop: 0,
+    paddingBottom: 0,
     alignItems: "center",
   },
 
   buttonGroup: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-evenly",
     //justifyContent: "flex-start",
-    paddingTop: 15,
+    paddingTop: ScreenHeight / 100,
     paddingBottom: 15,
-    paddingLeft: 40,
-    paddingRight: 40,
+    paddingLeft: 0,
+    paddingRight: 0,
   },
   linechart: {
     height: "100%",
