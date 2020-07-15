@@ -13,6 +13,9 @@ import { Provider, Portal, Modal } from "react-native-paper";
 import { displayName } from "../src/helpers/displayName";
 import { getRecordsUpdate, records } from "../src/reducers/records";
 
+import FABView from "../Utils/FAB";
+import { LinearGradientBackground } from "../Utils/LinearGradientBackground";
+
 //var patient_id = "2igwzwrRiEYReq9HOaDIraVg55V2";
 var patient_id;
 auth.onAuthStateChanged((user) => {
@@ -117,33 +120,34 @@ class OverviewScreen extends Component {
     };
 
     return (
-      <View>
-        <LinearGradient
+      <>
+        <LinearGradientBackground
           colors={["#1872a7", "#5a74d1", "#a676ff"]}
           start={[0, 0.9]}
           end={[1, 0.1]}
           locations={[0, 0.5, 1]}
           style={{
-            height: "100%",
+            height: ScreenHeight,
+            paddingBottom: ScreenHeight * 0.1,
           }}
         >
-          {calDateDifference() ? (
-            <View style={OverviewScreenStyle.reminderContainer}>
-              <Icon
-                name="error-outline"
-                color="#24559E"
-                containerStyle={OverviewScreenStyle.iconstyle}
-              />
-              <Text style={OverviewScreenStyle.reminderText}>
-                距離上次驗眼已超過一年，建議盡快預約驗眼
-              </Text>
-            </View>
-          ) : null}
-
+          <View style={{ flex: 3 }}>
+            {true ? (
+              <View style={OverviewScreenStyle.reminderContainer}>
+                <Icon
+                  name="error-outline"
+                  color="#24559E"
+                  containerStyle={OverviewScreenStyle.iconstyle}
+                />
+                <Text style={OverviewScreenStyle.reminderText}>
+                  距離上次驗眼已超過一年，建議盡快預約驗眼
+                </Text>
+              </View>
+            ) : null}
+          </View>
           <View style={{ flexDirection: "row", flex: 10 }}>
             <View
               style={{
-                marginTop: ScreenHeight * 0.2,
                 flex: 1,
                 alignItems: "center",
               }}
@@ -179,7 +183,6 @@ class OverviewScreen extends Component {
                   )}
                 </TouchableOpacity>
               </View>
-
               <View
                 style={{
                   flex: 2.3,
@@ -199,7 +202,7 @@ class OverviewScreen extends Component {
               style={{
                 flex: 1,
                 alignItems: "center",
-                marginTop: ScreenHeight * 0.168,
+                marginTop: ScreenHeight * 0.01,
               }}
             >
               <View style={OverviewScreenStyle.rightEyeContainer}>
@@ -239,10 +242,9 @@ class OverviewScreen extends Component {
               </View>
             </View>
           </View>
-
           <View style={OverviewScreenStyle.dateContainer}>
             <Text style={OverviewScreenStyle.dateText}>
-              最近驗眼日期:{" "}
+              {"最近驗眼日期: "}
               {this.state.dateArr == null
                 ? ""
                 : moment(
@@ -250,7 +252,7 @@ class OverviewScreen extends Component {
                   ).format("YYYY-MM-DD")}
             </Text>
           </View>
-        </LinearGradient>
+        </LinearGradientBackground>
         <Provider>
           <Portal>
             <Modal
@@ -292,7 +294,8 @@ class OverviewScreen extends Component {
             </Modal>
           </Portal>
         </Provider>
-      </View>
+        <FABView navigation={this.props.navigation} />
+      </>
     );
   }
 }
@@ -482,7 +485,7 @@ const OverviewScreenStyle = StyleSheet.create({
   topContainer: {
     backgroundColor: "#24559E",
     position: "absolute",
-    top: -30,
+    top: -ScreenHeight * 0.045,
     height: ScreenHeight * 0.09,
     width: ScreenHeight * 0.09,
     borderRadius: ScreenHeight * 0.015,
@@ -501,7 +504,7 @@ const OverviewScreenStyle = StyleSheet.create({
   itemContainer: {
     alignSelf: "center",
     flexDirection: "row",
-    paddingTop: ScreenHeight * 0.023,
+    paddingTop: ScreenHeight * 0.045,
   },
   levelTextContatiner: {
     width: ScreenWidth * 0.1,
@@ -537,15 +540,15 @@ const OverviewScreenStyle = StyleSheet.create({
     textAlign: "center",
   },
   dateContainer: {
-    alignItems: "center",
     flex: 1,
   },
   dateText: {
+    alignSelf: "center",
     fontSize: 18,
     color: "#FFFFFF",
+    textAlignVertical: "center",
   },
   reminderContainer: {
-    position: "absolute",
     marginTop: 65,
     height: ScreenHeight / 11,
     width: ScreenWidth / 1.5,
@@ -553,7 +556,6 @@ const OverviewScreenStyle = StyleSheet.create({
     borderBottomRightRadius: 15,
     backgroundColor: "#D9FFD8",
     flexDirection: "row",
-    zIndex: 1,
   },
   hiddenreminderContainer: {
     marginTop: 65,
