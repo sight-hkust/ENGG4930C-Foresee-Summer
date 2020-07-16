@@ -126,6 +126,10 @@ export default class RecordsScreen extends Component {
               <Text style={this.state.refractive == '2' ? RecordScreenStyle.selectedMenuText : RecordScreenStyle.unselectedMenuText}>散光</Text>
             </TouchableOpacity>
           </View>
+          {data != null && this.state.refractive == '3' && (
+            <View style={{ marginTop: 0 }}>
+              <RenderVA data={data} dateArr={this.state.dates} />
+            </View>
           )}
           <View style={RecordScreenStyle.linechart}>
             <RenderLineChart dataArr={data} dateArr={this.state.dates} refractive={this.state.refractive} isLeft={this.state.Leye} selectedIndex={this.state.index} />
@@ -168,67 +172,26 @@ export default class RecordsScreen extends Component {
                 </View>
               </View>
             )}
-            <View style={RecordScreenStyle.linechart}>
-              <RenderLineChart dataArr={data} dateArr={this.state.dates} refractive={this.state.refractive} isLeft={this.state.Leye} selectedIndex={this.state.index} />
 
-              {data != null && this.state.refractive != '3' && (
-                <View style={RecordScreenStyle.contentContainer}>
-                  <View style={RecordScreenStyle.eyesButton}>
-                    <TouchableOpacity activeOpacity={0.8} onPress={() => this.setState({ Leye: true })}>
-                      <Image
-                        source={this.state.Leye ? Open : Close}
-                        style={{
-                          height: ScreenHeight / 10,
-                          resizeMode: 'contain',
-                        }}
-                      />
-                    </TouchableOpacity>
-                    <TouchableOpacity activeOpacity={0.8} onPress={() => this.setState({ Leye: false })} style={{ paddingLeft: 40 }}>
-                      <Image
-                        source={this.state.Leye ? Close : Open}
-                        style={{
-                          height: ScreenHeight / 10,
-                          resizeMode: 'contain',
-                        }}
-                      />
-                    </TouchableOpacity>
-                  </View>
+            <View style={RecordScreenStyle.buttonGroup}>
+              {data != null && <DetailButton data={data} selectedDate={this.state.selectedDate} isAdj={false} refractive={this.state.refractive} />}
 
-                  <View style={RecordScreenStyle.datesButton}>
-                    <TouchableOpacity onPress={GetBack}>
-                      <Image source={BackArrow} />
-                    </TouchableOpacity>
-                    <Text style={RecordScreenStyle.dateText}>{this.state.selectedDate}</Text>
-                    <TouchableOpacity onPress={GetNext}>
-                      <Image source={NextArrow} />
-                    </TouchableOpacity>
-                  </View>
+              <Button
+                icon={<Icon name="add" size={ScreenHeight / 20} color="#2D9CDB" />}
+                onPress={pressHandler}
+                buttonStyle={{
+                  backgroundColor: 'white',
+                  width: ScreenHeight / 15,
+                  height: ScreenHeight / 15,
+                  borderRadius: 24,
+                  paddingLeft: 0,
+                  paddingRight: 0,
+                }}
+                TouchableComponent={TouchableOpacity}
+              />
+              {data != null && <DetailButton data={data} selectedDate={this.state.selectedDate} isAdj={true} refractive={this.state.refractive} />}
 
-                  <View style={RecordScreenStyle.content}>
-                    <RenderContent isLeft={this.state.Leye} ddlValue={this.state.refractive} data={data} selectedDate={this.state.selectedDate} index={this.state.index} dateArr={this.state.dates} />
-                  </View>
-                </View>
-              )}
-
-              <View style={RecordScreenStyle.buttonGroup}>
-                {data != null && <DetailButton data={data} selectedDate={this.state.selectedDate} isAdj={false} refractive={this.state.refractive} />}
-
-                <Button
-                  icon={<Icon name="add" size={ScreenHeight / 20} color="#2D9CDB" />}
-                  onPress={pressHandler}
-                  buttonStyle={{
-                    backgroundColor: 'white',
-                    width: ScreenHeight / 15,
-                    height: ScreenHeight / 15,
-                    borderRadius: 24,
-                    paddingLeft: 0,
-                    paddingRight: 0,
-                  }}
-                />
-                {data != null && <DetailButton data={data} selectedDate={this.state.selectedDate} isAdj={true} refractive={this.state.refractive} />}
-
-                {/* <RenderIncreaseWarning data={data} dateArr={this.state.dates} index={this.state.index} refractive={this.state.refractive} isLeft={true}/> */}
-              </View>
+              {/* <RenderIncreaseWarning data={data} dateArr={this.state.dates} index={this.state.index} refractive={this.state.refractive} isLeft={true}/> */}
             </View>
           </View>
         </View>

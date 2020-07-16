@@ -61,7 +61,7 @@ const FABView = () => {
             fabStyle={{ backgroundColor: '#fff' }}
           />
         </Portal>
-        <BottomModal isVisible={showContact} toggleModal={toggleModal} style={{ backgroundColor: '#F8F8F8', height: hp('45%') }}>
+        <BottomModal isVisible={showContact} toggleModal={toggleModal} style={{ backgroundColor: '#F8F8F8', height: hp('50%') }}>
           <View style={{ alignSelf: 'center', width: '30%', height: 1, borderWidth: 1, marginBottom: 10, borderColor: '#1772A6' }} />
           <View style={{ paddingBottom: 20 }}>
             {index === 0 ? (
