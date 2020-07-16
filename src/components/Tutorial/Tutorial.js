@@ -15,7 +15,7 @@ const tutorialContent = [
   {
     image: IMAGE_0,
     subject: "如何看不同日期的記錄?",
-    content: "按下箭咀看前一次或後一次的紀錄",
+    content: "按下白色圓形切換至不同日期的記錄\n按下箭咀看前一次或後一次的紀錄",
   },
   {
     image: IMAGE_1,
@@ -25,12 +25,13 @@ const tutorialContent = [
   {
     image: IMAGE_2,
     subject: "顏色代表甚麼?",
-    content: "視力趨勢圖中不同顏色\n代表屈光不正的深淺",
+    content: "視力趨勢圖中不同顏色\n代表視力的深淺",
   },
   {
     image: IMAGE_3,
     subject: "數字代表甚麼?",
-    content: "數字越大\n屈光不正程度越嚴重",
+    content:
+      "負數代表近視 正數代表遠視\n數字(排除正負號)越大\n眼屈光不正程度越嚴重",
   },
   {
     image: IMAGE_4,
@@ -40,8 +41,7 @@ const tutorialContent = [
   {
     image: IMAGE_5,
     subject: "底部圖案代表甚麼功能?",
-    content:
-      "按下真實度數顯示眼睛詳細度數\n按下加號輸入驗眼數據\n調整度數顯示眼鏡詳細度數",
+    content: "中央的眼睛是視力趨勢主頁\n其他是護眼學堂的四種活動",
   },
 ];
 
@@ -86,7 +86,7 @@ const Tutorial = ({ route, navigation }) => {
               source={item.image}
             />
             <View
-              style={{ height: ScreenHeight * 0.1, justifyContent: "center" }}
+              style={{ height: ScreenHeight * 0.12, justifyContent: "center" }}
             >
               <Text style={styles.title}>{item.subject}</Text>
             </View>
@@ -96,14 +96,21 @@ const Tutorial = ({ route, navigation }) => {
                 style={{
                   position: "absolute",
                   width: ScreenWidth,
-                  bottom: ScreenHeight * 0.15,
+                  bottom: ScreenHeight * 0.14,
                   flex: 1,
                   alignItems: "center",
                 }}
               >
                 <Button
-                  buttonStyle={styles.buttonStyle}
-                  titleStyle={{ fontSize: ScreenWidth / 24 }}
+                  buttonStyle={{
+                    borderWidth: 1,
+                    borderColor: "#8BB5F4",
+                    borderRadius: 18,
+                    height: 36,
+                    paddingHorizontal: 18,
+                    justifyContent: "center",
+                  }}
+                  titleStyle={{ fontSize: 14 }}
                   type="clear"
                   title="開始使用"
                   onPress={() => navigation.navigate("Main")}
@@ -131,24 +138,16 @@ const styles = StyleSheet.create({
   },
   title: {
     color: "#1772A6",
-    fontSize: ScreenWidth / 15,
+    fontSize: 26,
     fontWeight: "bold",
     textAlign: "center",
   },
   content: {
     textAlign: "center",
     color: "#2D9CDB",
-    fontSize: ScreenWidth / 22,
+    fontSize: 18,
     fontWeight: "bold",
-    height: ScreenHeight * 0.2,
-  },
-  buttonStyle: {
-    borderWidth: 1,
-    borderColor: "#8BB5F4",
-    borderRadius: ScreenWidth / 22,
-    height: (ScreenWidth / 22) * 2,
-    paddingHorizontal: 18,
-    justifyContent: "center",
+    height: ScreenHeight * 0.18,
   },
 });
 
