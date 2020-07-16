@@ -5,6 +5,7 @@ import { ScreenWidth, ScreenHeight } from '../../../constant/Constant';
 import Swiper from 'react-native-swiper';
 import { Grid, Row, Col } from 'react-native-easy-grid';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { tutorialContent } from './Tutorial';
 
 const RECORD_IMAGE_0 = require('../../../assets/images/Record_normal.png');
 const RECORD_IMAGE_1 = require('../../../assets/images/Record_disease.png');
@@ -59,20 +60,64 @@ const AddRecordTutorialContent = [
 ];
 
 export function RecordTutorial() {
+  const [index, setIndex] = useState(0);
+
   return (
-    <Swiper loop={false} showsButtons={true} showsPagination={false}>
-      {RecordTutorialContent.map((item, index) => {
-        return (
-          <ScrollView style={{ paddingBottom: 20 }}>
-            <View style={recordStyle.slide}>
-              <Text style={recordStyle.title}>{item.subject}</Text>
-              <Image style={recordStyle.image} source={item.image} />
-              <Text style={recordStyle.content}>{item.content}</Text>
-            </View>
-          </ScrollView>
-        );
-      })}
-    </Swiper>
+    <Grid>
+      <Row style={{ width: '100%', height: 60, alignItems: 'center', alignContent: 'center' }}>
+        <Col style={{ width: '35%', position: 'absolute', left: 35 }}>
+          <Button
+            title="視力分析"
+            type={index === 0 ? 'solid' : 'outline'}
+            TouchableComponent={TouchableOpacity}
+            onPress={() => setIndex(0)}
+            titleStyle={{ color: `${index === 0 ? '#fff' : '#4674C4'}`, fontSize: 15, fontWeight: 'bold' }}
+            buttonStyle={{ backgroundColor: `${index === 0 ? '#4674C4' : '#fff'}` }}
+          />
+        </Col>
+        <Col style={{ width: '35%', position: 'absolute', right: 35 }}>
+          <Button
+            title="界面解說"
+            type={index === 1 ? 'solid' : 'outline'}
+            TouchableComponent={TouchableOpacity}
+            onPress={() => setIndex(1)}
+            titleStyle={{ color: `${index === 1 ? '#fff' : '#4674C4'}`, fontSize: 15, fontWeight: 'bold' }}
+            buttonStyle={{ backgroundColor: `${index === 1 ? '#4674C4' : '#fff'}` }}
+          />
+        </Col>
+      </Row>
+      <Row>
+        {index === 0 ? (
+          <Swiper loop={false} showsButtons={true} showsPagination={false}>
+            {RecordTutorialContent.map((item, index) => {
+              return (
+                <ScrollView style={{ paddingBottom: 20, marginTop: 20 }}>
+                  <View style={recordStyle.slide}>
+                    <Text style={recordStyle.title}>{item.subject}</Text>
+                    <Image style={recordStyle.image} source={item.image} />
+                    <Text style={recordStyle.content}>{item.content}</Text>
+                  </View>
+                </ScrollView>
+              );
+            })}
+          </Swiper>
+        ) : (
+          <Swiper loop={false} showsButtons={true} showsPagination={false}>
+            {tutorialContent.map((item, index) => {
+              return (
+                <View style={styles.slide1}>
+                  <Image style={[styles.image, index % 2 ? { marginRight: ScreenWidth / 7 } : { marginLeft: ScreenWidth / 7 }]} source={item.image} />
+                  <View style={{ height: ScreenHeight * 0.12, justifyContent: 'center' }}>
+                    <Text style={styles.title}>{item.subject}</Text>
+                  </View>
+                  <Text style={styles.content}>{item.content}</Text>
+                </View>
+              );
+            })}
+          </Swiper>
+        )}
+      </Row>
+    </Grid>
   );
 }
 
@@ -105,7 +150,7 @@ export function AddRecordTutorial() {
       </Row>
       <Row>
         {index === 0 ? (
-          <Swiper loop={false} showsButtons={true} showsPagination={false}>
+          <Swiper loop={false} showsButtons={true} showsPagination={false} style={{ borderRadius: 20 }}>
             {AddRecordTutorialContent.map((item, index) => {
               return (
                 <ScrollView>
@@ -165,6 +210,29 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: '#fff',
     textAlign: 'center',
+  },
+  slide1: {
+    flex: 1,
+    alignItems: 'center',
+    backgroundColor: '#fff',
+    borderRadius: 20,
+  },
+  image: {
+    height: (ScreenWidth * 5) / 7,
+    width: (ScreenWidth * 6) / 7,
+  },
+  title: {
+    color: '#1772A6',
+    fontSize: 26,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  content: {
+    textAlign: 'center',
+    color: '#2D9CDB',
+    fontSize: 18,
+    fontWeight: 'bold',
+    height: ScreenHeight * 0.18,
   },
 });
 

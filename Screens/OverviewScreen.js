@@ -1,19 +1,19 @@
-import React, { Component } from "react";
-import { StyleSheet, Text, View, FlatList } from "react-native";
-import { database, auth } from "../src/config/config";
-import { Button } from "react-native-elements";
-import { Icon } from "react-native-elements";
-import moment from "moment";
-import { ScreenWidth, ScreenHeight } from "../constant/Constant";
-import { connect } from "react-redux";
-import { watchFamilyMembersUpdate } from "../src/reducers/familyMembers";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { Provider, Portal, Modal } from "react-native-paper";
-import { displayName } from "../src/helpers/displayName";
-import { getRecordsUpdate } from "../src/reducers/records";
+import React, { Component } from 'react';
+import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { database, auth } from '../src/config/config';
+import { Button } from 'react-native-elements';
+import { Icon } from 'react-native-elements';
+import moment from 'moment';
+import { ScreenWidth, ScreenHeight } from '../constant/Constant';
+import { connect } from 'react-redux';
+import { watchFamilyMembersUpdate } from '../src/reducers/familyMembers';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Provider, Portal, Modal } from 'react-native-paper';
+import { displayName } from '../src/helpers/displayName';
+import { getRecordsUpdate } from '../src/reducers/records';
 
-import FABView from "../Utils/FAB";
-import MenuScreen from "../Utils/MenuScreen";
+import FABView from '../Utils/FAB';
+import MenuScreen from '../Utils/MenuScreen';
 
 var patient_id;
 auth.onAuthStateChanged((user) => {
@@ -74,10 +74,7 @@ class OverviewScreen extends Component {
     if (familyList.length == 1 && familyMembers) {
       familyMembers.forEach((member) => familyList.push(member));
     }
-    if (
-      prevProps.recordStore.records != this.props.recordStore.records &&
-      prevProps.recordStore.dateList != this.props.recordStore.dateList
-    ) {
+    if (prevProps.recordStore.records != this.props.recordStore.records && prevProps.recordStore.dateList != this.props.recordStore.dateList) {
       this.setState({
         data: this.props.recordStore.records,
         dateArr: this.props.recordStore.dateList,
@@ -121,18 +118,12 @@ class OverviewScreen extends Component {
           <View style={{ flex: 3 }}>
             {calDateDifference() ? (
               <View style={OverviewScreenStyle.reminderContainer}>
-                <Icon
-                  name="error-outline"
-                  color="#24559E"
-                  containerStyle={OverviewScreenStyle.iconstyle}
-                />
-                <Text style={OverviewScreenStyle.reminderText}>
-                  距離上次驗眼已超過一年，建議盡快預約驗眼
-                </Text>
+                <Icon name="error-outline" color="#24559E" containerStyle={OverviewScreenStyle.iconstyle} />
+                <Text style={OverviewScreenStyle.reminderText}>距離上次驗眼已超過一年，建議盡快預約驗眼</Text>
               </View>
             ) : null}
           </View>
-          <View style={{ flexDirection: "row", flex: 10 }}>
+          <View style={{ flexDirection: 'row', flex: 10 }}>
             <View
               style={{
                 flex: 1,
@@ -177,7 +168,7 @@ class OverviewScreen extends Component {
             <View
               style={{
                 flex: 1,
-                alignItems: "center",
+                alignItems: 'center',
                 marginTop: ScreenHeight * 0.01,
               }}
             >
@@ -202,18 +193,15 @@ class OverviewScreen extends Component {
                     paddingRight: 0,
                   }}
                   containerStyle={{ alignItems: 'center', marginTop: 15 }}
+                  TouchableComponent={TouchableOpacity}
                 />
               </View>
             </View>
           </View>
           <View style={OverviewScreenStyle.dateContainer}>
             <Text style={OverviewScreenStyle.dateText}>
-              {"最近驗眼日期: "}
-              {this.state.dateArr == null
-                ? ""
-                : moment(
-                    this.state.dateArr[this.state.dateArr.length - 1]
-                  ).format("YYYY-MM-DD")}
+              {'最近驗眼日期: '}
+              {this.state.dateArr == null ? '' : moment(this.state.dateArr[this.state.dateArr.length - 1]).format('YYYY-MM-DD')}
             </Text>
           </View>
         </MenuScreen>
@@ -402,8 +390,8 @@ const OverviewScreenStyle = StyleSheet.create({
     borderRadius: 26,
   },
   topContainer: {
-    backgroundColor: "#24559E",
-    position: "absolute",
+    backgroundColor: '#24559E',
+    position: 'absolute',
     top: -ScreenHeight * 0.045,
     height: ScreenHeight * 0.09,
     width: ScreenHeight * 0.09,
@@ -421,8 +409,8 @@ const OverviewScreenStyle = StyleSheet.create({
     fontWeight: 'bold',
   },
   itemContainer: {
-    alignSelf: "center",
-    flexDirection: "row",
+    alignSelf: 'center',
+    flexDirection: 'row',
     paddingTop: ScreenHeight * 0.045,
   },
   levelTextContatiner: {
@@ -462,10 +450,10 @@ const OverviewScreenStyle = StyleSheet.create({
     flex: 1,
   },
   dateText: {
-    alignSelf: "center",
+    alignSelf: 'center',
     fontSize: 18,
-    color: "#FFFFFF",
-    textAlignVertical: "center",
+    color: '#FFFFFF',
+    textAlignVertical: 'center',
   },
   reminderContainer: {
     marginTop: 65,
@@ -473,8 +461,8 @@ const OverviewScreenStyle = StyleSheet.create({
     width: ScreenWidth / 1.5,
     borderTopRightRadius: 15,
     borderBottomRightRadius: 15,
-    backgroundColor: "#D9FFD8",
-    flexDirection: "row",
+    backgroundColor: '#D9FFD8',
+    flexDirection: 'row',
   },
   hiddenreminderContainer: {
     marginTop: 65,
