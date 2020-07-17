@@ -9,31 +9,9 @@ import { scaleLinear, scaleTime } from "d3-scale";
 import moment from "moment";
 
 export const RenderDateDots = (config) => {
-  const { data, dateArr, selected } = config;
+  const { data, dateArr, selected, subArray, L_output, R_output } = config;
   const height = ScreenHeight / 6;
   const padding = 25;
-
-  var L_output = [];
-  var R_output = [];
-
-  const calSubArray = () => {
-    var end = 0;
-    var start = 0;
-    if (dateArr.length < 4) {
-      return dateArr;
-    } else if (selected > dateArr.length - 4) {
-      return dateArr.slice(-4);
-    } else if (selected <= dateArr.length - 4) {
-      start = selected;
-      end = selected + 4;
-      return dateArr.slice(start, end);
-    }
-  };
-  for (const date of calSubArray()) {
-    L_output.push(data[date].L_VA);
-    R_output.push(data[date].R_VA);
-  }
-  //console.log(L_output);
 
   return (
     <View>
@@ -41,15 +19,37 @@ export const RenderDateDots = (config) => {
         <Rect width="100%" height="100%" fill="none" />
 
         <G>
-          <Path key={Math.random()} d={`M${padding} ${height / 3 - 15} H${ScreenWidth - padding} Z`} stroke="rgba(91, 192, 173, 0.9)" strokeWidth={3} strokeLinecap="round" />
-          <Path key={Math.random()} d={`M${padding} ${(height / 3 - 15) * 2} H${ScreenWidth - padding} Z`} stroke="rgba(255, 223, 76, 0.8)" strokeWidth={3} strokeLinecap="round" />
-          <Path key={Math.random()} d={`M${padding} ${(height / 3 - 15) * 3} H${ScreenWidth - padding} Z`} stroke="rgba(255, 103, 108, 0.8)" strokeWidth={3} strokeLinecap="round" />
+          <Path
+            key={Math.random()}
+            d={`M${padding} ${height / 3 - 15} H${ScreenWidth - padding} Z`}
+            stroke="rgba(91, 192, 173, 0.9)"
+            strokeWidth={3}
+            strokeLinecap="round"
+          />
+          <Path
+            key={Math.random()}
+            d={`M${padding} ${(height / 3 - 15) * 2} H${
+              ScreenWidth - padding
+            } Z`}
+            stroke="rgba(255, 223, 76, 0.8)"
+            strokeWidth={3}
+            strokeLinecap="round"
+          />
+          <Path
+            key={Math.random()}
+            d={`M${padding} ${(height / 3 - 15) * 3} H${
+              ScreenWidth - padding
+            } Z`}
+            stroke="rgba(255, 103, 108, 0.8)"
+            strokeWidth={3}
+            strokeLinecap="round"
+          />
         </G>
         <G>
           {renderDots({
             L_VA: L_output,
             R_VA: R_output,
-            dateArr: calSubArray(),
+            dateArr: subArray,
             full_dateArr: dateArr,
             height: height,
             selectedIndex: selected,
@@ -67,7 +67,10 @@ export const renderDots = (config) => {
   const output = [];
   const x_scale = (val) => {
     const x = scaleTime()
-      .domain([moment(dateArr[0], "YYYY-MM-DD").toDate(), moment(dateArr[dateArr.length - 1], "YYYY-MM-DD").toDate()])
+      .domain([
+        moment(dateArr[0], "YYYY-MM-DD").toDate(),
+        moment(dateArr[dateArr.length - 1], "YYYY-MM-DD").toDate(),
+      ])
       .range([ScreenWidth / 5, ScreenWidth - ScreenWidth / 5]);
 
     return x(val);
@@ -97,7 +100,12 @@ export const renderDots = (config) => {
       } else {
         return height / 3 - 15;
       }
-    } else if (parseInt(L_VA_point.substring(0, 1) == 0 || parseInt(L_VA_point.substring(0, 1) == 1))) {
+    } else if (
+      parseInt(
+        L_VA_point.substring(0, 1) == 0 ||
+          parseInt(L_VA_point.substring(0, 1) == 1)
+      )
+    ) {
       //used 1.0
       const L = parseInt(L_VA_point);
       const R = parseInt(R_VA_point);
@@ -118,35 +126,82 @@ export const renderDots = (config) => {
     const cy = y_scale(L_VA[index], R_VA[index]);
 
     //console.log(lastIndex);
-    output.push(
-      <>
-        {item === full_dateArr[selectedIndex] && <Path key={Math.random()} d={`M${cx} ${cy} V${ScreenHeight / 9} Z`} stroke="white" strokeWidth={3} strokeLinecap="round" />}
-        <Circle
-          key={Math.random()}
-          cx={cx}
-          cy={cy}
-          r="9"
-          stroke={item === full_dateArr[selectedIndex] ? "white" : "#00C2FF"}
-          strokeWidth="2"
-          fill={item === full_dateArr[selectedIndex] ? "#00C2FF" : "white"}
-          opacity={"1"}
-        />
+    if (item !== full_dateArr[selectedIndex])
+      output.push(
+        <>
+          <Circle
+            key={Math.random()}
+            cx={cx}
+            cy={cy}
+            r="9"
+            stroke={"#00C2FF"}
+            strokeWidth="2"
+            fill={"white"}
+            opacity={"1"}
+          />
 
-        <Text
-          x={cx}
-          y={item === full_dateArr[selectedIndex] ? ScreenHeight / 6.5 : ScreenHeight / 7.3}
-          textAnchor="middle"
-          fill="white"
-          fontSize={item === full_dateArr[selectedIndex] ? ScreenHeight / 26 : ScreenHeight / 35}
-          fontWeight="bold"
-        >
-          {moment(item).format("YYYY")}
-        </Text>
-        <Text x={cx} y={ScreenHeight / 6.6 + ScreenHeight / 35} textAnchor="middle" fontSize={ScreenHeight / 38} fill={item === full_dateArr[selectedIndex] ? "white" : "none"}>
-          {moment(item).format("D[/]M")}
-        </Text>
-      </>
-    );
+          <Text
+            x={cx}
+            y={ScreenHeight / 7.3}
+            textAnchor="middle"
+            fill="white"
+            fontSize={ScreenHeight / 35}
+            fontWeight="bold"
+          >
+            {moment(item).format("YYYY")}
+          </Text>
+        </>
+      );
+  });
+  config.dateArr.forEach((item, index) => {
+    //console.log("selected index:",full_dateArr[selectedIndex])
+    //const cx = paddingRight/2 + (index * (width - paddingRight)) / (data.length-1);
+    const cx = x_scale(moment(item, "YYYY-MM-DD").toDate());
+    const cy = y_scale(L_VA[index], R_VA[index]);
+
+    //console.log(lastIndex);
+    if (item === full_dateArr[selectedIndex])
+      output.push(
+        <>
+          <Path
+            key={Math.random()}
+            d={`M${cx} ${cy} V${ScreenHeight / 9} Z`}
+            stroke="white"
+            strokeWidth={3}
+            strokeLinecap="round"
+          />
+          <Circle
+            key={Math.random()}
+            cx={cx}
+            cy={cy}
+            r="9"
+            stroke={"white"}
+            strokeWidth="2"
+            fill={"#00C2FF"}
+            opacity={"1"}
+          />
+
+          <Text
+            x={cx}
+            y={ScreenHeight / 6.5}
+            textAnchor="middle"
+            fill="white"
+            fontSize={ScreenHeight / 26}
+            fontWeight="bold"
+          >
+            {moment(item).format("YYYY")}
+          </Text>
+          <Text
+            x={cx}
+            y={ScreenHeight / 6.6 + ScreenHeight / 35}
+            textAnchor="middle"
+            fontSize={ScreenHeight / 38}
+            fill={"white"}
+          >
+            {moment(item).format("D[/]M")}
+          </Text>
+        </>
+      );
   });
   return output;
 };

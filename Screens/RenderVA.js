@@ -1,5 +1,12 @@
 import React, { Component, useState } from "react";
-import { StyleSheet, View, TouchableOpacity, Image, Text, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Image,
+  Text,
+  ScrollView,
+} from "react-native";
 import { Button } from "react-native-elements";
 import { Icon } from "react-native-elements";
 import { ScreenWidth, ScreenHeight } from "../constant/Constant";
@@ -23,7 +30,12 @@ export const RenderVA = (props) => {
 
   return (
     <View>
-      <RenderDatesButton dateArr={dateArr} L_VAData={L_VAData} R_VAData={R_VAData} data={data} />
+      <RenderDatesButton
+        dateArr={dateArr}
+        L_VAData={L_VAData}
+        R_VAData={R_VAData}
+        data={data}
+      />
     </View>
   );
 };
@@ -69,12 +81,35 @@ export const RenderDatesButton = (props) => {
   console.log(data[dateArr[1]].L_VA);
   return (
     <>
-      <RenderDateDots data={data} dateArr={dateArr} selected={index} />
-      <View style={{ flexDirection: "row", alignSelf: "center", marginTop: ScreenHeight / 50, marginBottom: ScreenHeight / 60 }}>
+      <RenderDateDots
+        data={data}
+        dateArr={dateArr}
+        selected={index}
+        subArray={calSubArray()}
+        L_output={L_output}
+        R_output={R_output}
+      />
+      <View
+        style={{
+          flexDirection: "row",
+          alignSelf: "center",
+          marginTop: ScreenHeight / 50,
+          marginBottom: ScreenHeight / 60,
+        }}
+      >
         <TouchableOpacity onPress={GetBack}>
           <Image source={BackArrow} />
         </TouchableOpacity>
-        <Text style={{ color: "white", fontSize: 18, paddingLeft: 15, paddingRight: 15 }}>{dateArr[index]}</Text>
+        <Text
+          style={{
+            color: "white",
+            fontSize: 18,
+            paddingLeft: 15,
+            paddingRight: 15,
+          }}
+        >
+          {dateArr[index]}
+        </Text>
         <TouchableOpacity onPress={GetNext}>
           <Image source={NextArrow} />
         </TouchableOpacity>
@@ -99,10 +134,14 @@ export const RenderContent = (props) => {
         marginTop: ScreenHeight / 50,
       }}
     >
-      <Text style={RenderVAStyle.VAText}>右眼矯正視力：{data[dateArr[index]].R_VA}</Text>
+      <Text style={RenderVAStyle.VAText}>
+        右眼矯正視力：{data[dateArr[index]].R_VA}
+      </Text>
       <RenderRating VA={data[dateArr[index]].R_VA} />
 
-      <Text style={RenderVAStyle.VAText}>左眼矯正視力：{data[dateArr[index]].L_VA}</Text>
+      <Text style={RenderVAStyle.VAText}>
+        左眼矯正視力：{data[dateArr[index]].L_VA}
+      </Text>
       <RenderRating VA={data[dateArr[index]].L_VA} />
     </View>
   );
