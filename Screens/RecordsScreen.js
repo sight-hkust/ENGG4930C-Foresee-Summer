@@ -107,6 +107,30 @@ export default class RecordsScreen extends Component {
       });
     };
 
+    const NextButton = () => {
+      return (
+        <TouchableOpacity onPress={GetNext}>
+          <Image source={NextArrow} />
+        </TouchableOpacity>
+      );
+    };
+
+    const BackButton = () => {
+      return (
+        <TouchableOpacity onPress={GetBack}>
+          <Image source={BackArrow} />
+        </TouchableOpacity>
+      );
+    };
+
+    const calSubArray = () => {
+      const dateArr = this.state.dates;
+      const fits = this.state.firstIndexToShow;
+      if (dateArr.length < UpperDisplayLimit) {
+        return dateArr;
+      } else return dateArr.slice(fits, fits + UpperDisplayLimit);
+    };
+
     return (
       <MenuScreen>
         <View style={RecordScreenStyle.header}>
@@ -182,7 +206,14 @@ export default class RecordsScreen extends Component {
           </View>
           {data != null && this.state.refractive == "3" && (
             <View style={{ marginTop: 0 }}>
-              <RenderVA data={data} dateArr={this.state.dates} />
+              <RenderVA
+                data={data}
+                dateArr={this.state.dates}
+                NextButton={NextButton}
+                BackButton={BackButton}
+                index={this.state.index}
+                subArray={calSubArray()}
+              />
             </View>
           )}
           <View style={RecordScreenStyle.linechart}>
@@ -191,6 +222,7 @@ export default class RecordsScreen extends Component {
               dateArr={this.state.dates}
               refractive={this.state.refractive}
               isLeft={this.state.Leye}
+              subArray={calSubArray()}
               selectedIndex={this.state.index}
               fits={this.state.firstIndexToShow}
             />
@@ -226,15 +258,11 @@ export default class RecordsScreen extends Component {
                 </View>
 
                 <View style={RecordScreenStyle.datesButton}>
-                  <TouchableOpacity onPress={GetBack}>
-                    <Image source={BackArrow} />
-                  </TouchableOpacity>
+                  <BackButton />
                   <Text style={RecordScreenStyle.dateText}>
                     {this.state.selectedDate}
                   </Text>
-                  <TouchableOpacity onPress={GetNext}>
-                    <Image source={NextArrow} />
-                  </TouchableOpacity>
+                  <NextButton />
                 </View>
 
                 <View style={RecordScreenStyle.content}>
@@ -369,7 +397,15 @@ export const RenderModal = (props) => {
 };
 
 export const RenderLineChart = (props) => {
-  const { dataArr, dateArr, refractive, isLeft, selectedIndex, fits } = props;
+  const {
+    dataArr,
+    dateArr,
+    refractive,
+    isLeft,
+    subArray,
+    selectedIndex,
+    fits,
+  } = props;
 
   if (dataArr == null) {
     return (
@@ -384,15 +420,9 @@ export const RenderLineChart = (props) => {
   var output = [];
   //console.log(selectedIndex)
 
-  const calSubArray = () => {
-    if (dateArr.length < UpperDisplayLimit) {
-      return dateArr;
-    } else return dateArr.slice(fits, fits + UpperDisplayLimit);
-  };
-
   switch (refractive) {
     case "0": {
-      for (const date of calSubArray()) {
+      for (const date of subArray) {
         output.push(isLeft ? dataArr[date].L_Myopia : dataArr[date].R_Myopia);
         //console.log("@RecordsScreen: ", dataArr);
       }
@@ -400,7 +430,7 @@ export const RenderLineChart = (props) => {
     }
 
     case "1": {
-      for (const date of calSubArray()) {
+      for (const date of subArray) {
         output.push(
           isLeft ? dataArr[date].L_Hyperopia : dataArr[date].R_Hyperopia
         );
@@ -408,7 +438,7 @@ export const RenderLineChart = (props) => {
       break;
     }
     case "2": {
-      for (const date of calSubArray()) {
+      for (const date of subArray) {
         output.push(isLeft ? dataArr[date].L_CYL : dataArr[date].R_CYL);
       }
       break;
@@ -422,7 +452,7 @@ export const RenderLineChart = (props) => {
     return (
       <LineChart
         data={output}
-        dateArr={calSubArray()}
+        dateArr={subArray}
         full_dateArr={dateArr}
         selectedIndex={selectedIndex}
         refractive={refractive}

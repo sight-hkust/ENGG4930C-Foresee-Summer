@@ -17,75 +17,24 @@ const BackArrow = require("../assets/images/BackArrow.png");
 const NextArrow = require("../assets/images/NextArrow.png");
 const VAChart = require("../assets/images/VAChart.png");
 const Tutorial = require("../assets/images/VATutorial.png");
+
 export const RenderVA = (props) => {
-  const { data, dateArr } = props;
-  const L_VAData = [];
-  const R_VAData = [];
-  for (const item in data) {
-    //console.log("ind", data[item].L_VA);
-    L_VAData.push(data[item].L_VA);
-    R_VAData.push(data[item].R_VA);
-  }
-  //console.log(data);
-
-  return (
-    <View>
-      <RenderDatesButton
-        dateArr={dateArr}
-        L_VAData={L_VAData}
-        R_VAData={R_VAData}
-        data={data}
-      />
-    </View>
-  );
-};
-
-export const RenderDatesButton = (props) => {
-  const { dateArr, L_VAData, R_VAData, data } = props;
-  const [index, setIndex] = useState(dateArr.length - 1);
-  const GetNext = () => {
-    const length = dateArr.length;
-    const value = (index + 1) % length;
-    setIndex(value);
-  };
-
-  const GetBack = () => {
-    if (index == 0) {
-      const length = dateArr.length - 1;
-      setIndex(length);
-    } else {
-      const value = index;
-      setIndex(value - 1);
-    }
-  };
+  const { dateArr, data, NextButton, BackButton, index, subArray } = props;
   var L_output = [];
   var R_output = [];
 
-  const calSubArray = () => {
-    var end = 0;
-    var start = 0;
-    if (dateArr.length < 4) {
-      return dateArr;
-    } else if (index > dateArr.length - 4) {
-      return dateArr.slice(-4);
-    } else if (index <= dateArr.length - 4) {
-      start = index;
-      end = index + 4;
-      return dateArr.slice(start, end);
-    }
-  };
-  for (const date of calSubArray()) {
+  for (const date of subArray) {
     L_output.push(data[date].L_VA);
     R_output.push(data[date].R_VA);
   }
   console.log(data[dateArr[1]].L_VA);
   return (
-    <>
+    <View>
       <RenderDateDots
         data={data}
         dateArr={dateArr}
         selected={index}
-        subArray={calSubArray()}
+        subArray={subArray}
         L_output={L_output}
         R_output={R_output}
       />
@@ -97,9 +46,7 @@ export const RenderDatesButton = (props) => {
           marginBottom: ScreenHeight / 60,
         }}
       >
-        <TouchableOpacity onPress={GetBack}>
-          <Image source={BackArrow} />
-        </TouchableOpacity>
+        <BackButton />
         <Text
           style={{
             color: "white",
@@ -110,13 +57,11 @@ export const RenderDatesButton = (props) => {
         >
           {dateArr[index]}
         </Text>
-        <TouchableOpacity onPress={GetNext}>
-          <Image source={NextArrow} />
-        </TouchableOpacity>
+        <NextButton />
       </View>
 
       <RenderContent data={data} index={index} dateArr={dateArr} />
-    </>
+    </View>
   );
 };
 
