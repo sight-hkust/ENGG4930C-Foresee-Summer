@@ -42,22 +42,19 @@ export const RenderVA = (props) => {
         style={{
           flexDirection: "row",
           alignSelf: "center",
-          marginTop: ScreenHeight / 50,
-          marginBottom: ScreenHeight / 60,
         }}
       >
-        <BackButton />
+        <BackButton isVA={true} />
         <Text
           style={{
             color: "white",
-            fontSize: 18,
-            paddingLeft: 15,
-            paddingRight: 15,
+            fontSize: ScreenHeight / 35,
+            paddingHorizontal: ScreenWidth / 70,
           }}
         >
           {dateArr[index]}
         </Text>
-        <NextButton />
+        <NextButton isVA={true} />
       </View>
 
       <RenderContent data={data} index={index} dateArr={dateArr} />
@@ -72,11 +69,11 @@ export const RenderContent = (props) => {
     <View
       style={{
         alignSelf: "center",
-        backgroundColor: "rgba(255,255,255,0.9)",
-        height: ScreenHeight / 3.9,
+        backgroundColor: "white",
         width: ScreenWidth / 1.25,
         borderRadius: 20,
         marginTop: ScreenHeight / 50,
+        paddingBottom: ScreenHeight / 40,
       }}
     >
       <Text style={RenderVAStyle.VAText}>
@@ -125,14 +122,13 @@ const RenderVAStyle = StyleSheet.create({
   VAText: {
     marginTop: ScreenHeight / 40,
     textAlign: "center",
-    fontSize: 18,
+    fontSize: ScreenWidth / 20,
     fontWeight: "bold",
     color: "#2D9CDB",
   },
   description: {
-    marginTop: 5,
     textAlign: "center",
-    fontSize: 18,
+    fontSize: ScreenWidth / 22,
     color: "#2D9CDB",
   },
 });

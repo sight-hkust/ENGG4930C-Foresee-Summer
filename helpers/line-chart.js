@@ -21,7 +21,7 @@ export default class LineChart extends React.Component {
         moment(dateArr[0], "YYYY-MM-DD").toDate(),
         moment(dateArr[dateArr.length - 1], "YYYY-MM-DD").toDate(),
       ])
-      .range([paddingRight / 2 + 25, ScreenWidth - paddingRight * 1.5 - 25]);
+      .range([paddingRight * 2.5, ScreenWidth - paddingRight * 2.5]);
 
     return x(val);
   };
@@ -120,9 +120,9 @@ export default class LineChart extends React.Component {
     const y = (i) => {
       return this.y_scale(datas[i], paddingTop);
     };
-    const startingPoint = 2;
-    const verticalPoint = y(0) + 13;
-    const horizontalLine = ScreenWidth - config.paddingRight;
+    const startingPoint = paddingRight * 0.75;
+    const verticalPoint = y(0) + 20;
+    const horizontalLine = ScreenWidth - config.paddingRight * 0.75;
     const lastPoint = y(dateArr.length - 1);
     return [
       `M${startingPoint},750 V${verticalPoint} Q ${startingPoint}, ${y(0)}, ${x(
@@ -139,7 +139,7 @@ export default class LineChart extends React.Component {
       .join(" ")
       .concat(
         `Q ${horizontalLine}, ${lastPoint}, ${horizontalLine}, ${
-          lastPoint + 13
+          lastPoint + 20
         }  V750 `
       );
   };
@@ -199,10 +199,10 @@ export default class LineChart extends React.Component {
             />
             <Text
               x={cx}
-              y={cy + 30}
+              y={cy + 10 + ScreenHeight / 35}
               textAnchor="middle"
               fill="black"
-              fontSize="19"
+              fontSize={ScreenHeight / 35}
               fontWeight="bold"
             >
               {moment(item).format("YYYY")}
@@ -236,19 +236,19 @@ export default class LineChart extends React.Component {
             />
             <Text
               x={cx}
-              y={cy + 30}
+              y={cy + 10 + ScreenHeight / 35}
               textAnchor="middle"
               fill="black"
-              fontSize="19"
+              fontSize={ScreenHeight / 35}
               fontWeight="bold"
             >
               {moment(item).format("YYYY")}
             </Text>
             <Text
               x={cx}
-              y={cy + 45}
+              y={cy + 10 + (ScreenHeight / 35) * 1.75}
               textAnchor="middle"
-              fontSize="14"
+              fontSize={ScreenHeight / 35 / 1.2}
               fill={"black"}
             >
               {moment(item).format("D[/]M")}

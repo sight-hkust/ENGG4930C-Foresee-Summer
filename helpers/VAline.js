@@ -15,33 +15,33 @@ export const RenderDateDots = (config) => {
 
   return (
     <View>
-      <Svg height={height + 15} width={ScreenWidth}>
+      <Svg height={(height / 3) * 4} width={ScreenWidth}>
         <Rect width="100%" height="100%" fill="none" />
 
         <G>
           <Path
             key={Math.random()}
-            d={`M${padding} ${height / 3 - 15} H${ScreenWidth - padding} Z`}
+            d={`M${padding} ${height / 3 - 10} H${ScreenWidth - padding} Z`}
             stroke="rgba(91, 192, 173, 0.9)"
-            strokeWidth={3}
+            strokeWidth={8}
             strokeLinecap="round"
           />
           <Path
             key={Math.random()}
-            d={`M${padding} ${(height / 3 - 15) * 2} H${
+            d={`M${padding} ${(height / 3 - 10) * 2} H${
               ScreenWidth - padding
             } Z`}
             stroke="rgba(255, 223, 76, 0.8)"
-            strokeWidth={3}
+            strokeWidth={8}
             strokeLinecap="round"
           />
           <Path
             key={Math.random()}
-            d={`M${padding} ${(height / 3 - 15) * 3} H${
+            d={`M${padding} ${(height / 3 - 10) * 3} H${
               ScreenWidth - padding
             } Z`}
             stroke="rgba(255, 103, 108, 0.8)"
-            strokeWidth={3}
+            strokeWidth={8}
             strokeLinecap="round"
           />
         </G>
@@ -53,6 +53,7 @@ export const RenderDateDots = (config) => {
             full_dateArr: dateArr,
             height: height,
             selectedIndex: selected,
+            paddingRight: 20,
           })}
         </G>
       </Svg>
@@ -61,7 +62,15 @@ export const RenderDateDots = (config) => {
 };
 
 export const renderDots = (config) => {
-  const { L_VA, R_VA, dateArr, full_dateArr, selectedIndex, height } = config;
+  const {
+    L_VA,
+    R_VA,
+    dateArr,
+    full_dateArr,
+    selectedIndex,
+    height,
+    paddingRight,
+  } = config;
   console.log("full_dateArr", full_dateArr);
   console.log("dateArr", dateArr);
   const output = [];
@@ -71,34 +80,35 @@ export const renderDots = (config) => {
         moment(dateArr[0], "YYYY-MM-DD").toDate(),
         moment(dateArr[dateArr.length - 1], "YYYY-MM-DD").toDate(),
       ])
-      .range([ScreenWidth / 5, ScreenWidth - ScreenWidth / 5]);
+      .range([paddingRight * 2.5, ScreenWidth - paddingRight * 2.5]);
 
     return x(val);
   };
 
   const y_scale = (L_VA_point, R_VA_point) => {
     console.log(L_VA_point);
+    const h = height / 3 - 10;
     if (parseInt(L_VA_point.substring(0, 1)) == 2) {
       //used 20/20
       const L_backNum = parseInt(L_VA_point.substring(3));
       const R_backNum = parseInt(R_VA_point.substring(3));
       if (L_backNum >= 30 || R_backNum >= 30) {
-        return (height / 3 - 15) * 3;
+        return h * 3;
       } else if (L_backNum >= 25 || R_backNum >= 25) {
-        return (height / 3 - 15) * 2;
+        return h * 2;
       } else {
-        return height / 3 - 15;
+        return h;
       }
     } else if (parseInt(L_VA_point.substring(0, 1)) == 6) {
       //used 6/6
       const L_backNum = parseInt(L_VA_point.substring(2));
       const R_backNum = parseInt(L_VA_point.substring(2));
       if (L_backNum >= 9 || R_backNum >= 9) {
-        return (height / 3 - 15) * 3;
+        return h * 3;
       } else if (L_backNum >= 7.5 || R_backNum >= 7.5) {
-        return (height / 3 - 15) * 2;
+        return h * 2;
       } else {
-        return height / 3 - 15;
+        return h;
       }
     } else if (
       parseInt(
@@ -109,9 +119,9 @@ export const renderDots = (config) => {
       //used 1.0
       const L = parseInt(L_VA_point);
       const R = parseInt(R_VA_point);
-      if (L < 0.8 || R < 0.8) return (height / 3 - 15) * 3;
-      else if (L < 1 || R < 1) return (height / 3 - 15) * 2;
-      else return height / 3 - 15;
+      if (L < 0.8 || R < 0.8) return h * 3;
+      else if (L < 1 || R < 1) return h * 2;
+      else return h;
     }
 
     //[0 => 1.25]
@@ -139,10 +149,9 @@ export const renderDots = (config) => {
             fill={"white"}
             opacity={"1"}
           />
-
           <Text
             x={cx}
-            y={ScreenHeight / 7.3}
+            y={ScreenHeight / 7 + ScreenHeight / 35}
             textAnchor="middle"
             fill="white"
             fontSize={ScreenHeight / 35}
@@ -165,7 +174,7 @@ export const renderDots = (config) => {
         <>
           <Path
             key={Math.random()}
-            d={`M${cx} ${cy} V${ScreenHeight / 9} Z`}
+            d={`M${cx} ${cy} V${ScreenHeight / 7} Z`}
             stroke="white"
             strokeWidth={3}
             strokeLinecap="round"
@@ -180,22 +189,21 @@ export const renderDots = (config) => {
             fill={"#00C2FF"}
             opacity={"1"}
           />
-
           <Text
             x={cx}
-            y={ScreenHeight / 6.5}
+            y={ScreenHeight / 7 + ScreenHeight / 35}
             textAnchor="middle"
             fill="white"
-            fontSize={ScreenHeight / 26}
+            fontSize={ScreenHeight / 35}
             fontWeight="bold"
           >
             {moment(item).format("YYYY")}
           </Text>
           <Text
             x={cx}
-            y={ScreenHeight / 6.6 + ScreenHeight / 35}
+            y={ScreenHeight / 7 + (ScreenHeight / 35) * 1.75}
             textAnchor="middle"
-            fontSize={ScreenHeight / 38}
+            fontSize={ScreenHeight / 35 / 1.2}
             fill={"white"}
           >
             {moment(item).format("D[/]M")}

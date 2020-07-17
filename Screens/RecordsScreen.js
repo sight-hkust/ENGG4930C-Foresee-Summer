@@ -107,18 +107,28 @@ export default class RecordsScreen extends Component {
       });
     };
 
-    const NextButton = () => {
+    const NextButton = (props) => {
       return (
         <TouchableOpacity onPress={GetNext}>
-          <Image source={NextArrow} />
+          <Icon
+            name="swapright"
+            type="antdesign"
+            size={(ScreenHeight / 35) * 1.8}
+            color={props.isVA ? "white" : "#2D9CDB"}
+          />
         </TouchableOpacity>
       );
     };
 
-    const BackButton = () => {
+    const BackButton = (props) => {
       return (
         <TouchableOpacity onPress={GetBack}>
-          <Image source={BackArrow} />
+          <Icon
+            name="swapleft"
+            type="antdesign"
+            size={(ScreenHeight / 35) * 1.8}
+            color={props.isVA ? "white" : "#2D9CDB"}
+          />
         </TouchableOpacity>
       );
     };
@@ -205,7 +215,7 @@ export default class RecordsScreen extends Component {
             </TouchableOpacity>
           </View>
           {data != null && this.state.refractive == "3" && (
-            <View style={{ marginTop: 0 }}>
+            <View>
               <RenderVA
                 data={data}
                 dateArr={this.state.dates}
@@ -258,11 +268,11 @@ export default class RecordsScreen extends Component {
                 </View>
 
                 <View style={RecordScreenStyle.datesButton}>
-                  <BackButton />
+                  <BackButton isVA={false} />
                   <Text style={RecordScreenStyle.dateText}>
                     {this.state.selectedDate}
                   </Text>
-                  <NextButton />
+                  <NextButton isVA={false} />
                 </View>
 
                 <View style={RecordScreenStyle.content}>
@@ -330,7 +340,13 @@ export const DetailButton = (props) => {
     setIsVisible(!isVisible);
   };
   return (
-    <View style={{ flexDirection: "column", justifyContent: "center" }}>
+    <View
+      style={{
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+      }}
+    >
       <Button
         icon={
           <Icon
@@ -349,12 +365,11 @@ export const DetailButton = (props) => {
           paddingLeft: 0,
           paddingRight: 0,
         }}
-        containerStyle={{ paddingLeft: ScreenWidth / 40 }}
         TouchableComponent={TouchableOpacity}
       />
       <Text
         style={{
-          color: refractive == "3" ? "white" : "#135a85",
+          color: "white",
           fontSize: ScreenHeight / 40,
         }}
       >
@@ -481,7 +496,6 @@ const RecordScreenStyle = StyleSheet.create({
     fontWeight: "bold",
   },
   secondaryContainer: {
-    marginRight: 10,
     height: "100%",
     borderTopLeftRadius: 16,
     borderTopRightRadius: 16,
@@ -498,7 +512,7 @@ const RecordScreenStyle = StyleSheet.create({
     paddingRight: 10,
     paddingTop: 4,
     paddingBottom: 4,
-    backgroundColor: "#FFFFFF",
+    backgroundColor: "white",
     borderRadius: 10,
   },
   unselectedMenuText: {
@@ -517,8 +531,7 @@ const RecordScreenStyle = StyleSheet.create({
   eyesButton: {
     flexDirection: "row",
     justifyContent: "center",
-    paddingTop: ScreenHeight / 38,
-    paddingBottom: ScreenHeight / 38,
+    paddingVertical: ScreenHeight / 40,
     //alignSelf: "center",
   },
   datesButton: {
@@ -529,17 +542,15 @@ const RecordScreenStyle = StyleSheet.create({
   dateText: {
     color: "#2D9CDB",
     fontSize: ScreenHeight / 35,
-    paddingLeft: 15,
-    paddingRight: 15,
+    paddingHorizontal: ScreenWidth / 70,
   },
   contentContainer: {
     alignSelf: "center",
-    backgroundColor: "rgba(255,255,255,0.9)",
-    height: ScreenHeight / 3.2,
+    backgroundColor: "white",
     width: ScreenWidth / 1.25,
     borderRadius: 20,
     marginTop: ScreenHeight / 4 + 5,
-    paddingBottom: 10,
+    paddingBottom: ScreenHeight / 40,
   },
   content: {
     alignSelf: "center",
@@ -552,14 +563,12 @@ const RecordScreenStyle = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-evenly",
     //justifyContent: "flex-start",
-    paddingTop: ScreenHeight / 100,
-    paddingBottom: 15,
+    paddingTop: ScreenHeight / 50,
     paddingLeft: 0,
     paddingRight: 0,
   },
   linechart: {
     height: "100%",
-    marginLeft: 10,
   },
   noDataText: {
     fontSize: 25,
