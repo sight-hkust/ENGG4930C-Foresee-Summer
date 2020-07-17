@@ -46,6 +46,7 @@ import {
   AddRecordTutorial,
 } from "./src/components/Tutorial/MiniTutorial";
 import ProfPatientRecordView from "./src/components/Professional/ProfPatientRecrodView/ProfPatientRecordView";
+import { BackButton } from "./src/components/Utils/BackButton";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -152,7 +153,7 @@ function ProfileScreen({ navigation, route }) {
   return (
     <Stack.Navigator screenOptions={headerConfig}>
       <Stack.Screen
-        name="Profile"
+        name="ProfileTabMain"
         component={Profile}
         options={{ title: "我的檔案" }}
       />
@@ -160,6 +161,22 @@ function ProfileScreen({ navigation, route }) {
         name="QrCode"
         component={QrCode}
         options={{ headerShown: false }}
+      />
+      <Stack.Screen
+        name="Register"
+        component={RegistrationForm}
+        options={{
+          headerTransparent: true,
+          headerLeft: () => (
+            <BackButton
+              onPress={() => {
+                navigation.navigate("ProfileTabMain");
+              }}
+            />
+          ),
+          headerTintColor: "white",
+          title: null,
+        }}
       />
     </Stack.Navigator>
   );
@@ -211,7 +228,7 @@ function Main({ route, navigation }) {
         inactiveTintColor: "#2D9CDB",
         style: {
           backgroundColor: "#BED8FF",
-          height: Dimensions.get("window").height * 0.1,
+          height: Dimensions.get("window").height * 0.08,
           borderTopWidth: 0,
           borderTopColor: "transparent",
           paddingHorizontal:
@@ -261,7 +278,15 @@ function Main({ route, navigation }) {
             component={SettingScreen}
             initialParams={{ isProfessional: true }}
             options={{
-              tabBarIcon: () => <Icon name="setting" type="antdesign" color="#23559E" size={32.5} containerStyle={styles.icon} />,
+              tabBarIcon: () => (
+                <Icon
+                  name="setting"
+                  type="antdesign"
+                  color="#23559E"
+                  size={32.5}
+                  containerStyle={styles.icon}
+                />
+              ),
             }}
           />
         </>
@@ -303,7 +328,7 @@ function Main({ route, navigation }) {
               tabBarIcon: () => (
                 <Image
                   source={require("./assets/images/Icon_solid.png")}
-                  style={{ ...styles.icon, ...{ width: 55, height: 55 } }}
+                  style={{ ...styles.icon, ...{ width: 50, height: 50 } }}
                 />
               ),
             }}
@@ -440,8 +465,8 @@ const headerConfig = {
 
 const styles = StyleSheet.create({
   icon: {
-    width: 40,
-    height: 40,
+    width: 35,
+    height: 35,
     justifyContent: "center",
     alignItems: "center",
     shadowColor: "black",

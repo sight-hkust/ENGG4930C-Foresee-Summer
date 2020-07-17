@@ -1,21 +1,20 @@
-import React, { Component } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
-import { database, auth } from '../src/config/config';
-import { Button } from 'react-native-elements';
-import { Icon } from 'react-native-elements';
-import moment from 'moment';
-import { ScreenWidth, ScreenHeight, Scale } from '../constant/Constant';
-import { connect } from 'react-redux';
-import { watchFamilyMembersUpdate } from '../src/reducers/familyMembers';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Provider, Portal, Modal } from 'react-native-paper';
-import { displayName } from '../src/helpers/displayName';
-import { getRecordsUpdate, records } from '../src/reducers/records';
+import React, { Component } from "react";
+import { StyleSheet, Text, View, FlatList } from "react-native";
+import { database, auth } from "../src/config/config";
+import { Button } from "react-native-elements";
+import { Icon } from "react-native-elements";
+import moment from "moment";
+import { ScreenWidth, ScreenHeight } from "../constant/Constant";
+import { connect } from "react-redux";
+import { watchFamilyMembersUpdate } from "../src/reducers/familyMembers";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { Provider, Portal, Modal } from "react-native-paper";
+import { displayName } from "../src/helpers/displayName";
+import { getRecordsUpdate } from "../src/reducers/records";
 
-import FABView from '../Utils/FAB';
+import FABView from "../Utils/FAB";
+import MenuScreen from "../Utils/MenuScreen";
 
-//var patient_id = "2igwzwrRiEYReq9HOaDIraVg55V2";
 var patient_id;
 auth.onAuthStateChanged((user) => {
   if (user != null) {
@@ -38,7 +37,6 @@ class OverviewScreen extends Component {
 
   componentDidMount() {
     const { familyList } = this.state;
-    const { familyMembers } = this.props.familyStore;
 
     const ref = database.ref('users/' + patient_id);
 
@@ -73,8 +71,13 @@ class OverviewScreen extends Component {
     if (familyMembers && familyMembers != prevProps.familyStore.familyMembers) {
       familyMembers.forEach((member) => familyList.push(member));
     }
-
-    if (prevProps.recordStore.records != this.props.recordStore.records && prevProps.recordStore.dateList != this.props.recordStore.dateList) {
+    if (familyList.length == 1 && familyMembers) {
+      familyMembers.forEach((member) => familyList.push(member));
+    }
+    if (
+      prevProps.recordStore.records != this.props.recordStore.records &&
+      prevProps.recordStore.dateList != this.props.recordStore.dateList
+    ) {
       this.setState({
         data: this.props.recordStore.records,
         dateArr: this.props.recordStore.dateList,
@@ -113,28 +116,25 @@ class OverviewScreen extends Component {
     };
 
     return (
-      <View>
-        <LinearGradient
-          colors={['#1872a7', '#5a74d1', '#a676ff']}
-          start={[0, 0.9]}
-          end={[1, 0.1]}
-          locations={[0, 0.5, 1]}
-          style={{
-            height: "100%",
-            paddingBottom: ScreenHeight * 0.1,
-          }}
-        >
-          {calDateDifference() ? (
-            <View style={OverviewScreenStyle.reminderContainer}>
-              <Icon name="error-outline" color="#24559E" containerStyle={OverviewScreenStyle.iconstyle} />
-              <Text style={OverviewScreenStyle.reminderText}>距離上次驗眼已超過一年，建議盡快預約驗眼</Text>
-            </View>
-          ) : null}
-
-          <View style={{ flexDirection: 'row', flex: 10 }}>
+      <>
+        <MenuScreen>
+          <View style={{ flex: 3 }}>
+            {calDateDifference() ? (
+              <View style={OverviewScreenStyle.reminderContainer}>
+                <Icon
+                  name="error-outline"
+                  color="#24559E"
+                  containerStyle={OverviewScreenStyle.iconstyle}
+                />
+                <Text style={OverviewScreenStyle.reminderText}>
+                  距離上次驗眼已超過一年，建議盡快預約驗眼
+                </Text>
+              </View>
+            ) : null}
+          </View>
+          <View style={{ flexDirection: "row", flex: 10 }}>
             <View
               style={{
-                marginTop: ScreenHeight * 0.2,
                 flex: 1,
                 alignItems: 'center',
               }}
@@ -163,7 +163,6 @@ class OverviewScreen extends Component {
                   )}
                 </TouchableOpacity>
               </View>
-
               <View
                 style={{
                   flex: 2.3,
@@ -178,8 +177,8 @@ class OverviewScreen extends Component {
             <View
               style={{
                 flex: 1,
-                alignItems: 'center',
-                marginTop: ScreenHeight * 0.168,
+                alignItems: "center",
+                marginTop: ScreenHeight * 0.01,
               }}
             >
               <View style={OverviewScreenStyle.rightEyeContainer}>
@@ -207,11 +206,17 @@ class OverviewScreen extends Component {
               </View>
             </View>
           </View>
-
           <View style={OverviewScreenStyle.dateContainer}>
-            <Text style={OverviewScreenStyle.dateText}>最近驗眼日期: {this.state.dateArr == null ? '' : moment(this.state.dateArr[this.state.dateArr.length - 1]).format('YYYY-MM-DD')}</Text>
+            <Text style={OverviewScreenStyle.dateText}>
+              {"最近驗眼日期: "}
+              {this.state.dateArr == null
+                ? ""
+                : moment(
+                    this.state.dateArr[this.state.dateArr.length - 1]
+                  ).format("YYYY-MM-DD")}
+            </Text>
           </View>
-        </LinearGradient>
+        </MenuScreen>
         <Provider>
           <Portal>
             <Modal visible={isFamilyListModalVisible} onDismiss={this._hideFamilyListModal}>
@@ -247,7 +252,7 @@ class OverviewScreen extends Component {
           </Portal>
         </Provider>
         <FABView navigation={this.props.navigation} />
-      </View>
+      </>
     );
   }
 }
@@ -397,9 +402,9 @@ const OverviewScreenStyle = StyleSheet.create({
     borderRadius: 26,
   },
   topContainer: {
-    backgroundColor: '#24559E',
-    position: 'absolute',
-    top: -30,
+    backgroundColor: "#24559E",
+    position: "absolute",
+    top: -ScreenHeight * 0.045,
     height: ScreenHeight * 0.09,
     width: ScreenHeight * 0.09,
     borderRadius: ScreenHeight * 0.015,
@@ -416,12 +421,12 @@ const OverviewScreenStyle = StyleSheet.create({
     fontWeight: 'bold',
   },
   itemContainer: {
-    alignSelf: 'center',
-    flexDirection: 'row',
-    paddingTop: ScreenHeight * 0.023,
+    alignSelf: "center",
+    flexDirection: "row",
+    paddingTop: ScreenHeight * 0.045,
   },
   levelTextContatiner: {
-    width: ScreenWidth * 0.1,
+    width: ScreenWidth * 0.08,
   },
   levelText: {
     fontSize: ScreenHeight * 0.025,
@@ -430,7 +435,7 @@ const OverviewScreenStyle = StyleSheet.create({
     fontWeight: 'bold',
   },
   degreeText: {
-    marginLeft: ScreenWidth * 0.015,
+    marginLeft: ScreenWidth * 0.01,
     fontSize: 35,
     paddingTop: ScreenHeight * 0.02,
     color: '#1772A6',
@@ -454,23 +459,22 @@ const OverviewScreenStyle = StyleSheet.create({
     textAlign: 'center',
   },
   dateContainer: {
-    alignItems: 'center',
     flex: 1,
   },
   dateText: {
+    alignSelf: "center",
     fontSize: 18,
-    color: '#FFFFFF',
+    color: "#FFFFFF",
+    textAlignVertical: "center",
   },
   reminderContainer: {
-    position: 'absolute',
     marginTop: 65,
     height: ScreenHeight / 11,
     width: ScreenWidth / 1.5,
     borderTopRightRadius: 15,
     borderBottomRightRadius: 15,
-    backgroundColor: '#D9FFD8',
-    flexDirection: 'row',
-    zIndex: 1,
+    backgroundColor: "#D9FFD8",
+    flexDirection: "row",
   },
   hiddenreminderContainer: {
     marginTop: 65,

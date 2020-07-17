@@ -17,13 +17,13 @@ import { RenderVA } from "../Screens/RenderVA";
 
 //const patient_id = auth.currentUser.uid;
 //const patient_id = "002";
-var patient_id;
+/* var patient_id;
 auth.onAuthStateChanged((user) => {
   if (user != null) {
     patient_id = user.uid;
   }
-});
-const UpperDisplayLimit = 3; //3 for testing, real is 4
+}); */
+//const UpperDisplayLimit = 3; //3 for testing, real is 4
 
 export default class RecordsScreen extends Component {
   constructor(props) {
@@ -64,6 +64,7 @@ export default class RecordsScreen extends Component {
   }
 
   render() {
+    const { patient_id } = this.props.route.params;
     const data = this.state.data;
     const pressHandler = () => {
       this.props.navigation.navigate("AddRecordScreen", {
@@ -111,11 +112,13 @@ export default class RecordsScreen extends Component {
           <View style={RecordScreenStyle.header}>
             <Text style={RecordScreenStyle.title}>
               {this.state.refractive == "0"
-                ? "近視"
+                ? "近視度數"
                 : this.state.refractive == "1"
-                ? "遠視"
-                : "散光"}
-              度數趨勢
+                ? "遠視度數"
+                : this.state.refractive == "2"
+                ? "散光度數"
+                : "視力"}
+              趨勢
             </Text>
           </View>
 
@@ -198,14 +201,26 @@ export default class RecordsScreen extends Component {
                       activeOpacity={0.8}
                       onPress={() => this.setState({ Leye: true })}
                     >
-                      <Image source={this.state.Leye ? Open : Close} />
+                      <Image
+                        source={this.state.Leye ? Open : Close}
+                        style={{
+                          height: ScreenHeight / 10,
+                          resizeMode: "contain",
+                        }}
+                      />
                     </TouchableOpacity>
                     <TouchableOpacity
                       activeOpacity={0.8}
                       onPress={() => this.setState({ Leye: false })}
                       style={{ paddingLeft: 40 }}
                     >
-                      <Image source={this.state.Leye ? Close : Open} />
+                      <Image
+                        source={this.state.Leye ? Close : Open}
+                        style={{
+                          height: ScreenHeight / 10,
+                          resizeMode: "contain",
+                        }}
+                      />
                     </TouchableOpacity>
                   </View>
 
@@ -234,39 +249,41 @@ export default class RecordsScreen extends Component {
                 </View>
               )}
 
-              {this.state.refractive != "3" && (
-                <View style={RecordScreenStyle.buttonGroup}>
-                  {data != null && (
-                    <DetailButton
-                      data={data}
-                      selectedDate={this.state.selectedDate}
-                      isAdj={false}
-                    />
-                  )}
-
-                  <Button
-                    icon={<Icon name="add" size={25} color="#2D9CDB" />}
-                    onPress={pressHandler}
-                    buttonStyle={{
-                      backgroundColor: "white",
-                      width: 48,
-                      height: 48,
-                      borderRadius: 24,
-                      paddingLeft: 0,
-                      paddingRight: 0,
-                    }}
+              <View style={RecordScreenStyle.buttonGroup}>
+                {data != null && (
+                  <DetailButton
+                    data={data}
+                    selectedDate={this.state.selectedDate}
+                    isAdj={false}
+                    refractive={this.state.refractive}
                   />
-                  {data != null && (
-                    <DetailButton
-                      data={data}
-                      selectedDate={this.state.selectedDate}
-                      isAdj={true}
-                    />
-                  )}
+                )}
 
-                  {/* <RenderIncreaseWarning data={data} dateArr={this.state.dates} index={this.state.index} refractive={this.state.refractive} isLeft={true}/> */}
-                </View>
-              )}
+                <Button
+                  icon={
+                    <Icon name="add" size={ScreenHeight / 20} color="#2D9CDB" />
+                  }
+                  onPress={pressHandler}
+                  buttonStyle={{
+                    backgroundColor: "white",
+                    width: ScreenHeight / 15,
+                    height: ScreenHeight / 15,
+                    borderRadius: 24,
+                    paddingLeft: 0,
+                    paddingRight: 0,
+                  }}
+                />
+                {data != null && (
+                  <DetailButton
+                    data={data}
+                    selectedDate={this.state.selectedDate}
+                    isAdj={true}
+                    refractive={this.state.refractive}
+                  />
+                )}
+
+                {/* <RenderIncreaseWarning data={data} dateArr={this.state.dates} index={this.state.index} refractive={this.state.refractive} isLeft={true}/> */}
+              </View>
             </View>
           </View>
         </LinearGradient>
@@ -276,7 +293,7 @@ export default class RecordsScreen extends Component {
 }
 
 export const DetailButton = (props) => {
-  const { data, selectedDate, isAdj } = props;
+  const { data, selectedDate, isAdj, refractive } = props;
 
   const [isVisible, setIsVisible] = useState(false);
 
@@ -297,15 +314,20 @@ export const DetailButton = (props) => {
         onPress={toggleModal}
         buttonStyle={{
           backgroundColor: "white",
-          width: 40,
-          height: 40,
+          width: ScreenHeight / 15,
+          height: ScreenHeight / 15,
           borderRadius: 24,
           paddingLeft: 0,
           paddingRight: 0,
         }}
-        containerStyle={{ paddingLeft: 10 }}
+        containerStyle={{ paddingLeft: ScreenWidth / 40 }}
       />
-      <Text style={{ color: "#135a85", fontSize: 16 }}>
+      <Text
+        style={{
+          color: refractive == "3" ? "white" : "#135a85",
+          fontSize: ScreenHeight / 40,
+        }}
+      >
         {isAdj ? "調整度數" : "真實度數"}
       </Text>
       <RenderModal
@@ -434,14 +456,14 @@ const RecordScreenStyle = StyleSheet.create({
     backgroundColor: "#24559E",
   },
   header: {
-    paddingTop: 40,
+    paddingTop: 38,
     marginLeft: 50,
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
   },
   title: {
-    fontSize: 30,
+    fontSize: 28,
     color: "white",
     fontWeight: "bold",
   },
@@ -482,8 +504,8 @@ const RecordScreenStyle = StyleSheet.create({
   eyesButton: {
     flexDirection: "row",
     justifyContent: "center",
-    paddingTop: 15,
-    paddingBottom: 15,
+    paddingTop: ScreenHeight / 38,
+    paddingBottom: ScreenHeight / 38,
     //alignSelf: "center",
   },
   datesButton: {
@@ -493,7 +515,7 @@ const RecordScreenStyle = StyleSheet.create({
   },
   dateText: {
     color: "#2D9CDB",
-    fontSize: 18,
+    fontSize: ScreenHeight / 35,
     paddingLeft: 15,
     paddingRight: 15,
   },
@@ -508,19 +530,19 @@ const RecordScreenStyle = StyleSheet.create({
   },
   content: {
     alignSelf: "center",
-    paddingTop: 5,
-    paddingBottom: 5,
+    paddingTop: 0,
+    paddingBottom: 0,
     alignItems: "center",
   },
 
   buttonGroup: {
     flexDirection: "row",
-    justifyContent: "space-around",
+    justifyContent: "space-evenly",
     //justifyContent: "flex-start",
-    paddingTop: 15,
+    paddingTop: ScreenHeight / 100,
     paddingBottom: 15,
-    paddingLeft: 40,
-    paddingRight: 40,
+    paddingLeft: 0,
+    paddingRight: 0,
   },
   linechart: {
     height: "100%",

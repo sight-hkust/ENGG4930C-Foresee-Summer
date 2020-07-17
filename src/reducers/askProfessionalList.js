@@ -19,7 +19,9 @@ export const watchQuestionListUpdate = () => {
         snap.forEach((question) => {
           if (question.val()['response'] != null) {
             questionList.push({
+              question_id: question.key,
               tags: question.val()['tags'],
+              views: question.val()['views'],
               question_title: question.val()['subject'],
               question_content: question.val()['content'],
               answer: question.val()['response']['content'],

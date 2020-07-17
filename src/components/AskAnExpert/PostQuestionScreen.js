@@ -20,10 +20,6 @@ const PostQuestionSchema = object({
 });
 
 const PostQuestionScreen = ({ route, navigation }) => {
-  navigation.setOptions({
-    headerRight: () => <HeaderRightButton navigation={navigation} type="question" />,
-  });
-
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   return (
@@ -163,7 +159,7 @@ class Tag extends React.Component {
     this.state = {
       tags: {
         tag: '',
-        tagsArray: ['眼精疼痛', '視力模糊', '分泌物'],
+        tagsArray: ['眼睛疼痛', '視力模糊'],
       },
     };
   }
@@ -200,7 +196,7 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 80,
     width: '100%',
-    height: ScreenHeight * 0.8,
+    height: ScreenHeight * 1.1,
     alignSelf: 'center',
   },
   form: {

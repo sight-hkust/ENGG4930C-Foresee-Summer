@@ -5,10 +5,13 @@ import { RegistrationForm } from "./RegistrationForm/RegistrationForm";
 import { LinkExistingUserInfo } from "./LinkUserInfo/LinkExistingUserInfo";
 import { RegisterWithPhoneNumber } from "./LinkUserInfo/RegisterWithPhoneNumber";
 import { RegisterExisting } from "./LinkUserInfo/RegisterExisting";
+import { BackButton } from "../Utils/BackButton";
+import { Icon } from "react-native-elements";
+import { TouchableOpacity } from "react-native";
 
 const RegistrationStack = createStackNavigator();
 
-export const RegisterNavigator = (props) => {
+export const RegisterNavigator = ({ navigation, route }) => {
   return (
     <RegistrationStack.Navigator initialRouteName="Register Options">
       <RegistrationStack.Screen
@@ -29,7 +32,16 @@ export const RegisterNavigator = (props) => {
         name="Registration Form"
         component={RegistrationForm}
         options={{
-          headerShown: false,
+          headerTransparent: true,
+          headerLeft: () => (
+            <BackButton
+              onPress={() => {
+                navigation.goBack();
+              }}
+            />
+          ),
+          headerTintColor: "white",
+          title: null,
         }}
       />
       <RegistrationStack.Screen

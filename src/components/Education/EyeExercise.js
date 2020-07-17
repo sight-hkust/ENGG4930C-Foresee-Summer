@@ -10,8 +10,9 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { Audio } from "expo-av";
 import * as Brightness from "expo-brightness";
+import { ScreenHeight, ScreenWidth } from "../../../constant/Constant";
 import FABView from "../../../Utils/FAB";
-import { ScreenHeight } from "../../../constant/Constant";
+import MenuScreen from "../../../Utils/MenuScreen";
 
 // "https://ia600204.us.archive.org/11/items/hamlet_0911_librivox/hamlet_act5_shakespeare.mp3"
 // "https://ia800500.us.archive.org/10/items/VwFantasiaOngreensleevesmarriner/1-01VaughanWilliams_FantasiaOnGreensleeves.mp3",
@@ -152,183 +153,113 @@ export default class EyeExercise extends Component {
 
     return (
       <>
-        <FABView />
-        <View style={styles.background}>
-          <LinearGradient
-            colors={["#1872a7", "#5a74d1", "#a676ff"]}
-            start={[0, 0.9]}
-            end={[1, 0.1]}
-            locations={[0, 0.5, 1]}
-            style={{
-              height: "100%",
-              paddingBottom: ScreenHeight * 0.1,
-            }}
-          >
-            {playingStatus == 0 && (
-              <View style={styles.secondaryContainer}>
-                <Text style={styles.text}>
-                  {
-                    "按下「開始」，\n讓眼睛離開手機屏幕，\n跟隨聲音導航開始護眼運動"
-                  }
-                </Text>
-                <View style={{ flex: 1, alignItems: "center" }}>
-                  <TouchableOpacity
-                    style={styles.boxes}
-                    onPress={() => {
-                      if (this.state.isBuffering == false) PressPlayButton(0);
-                    }}
-                  >
-                    <Text style={styles.buttonText}>開始</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            )}
-            {playingStatus == 1 && (
-              <View style={styles.secondaryContainer}>
-                <Text style={styles.text}>
-                  你已完成{audioIndex}/{audios.length}段護眼運動。{"\n"}
-                  想繼續嗎？
-                </Text>
-                <View
-                  style={{
-                    flex: 1,
-                    flexDirection: "row",
-                    justifyContent: "space-evenly",
-                  }}
-                >
-                  <TouchableOpacity
-                    style={styles.boxes}
-                    onPress={() => {
-                      if (this.state.isBuffering == false) PressPlayButton(1);
-                    }}
-                  >
-                    <Text style={styles.buttonText}>繼續</Text>
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    style={styles.boxes}
-                    onPress={() => {
-                      if (this.state.isBuffering == false) PressPlayButton(2);
-                    }}
-                  >
-                    <Text style={styles.buttonText}>完前緩和</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            )}
-            {playingStatus == 2 && (
-              <View style={styles.secondaryContainer}>
-                <Text style={styles.text}>
-                  {"你已完成全部護眼運動，\n只差讓眼睛緩和的步驟！"}
-                </Text>
-                <View style={{ flex: 1, alignItems: "center" }}>
-                  <TouchableOpacity
-                    style={styles.boxes}
-                    onPress={() => {
-                      if (this.state.isBuffering == false) PressPlayButton(2);
-                    }}
-                  >
-                    <Text style={styles.buttonText}>完前緩和</Text>
-                  </TouchableOpacity>
-                </View>
-              </View>
-            )}
-            {playingStatus == 3 && (
-              <View style={styles.secondaryContainer}>
-                <Text style={styles.text}>
-                  <Text style={{ fontSize: 6, lineHeight: 0 }}>
-                    {"甚麼？你看到奇怪的畫面？剛才眼睛要離開手機屏幕哦！\n"}
-                  </Text>
-                  你已完成這次的護眼運動！
-                </Text>
-                <View style={{ flex: 1, alignItems: "center" }}>
-                  <TouchableOpacity
-                    style={styles.boxes}
-                    onPress={() =>
-                      this.setState({ playingStatus: 0, audioIndex: 0 })
+        <MenuScreen>
+          <View style={styles.background}>
+            <LinearGradient
+              colors={["#1872a7", "#5a74d1", "#a676ff"]}
+              start={[0, 0.9]}
+              end={[1, 0.1]}
+              locations={[0, 0.5, 1]}
+              style={{
+                height: "100%",
+              }}
+            >
+              {playingStatus == 0 && (
+                <View style={styles.secondaryContainer}>
+                  <Text style={styles.text}>
+                    {
+                      "按下「開始」，\n讓眼睛離開手機屏幕，\n跟隨聲音導航開始護眼運動"
                     }
+                  </Text>
+                  <View style={{ flex: 1, alignItems: "center" }}>
+                    <TouchableOpacity
+                      style={styles.boxes}
+                      onPress={() => {
+                        if (this.state.isBuffering == false) PressPlayButton(0);
+                      }}
+                    >
+                      <Text style={styles.buttonText}>開始</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              )}
+              {playingStatus == 1 && (
+                <View style={styles.secondaryContainer}>
+                  <Text style={styles.text}>
+                    你已完成{audioIndex}/{audios.length}段護眼運動。{"\n"}
+                    想繼續嗎？
+                  </Text>
+                  <View
+                    style={{
+                      flex: 1,
+                      flexDirection: "row",
+                      justifyContent: "space-evenly",
+                    }}
                   >
-                    <Text style={styles.buttonText}>再來一組</Text>
-                  </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.boxes}
+                      onPress={() => {
+                        if (this.state.isBuffering == false) PressPlayButton(1);
+                      }}
+                    >
+                      <Text style={styles.buttonText}>繼續</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={styles.boxes}
+                      onPress={() => {
+                        if (this.state.isBuffering == false) PressPlayButton(2);
+                      }}
+                    >
+                      <Text style={styles.buttonText}>完前緩和</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-              </View>
-            )}
-            {
-              /*test*/ playingStatus == 12 && (
-                <View
-                  style={{
-                    height: ScreenHeight,
-                    justifyContent: "center",
-                    backgroundColor: "black",
-                  }}
-                >
-                  <Image
-                    style={{ width: "100%" }}
-                    source={playingImage}
-                    resizeMode="contain"
-                  />
+              )}
+              {playingStatus == 2 && (
+                <View style={styles.secondaryContainer}>
+                  <Text style={styles.text}>
+                    {"你已完成全部護眼運動，\n只差讓眼睛緩和的步驟！"}
+                  </Text>
+                  <View style={{ flex: 1, alignItems: "center" }}>
+                    <TouchableOpacity
+                      style={styles.boxes}
+                      onPress={() => {
+                        if (this.state.isBuffering == false) PressPlayButton(2);
+                      }}
+                    >
+                      <Text style={styles.buttonText}>完前緩和</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-              )
-            }
-            {playingStatus >= 10 && playingStatus < 12 && (
-              <View style={styles.secondaryContainer}>
-                <View
-                  style={{
-                    flex: 4,
-                    alignItems: "center",
-                    padding: 20,
-                    justifyContent: "center",
-                  }}
-                >
-                  <Image
-                    style={{ width: "100%" }}
-                    source={playingImage}
-                    resizeMode="contain"
-                  />
+              )}
+              {playingStatus == 3 && (
+                <View style={styles.secondaryContainer}>
+                  <Text style={styles.text}>你已完成這次的護眼運動！</Text>
+                  <View style={{ flex: 1, alignItems: "center" }}>
+                    <TouchableOpacity
+                      style={styles.boxes}
+                      onPress={() =>
+                        this.setState({ playingStatus: 0, audioIndex: 0 })
+                      }
+                    >
+                      <Text style={styles.buttonText}>再來一組</Text>
+                    </TouchableOpacity>
+                  </View>
                 </View>
-                <View style={{ flex: 0, alignItems: "center" }} />
-              </View>
-            </View>
-          )}
-          {playingStatus == 2 && (
-            <View style={styles.secondaryContainer}>
-              <Text style={styles.text}>
-                {"你已完成全部護眼運動，\n只差讓眼睛緩和的步驟！"}
-              </Text>
-              <View style={{ flex: 1, alignItems: "center" }}>
-                <TouchableOpacity
-                  style={styles.boxes}
-                  onPress={() => {
-                    if (this.state.isBuffering == false) PressPlayButton(2);
-                  }}
-                >
-                  <Text style={styles.buttonText}>完前緩和</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          )}
-          {playingStatus == 3 && (
-            <View style={styles.secondaryContainer}>
-              <Text style={styles.text}>你已完成這次的護眼運動！</Text>
-              <View style={{ flex: 1, alignItems: "center" }}>
-                <TouchableOpacity
-                  style={styles.boxes}
-                  onPress={() =>
-                    this.setState({ playingStatus: 0, audioIndex: 0 })
-                  }
-                >
-                  <Text style={styles.buttonText}>再來一組</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          )}
-          {playingStatus >= 10 && (
-            <View style={styles.secondaryContainer}>
-              <Text style={[styles.text, { fontSize: 72 }]}>{"👁️  👁️"}</Text>
-              <View style={{ flex: 0, alignItems: "center" }} />
-            </View>
-          )}
-        </LinearGradient>
-      </View>
+              )}
+              {playingStatus >= 10 && (
+                <View style={styles.secondaryContainer}>
+                  <Text style={[styles.text, { fontSize: 72 }]}>
+                    {"👁️  👁️"}
+                  </Text>
+                  <View style={{ flex: 0, alignItems: "center" }} />
+                </View>
+              )}
+            </LinearGradient>
+          </View>
+          <FABView />
+        </MenuScreen>
+      </>
     );
   }
 }
@@ -347,7 +278,7 @@ const styles = StyleSheet.create({
     flex: 1,
     marginHorizontal: 30,
     marginTop: 90,
-    marginBottom: 10,
+    marginBottom: 30,
     borderRadius: 30,
     borderWidth: 3,
     borderColor: "white",
@@ -356,22 +287,22 @@ const styles = StyleSheet.create({
     flex: 4,
     textAlign: "center",
     textAlignVertical: "center",
-    fontSize: 25,
+    fontSize: ScreenWidth / 16,
     fontWeight: "bold",
-    lineHeight: 32,
+    lineHeight: (ScreenWidth / 16) * 1.2,
     color: "white",
   },
   boxes: {
-    height: 60,
-    width: 120,
-    borderRadius: 30,
+    height: (ScreenWidth / 16) * 2,
+    width: (ScreenWidth / 16) * 5,
+    borderRadius: ScreenWidth / 16,
     backgroundColor: "white",
   },
   buttonText: {
     flex: 1,
     textAlign: "center",
     textAlignVertical: "center",
-    fontSize: 25,
+    fontSize: ScreenWidth / 16,
     color: "#3CA1B7",
   },
 });

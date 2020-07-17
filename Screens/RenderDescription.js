@@ -1,5 +1,6 @@
 import React, { Component, useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, ScrollView } from "react-native";
+import { ScreenWidth, ScreenHeight } from "../constant/Constant";
 
 export const RenderContent = (props) => {
   const { isLeft, ddlValue, data, selectedDate, index, dateArr } = props;
@@ -221,10 +222,10 @@ export const RenderIncreaseWarning = (props) => {
   const calDiff = (cur, prev) => {
     const diff = prev - cur;
     if (diff > 0) {
-      return "淺了" + diff + "度，";
+      return "淺了" + diff + "度";
     } else if (diff < 0) {
-      return "深了" + Math.abs(diff) + "度，";
-    } else return "度數不變。";
+      return "深了" + Math.abs(diff) + "度";
+    } else return "度數不變";
   };
 
   if (isLeft) {
@@ -261,14 +262,14 @@ export const RenderIncreaseWarning = (props) => {
 const DescriptionStyle = StyleSheet.create({
   degreeText: {
     color: "#2D9CDB",
-    fontSize: 20,
+    fontSize: ScreenWidth / 20,
     fontWeight: "bold",
     textAlign: "center",
   },
   contentText: {
     textAlign: "center",
     color: "#2D9CDB",
-    fontSize: 16,
+    fontSize: ScreenWidth / 25,
   },
   warningText: {
     marginLeft: 10,
