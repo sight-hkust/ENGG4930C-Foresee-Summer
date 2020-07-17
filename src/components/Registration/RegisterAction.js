@@ -108,9 +108,9 @@ export const registerChildAccount = async ({
   registerChild,
   returnOnComplete,
 }) => {
-  /* let childUid = await nanoid();
+  let childUid = await nanoid();
   childUid = "ch-" + childUid;
-  writeUserData({ registerChild, values, childUid, uid: auth.currentUser.uid }); */
+  writeUserData({ registerChild, values, childUid, uid: auth.currentUser.uid });
   returnOnComplete();
 };
 
