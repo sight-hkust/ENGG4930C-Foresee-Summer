@@ -42,6 +42,7 @@ import { InputDatePickerModal } from "../../Utils/InputDatePickerModal";
 import MenuScreen from "../../../../Utils/MenuScreen";
 import PatientSearchPanel from "../../Utils/PatientSearchPanel";
 import { SchemaRegisterChild } from "../Schema/SchemaRegisterChild";
+import { CommonActions } from "@react-navigation/native";
 
 export const RegistrationForm = ({ navigation, route }) => {
   const { isProfessional, registerPatient, registerChild } = route.params;
@@ -112,7 +113,14 @@ export const RegistrationForm = ({ navigation, route }) => {
                     registerChild,
                     returnOnComplete: () => {
                       setIsLoading(false);
-                      navigation.navigate("HomeScreen");
+                      navigation.dispatch(
+                        CommonActions.navigate({
+                          name: "HomeScreen",
+                          params: {
+                            actions: navigation.popToTop(),
+                          }
+                        })
+                      );
                       resetForm({});
                       setStatus({ success: true });
                     },
@@ -175,8 +183,8 @@ export const RegistrationForm = ({ navigation, route }) => {
                 ? SchemaRegisterPatient
                 : SchemaProfessional
               : registerChild
-              ? SchemaRegisterChild
-              : SchemaPatient
+                ? SchemaRegisterChild
+                : SchemaPatient
           }
           validateOnBlur={false}
           validateOnChange={false}
@@ -210,8 +218,8 @@ const FormDetails = ({
 }) => {
   const selectedNameFieldsOnRefresh =
     (selectedNameFields == selectedNameFields) == "eng" &&
-    !formikProps.errors["englishNameError"] &&
-    formikProps.errors["chineseNameError"]
+      !formikProps.errors["englishNameError"] &&
+      formikProps.errors["chineseNameError"]
       ? "eng"
       : "chi";
   const { setFieldValue, values } = formikProps;
@@ -283,9 +291,9 @@ const FormDetails = ({
   return (
     <>
       {(isProfessional && registerPatient) ||
-      (!isProfessional && registerChild) ? (
-        <MenuScreen />
-      ) : null}
+        (!isProfessional && registerChild) ? (
+          <MenuScreen />
+        ) : null}
 
       <ScrollView
         style={{
@@ -304,33 +312,33 @@ const FormDetails = ({
           !registerChild ? (
             <Logo style={styles.logoContainer} />
           ) : (
+              <Text
+                style={{
+                  textAlign: "center",
+                  marginVertical: ScreenHeight * 0.045,
+                  fontSize: 30,
+                  fontWeight: "bold",
+                  color: "#fff",
+                }}
+              >
+                {" "}
+              登記子女帳號{" "}
+              </Text>
+            )
+        ) : (
             <Text
               style={{
                 textAlign: "center",
-                marginVertical: ScreenHeight * 0.045,
-                fontSize: 30,
+                marginVertical: 40,
+                fontSize: 35,
                 fontWeight: "bold",
                 color: "#fff",
               }}
             >
               {" "}
-              登記子女帳號{" "}
-            </Text>
-          )
-        ) : (
-          <Text
-            style={{
-              textAlign: "center",
-              marginVertical: 40,
-              fontSize: 35,
-              fontWeight: "bold",
-              color: "#fff",
-            }}
-          >
-            {" "}
             登記病人{" "}
-          </Text>
-        )}
+            </Text>
+          )}
 
         <View style={styles.inputFieldsContainer}>
           {selectedNameFields === "chi" ? (
@@ -430,25 +438,25 @@ const FormDetails = ({
           </View>
 
           {formikProps.errors &&
-          (formikProps.errors["chineseNameError"] ||
-            formikProps.errors["englishNameError"]) ? (
-            <Text
-              style={{
-                paddingTop: ScreenWidth * 0.01,
-                paddingLeft: ScreenWidth * 0.08,
-                textAlign: "left",
-                fontSize: FontScale * 20,
-                fontWeight: "700",
-                color: "#FFFD78",
-                flexWrap: "wrap",
-              }}
-            >
-              {"* " +
-                (formikProps.errors["chineseNameError"]
-                  ? formikProps.errors["chineseNameError"]
-                  : formikProps.errors["englishNameError"])}
-            </Text>
-          ) : null}
+            (formikProps.errors["chineseNameError"] ||
+              formikProps.errors["englishNameError"]) ? (
+              <Text
+                style={{
+                  paddingTop: ScreenWidth * 0.01,
+                  paddingLeft: ScreenWidth * 0.08,
+                  textAlign: "left",
+                  fontSize: FontScale * 20,
+                  fontWeight: "700",
+                  color: "#FFFD78",
+                  flexWrap: "wrap",
+                }}
+              >
+                {"* " +
+                  (formikProps.errors["chineseNameError"]
+                    ? formikProps.errors["chineseNameError"]
+                    : formikProps.errors["englishNameError"])}
+              </Text>
+            ) : null}
 
           {isProfessional && !registerPatient ? (
             <InputDialogPicker
@@ -462,14 +470,14 @@ const FormDetails = ({
               showDialog={_showRoleDialog}
             />
           ) : (
-            <InputDatePickerModal
-              icon={hourGlassIcon}
-              formikProps={formikProps}
-              formikKey="birthday"
-              showDatePicker={_showDatePicker}
-              value={values.birthday}
-            />
-          )}
+              <InputDatePickerModal
+                icon={hourGlassIcon}
+                formikProps={formikProps}
+                formikKey="birthday"
+                showDatePicker={_showDatePicker}
+                value={values.birthday}
+              />
+            )}
           {registerPatient ? (
             <>
               <View
@@ -567,24 +575,24 @@ const FormDetails = ({
               />
             </>
           ) : (
-            <>
-              <InputTextField
-                containerStyle={{ height: "auto" }}
-                label={"密碼"}
-                icon={KeyIcon}
-                formikProps={formikProps}
-                formikKey="password"
-                secureTextEntry
-              />
-              <InputTextField
-                label={"確認密碼"}
-                icon={KeyIcon}
-                formikProps={formikProps}
-                formikKey="confirmPassword"
-                secureTextEntry
-              />
-            </>
-          )}
+              <>
+                <InputTextField
+                  containerStyle={{ height: "auto" }}
+                  label={"密碼"}
+                  icon={KeyIcon}
+                  formikProps={formikProps}
+                  formikKey="password"
+                  secureTextEntry
+                />
+                <InputTextField
+                  label={"確認密碼"}
+                  icon={KeyIcon}
+                  formikProps={formikProps}
+                  formikKey="confirmPassword"
+                  secureTextEntry
+                />
+              </>
+            )}
           {!isProfessional ? (
             <CheckBox
               containerStyle={{

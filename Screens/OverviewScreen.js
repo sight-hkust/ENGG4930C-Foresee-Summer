@@ -66,9 +66,10 @@ class OverviewScreen extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { familyList } = this.state;
+    const { familyList, accountOwner } = this.state;
     const { familyMembers } = this.props.familyStore;
     if (familyMembers && familyMembers != prevProps.familyStore.familyMembers) {
+      familyList.splice(1, familyList.length);
       familyMembers.forEach((member) => familyList.push(member));
     }
     if (familyList.length == 1 && familyMembers) {
@@ -212,8 +213,8 @@ class OverviewScreen extends Component {
               {this.state.dateArr == null
                 ? ""
                 : moment(
-                    this.state.dateArr[this.state.dateArr.length - 1]
-                  ).format("YYYY-MM-DD")}
+                  this.state.dateArr[this.state.dateArr.length - 1]
+                ).format("YYYY-MM-DD")}
             </Text>
           </View>
         </MenuScreen>
@@ -234,18 +235,20 @@ class OverviewScreen extends Component {
                 <FlatList
                   data={familyList}
                   keyExtractor={(item, index) => index.toString()}
-                  renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => this._selectFamily(item)}>
+                  renderItem={({ item }) => {
+                    /* console.log("LINE242:", item.firstName); */
+                    return ((<TouchableOpacity onPress={() => this._selectFamily(item)}>
                       <View
                         style={{
                           width: '100%',
                           paddingVertical: ScreenHeight * 0.02,
                         }}
                       >
-                        <Text style={{ fontSize: 20, textAlign: 'center' }}>{item.surName && item.givenName ? item.surName + item.givenName : item.lastName + item.firstName}</Text>
+                        <Text style={{ fontSize: 20, textAlign: 'center' }}>{displayName(item)}</Text>
                       </View>
                     </TouchableOpacity>
-                  )}
+                    ))
+                  }}
                 />
               </View>
             </Modal>
