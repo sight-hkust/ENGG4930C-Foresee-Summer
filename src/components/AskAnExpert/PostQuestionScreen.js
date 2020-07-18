@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, Keyboard, Dimensions, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, Keyboard, Animated, ScrollView } from 'react-native';
 import { Input, CheckBox, Button, Icon } from 'react-native-elements';
 import { Formik } from 'formik';
 import { object, string } from 'yup';
@@ -22,10 +22,54 @@ const PostQuestionSchema = object({
 const PostQuestionScreen = ({ route, navigation }) => {
   const [isSubmitted, setIsSubmitted] = useState(false);
 
+  var yScroll = new Animated.Value(0);
+
+  navigation.setOptions({
+    headerRightContainerStyle: {
+      position: 'absolute',
+      top: yScroll.interpolate({
+        inputRange: [0, 80],
+        outputRange: [0, -200],
+        extrapolate: 'clamp',
+      }),
+    },
+    headerTitleStyle: {
+      position: 'absolute',
+      top: yScroll.interpolate({
+        inputRange: [0, 80],
+        outputRange: [-20, -120],
+        extrapolate: 'clamp',
+      }),
+      fontSize: 28,
+      color: '#E1EDFF',
+      fontWeight: '700',
+      overflow: 'hidden',
+    },
+    headerLeftContainerStyle: {
+      position: 'absolute',
+      top: yScroll.interpolate({
+        inputRange: [0, 80],
+        outputRange: [0, -200],
+        extrapolate: 'clamp',
+      }),
+    },
+  });
+
   return (
-    <MenuScreen>
+    <MenuScreen style={{ position: 'fix' }}>
       <View>
-        <ScrollView>
+        <ScrollView
+          onScroll={Animated.event([
+            {
+              nativeEvent: {
+                contentOffset: {
+                  y: yScroll,
+                },
+              },
+            },
+          ])}
+          scrollEventThrottle={1}
+        >
           <View style={styles.container}>
             {!isSubmitted ? (
               <Formik
@@ -196,7 +240,7 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 80,
     width: '100%',
-    height: ScreenHeight * 1.1,
+    height: ScreenHeight,
     alignSelf: 'center',
   },
   form: {
@@ -226,7 +270,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'rgba(225, 237, 255, 0.5)',
   },
   textAreaContainer: {
-    color: 'white',
+    color: '#1772A6',
     height: 180,
     textAlignVertical: 'top',
     paddingTop: 10,
@@ -244,7 +288,6 @@ const styles = StyleSheet.create({
     fontSize: 18,
     color: 'white',
   },
-
   tagContainer: {
     width: '100%',
     justifyContent: 'center',
