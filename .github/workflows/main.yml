@@ -20,7 +20,7 @@ jobs:
           npm install
           npm install -g turtle-cli expo-cli
           turtle setup:android
-          turtle build:android --keystore-path ./keystore.jks --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS --type app-bundle -o ./artifact.aab
+          turtle build:android --keystore-path ./keystore.jks --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS --type app-bundle -o ./artifact.aab --username $EXPO_USERNAME --password $EXPO_PASSWORD
         env:
           EXPO_USERNAME: ${{ secrets.EXPO_USERNAME }}
           EXPO_PASSWORD: ${{ secrets.EXPO_PASSWORD }}
