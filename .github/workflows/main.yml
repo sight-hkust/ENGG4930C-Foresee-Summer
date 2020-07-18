@@ -30,7 +30,7 @@ jobs:
           echo $EXPO_ANDROID_KEYSTORE_BASE64 | base64 -d > ./keystore.jks
           npm install
           npm install -g turtle-cli expo-cli
-          npx expo login -u $(EXPO_USERNAME) -p $(EXPO_PASSWORD)
+          npx expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
           turtle setup:android
           turtle build:android --keystore-path ./keystore.jks --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS --type app-bundle -o ./artifact.aab
 
