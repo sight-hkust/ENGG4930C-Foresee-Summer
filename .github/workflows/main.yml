@@ -16,14 +16,13 @@ jobs:
         name: Setup NodeJS Environment
         uses: actions/setup-node@v1
       - run: |
-          echo $KEYSTORE | base64 -d > ./keystore.jks
           npm install -g turtle-cli
           turtle setup:android
-          turtle build:android \
-            --keystore-path $(pwd)/keystore.jks \
-            --keystore-alias $KEYSTORE_ALIAS
+          turtle build:android
         env:
-          KEYSTORE: ${{ secrets.keystore }}
-          KEYSTORE_ALIAS: ${{ secrets.keystore_alias }}
-          EXPO_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.keystore_password }}
-          EXPO_ANDROID_KEY_PASSWORD: ${{ secrets.key_password }}
+          EXPO_USERNAME: ${{ secrets.EXPO_USERNAME }}
+          EXPO_PASSWORD: ${{ secrets.EXPO_PASSWORD }}
+          EXPO_ANDROID_KEYSTORE_BASE64: ${{ secrets.KEYSTORE }}
+          EXPO_ANDROID_KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
+          EXPO_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          EXPO_ANDROID_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
