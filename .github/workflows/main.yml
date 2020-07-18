@@ -1,0 +1,47 @@
+name: Deployment
+
+on: 
+  push:
+    branches:
+      - master
+      - continuous-deployment
+jobs:
+  deployment:
+    runs-on: macos-latest
+    steps:
+      - id: checkout-repo
+        name: Read repository
+        uses: actions/checkout@v2
+      - id: setup-nodejs
+        name: Setup NodeJS Environment
+        uses: actions/setup-node@v1
+        with:
+          node-version: "12"
+      - id: run-build-scripts
+        name: Build and export application
+        env:
+          EXPO_USERNAME: ${{ secrets.EXPO_USERNAME }}
+          EXPO_PASSWORD: ${{ secrets.EXPO_PASSWORD }}
+          EXPO_ANDROID_KEYSTORE_BASE64: ${{ secrets.KEYSTORE }}
+          EXPO_ANDROID_KEYSTORE_ALIAS: ${{ secrets.KEYSTORE_ALIAS }}
+          EXPO_ANDROID_KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          EXPO_ANDROID_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+          PLAYSTORE_SERVICE_ACCOUNT: ${{ secrets.PLAYSTORE_SERVICE_ACCOUNT }}
+        run: |
+          echo $EXPO_ANDROID_KEYSTORE_BASE64 | base64 -d > ./keystore.jks
+          echo $PLAYSTORE_SERVICE_ACCOUNT | base64 -d > ./playstore-service-account.json
+          npm install -g turtle-cli expo-cli
+          expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
+          yarn
+          expo publish
+          turtle setup:android
+          turtle build:android --keystore-path ./keystore.jks --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS --type app-bundle -o ./app.aab --public-url https://expo.io/@hymanae2/foresee
+      - id: upload-build-artifact
+        name: Upload build artifact
+        uses: actions/upload-artifact@v1
+        with:
+          name: release
+          path: ./app.aab
+          #      - id: publish-playstore
+          #name: Publish to Google Playstore
+          #run: fastlane supply --track 'production' --json_key 'playstore-service-account.json' --package_name "hk.ust.sight.foresee" --apk "app.aab" --skip_upload_metadata --skip_upload_images --skip_upload_screenshots
