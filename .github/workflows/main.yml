@@ -1,0 +1,20 @@
+name: Deployment
+
+on: 
+  push:
+    branches:
+      - master
+      - continuous-deployment
+jobs:
+  deployment:
+    runs-on: macos-latest
+    steps:
+      - id: checkout-repo
+        name: Read repository
+        uses: actions/checkout@v2
+      - id: setup-nodejs
+        name: Setup NodeJS Environment
+        uses: actions/setup-node@v1
+      - run: |
+          npm install -g turtle-cli
+          turtle setup:android
