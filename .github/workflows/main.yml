@@ -35,7 +35,7 @@ jobs:
           yarn
           expo publish
           turtle setup:android
-          turtle build:android --keystore-path ./keystore.jks --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS --type app-bundle -o ./app.aab --public-url https://expo.host/@hymanae2/foresee
+          turtle build:android --keystore-path ./keystore.jks --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS --type app-bundle -o ./app.aab --public-url https://exp.host/@hymanae2/foresee/index.exp?sdkVersion=37.0.0​
           fastlane supply --track 'production' --json_key 'playstore-service-account.json' --package_name "hk.ust.sight.foresee" --apk "app.aab" --skip_upload_metadata --skip_upload_images --skip_upload_screenshots
       - id: upload-build-artifact
         name: Upload build artifact
