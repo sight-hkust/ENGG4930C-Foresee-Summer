@@ -16,7 +16,7 @@ jobs:
         name: Setup NodeJS Environment
         uses: actions/setup-node@v1
         with:
-          - node-version: "12"
+          node-version: "12"
       - id: run-build-scripts
         name: Build and export application
         env:
