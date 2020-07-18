@@ -16,7 +16,7 @@ jobs:
         name: Setup NodeJS Environment
         uses: actions/setup-node@v1
       - run: |
-          npm install -g turtle-cli
+          npm install -g turtle-cli expo-cli
           turtle setup:android
           turtle build:android
         env:
