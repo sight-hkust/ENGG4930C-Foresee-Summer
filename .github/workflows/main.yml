@@ -35,11 +35,13 @@ jobs:
           yarn
           expo publish
           turtle setup:android
-          turtle build:android --keystore-path ./keystore.jks --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS --type app-bundle -o ./app.aab --public-url https://expo.io/@hymanae2/foresee​
-          fastlane supply --track 'production' --json_key 'playstore-service-account.json' --package_name "hk.ust.sight.foresee" --apk "app.aab" --skip_upload_metadata --skip_upload_images --skip_upload_screenshots
+          turtle build:android --keystore-path ./keystore.jks --keystore-alias $EXPO_ANDROID_KEYSTORE_ALIAS --type app-bundle -o ./app.aab --public-url https://expo.io/@hymanae2/foresee
       - id: upload-build-artifact
         name: Upload build artifact
         uses: actions/upload-artifact@v1
         with:
           name: app-release.apk
           path: ./app.aab
+      - id: publish-playstore
+        name: Publish to Google Playstore
+        run: fastlane supply --track 'production' --json_key 'playstore-service-account.json' --package_name "hk.ust.sight.foresee" --apk "app.aab" --skip_upload_metadata --skip_upload_images --skip_upload_screenshots
