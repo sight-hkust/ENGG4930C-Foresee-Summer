@@ -20,7 +20,7 @@
       "bundleIdentifier": "ios"
     },
     "android": {
-      "package": "foresee.android"
+      "package": "hk.ust.sight.foresee"
     },
     "entryPoint": "node_modules/expo/AppEntry.js",
     "packagerOpts": {
