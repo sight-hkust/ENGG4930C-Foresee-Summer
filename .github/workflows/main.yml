@@ -42,6 +42,6 @@ jobs:
         with:
           name: release
           path: ./app.aab
-          #      - id: publish-playstore
-          #name: Publish to Google Playstore
-          #run: fastlane supply --track 'production' --json_key 'playstore-service-account.json' --package_name "hk.ust.sight.foresee" --apk "app.aab" --skip_upload_metadata --skip_upload_images --skip_upload_screenshots
+      - id: publish-playstore
+        name: Publish to Google Playstore
+        run: fastlane supply --track 'production' --json_key 'playstore-service-account.json' --package_name "hk.ust.sight.foresee" --aab "app.aab" --skip_upload_metadata --skip_upload_images --skip_upload_screenshots
