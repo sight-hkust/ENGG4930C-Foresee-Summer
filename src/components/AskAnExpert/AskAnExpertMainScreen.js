@@ -290,7 +290,6 @@ const styles = StyleSheet.create({
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
     zIndex: 1,
-    borderWidth: 1,
   },
   scrollView: {
     height: ScreenHeight * 0.45,
@@ -319,9 +318,10 @@ const styles = StyleSheet.create({
     height: hp('19%'),
     alignItems: 'center',
     marginBottom: hp('3.5%'),
+    overflow: 'hidden',
   },
   miniQuestionTitle: {
-    fontSize: hp('2.4%'),
+    fontSize: hp('1.8%'),
     color: '#1772A6',
     fontWeight: 'bold',
     paddingBottom: hp('2%'),
