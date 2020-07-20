@@ -221,9 +221,9 @@ export const RenderIncreaseWarning = (props) => {
   const calDiff = (cur, prev) => {
     const diff = prev - cur;
     if (diff > 0) {
-      return "淺了" + diff + "度，";
+      return "淺了" + diff + "度";
     } else if (diff < 0) {
-      return "深了" + Math.abs(diff) + "度，";
+      return "深了" + Math.abs(diff) + "度";
     } else return "度數不變。";
   };
 
