@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, View, TouchableOpacity, FlatList, Image } from 'react-native';
-import { Icon } from 'react-native-elements';
+import { Icon, Button } from 'react-native-elements';
 import { Grid, Col } from 'react-native-easy-grid';
 import Modal from 'react-native-modal';
 
@@ -10,8 +10,11 @@ import MenuScreen from '../../../Utils/MenuScreen';
 
 import { connect } from 'react-redux';
 import { watchQuestionListUpdate, questionList } from '../../reducers/askProfessionalList';
-import HeaderRightButton from '../../../Utils/HeaderRightButton';
 import FABView from '../../../Utils/FAB';
+import { actionCounter } from '../../helpers/actionCounter';
+
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { set } from 'react-native-reanimated';
 
 const SPECIAL_TAG_1 = '眼睛疼痛';
 const SPECIAL_TAG_2 = '視力模糊';
@@ -28,51 +31,66 @@ const AskAnExpertMainScreen = ({ route, navigation, questionListStore }) => {
 
   const { questionList } = questionListStore;
 
+  const [loaded, setLoaded] = useState(false);
+
+  const [hotQuestionlist, setHotQuestionlist] = useState([]);
+
   useEffect(() => {
     hotTopicCounter = 0;
-  }, []);
+    if (questionList && !loaded) {
+      setHotQuestionlist(
+        questionList.sort(function (a, b) {
+          return b.views - a.views;
+        })
+      );
+
+      setLoaded(true);
+    }
+  }, [questionList]);
 
   return (
     <MenuScreen style={{ height: 0 }}>
-      {questionList != null && (
+      {questionList && loaded && (
         <>
           <View style={styles.linearbackgorundContainer}>
             <LinearGradientBackground style={{ height: ScreenHeight }} colors={['#1772A6', '#A377FF']} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]} />
           </View>
           <View style={styles.container}>
-            <View style={{ width: ScreenWidth, marginTop: 50, zIndex: 1 }}>
+            <View style={{ width: ScreenWidth, marginTop: hp('7.5%'), zIndex: 3, height: hp('27%') }}>
               <Text
                 style={{
                   color: 'white',
                   fontWeight: 'bold',
-                  fontSize: 25,
+                  fontSize: hp('3%'),
                   marginLeft: ScreenWidth * 0.05 + 10,
                 }}
               >
                 熱門
               </Text>
-              <FlatList
-                data={questionList.slice(0, 4)}
-                horizontal={true}
-                renderItem={({ item }) => {
-                  hotTopicCounter++;
-                  return (
-                    <HotQuestionCard
-                      style={
-                        hotTopicCounter == 1 && {
-                          marginLeft: ScreenWidth * 0.03,
+              {hotQuestionlist && (
+                <FlatList
+                  data={hotQuestionlist.slice(0, 4)}
+                  horizontal={true}
+                  renderItem={({ item }) => {
+                    hotTopicCounter++;
+                    return (
+                      <HotQuestionCard
+                        style={
+                          hotTopicCounter == 1 && {
+                            marginLeft: ScreenWidth * 0.03,
+                          }
                         }
-                      }
-                      faq={item}
-                      key={item.id}
-                      counter={hotTopicCounter - 1}
-                    />
-                  );
-                }}
-                keyExtractor={(item) => item.id}
-                style={{ marginTop: 26, height: 180 }}
-                showsHorizontalScrollIndicator={false}
-              />
+                        faq={item}
+                        key={item.id}
+                        counter={hotTopicCounter - 1}
+                      />
+                    );
+                  }}
+                  keyExtractor={(item) => item.id}
+                  style={{ marginTop: hp('3%'), height: 180, zIndex: 4 }}
+                  showsHorizontalScrollIndicator={false}
+                />
+              )}
             </View>
 
             <View style={styles.background}>
@@ -84,18 +102,27 @@ const AskAnExpertMainScreen = ({ route, navigation, questionListStore }) => {
                 }}
               >
                 <Col style={{ paddingLeft: ScreenWidth * 0.1 }}>
-                  <Text
-                    style={{
-                      color: '#24559E',
-                      fontWeight: 'bold',
-                      fontSize: 25,
-                    }}
-                  >
-                    最新
-                  </Text>
+                  <Button
+                    title="最新"
+                    type="clear"
+                    onPress={() => navigation.navigate('PostQuestion')}
+                    titleStyle={{ color: '#24559E', fontWeight: 'bold', fontSize: hp('3%') }}
+                    containerStyle={{ width: wp('20%') }}
+                    size={15}
+                    disabled={true}
+                  />
                 </Col>
-                <Col style={{ paddingLeft: ScreenWidth * 0.1 }}>
-                  <Icon size={35} name="edit" type="feather" color="black" onPress={() => navigation.navigate('PostQuestion')} Component={TouchableOpacity} />
+                <Col style={{ paddingLeft: ScreenWidth * 0.1, zIndex: 3 }}>
+                  <Button
+                    title=" 發問"
+                    icon={<Icon size={wp('7%')} name="edit" type="ionicons" color="#1772A6" />}
+                    type="clear"
+                    onPress={() => navigation.navigate('PostQuestion')}
+                    titleStyle={{ color: '#1772A6', fontSize: hp('3%') }}
+                    containerStyle={{ marginRight: wp('7%') }}
+                    size={15}
+                    TouchableComponent={TouchableOpacity}
+                  />
                 </Col>
               </Grid>
 
@@ -124,7 +151,13 @@ export const HotQuestionCard = (props) => {
 
   return (
     <View style={{ ...styles.shadow }}>
-      <TouchableOpacity style={{ ...styles.hotTopicCard, ...props.style }} onPress={toggleModal}>
+      <TouchableOpacity
+        style={{ ...styles.hotTopicCard, ...props.style }}
+        onPress={() => {
+          toggleModal();
+          actionCounter('askProf', props.faq.question_id, 'views');
+        }}
+      >
         <LinearGradientBackground
           colors={[
             `rgb(${RGB[0] + props.counter * 12},${RGB[1] + props.counter * 36}, ${RGB[2] + props.counter * 28})`,
@@ -151,8 +184,14 @@ export const MiniQuestionCard = (props) => {
 
   return (
     <>
-      <TouchableOpacity style={{ ...styles.shadow, ...styles.miniQuestion }} onPress={toggleModal}>
-        <View style={{ paddingHorizontal: 15, paddingTop: 7.5, width: '100%' }}>
+      <TouchableOpacity
+        style={{ ...styles.shadow, ...styles.miniQuestion }}
+        onPress={() => {
+          toggleModal();
+          actionCounter('askProf', props.faq.question_id, 'views');
+        }}
+      >
+        <View style={{ paddingHorizontal: wp('3%'), paddingTop: hp('1%'), width: '100%' }}>
           <View style={{ flexDirection: 'row', marginBottom: 10, marginTop: 5 }}>
             {props.faq.tags.map((item) => {
               switch (item) {
@@ -180,27 +219,18 @@ export const QuestionCard = (props) => {
   const [bookmarked, setBookmarked] = useState(false);
 
   return (
-    <Modal
-      isVisible={props.isVisible}
-      style={{
-        backgroundColor: 'rgb(225, 237, 255)',
-        padding: 20,
-        borderRadius: 20,
-        justifyContent: 'flex-end',
-        margin: 0,
-      }}
-    >
+    <Modal isVisible={props.isVisible} style={styles.questionCardModal}>
       <Grid>
         <Col>
-          <TouchableOpacity style={{ position: 'absolute', top: 15, left: 15 }} onPress={() => props.toggleModal(!props.isVisible)}>
+          <TouchableOpacity style={{ position: 'absolute', top: hp('3%'), left: wp('5%') }} onPress={() => props.toggleModal(!props.isVisible)}>
             <Image source={require('../../../assets/images/BackArrow.png')} />
           </TouchableOpacity>
         </Col>
         <Icon
-          containerStyle={{ position: 'absolute', right: 15 }}
+          containerStyle={{ position: 'absolute', top: hp('2%'), right: wp('5%') }}
           name={!bookmarked ? 'bookmark' : 'bookmark-alt'}
           type="fontisto"
-          size={45}
+          size={wp('10%')}
           color={bookmarked ? 'red' : 'black'}
           onPress={() => setBookmarked(!bookmarked)}
         />
@@ -232,7 +262,7 @@ export const QuestionCard = (props) => {
 const Label = (props) => {
   return (
     <View style={{ ...styles.label, ...{ backgroundColor: props.color } }}>
-      <Text style={{ color: '#1772A6' }}> #{props.text} </Text>
+      <Text style={styles.labelContent}> #{props.text} </Text>
     </View>
   );
 };
@@ -248,9 +278,9 @@ const styles = StyleSheet.create({
     borderBottomRightRadius: 40,
     overflow: 'hidden',
     width: ScreenWidth,
-    height: ScreenHeight * 0.32,
+    height: hp('32%'),
     position: 'absolute',
-    zIndex: 1,
+    zIndex: 2,
   },
   background: {
     backgroundColor: 'white',
@@ -259,7 +289,7 @@ const styles = StyleSheet.create({
     bottom: 0,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
-    zIndex: 0,
+    zIndex: 1,
   },
   scrollView: {
     height: ScreenHeight * 0.45,
@@ -268,14 +298,15 @@ const styles = StyleSheet.create({
     marginBottom: 30,
   },
   hotTopicCard: {
-    width: ScreenWidth * 0.2825,
-    height: ScreenHeight * 0.17,
+    width: wp('30%'),
+    height: wp('30%'),
     borderRadius: 30,
     overflow: 'hidden',
     marginRight: 20,
+    zIndex: 3,
   },
   hotTopicCardText: {
-    fontSize: 20,
+    fontSize: hp('2.4%'),
     fontWeight: 'bold',
     color: 'white',
     marginTop: 20,
@@ -284,43 +315,53 @@ const styles = StyleSheet.create({
   miniQuestion: {
     backgroundColor: '#E1EDFF',
     borderRadius: 30,
-    height: 130,
+    height: hp('19%'),
     alignItems: 'center',
-    marginBottom: 15,
+    marginBottom: hp('3.5%'),
+    overflow: 'hidden',
   },
   miniQuestionTitle: {
-    fontSize: 17,
+    fontSize: hp('1.8%'),
     color: '#1772A6',
     fontWeight: 'bold',
-    paddingBottom: 10,
+    paddingBottom: hp('2%'),
   },
   miniQuestionContent: {
-    fontSize: 14,
+    fontSize: hp('1.8%'),
     color: '#2D9CDB',
+  },
+  questionCardModal: {
+    backgroundColor: 'rgb(225, 237, 255)',
+    padding: 20,
+    borderRadius: 20,
+    justifyContent: 'flex-end',
+    margin: 0,
   },
   questionCard: {
     backgroundColor: 'white',
     borderRadius: 30,
-    height: 290,
+    height: hp('35%'),
+    width: wp('80%'),
+    alignSelf: 'center',
     alignItems: 'center',
-    marginBottom: 25,
+    marginBottom: hp('5%'),
   },
   questionCardTitle: {
-    fontSize: 25,
+    fontSize: wp('6%'),
     color: '#24559E',
     fontWeight: 'bold',
     marginBottom: 15,
   },
   questionCardContent: {
-    fontSize: 18,
+    fontSize: wp('4.25%'),
     color: '#2D9CDB',
   },
   labelContainer: {
     flexDirection: 'row',
   },
   label: {
-    height: 27,
-    width: 80,
+    height: hp('3.2%'),
+    width: wp('20%'),
     marginRight: 10,
     backgroundColor: '#94DFC9',
     justifyContent: 'center',
@@ -328,12 +369,17 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     borderRadius: 8,
   },
+  labelContent: {
+    fontSize: wp('3.5%'),
+    color: '#1772A6',
+  },
   shadow: {
     shadowColor: '#000000',
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
+    zIndex: 3,
   },
 });
 

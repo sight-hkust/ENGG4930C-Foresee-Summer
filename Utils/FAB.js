@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
-import { View, Linking } from 'react-native';
+import { View, Linking, Text } from 'react-native';
 import { FAB, Portal, Provider } from 'react-native-paper';
 import BottomModal from './BottomModal';
 import { ContactUs, Feedback } from '../src/components/Setting/Setting';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const FABView = () => {
   const [state, setState] = React.useState({ open: false });
@@ -60,9 +61,21 @@ const FABView = () => {
             fabStyle={{ backgroundColor: '#fff' }}
           />
         </Portal>
-        <BottomModal isVisible={showContact} toggleModal={toggleModal} style={{ backgroundColor: '#8BB5F4' }}>
-          <View style={{ alignSelf: 'center', width: '30%', height: 1, borderWidth: 1, marginBottom: 10, borderColor: '#fff' }} />
-          {index === 0 ? <Feedback /> : <ContactUs />}
+        <BottomModal isVisible={showContact} toggleModal={toggleModal} style={{ backgroundColor: '#F8F8F8', height: hp('50%') }}>
+          <View style={{ alignSelf: 'center', width: '30%', height: 1, borderWidth: 1, marginBottom: 10, borderColor: '#1772A6' }} />
+          <View style={{ paddingBottom: 20 }}>
+            {index === 0 ? (
+              <Feedback
+                content={{ borderColor: '#1772A6' }}
+                contentFontColor={{ color: '#1772A6' }}
+                wordCounterFontColor={{ color: '#1772A6' }}
+                buttonColor={{ backgroundColor: '#2D9CDB' }}
+                buttonTitle={{ color: '#fff' }}
+              />
+            ) : (
+              <ContactUs titleColor={{ color: '#1772A6' }} />
+            )}
+          </View>
         </BottomModal>
       </Provider>
     </>
