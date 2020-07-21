@@ -304,6 +304,9 @@ const headerConfig = {
     fontSize: 25,
     fontWeight: 'bold',
   },
+  headerTitleAlign: 'left',
+  headerBackTitleVisible: false,
+  headerBackImage: () => <Icon name="md-arrow-back" type="ionicon" color="#E1EDFF" size={36} containerStyle={{ marginLeft: 20 }} />,
 };
 
 const styles = StyleSheet.create({
@@ -315,7 +318,8 @@ const styles = StyleSheet.create({
     shadowColor: 'black',
     shadowOpacity: 0.3,
     shadowOffset: {
-      height: 2,
+      width: 1.5,
+      height: 1,
     },
     shadowRadius: 3,
   },
