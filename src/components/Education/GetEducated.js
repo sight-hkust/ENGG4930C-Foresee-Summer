@@ -71,7 +71,7 @@ export default class GetEducated extends Component {
         <MenuScreen>
           <View
             style={{
-              backgroundColor: "#E1EDFF",
+              backgroundColor: "white",
               height: "100%",
             }}
           >
