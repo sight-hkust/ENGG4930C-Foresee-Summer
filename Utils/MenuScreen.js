@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import { LinearGradientBackground } from './LinearGradientBackground';
 import { ScreenHeight, Scale } from '../constant/Constant';
 
@@ -39,12 +39,12 @@ const styles = StyleSheet.create({
   shadow: {
     shadowColor: '#000000',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
+    shadowOffset: { width: 0, height: 5 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
   },
   backgroundContainer: {
-    height: ScreenHeight * 0.92,
+    height: Platform.OS === 'ios' ? ScreenHeight * 0.9 : ScreenHeight * 0.92,
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,
     overflow: 'hidden',
