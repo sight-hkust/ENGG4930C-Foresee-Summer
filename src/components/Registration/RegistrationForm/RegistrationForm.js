@@ -606,7 +606,6 @@ const FormDetails = ({
               }}
               checkedColor={"#FFFFFF"}
               uncheckedColor={"#E3E3E3"}
-              fontFamily="Roboto"
               checked={values.allowedSearch}
               onPress={toggleCheckbox}
               center
