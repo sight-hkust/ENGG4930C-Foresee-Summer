@@ -1,5 +1,12 @@
 import React, { Component, useState } from "react";
-import { StyleSheet, View, TouchableOpacity, Image, Text, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  View,
+  TouchableOpacity,
+  Image,
+  Text,
+  ScrollView,
+} from "react-native";
 import { Button } from "react-native-elements";
 import { Icon } from "react-native-elements";
 import { ScreenWidth, ScreenHeight } from "../constant/Constant";
@@ -10,78 +17,48 @@ const BackArrow = require("../assets/images/BackArrow.png");
 const NextArrow = require("../assets/images/NextArrow.png");
 const VAChart = require("../assets/images/VAChart.png");
 const Tutorial = require("../assets/images/VATutorial.png");
+
 export const RenderVA = (props) => {
-  const { data, dateArr } = props;
-  const L_VAData = [];
-  const R_VAData = [];
-  for (const item in data) {
-    //console.log("ind", data[item].L_VA);
-    L_VAData.push(data[item].L_VA);
-    R_VAData.push(data[item].R_VA);
-  }
-  //console.log(data);
-
-  return (
-    <View>
-      <RenderDatesButton dateArr={dateArr} L_VAData={L_VAData} R_VAData={R_VAData} data={data} />
-    </View>
-  );
-};
-
-export const RenderDatesButton = (props) => {
-  const { dateArr, L_VAData, R_VAData, data } = props;
-  const [index, setIndex] = useState(dateArr.length - 1);
-  const GetNext = () => {
-    const length = dateArr.length;
-    const value = (index + 1) % length;
-    setIndex(value);
-  };
-
-  const GetBack = () => {
-    if (index == 0) {
-      const length = dateArr.length - 1;
-      setIndex(length);
-    } else {
-      const value = index;
-      setIndex(value - 1);
-    }
-  };
+  const { dateArr, data, NextButton, BackButton, index, subArray } = props;
   var L_output = [];
   var R_output = [];
 
-  const calSubArray = () => {
-    var end = 0;
-    var start = 0;
-    if (dateArr.length < 4) {
-      return dateArr;
-    } else if (index > dateArr.length - 4) {
-      return dateArr.slice(-4);
-    } else if (index <= dateArr.length - 4) {
-      start = index;
-      end = index + 4;
-      return dateArr.slice(start, end);
-    }
-  };
-  for (const date of calSubArray()) {
+  for (const date of subArray) {
     L_output.push(data[date].L_VA);
     R_output.push(data[date].R_VA);
   }
   console.log(data[dateArr[1]].L_VA);
   return (
-    <>
-      <RenderDateDots data={data} dateArr={dateArr} selected={index} />
-      <View style={{ flexDirection: "row", alignSelf: "center", marginTop: ScreenHeight / 50, marginBottom: ScreenHeight / 60 }}>
-        <TouchableOpacity onPress={GetBack}>
-          <Image source={BackArrow} />
-        </TouchableOpacity>
-        <Text style={{ color: "white", fontSize: 18, paddingLeft: 15, paddingRight: 15 }}>{dateArr[index]}</Text>
-        <TouchableOpacity onPress={GetNext}>
-          <Image source={NextArrow} />
-        </TouchableOpacity>
+    <View>
+      <RenderDateDots
+        data={data}
+        dateArr={dateArr}
+        selected={index}
+        subArray={subArray}
+        L_output={L_output}
+        R_output={R_output}
+      />
+      <View
+        style={{
+          flexDirection: "row",
+          alignSelf: "center",
+        }}
+      >
+        <BackButton isVA={true} />
+        <Text
+          style={{
+            color: "white",
+            fontSize: ScreenHeight / 35,
+            paddingHorizontal: ScreenWidth / 70,
+          }}
+        >
+          {dateArr[index]}
+        </Text>
+        <NextButton isVA={true} />
       </View>
 
       <RenderContent data={data} index={index} dateArr={dateArr} />
-    </>
+    </View>
   );
 };
 
@@ -92,17 +69,21 @@ export const RenderContent = (props) => {
     <View
       style={{
         alignSelf: "center",
-        backgroundColor: "rgba(255,255,255,0.9)",
-        height: ScreenHeight / 3.9,
+        backgroundColor: "white",
         width: ScreenWidth / 1.25,
         borderRadius: 20,
         marginTop: ScreenHeight / 50,
+        paddingBottom: ScreenHeight / 40,
       }}
     >
-      <Text style={RenderVAStyle.VAText}>右眼矯正視力：{data[dateArr[index]].R_VA}</Text>
+      <Text style={RenderVAStyle.VAText}>
+        右眼矯正視力：{data[dateArr[index]].R_VA}
+      </Text>
       <RenderRating VA={data[dateArr[index]].R_VA} />
 
-      <Text style={RenderVAStyle.VAText}>左眼矯正視力：{data[dateArr[index]].L_VA}</Text>
+      <Text style={RenderVAStyle.VAText}>
+        左眼矯正視力：{data[dateArr[index]].L_VA}
+      </Text>
       <RenderRating VA={data[dateArr[index]].L_VA} />
     </View>
   );
@@ -141,14 +122,13 @@ const RenderVAStyle = StyleSheet.create({
   VAText: {
     marginTop: ScreenHeight / 40,
     textAlign: "center",
-    fontSize: 18,
+    fontSize: ScreenWidth / 20,
     fontWeight: "bold",
     color: "#2D9CDB",
   },
   description: {
-    marginTop: 5,
     textAlign: "center",
-    fontSize: 18,
+    fontSize: ScreenWidth / 22,
     color: "#2D9CDB",
   },
 });

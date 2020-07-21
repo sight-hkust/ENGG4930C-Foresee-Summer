@@ -38,9 +38,9 @@ class OverviewScreen extends Component {
   componentDidMount() {
     const { familyList } = this.state;
 
-    const ref = database.ref('users/' + patient_id);
+    const ref = database.ref("users/" + patient_id);
 
-    ref.child('records').on('value', (snapshot) => {
+    ref.child("records").on("value", (snapshot) => {
       var tempDate = [];
       for (var key in snapshot.val()) {
         tempDate.push(key);
@@ -51,7 +51,7 @@ class OverviewScreen extends Component {
       });
     });
 
-    ref.once('value', (snapshot) => {
+    ref.once("value", (snapshot) => {
       const user = snapshot.val();
       familyList.push({
         firstName: user.firstName,
@@ -111,7 +111,7 @@ class OverviewScreen extends Component {
       const length = this.state.dateArr.length;
       var prev = moment(this.state.dateArr[length - 1]);
       var cur = moment();
-      if (cur.diff(prev, 'years', true) >= 1) {
+      if (cur.diff(prev, "years", true) >= 1) {
         return true;
       }
     };
@@ -119,111 +119,141 @@ class OverviewScreen extends Component {
     return (
       <>
         <MenuScreen>
-          <View style={{ flex: 3 }}>
-            {calDateDifference() ? (
-              <View style={OverviewScreenStyle.reminderContainer}>
-                <Icon
-                  name="error-outline"
-                  color="#24559E"
-                  containerStyle={OverviewScreenStyle.iconstyle}
-                />
-                <Text style={OverviewScreenStyle.reminderText}>
-                  距離上次驗眼已超過一年，建議盡快預約驗眼
-                </Text>
-              </View>
-            ) : null}
-          </View>
-          <View style={{ flexDirection: "row", flex: 10 }}>
-            <View
-              style={{
-                flex: 1,
-                alignItems: 'center',
-              }}
-            >
-              <View style={OverviewScreenStyle.greetingContainer}>
-                <Text style={OverviewScreenStyle.greetingText}>您好，</Text>
-                <TouchableOpacity
+          <View style={{ height: "100%" }}>
+            <View style={{ flex: 3 }}>
+              {calDateDifference() ? (
+                <View style={OverviewScreenStyle.reminderContainer}>
+                  <Icon
+                    name="error-outline"
+                    color="#24559E"
+                    containerStyle={OverviewScreenStyle.iconstyle}
+                  />
+                  <Text style={OverviewScreenStyle.reminderText}>
+                    距離上次驗眼已超過一年，建議盡快預約驗眼
+                  </Text>
+                </View>
+              ) : null}
+            </View>
+            <View style={{ flexDirection: "row", flex: 10 }}>
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: "center",
+                }}
+              >
+                <View style={OverviewScreenStyle.greetingContainer}>
+                  <Text style={OverviewScreenStyle.greetingText}>您好，</Text>
+                  <TouchableOpacity
+                    style={{
+                      width: "110%",
+                      flexDirection: "row",
+                    }}
+                    onPress={this._showFamilyListModal}
+                  >
+                    {selectedFamily && (
+                      <>
+                        <Text style={OverviewScreenStyle.userName}>
+                          {displayName(selectedFamily)}
+                        </Text>
+                        <View
+                          style={{
+                            marginLeft: ScreenWidth * 0.02,
+                            justifyContent: "center",
+                          }}
+                        >
+                          <Icon
+                            name="caretdown"
+                            type="antdesign"
+                            size={ScreenWidth * 0.05}
+                            color="black"
+                          />
+                        </View>
+                      </>
+                    )}
+                  </TouchableOpacity>
+                </View>
+                <View
                   style={{
-                    width: '110%',
-                    flexDirection: 'row',
+                    flex: 2.3,
+                    alignSelf: "center",
                   }}
-                  onPress={this._showFamilyListModal}
                 >
-                  {selectedFamily && (
-                    <>
-                      <Text style={OverviewScreenStyle.userName}>{displayName(selectedFamily)}</Text>
-                      <View
-                        style={{
-                          marginLeft: ScreenWidth * 0.02,
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <Icon name="caretdown" type="antdesign" size={ScreenWidth * 0.05} color="black" />
-                      </View>
-                    </>
-                  )}
-                </TouchableOpacity>
+                  <View style={OverviewScreenStyle.leftEyeContainer}>
+                    <DisplayDegree
+                      data={this.state.data}
+                      dateArr={this.state.dateArr}
+                      isLeft={true}
+                    />
+                  </View>
+                </View>
               </View>
               <View
                 style={{
-                  flex: 2.3,
-                  alignSelf: 'center',
+                  flex: 1,
+                  alignItems: "center",
+                  marginTop: ScreenHeight * 0.01,
                 }}
               >
-                <View style={OverviewScreenStyle.leftEyeContainer}>
-                  <DisplayDegree data={this.state.data} dateArr={this.state.dateArr} isLeft={true} />
+                <View style={OverviewScreenStyle.rightEyeContainer}>
+                  <DisplayDegree
+                    data={this.state.data}
+                    dateArr={this.state.dateArr}
+                    isLeft={false}
+                  />
+                </View>
+                <View style={OverviewScreenStyle.nextPageContainer}>
+                  <Text style={OverviewScreenStyle.nextPageText}>
+                    詳細度數趨勢/{"\n"}輸入數據
+                  </Text>
+                  <Button
+                    icon={
+                      <Icon
+                        name="keyboard-arrow-right"
+                        size={40}
+                        color="#24559E"
+                      />
+                    }
+                    onPress={() => {
+                      this.props.navigation.navigate("RecordsScreen", {
+                        patient_id: selectedFamily.uid,
+                      });
+                    }}
+                    buttonStyle={{
+                      backgroundColor: "white",
+                      width: 45,
+                      height: 45,
+                      borderRadius: 25,
+                      paddingLeft: 2,
+                      paddingRight: 0,
+                    }}
+                    containerStyle={{ alignItems: "center", marginTop: 15 }}
+                    TouchableComponent={TouchableOpacity}
+                  />
                 </View>
               </View>
             </View>
-            <View
-              style={{
-                flex: 1,
-                alignItems: "center",
-                marginTop: ScreenHeight * 0.01,
-              }}
-            >
-              <View style={OverviewScreenStyle.rightEyeContainer}>
-                <DisplayDegree data={this.state.data} dateArr={this.state.dateArr} isLeft={false} />
-              </View>
-              <View style={OverviewScreenStyle.nextPageContainer}>
-                <Text style={OverviewScreenStyle.nextPageText}>詳細度數趨勢/{'\n'}輸入數據</Text>
-                <Button
-                  icon={<Icon name="keyboard-arrow-right" size={40} color="#24559E" />}
-                  onPress={() => {
-                    this.props.navigation.navigate('RecordsScreen', {
-                      patient_id: selectedFamily.uid,
-                    });
-                  }}
-                  buttonStyle={{
-                    backgroundColor: 'white',
-                    width: 45,
-                    height: 45,
-                    borderRadius: 25,
-                    paddingLeft: 2,
-                    paddingRight: 0,
-                  }}
-                  containerStyle={{ alignItems: 'center', marginTop: 15 }}
-                />
-              </View>
+            <View style={OverviewScreenStyle.dateContainer}>
+              <Text style={OverviewScreenStyle.dateText}>
+                {"最近驗眼日期: "}
+                {this.state.dateArr == null
+                  ? ""
+                  : moment(
+                      this.state.dateArr[this.state.dateArr.length - 1]
+                    ).format("YYYY-MM-DD")}
+              </Text>
             </View>
           </View>
-          <View style={OverviewScreenStyle.dateContainer}>
-            <Text style={OverviewScreenStyle.dateText}>
-              {"最近驗眼日期: "}
-              {this.state.dateArr == null
-                ? ""
-                : moment(
-                  this.state.dateArr[this.state.dateArr.length - 1]
-                ).format("YYYY-MM-DD")}
-            </Text>
-          </View>
+          <FABView />
         </MenuScreen>
         <Provider>
           <Portal>
-            <Modal visible={isFamilyListModalVisible} onDismiss={this._hideFamilyListModal}>
+            <Modal
+              visible={isFamilyListModalVisible}
+              onDismiss={this._hideFamilyListModal}
+            >
               <View
                 style={{
-                  backgroundColor: 'white',
+                  backgroundColor: "white",
                   marginHorizontal: ScreenWidth * 0.12,
                   minHeight: ScreenHeight * 0.2,
                   elevation: 3,
@@ -237,24 +267,28 @@ class OverviewScreen extends Component {
                   keyExtractor={(item, index) => index.toString()}
                   renderItem={({ item }) => {
                     /* console.log("LINE242:", item.firstName); */
-                    return ((<TouchableOpacity onPress={() => this._selectFamily(item)}>
-                      <View
-                        style={{
-                          width: '100%',
-                          paddingVertical: ScreenHeight * 0.02,
-                        }}
+                    return (
+                      <TouchableOpacity
+                        onPress={() => this._selectFamily(item)}
                       >
-                        <Text style={{ fontSize: 20, textAlign: 'center' }}>{displayName(item)}</Text>
-                      </View>
-                    </TouchableOpacity>
-                    ))
+                        <View
+                          style={{
+                            width: "100%",
+                            paddingVertical: ScreenHeight * 0.02,
+                          }}
+                        >
+                          <Text style={{ fontSize: 20, textAlign: "center" }}>
+                            {displayName(item)}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    );
                   }}
                 />
               </View>
             </Modal>
           </Portal>
         </Provider>
-        <FABView navigation={this.props.navigation} />
       </>
     );
   }
@@ -265,7 +299,9 @@ export const DisplayDegree = (props) => {
     return (
       <>
         <View style={OverviewScreenStyle.topContainer}>
-          <Text style={OverviewScreenStyle.topText}>{isLeft ? '左' : '右'}</Text>
+          <Text style={OverviewScreenStyle.topText}>
+            {isLeft ? "左" : "右"}
+          </Text>
         </View>
         <View>
           <Text style={OverviewScreenStyle.noRecordText}>暫無數據</Text>
@@ -276,22 +312,36 @@ export const DisplayDegree = (props) => {
   const length = dateArr.length - 1;
   const curData = data[dateArr[length]];
 
-  if (isLeft && curData.L_Myopia == '0' && curData.L_Hyperopia == '0' && curData.L_CYL == '0') {
+  if (
+    isLeft &&
+    curData.L_Myopia == "0" &&
+    curData.L_Hyperopia == "0" &&
+    curData.L_CYL == "0"
+  ) {
     return (
       <>
         <View style={OverviewScreenStyle.topContainer}>
-          <Text style={OverviewScreenStyle.topText}>{isLeft ? '左' : '右'}</Text>
+          <Text style={OverviewScreenStyle.topText}>
+            {isLeft ? "左" : "右"}
+          </Text>
         </View>
         <View>
           <Text style={OverviewScreenStyle.noRecordText}>沒有屈光不正</Text>
         </View>
       </>
     );
-  } else if (!isLeft && curData.R_Myopia == '0' && curData.R_Hyperopia == '0' && curData.R_CYL == '0') {
+  } else if (
+    !isLeft &&
+    curData.R_Myopia == "0" &&
+    curData.R_Hyperopia == "0" &&
+    curData.R_CYL == "0"
+  ) {
     return (
       <>
         <View style={OverviewScreenStyle.topContainer}>
-          <Text style={OverviewScreenStyle.topText}>{isLeft ? '左' : '右'}</Text>
+          <Text style={OverviewScreenStyle.topText}>
+            {isLeft ? "左" : "右"}
+          </Text>
         </View>
         <View>
           <Text style={OverviewScreenStyle.noRecordText}>沒有屈光不正</Text>
@@ -307,14 +357,29 @@ export const DisplayDegree = (props) => {
       }}
     >
       <View style={OverviewScreenStyle.topContainer}>
-        <Text style={OverviewScreenStyle.topText}>{isLeft ? '左' : '右'}</Text>
+        <Text style={OverviewScreenStyle.topText}>{isLeft ? "左" : "右"}</Text>
       </View>
 
-      {(isLeft ? curData.L_Myopia != 0 : curData.R_Myopia != 0) && <RenderItem degree={isLeft ? curData.L_Myopia : curData.R_Myopia} refractive={'M'} />}
+      {(isLeft ? curData.L_Myopia != 0 : curData.R_Myopia != 0) && (
+        <RenderItem
+          degree={isLeft ? curData.L_Myopia : curData.R_Myopia}
+          refractive={"M"}
+        />
+      )}
 
-      {(isLeft ? curData.L_Hyperopia != 0 : curData.R_Hyperopia != 0) && <RenderItem degree={isLeft ? curData.L_Hyperopia : curData.R_Hyperopia} refractive={'H'} />}
+      {(isLeft ? curData.L_Hyperopia != 0 : curData.R_Hyperopia != 0) && (
+        <RenderItem
+          degree={isLeft ? curData.L_Hyperopia : curData.R_Hyperopia}
+          refractive={"H"}
+        />
+      )}
 
-      {(isLeft ? curData.L_CYL != 0 : curData.R_CYL != 0) && <RenderItem degree={isLeft ? curData.L_CYL : curData.R_CYL} refractive={'A'} />}
+      {(isLeft ? curData.L_CYL != 0 : curData.R_CYL != 0) && (
+        <RenderItem
+          degree={isLeft ? curData.L_CYL : curData.R_CYL}
+          refractive={"A"}
+        />
+      )}
     </View>
   );
 };
@@ -333,23 +398,29 @@ export const RenderItem = (props) => {
 export const RenderIndicator = (props) => {
   const { degree, refractive } = props;
   switch (refractive) {
-    case 'M':
+    case "M":
       return (
         <View style={OverviewScreenStyle.levelTextContatiner}>
-          <Text style={OverviewScreenStyle.levelText}>{degree < 300 ? '淺近視' : degree < 575 ? '中度近視' : '深近視'}</Text>
+          <Text style={OverviewScreenStyle.levelText}>
+            {degree < 300 ? "淺近視" : degree < 575 ? "中度近視" : "深近視"}
+          </Text>
         </View>
       );
 
-    case 'H':
+    case "H":
       return (
         <View style={OverviewScreenStyle.levelTextContatiner}>
-          <Text style={OverviewScreenStyle.levelText}>{degree < 200 ? '淺遠視' : degree < 500 ? '中度遠視' : '深遠視'}</Text>
+          <Text style={OverviewScreenStyle.levelText}>
+            {degree < 200 ? "淺遠視" : degree < 500 ? "中度遠視" : "深遠視"}
+          </Text>
         </View>
       );
-    case 'A':
+    case "A":
       return (
         <View style={OverviewScreenStyle.levelTextContatiner}>
-          <Text style={OverviewScreenStyle.levelText}>{degree < 75 ? '淺散光' : degree < 175 ? '中度散光' : '深散光'}</Text>
+          <Text style={OverviewScreenStyle.levelText}>
+            {degree < 75 ? "淺散光" : degree < 175 ? "中度散光" : "深散光"}
+          </Text>
         </View>
       );
   }
@@ -364,7 +435,8 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
   dispatch(watchFamilyMembersUpdate());
   return {
-    getRecordsHandler: (uid, inactive) => dispatch(getRecordsUpdate(uid, inactive)),
+    getRecordsHandler: (uid, inactive) =>
+      dispatch(getRecordsUpdate(uid, inactive)),
   };
 };
 
@@ -373,23 +445,23 @@ export default connect(mapStateToProps, mapDispatchToProps)(OverviewScreen);
 const OverviewScreenStyle = StyleSheet.create({
   greetingContainer: {
     flex: 1,
-    width: '100%',
+    width: "100%",
     paddingLeft: ScreenWidth * 0.035,
   },
   greetingText: {
-    textAlignVertical: 'center',
+    textAlignVertical: "center",
     fontSize: 35,
-    fontWeight: 'bold',
-    color: 'white',
+    fontWeight: "bold",
+    color: "white",
   },
   userName: {
-    textAlignVertical: 'center',
+    textAlignVertical: "center",
     fontSize: 46,
-    fontWeight: 'bold',
-    color: 'white',
+    fontWeight: "bold",
+    color: "white",
   },
   leftEyeContainer: {
-    backgroundColor: '#E1EDFF',
+    backgroundColor: "#E1EDFF",
     width: ScreenWidth / 2.8,
     height: ScreenHeight / 3,
     marginTop: 60,
@@ -397,7 +469,7 @@ const OverviewScreenStyle = StyleSheet.create({
     borderRadius: 26,
   },
   rightEyeContainer: {
-    backgroundColor: '#E1EDFF',
+    backgroundColor: "#E1EDFF",
     width: ScreenWidth / 2.8,
     height: ScreenHeight / 3,
     marginTop: 45,
@@ -411,17 +483,17 @@ const OverviewScreenStyle = StyleSheet.create({
     height: ScreenHeight * 0.09,
     width: ScreenHeight * 0.09,
     borderRadius: ScreenHeight * 0.015,
-    alignSelf: 'center',
-    justifyContent: 'center',
+    alignSelf: "center",
+    justifyContent: "center",
     marginBottom: 2,
   },
   topText: {
     fontSize: ScreenHeight * 0.05,
-    color: 'white',
-    textAlignVertical: 'center',
-    textAlign: 'center',
+    color: "white",
+    textAlignVertical: "center",
+    textAlign: "center",
     paddingTop: 3,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   itemContainer: {
     alignSelf: "center",
@@ -433,22 +505,22 @@ const OverviewScreenStyle = StyleSheet.create({
   },
   levelText: {
     fontSize: ScreenHeight * 0.025,
-    textAlign: 'center',
-    color: '#1772A6',
-    fontWeight: 'bold',
+    textAlign: "center",
+    color: "#1772A6",
+    fontWeight: "bold",
   },
   degreeText: {
     marginLeft: ScreenWidth * 0.01,
     fontSize: 35,
     paddingTop: ScreenHeight * 0.02,
-    color: '#1772A6',
-    fontWeight: 'bold',
+    color: "#1772A6",
+    fontWeight: "bold",
   },
   unitText: {
     fontSize: 14,
     paddingTop: 38,
-    color: '#1772A6',
-    fontWeight: 'bold',
+    color: "#1772A6",
+    fontWeight: "bold",
   },
   nextPageContainer: {
     width: ScreenWidth / 2,
@@ -456,10 +528,10 @@ const OverviewScreenStyle = StyleSheet.create({
     marginTop: 20,
   },
   nextPageText: {
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     fontSize: 22,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
   },
   dateContainer: {
     flex: 1,
@@ -485,26 +557,26 @@ const OverviewScreenStyle = StyleSheet.create({
     width: ScreenWidth / 1.5,
     borderTopRightRadius: 15,
     borderBottomRightRadius: 15,
-    flexDirection: 'row',
+    flexDirection: "row",
   },
   reminderText: {
-    color: '#2D9CDB',
+    color: "#2D9CDB",
     flex: 1,
-    flexWrap: 'wrap',
+    flexWrap: "wrap",
     paddingTop: 9,
     paddingLeft: 10,
     paddingRight: 10,
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   iconstyle: {
     paddingTop: 10,
     paddingLeft: 10,
   },
   noRecordText: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 20,
     paddingTop: 50,
-    color: '#1772A6',
+    color: "#1772A6",
   },
 });

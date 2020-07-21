@@ -82,7 +82,7 @@ export default function Setting({ route, navigation }) {
           title={'登出'}
           containerStyle={styles.listItem}
           titleStyle={styles.title}
-          chevron={{ size: 30, color: "#E1EDFF" }}
+          chevron={{ size: 30, color: '#E1EDFF' }}
           onPress={() => {
             auth.signOut();
           }}
@@ -114,7 +114,7 @@ const ThemeSwitch = () => {
   );
 };
 
-export const ContactUs = () => {
+export const ContactUs = (props) => {
   return (
     <View
       style={{
@@ -130,40 +130,40 @@ export const ContactUs = () => {
         <Row style={styles.contactUsRow}>
           <Col style={styles.contactUsLeftCol}>
             <Icon type="entypo" name="instagram" color="pink" />
-            <Text style={styles.contactUsTitle}> Instagram</Text>
+            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}> Instagram</Text>
           </Col>
           <Col style={styles.contactUsRightCol}>
-            <Text style={styles.contactUsTitle}>@foresee_offical</Text>
+            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>@foresee_offical</Text>
           </Col>
         </Row>
 
         <Row style={styles.contactUsRow}>
           <Col style={styles.contactUsLeftCol}>
             <Icon type="entypo" name="facebook" color="#33D1FF" />
-            <Text style={styles.contactUsTitle}> Facebook</Text>
+            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}> Facebook</Text>
           </Col>
           <Col style={styles.contactUsRightCol}>
-            <Text style={styles.contactUsTitle}>@Foresee_Sight</Text>
+            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>@Foresee_Sight</Text>
           </Col>
         </Row>
 
         <Row style={styles.contactUsRow}>
           <Col style={styles.contactUsLeftCol}>
             <Icon type="fontisto" name="whatsapp" color="#3FF961" />
-            <Text style={styles.contactUsTitle}> Whatsapp</Text>
+            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}> Whatsapp</Text>
           </Col>
           <Col style={styles.contactUsRightCol}>
-            <Text style={styles.contactUsTitle}> +85230624700</Text>
+            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}> +85230624700</Text>
           </Col>
         </Row>
 
         <Row style={styles.contactUsRow}>
           <Col style={styles.contactUsLeftCol}>
             <Icon type="material-icon" name="email" color="#F0886F" />
-            <Text style={styles.contactUsTitle}> Email</Text>
+            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}> Email</Text>
           </Col>
           <Col style={styles.contactUsRightCol}>
-            <Text style={styles.contactUsTitle}>foresee@ust.hk</Text>
+            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>foresee@ust.hk</Text>
           </Col>
         </Row>
       </Grid>
@@ -171,7 +171,7 @@ export const ContactUs = () => {
   );
 };
 
-export const Feedback = () => {
+export const Feedback = (props) => {
   const [feedback, setFeedback] = useState('');
   const [alertSuccess, setAlertSuccess] = useState(false);
 
@@ -185,9 +185,9 @@ export const Feedback = () => {
         multiline={true}
         value={feedback}
         placeholder="歡迎留下意見"
-        inputContainerStyle={styles.contentContainer}
-        inputStyle={styles.textAreaContainer}
-        rightIcon={<Text style={styles.wordCounter}>{feedback.length}/200</Text>}
+        inputContainerStyle={{ ...styles.contentContainer, ...props.content }}
+        inputStyle={{ ...styles.textAreaContainer, ...props.contentFontColor }}
+        rightIcon={<Text style={{ ...styles.wordCounter, ...props.wordCounterFontColor }}>{feedback.length}/200</Text>}
         rightIconContainerStyle={{
           position: 'absolute',
           bottom: 0,
@@ -207,8 +207,8 @@ export const Feedback = () => {
           }, 1000);
         }}
         title="提交"
-        buttonStyle={{ width: 96 }}
-        textStyle={{ color: '#3CA1B7' }}
+        buttonStyle={{ width: 96, ...props.buttonColor }}
+        textStyle={{ color: '#3CA1B7', ...props.buttonTitle }}
       />
       <Snackbar
         visible={alertSuccess}

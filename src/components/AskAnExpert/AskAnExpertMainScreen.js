@@ -52,10 +52,10 @@ const AskAnExpertMainScreen = ({ route, navigation, questionListStore }) => {
     <MenuScreen style={{ height: 0 }}>
       {questionList && loaded && (
         <>
-          <View style={styles.linearbackgorundContainer}>
-            <LinearGradientBackground style={{ height: ScreenHeight }} colors={['#1772A6', '#A377FF']} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]} />
-          </View>
           <View style={styles.container}>
+            <View style={{ ...styles.linearbackgorundContainer }}>
+              <LinearGradientBackground colors={['#1772A6', '#A377FF']} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]} />
+            </View>
             <View style={{ width: ScreenWidth, marginTop: hp('7.5%'), zIndex: 3, height: hp('27%') }}>
               <Text
                 style={{
@@ -183,9 +183,9 @@ export const MiniQuestionCard = (props) => {
   };
 
   return (
-    <>
+    <View style={styles.shadow}>
       <TouchableOpacity
-        style={{ ...styles.shadow, ...styles.miniQuestion }}
+        style={styles.miniQuestion}
         onPress={() => {
           toggleModal();
           actionCounter('askProf', props.faq.question_id, 'views');
@@ -211,7 +211,7 @@ export const MiniQuestionCard = (props) => {
         </View>
       </TouchableOpacity>
       <QuestionCard isVisible={isVisible} toggleModal={toggleModal} faq={props.faq} />
-    </>
+    </View>
   );
 };
 
@@ -280,7 +280,8 @@ const styles = StyleSheet.create({
     width: ScreenWidth,
     height: hp('32%'),
     position: 'absolute',
-    zIndex: 2,
+    top: hp('-7.5%'),
+    zIndex: 1,
   },
   background: {
     backgroundColor: 'white',
@@ -289,8 +290,6 @@ const styles = StyleSheet.create({
     bottom: 0,
     borderBottomLeftRadius: 30,
     borderBottomRightRadius: 30,
-    zIndex: 1,
-    borderWidth: 1,
   },
   scrollView: {
     height: ScreenHeight * 0.45,
@@ -304,7 +303,6 @@ const styles = StyleSheet.create({
     borderRadius: 30,
     overflow: 'hidden',
     marginRight: 20,
-    zIndex: 3,
   },
   hotTopicCardText: {
     fontSize: hp('2.4%'),
@@ -319,9 +317,10 @@ const styles = StyleSheet.create({
     height: hp('19%'),
     alignItems: 'center',
     marginBottom: hp('3.5%'),
+    overflow: 'hidden',
   },
   miniQuestionTitle: {
-    fontSize: hp('2.4%'),
+    fontSize: hp('1.8%'),
     color: '#1772A6',
     fontWeight: 'bold',
     paddingBottom: hp('2%'),
@@ -376,10 +375,9 @@ const styles = StyleSheet.create({
   shadow: {
     shadowColor: '#000000',
     shadowColor: '#000',
-    shadowOffset: { width: 0, height: 10 },
+    shadowOffset: { width: 5, height: 10 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
-    zIndex: 3,
   },
 });
 
