@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Platform } from 'react-native';
 import { LinearGradientBackground } from './LinearGradientBackground';
 import { ScreenHeight, Scale } from '../constant/Constant';
 
@@ -31,7 +31,6 @@ export default class MenuScreen extends Component {
     );
   }
 }
-
 const styles = StyleSheet.create({
   container: {
     height: ScreenHeight,
@@ -44,7 +43,7 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
   },
   backgroundContainer: {
-    height: ScreenHeight * 0.92,
+    height: Platform.OS === 'ios' ? ScreenHeight * 0.9 : ScreenHeight * 0.92,
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,
     overflow: 'hidden',

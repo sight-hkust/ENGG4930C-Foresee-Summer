@@ -66,9 +66,10 @@ class OverviewScreen extends Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { familyList } = this.state;
+    const { familyList, accountOwner } = this.state;
     const { familyMembers } = this.props.familyStore;
     if (familyMembers && familyMembers != prevProps.familyStore.familyMembers) {
+      familyList.splice(1, familyList.length);
       familyMembers.forEach((member) => familyList.push(member));
     }
     if (familyList.length == 1 && familyMembers) {
@@ -115,95 +116,98 @@ class OverviewScreen extends Component {
     return (
       <>
         <MenuScreen>
-          <View style={{ flex: 3 }}>
-            {calDateDifference() ? (
-              <View style={OverviewScreenStyle.reminderContainer}>
-                <Icon name="error-outline" color="#24559E" containerStyle={OverviewScreenStyle.iconstyle} />
-                <Text style={OverviewScreenStyle.reminderText}>距離上次驗眼已超過一年，建議盡快預約驗眼</Text>
-              </View>
-            ) : null}
-          </View>
-          <View style={{ flexDirection: 'row', flex: 10 }}>
-            <View
-              style={{
-                flex: 1,
-                alignItems: 'center',
-              }}
-            >
-              <View style={OverviewScreenStyle.greetingContainer}>
-                <Text style={OverviewScreenStyle.greetingText}>您好，</Text>
-                <TouchableOpacity
+          <View style={{ height: '100%' }}>
+            <View style={{ flex: 3 }}>
+              {calDateDifference() ? (
+                <View style={OverviewScreenStyle.reminderContainer}>
+                  <Icon name="error-outline" color="#24559E" containerStyle={OverviewScreenStyle.iconstyle} />
+                  <Text style={OverviewScreenStyle.reminderText}>距離上次驗眼已超過一年，建議盡快預約驗眼</Text>
+                </View>
+              ) : null}
+            </View>
+            <View style={{ flexDirection: 'row', flex: 10 }}>
+              <View
+                style={{
+                  flex: 1,
+                  alignItems: 'center',
+                }}
+              >
+                <View style={OverviewScreenStyle.greetingContainer}>
+                  <Text style={OverviewScreenStyle.greetingText}>您好，</Text>
+                  <TouchableOpacity
+                    style={{
+                      width: '110%',
+                      flexDirection: 'row',
+                    }}
+                    onPress={this._showFamilyListModal}
+                  >
+                    {selectedFamily && (
+                      <>
+                        <Text style={OverviewScreenStyle.userName}>{displayName(selectedFamily)}</Text>
+                        <View
+                          style={{
+                            marginLeft: ScreenWidth * 0.02,
+                            justifyContent: 'center',
+                          }}
+                        >
+                          <Icon name="caretdown" type="antdesign" size={ScreenWidth * 0.05} color="black" />
+                        </View>
+                      </>
+                    )}
+                  </TouchableOpacity>
+                </View>
+                <View
                   style={{
-                    width: '110%',
-                    flexDirection: 'row',
+                    flex: 2.3,
+                    alignSelf: 'center',
                   }}
-                  onPress={this._showFamilyListModal}
                 >
-                  {selectedFamily && (
-                    <>
-                      <Text style={OverviewScreenStyle.userName}>{displayName(selectedFamily)}</Text>
-                      <View
-                        style={{
-                          marginLeft: ScreenWidth * 0.02,
-                          justifyContent: 'center',
-                        }}
-                      >
-                        <Icon name="caretdown" type="antdesign" size={ScreenWidth * 0.05} color="black" />
-                      </View>
-                    </>
-                  )}
-                </TouchableOpacity>
+                  <View style={OverviewScreenStyle.leftEyeContainer}>
+                    <DisplayDegree data={this.state.data} dateArr={this.state.dateArr} isLeft={true} />
+                  </View>
+                </View>
               </View>
               <View
                 style={{
-                  flex: 2.3,
-                  alignSelf: 'center',
+                  flex: 1,
+                  alignItems: 'center',
+                  marginTop: ScreenHeight * 0.01,
                 }}
               >
-                <View style={OverviewScreenStyle.leftEyeContainer}>
-                  <DisplayDegree data={this.state.data} dateArr={this.state.dateArr} isLeft={true} />
+                <View style={OverviewScreenStyle.rightEyeContainer}>
+                  <DisplayDegree data={this.state.data} dateArr={this.state.dateArr} isLeft={false} />
+                </View>
+                <View style={OverviewScreenStyle.nextPageContainer}>
+                  <Text style={OverviewScreenStyle.nextPageText}>詳細度數趨勢/{'\n'}輸入數據</Text>
+                  <Button
+                    icon={<Icon name="keyboard-arrow-right" size={40} color="#24559E" />}
+                    onPress={() => {
+                      this.props.navigation.navigate('RecordsScreen', {
+                        patient_id: selectedFamily.uid,
+                      });
+                    }}
+                    buttonStyle={{
+                      backgroundColor: 'white',
+                      width: 45,
+                      height: 45,
+                      borderRadius: 25,
+                      paddingLeft: 2,
+                      paddingRight: 0,
+                    }}
+                    containerStyle={{ alignItems: 'center', marginTop: 15 }}
+                    TouchableComponent={TouchableOpacity}
+                  />
                 </View>
               </View>
             </View>
-            <View
-              style={{
-                flex: 1,
-                alignItems: 'center',
-                marginTop: ScreenHeight * 0.01,
-              }}
-            >
-              <View style={OverviewScreenStyle.rightEyeContainer}>
-                <DisplayDegree data={this.state.data} dateArr={this.state.dateArr} isLeft={false} />
-              </View>
-              <View style={OverviewScreenStyle.nextPageContainer}>
-                <Text style={OverviewScreenStyle.nextPageText}>詳細度數趨勢/{'\n'}輸入數據</Text>
-                <Button
-                  icon={<Icon name="keyboard-arrow-right" size={40} color="#24559E" />}
-                  onPress={() => {
-                    this.props.navigation.navigate('RecordsScreen', {
-                      patient_id: selectedFamily.uid,
-                    });
-                  }}
-                  buttonStyle={{
-                    backgroundColor: 'white',
-                    width: 45,
-                    height: 45,
-                    borderRadius: 25,
-                    paddingLeft: 2,
-                    paddingRight: 0,
-                  }}
-                  containerStyle={{ alignItems: 'center', marginTop: 15 }}
-                  TouchableComponent={TouchableOpacity}
-                />
-              </View>
+            <View style={OverviewScreenStyle.dateContainer}>
+              <Text style={OverviewScreenStyle.dateText}>
+                {'最近驗眼日期: '}
+                {this.state.dateArr == null ? '' : moment(this.state.dateArr[this.state.dateArr.length - 1]).format('YYYY-MM-DD')}
+              </Text>
             </View>
           </View>
-          <View style={OverviewScreenStyle.dateContainer}>
-            <Text style={OverviewScreenStyle.dateText}>
-              {'最近驗眼日期: '}
-              {this.state.dateArr == null ? '' : moment(this.state.dateArr[this.state.dateArr.length - 1]).format('YYYY-MM-DD')}
-            </Text>
-          </View>
+          <FABView />
         </MenuScreen>
         <Provider>
           <Portal>
@@ -222,24 +226,26 @@ class OverviewScreen extends Component {
                 <FlatList
                   data={familyList}
                   keyExtractor={(item, index) => index.toString()}
-                  renderItem={({ item }) => (
-                    <TouchableOpacity onPress={() => this._selectFamily(item)}>
-                      <View
-                        style={{
-                          width: '100%',
-                          paddingVertical: ScreenHeight * 0.02,
-                        }}
-                      >
-                        <Text style={{ fontSize: 20, textAlign: 'center' }}>{item.surName && item.givenName ? item.surName + item.givenName : item.lastName + item.firstName}</Text>
-                      </View>
-                    </TouchableOpacity>
-                  )}
+                  renderItem={({ item }) => {
+                    /* console.log("LINE242:", item.firstName); */
+                    return (
+                      <TouchableOpacity onPress={() => this._selectFamily(item)}>
+                        <View
+                          style={{
+                            width: '100%',
+                            paddingVertical: ScreenHeight * 0.02,
+                          }}
+                        >
+                          <Text style={{ fontSize: 20, textAlign: 'center' }}>{displayName(item)}</Text>
+                        </View>
+                      </TouchableOpacity>
+                    );
+                  }}
                 />
               </View>
             </Modal>
           </Portal>
         </Provider>
-        <FABView navigation={this.props.navigation} />
       </>
     );
   }

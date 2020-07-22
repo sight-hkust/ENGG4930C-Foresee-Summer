@@ -1,6 +1,6 @@
 import 'react-native-gesture-handler';
 import React, { useState, useEffect } from 'react';
-import { Image, Dimensions, TouchableOpacity, StyleSheet } from 'react-native';
+import { Image, Dimensions, TouchableOpacity, StyleSheet, Platform } from 'react-native';
 import { Icon } from 'react-native-elements';
 
 import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
@@ -157,8 +157,9 @@ function Main({ route, navigation }) {
         activeTintColor: '#003973',
         inactiveTintColor: '#2D9CDB',
         style: {
-          backgroundColor: '#BED8FF',
-          height: Dimensions.get('window').height * 0.08,
+          position: 'absolute',
+          backgroundColor: 'transparent',
+          height: Platform.OS === 'ios' ? Dimensions.get('window').height * 0.09 : Dimensions.get('window').height * 0.08,
           borderTopWidth: 0,
           borderTopColor: 'transparent',
           paddingHorizontal: auth.currentUser.displayName == 'professional' ? 80 : 30,
@@ -304,18 +305,23 @@ const headerConfig = {
     fontSize: 25,
     fontWeight: 'bold',
   },
+  headerTitleAlign: 'left',
+  headerBackTitleVisible: false,
+  headerBackImage: () => <Icon name="md-arrow-back" type="ionicon" color="#E1EDFF" size={36} containerStyle={{ marginLeft: 20 }} />,
 };
 
 const styles = StyleSheet.create({
   icon: {
+    overflow: 'visible',
     width: 35,
     height: 35,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: 'black',
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.4,
     shadowOffset: {
-      height: 2,
+      width: 4,
+      height: 4,
     },
     shadowRadius: 3,
   },
