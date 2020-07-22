@@ -312,15 +312,16 @@ const headerConfig = {
 
 const styles = StyleSheet.create({
   icon: {
+    overflow: 'visible',
     width: 35,
     height: 35,
     justifyContent: 'center',
     alignItems: 'center',
     shadowColor: 'black',
-    shadowOpacity: 0.3,
+    shadowOpacity: 0.4,
     shadowOffset: {
-      width: 1.5,
-      height: 1,
+      width: 4,
+      height: 4,
     },
     shadowRadius: 3,
   },
