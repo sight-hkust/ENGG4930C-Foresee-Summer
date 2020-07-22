@@ -12,7 +12,7 @@ import { RoundButton } from '../../../Utils/RoundButton';
 import { ScreenHeight, ScreenWidth } from '../../../constant/Constant';
 
 import MenuScreen from '../../../Utils/MenuScreen';
-import HeaderRightButton from '../../../Utils/HeaderRightButton';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const PostQuestionSchema = object({
   title: string().required('此項必填'),
@@ -27,36 +27,47 @@ const PostQuestionScreen = ({ route, navigation }) => {
   navigation.setOptions({
     headerRightContainerStyle: {
       position: 'absolute',
-      top: yScroll.interpolate({
-        inputRange: [0, 80],
-        outputRange: [0, -200],
-        extrapolate: 'clamp',
-      }),
+      transform: [
+        {
+          translateY: yScroll.interpolate({
+            inputRange: [0, 80],
+            outputRange: [0, -200],
+            extrapolate: 'clamp',
+          }),
+        },
+      ],
     },
     headerTitleStyle: {
-      position: 'absolute',
-      top: yScroll.interpolate({
-        inputRange: [0, 80],
-        outputRange: [-20, -120],
-        extrapolate: 'clamp',
-      }),
+      transform: [
+        {
+          translateY: yScroll.interpolate({
+            inputRange: [0, 80],
+            outputRange: [0, -200],
+            extrapolate: 'clamp',
+          }),
+        },
+      ],
+      fontWeight: 'bold',
       fontSize: 28,
       color: '#E1EDFF',
-      fontWeight: '700',
       overflow: 'hidden',
     },
     headerLeftContainerStyle: {
       position: 'absolute',
-      top: yScroll.interpolate({
-        inputRange: [0, 80],
-        outputRange: [0, -200],
-        extrapolate: 'clamp',
-      }),
+      transform: [
+        {
+          translateY: yScroll.interpolate({
+            inputRange: [0, 80],
+            outputRange: [0, -200],
+            extrapolate: 'clamp',
+          }),
+        },
+      ],
     },
   });
 
   return (
-    <MenuScreen style={{ position: 'fix' }}>
+    <MenuScreen>
       <View>
         <ScrollView
           onScroll={Animated.event([
@@ -238,7 +249,7 @@ class Tag extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 80,
+    marginTop: hp('15%'),
     width: '100%',
     height: ScreenHeight,
     alignSelf: 'center',
@@ -266,12 +277,12 @@ const styles = StyleSheet.create({
   contentContainer: {
     borderRadius: 20,
     paddingHorizontal: 15,
-    height: 180,
+    height: hp('30%'),
     backgroundColor: 'rgba(225, 237, 255, 0.5)',
   },
   textAreaContainer: {
     color: '#1772A6',
-    height: 180,
+    height: hp('30%'),
     textAlignVertical: 'top',
     paddingTop: 10,
   },
