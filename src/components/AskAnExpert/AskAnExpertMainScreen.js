@@ -14,7 +14,6 @@ import FABView from '../../../Utils/FAB';
 import { actionCounter } from '../../helpers/actionCounter';
 
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { set } from 'react-native-reanimated';
 
 const SPECIAL_TAG_1 = '眼睛疼痛';
 const SPECIAL_TAG_2 = '視力模糊';
@@ -226,14 +225,14 @@ export const QuestionCard = (props) => {
             <Image source={require('../../../assets/images/BackArrow.png')} />
           </TouchableOpacity>
         </Col>
-        <Icon
+        {/* <Icon
           containerStyle={{ position: 'absolute', top: hp('2%'), right: wp('5%') }}
           name={!bookmarked ? 'bookmark' : 'bookmark-alt'}
           type="fontisto"
           size={wp('10%')}
           color={bookmarked ? 'red' : 'black'}
           onPress={() => setBookmarked(!bookmarked)}
-        />
+        /> */}
         <Col></Col>
       </Grid>
       <View style={styles.questionCard}>

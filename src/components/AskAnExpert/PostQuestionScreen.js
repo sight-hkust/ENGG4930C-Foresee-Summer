@@ -27,19 +27,27 @@ const PostQuestionScreen = ({ route, navigation }) => {
   navigation.setOptions({
     headerRightContainerStyle: {
       position: 'absolute',
-      top: yScroll.interpolate({
-        inputRange: [0, 80],
-        outputRange: [0, -200],
-        extrapolate: 'clamp',
-      }),
+      transform: [
+        {
+          translateY: yScroll.interpolate({
+            inputRange: [0, 80],
+            outputRange: [0, -200],
+            extrapolate: 'clamp',
+          }),
+        },
+      ],
     },
     headerTitleStyle: {
       position: 'absolute',
-      top: yScroll.interpolate({
-        inputRange: [0, 80],
-        outputRange: [-20, -120],
-        extrapolate: 'clamp',
-      }),
+      transform: [
+        {
+          translateY: yScroll.interpolate({
+            inputRange: [0, 80],
+            outputRange: [-20, -120],
+            extrapolate: 'clamp',
+          }),
+        },
+      ],
       fontSize: 28,
       color: '#E1EDFF',
       fontWeight: '700',
@@ -47,11 +55,15 @@ const PostQuestionScreen = ({ route, navigation }) => {
     },
     headerLeftContainerStyle: {
       position: 'absolute',
-      top: yScroll.interpolate({
-        inputRange: [0, 80],
-        outputRange: [0, -200],
-        extrapolate: 'clamp',
-      }),
+      transform: [
+        {
+          translateY: yScroll.interpolate({
+            inputRange: [0, 80],
+            outputRange: [0, -200],
+            extrapolate: 'clamp',
+          }),
+        },
+      ],
     },
   });
 
