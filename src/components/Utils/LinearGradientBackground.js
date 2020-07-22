@@ -4,7 +4,7 @@ import { SafeAreaView, View } from "react-native";
 
 export const LinearGradientBackground = ({
   children,
-  safeAreaViewEnable = true,
+  safeAreaViewEnable = false,
   ...props
 }) => {
   const LGView = ({ children }) =>

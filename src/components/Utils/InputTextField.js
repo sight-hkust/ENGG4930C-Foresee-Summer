@@ -4,6 +4,7 @@ import { InputFieldWrapper } from "./InputFieldWrapper";
 import { TextInput, StyleSheet } from "react-native";
 import { ScreenHeight, FontScale } from "../../../constant/Constant";
 import jsonPathToValue from "../../helpers/jsonPathToValue";
+import { heightPercentageToDP } from "react-native-responsive-screen";
 
 export const InputTextField = ({
   contianerStyle,
@@ -55,13 +56,14 @@ export const InputTextField = ({
 const styles = StyleSheet.create({
   textinput: {
     backgroundColor: "rgba(255, 255, 255, 0.4)",
-    height: ScreenHeight * 0.065,
-    borderRadius: ScreenHeight * 0.035,
+    height: heightPercentageToDP("7%"),
+    borderRadius: heightPercentageToDP("3.5%"),
     width: "100%",
     paddingHorizontal: "10%",
     fontSize: 20,
     color: "#FFFFFF",
     textAlign: "center",
     textAlignVertical: "center",
+    alignSelf: "center",
   },
 });

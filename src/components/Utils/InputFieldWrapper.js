@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     color: "white",
     textAlignVertical: "center",
+    alignSelf: "center",
   },
   errorMessage: {
     paddingTop: ScreenWidth * 0.01,
