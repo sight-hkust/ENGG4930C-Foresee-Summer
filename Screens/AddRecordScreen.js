@@ -33,12 +33,13 @@ export default class Form extends Component {
         ],
       },
       headerTitleStyle: {
-        position: 'absolute',
+        //position: 'absolute',
         transform: [
           {
             translateY: this.yScroll.interpolate({
               inputRange: [0, 80],
-              outputRange: [-20, -120],
+              //outputRange: [-20, -120],
+              outputRange: [0, -200],
               extrapolate: 'clamp',
             }),
           },

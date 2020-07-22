@@ -159,14 +159,14 @@ export const HotQuestionCard = (props) => {
       >
         <LinearGradientBackground
           colors={[
-            `rgb(${RGB[0] + props.counter * 12},${RGB[1] + props.counter * 36}, ${RGB[2] + props.counter * 28})`,
-            `rgb(${RGB[0] + (props.counter + 1) * 12},${RGB[1] + (props.counter + 1) * 36}, ${RGB[2] + (props.counter + 1) * 28})`,
+            `rgb(${RGB[0] + (props.counter % 4) * 12},${RGB[1] + (props.counter % 4) * 36}, ${RGB[2] + (props.counter % 4) * 28})`,
+            `rgb(${RGB[0] + ((props.counter % 4) + 1) * 12},${RGB[1] + ((props.counter % 4) + 1) * 36}, ${RGB[2] + ((props.counter % 4) + 1) * 28})`,
           ]}
           start={[0, 1]}
           end={[1, 0]}
           locations={[0.2, 0.7]}
         >
-          <Text style={styles.hotTopicCardText}>{props.faq.question_title}</Text>
+          <Text style={styles.hotTopicCardText}>{props.faq.question_title.length <= 14 ? props.faq.question_title : props.faq.question_title.substring(0, 14) + '...'}</Text>
         </LinearGradientBackground>
       </TouchableOpacity>
       <QuestionCard isVisible={isVisible} toggleModal={toggleModal} faq={props.faq} />
