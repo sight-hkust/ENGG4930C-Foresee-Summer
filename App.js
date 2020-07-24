@@ -49,6 +49,11 @@ const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 function ArticleScreen({ navigation, route }) {
+  if (route.state && route.state.index > 0) {
+    navigation.setOptions({ tabBarVisible: false });
+  } else {
+    navigation.setOptions({ tabBarVisible: true });
+  }
   return (
     <Stack.Navigator screenOptions={headerConfig}>
       <Stack.Screen name="GetEducatedScreen" component={GetEducatedScreen} options={{ title: '護眼秘笈' }} />
