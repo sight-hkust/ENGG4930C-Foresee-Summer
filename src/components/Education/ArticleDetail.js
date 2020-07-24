@@ -7,6 +7,7 @@ import { Button } from 'react-native-elements';
 import { Icon } from 'react-native-elements';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { ScreenWidth, ScreenHeight, FontScale } from '../../../constant/Constant';
+import { WebView } from 'react-native-webview';
 
 export default class ArticleDetailScreen extends Component {
   constructor(props) {
@@ -20,7 +21,7 @@ export default class ArticleDetailScreen extends Component {
       volume: 1.0,
       isBuffering: false,
       article_id: article_id, //this.props.route.params.article_id then remove from state
-      content: [],
+      content: '',
       subject: '',
       image: '',
       audio: null,
@@ -100,7 +101,7 @@ export default class ArticleDetailScreen extends Component {
           var childData = childSnapshot.val();
           if (childData.isVid) {
             this.setState({
-              content: childData.content.split('\n'),
+              content: childData.content,
               subject: childData.subject,
               isVid: childData.isVid,
               video: childData.video,
@@ -108,7 +109,7 @@ export default class ArticleDetailScreen extends Component {
           } else {
             this.setState(
               {
-                content: childData.content.split('\n'),
+                content: childData.content,
                 subject: childData.subject,
                 isVid: childData.isVid,
                 image: childData.image,
@@ -177,26 +178,14 @@ export default class ArticleDetailScreen extends Component {
           )}
         </View>
 
-        <ScrollView>
-          <View style={{ alignItems: 'center' }}>
-            {!this.state.isVid && (
-              <Button title={this.state.play ? '暫停錄音' : '播放錄音'} titleStyle={ArticleDetailStyles.buttonTitle} onPress={() => PressPlayButton()} buttonStyle={ArticleDetailStyles.playButton} />
-            )}
-            <Text style={this.state.isVid ? ArticleDetailStyles.videoContent : ArticleDetailStyles.articleContent}>
-              {this.state.content.map((text) => {
-                console.log(text);
-                return (
-                  <>
-                    <Text style={{ marginBottom: ScreenHeight * 0.05 }}>
-                      {text}
-                      {'\n\n'}
-                    </Text>
-                  </>
-                );
-              })}
-            </Text>
+        <View style={{ alignItems: 'center' }}>
+          {!this.state.isVid && (
+            <Button title={this.state.play ? '暫停錄音' : '播放錄音'} titleStyle={ArticleDetailStyles.buttonTitle} onPress={() => PressPlayButton()} buttonStyle={ArticleDetailStyles.playButton} />
+          )}
+          <View style={{ width: ScreenWidth, height: ScreenHeight * 0.7 }}>
+            <WebView style={{ backgroundColor: 'transparent', marginTop: ScreenHeight * 0.075 }} originWhitelist={['*']} source={{ html: this.state.content }} />
           </View>
-        </ScrollView>
+        </View>
       </View>
     );
   }
