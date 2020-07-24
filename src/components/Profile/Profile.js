@@ -10,6 +10,7 @@ import MenuScreen from "../../../Utils/MenuScreen";
 import { connect } from "react-redux";
 import { watchUserInfoUpdate } from "../../reducers/user";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { auth } from "../../config/config";
 
 const Profile = ({ navigation, route, userInfoStore }) => {
   const [loading, setLoading] = useState(true);
@@ -168,6 +169,14 @@ const Profile = ({ navigation, route, userInfoStore }) => {
                 type="clear"
                 titleStyle={styles.bottomMenuItem}
                 TouchableComponent={TouchableOpacity}
+              />
+              <Button
+                title="登出"
+                type="clear"
+                titleStyle={styles.bottomMenuItem}
+                onPress={() => {
+                  auth.signOut();
+                }}
               />
             </View>
           </>

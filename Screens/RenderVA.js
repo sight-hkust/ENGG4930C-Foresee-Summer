@@ -27,7 +27,7 @@ export const RenderVA = (props) => {
     L_output.push(data[date].L_VA);
     R_output.push(data[date].R_VA);
   }
-  console.log(data[dateArr[1]].L_VA);
+  /* console.log(data[dateArr[1]].L_VA); */
   return (
     <View>
       <RenderDateDots
