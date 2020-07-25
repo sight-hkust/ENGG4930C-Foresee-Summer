@@ -1,12 +1,5 @@
 import React, { Component, useState } from "react";
-import {
-  StyleSheet,
-  View,
-  TouchableOpacity,
-  Image,
-  Text,
-  ScrollView,
-} from "react-native";
+import { StyleSheet, View, TouchableOpacity, Image, Text, ScrollView } from "react-native";
 import { Button } from "react-native-elements";
 import { Icon } from "react-native-elements";
 import { ScreenWidth, ScreenHeight } from "../constant/Constant";
@@ -30,14 +23,7 @@ export const RenderVA = (props) => {
   /* console.log(data[dateArr[1]].L_VA); */
   return (
     <View>
-      <RenderDateDots
-        data={data}
-        dateArr={dateArr}
-        selected={index}
-        subArray={subArray}
-        L_output={L_output}
-        R_output={R_output}
-      />
+      <RenderDateDots data={data} dateArr={dateArr} selected={index} subArray={subArray} L_output={L_output} R_output={R_output} />
       <View
         style={{
           flexDirection: "row",
@@ -76,14 +62,10 @@ export const RenderContent = (props) => {
         paddingBottom: ScreenHeight / 40,
       }}
     >
-      <Text style={RenderVAStyle.VAText}>
-        右眼矯正視力：{data[dateArr[index]].R_VA}
-      </Text>
+      <Text style={RenderVAStyle.VAText}>右眼矯正視力：{data[dateArr[index]].R_VA}</Text>
       <RenderRating VA={data[dateArr[index]].R_VA} />
 
-      <Text style={RenderVAStyle.VAText}>
-        左眼矯正視力：{data[dateArr[index]].L_VA}
-      </Text>
+      <Text style={RenderVAStyle.VAText}>左眼矯正視力：{data[dateArr[index]].L_VA}</Text>
       <RenderRating VA={data[dateArr[index]].L_VA} />
     </View>
   );
