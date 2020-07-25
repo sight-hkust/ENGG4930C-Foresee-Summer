@@ -208,44 +208,44 @@ class OverviewScreen extends Component {
             </View>
           </View>
           <FABView />
-        </MenuScreen>
-        <Provider>
-          <Portal>
-            <Modal visible={isFamilyListModalVisible} onDismiss={this._hideFamilyListModal}>
-              <View
-                style={{
-                  backgroundColor: 'white',
-                  marginHorizontal: ScreenWidth * 0.12,
-                  minHeight: ScreenHeight * 0.2,
-                  elevation: 3,
-                  borderRadius: ScreenWidth * 0.02,
-                  padding: ScreenWidth * 0.03,
-                }}
-              >
-                <Text style={{ fontSize: 23 }}>選擇家庭成員</Text>
-                <FlatList
-                  data={familyList}
-                  keyExtractor={(item, index) => index.toString()}
-                  renderItem={({ item }) => {
-                    /* console.log("LINE242:", item.firstName); */
-                    return (
-                      <TouchableOpacity onPress={() => this._selectFamily(item)}>
-                        <View
-                          style={{
-                            width: '100%',
-                            paddingVertical: ScreenHeight * 0.02,
-                          }}
-                        >
-                          <Text style={{ fontSize: 20, textAlign: 'center' }}>{displayName(item)}</Text>
-                        </View>
-                      </TouchableOpacity>
-                    );
+          <Provider>
+            <Portal>
+              <Modal visible={isFamilyListModalVisible} onDismiss={this._hideFamilyListModal}>
+                <View
+                  style={{
+                    backgroundColor: 'white',
+                    marginHorizontal: ScreenWidth * 0.12,
+                    minHeight: ScreenHeight * 0.2,
+                    elevation: 3,
+                    borderRadius: ScreenWidth * 0.02,
+                    padding: ScreenWidth * 0.03,
                   }}
-                />
-              </View>
-            </Modal>
-          </Portal>
-        </Provider>
+                >
+                  <Text style={{ fontSize: 23 }}>選擇家庭成員</Text>
+                  <FlatList
+                    data={familyList}
+                    keyExtractor={(item, index) => index.toString()}
+                    renderItem={({ item }) => {
+                      /* console.log("LINE242:", item.firstName); */
+                      return (
+                        <TouchableOpacity onPress={() => this._selectFamily(item)}>
+                          <View
+                            style={{
+                              width: '100%',
+                              paddingVertical: ScreenHeight * 0.02,
+                            }}
+                          >
+                            <Text style={{ fontSize: 20, textAlign: 'center' }}>{displayName(item)}</Text>
+                          </View>
+                        </TouchableOpacity>
+                      );
+                    }}
+                  />
+                </View>
+              </Modal>
+            </Portal>
+          </Provider>
+        </MenuScreen>
       </>
     );
   }
