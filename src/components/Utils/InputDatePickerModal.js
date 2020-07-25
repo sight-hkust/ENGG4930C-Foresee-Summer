@@ -1,12 +1,9 @@
 import React from "react";
-import { StyleSheet, Text } from "react-native";
-import {
-  ScreenHeight,
-  ScreenWidth,
-  FontScale,
-} from "../../../constant/Constant";
+import { StyleSheet, Text, TouchableOpacity } from "react-native";
 import moment from "moment";
 import { InputFieldWrapper } from "./InputFieldWrapper";
+import { heightPercentageToDP } from "react-native-responsive-screen";
+import { View } from "react-native-animatable";
 
 export const InputDatePickerModal = ({
   containerStyle,
@@ -28,24 +25,34 @@ export const InputDatePickerModal = ({
       formikKey={formikKey}
       formikProps={formikProps}
       hideEmbeddedErrorMessage={hideEmbeddedErrorMessage}
+      showDatePicker
     >
-      <Text style={styles.textField} onPress={() => showDatePicker()} {...rest}>
-        {value == "" ? "" : moment(value).format("YYYY-MM-DD")}
-      </Text>
+      <TouchableOpacity onPress={() => showDatePicker()}>
+        <View
+          style={{
+            justifyContent: "center",
+            backgroundColor: "rgba(255, 255, 255, 0.4)",
+            height: heightPercentageToDP("7%"),
+            borderRadius: heightPercentageToDP("3.5%"),
+            marginHorizontal: "3%",
+          }}
+        >
+          <Text style={styles.textField} textAlignVertical="center" {...rest}>
+            {value == "" ? "" : moment(value).format("YYYY-MM-DD")}
+          </Text>
+        </View>
+      </TouchableOpacity>
     </InputFieldWrapper>
   );
 };
 
 const styles = StyleSheet.create({
   textField: {
-    backgroundColor: "rgba(255, 255, 255, 0.4)",
-    height: ScreenHeight * 0.065,
-    borderRadius: ScreenHeight * 0.035,
-    width: "100%",
+    overflow: "hidden",
     paddingHorizontal: "10%",
-    fontSize:  20,
+    width: "100%",
+    fontSize: 20,
     color: "#FFFFFF",
     textAlign: "center",
-    textAlignVertical: "center",
   },
 });

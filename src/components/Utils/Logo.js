@@ -17,7 +17,9 @@ export const Logo = ({ style, iconStyle, textStyle, hideText = false }) => {
         resizeMode="contain"
       />
       {hideText ? null : (
-        <Text style={[styles.logoText, textStyle]}>ForeSEE</Text>
+        <View style={{ flex: 4, justifyContent: "center" }}>
+          <Text style={[styles.logoText, textStyle]}>ForeSEE</Text>
+        </View>
       )}
     </View>
   );
@@ -33,10 +35,8 @@ const styles = StyleSheet.create({
   logoText: {
     color: "white",
     fontWeight: "700",
-    textAlignVertical: "center",
     fontSize: 20,
     left: ScreenWidth * 0.03,
-    flex: 4,
   },
   icon: {
     flex: 3,
