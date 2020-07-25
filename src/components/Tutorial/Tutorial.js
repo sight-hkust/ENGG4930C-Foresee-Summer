@@ -85,7 +85,7 @@ const Tutorial = ({ route, navigation }) => {
                 style={{
                   position: 'absolute',
                   width: ScreenWidth,
-                  bottom: ScreenHeight * 0.15,
+                  bottom: ScreenHeight * 0.14,
                   flex: 1,
                   alignItems: 'center',
                 }}
