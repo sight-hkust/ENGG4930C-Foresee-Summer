@@ -179,7 +179,7 @@ export default class ArticleDetailScreen extends Component {
         </View>
 
         <View style={{ alignItems: 'center' }}>
-          {!this.state.isVid && (
+          {!this.state.isVid && this.state.audio !== '' && (
             <Button title={this.state.play ? '暫停錄音' : '播放錄音'} titleStyle={ArticleDetailStyles.buttonTitle} onPress={() => PressPlayButton()} buttonStyle={ArticleDetailStyles.playButton} />
           )}
           <View style={{ width: ScreenWidth, height: ScreenHeight * 0.7 }}>
