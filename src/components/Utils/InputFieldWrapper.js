@@ -22,7 +22,9 @@ export const InputFieldWrapper = ({
     <View style={[styles.container, contianerStyle]}>
       <View style={[styles.labelContainer, labelContainerStyle]}>
         <View style={[styles.icon, iconStyle]}>{icon}</View>
-        <Text style={[styles.label, labelStyle]}>{label}</Text>
+        <View style={{ flex: 8, justifyContent: "center" }}>
+          <Text style={[styles.label, labelStyle]}>{label}</Text>
+        </View>
       </View>
       <View style={styles.inputContainer}>{children}</View>
       {!hideEmbbededMessage &&
@@ -55,7 +57,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   label: {
-    flex: 8,
     fontSize: 20,
     color: "white",
     textAlignVertical: "center",
