@@ -18,46 +18,42 @@ function rand(x) {
 
 var audios = [
   {
-    audio: require('../../../assets/audio/EyeExercise-01.m4a'),
+    audio: require('../../../assets/audio/EyeExercise-01.mp3'),
     image: require('../../../assets/images/EyeExercise-01.gif'),
   },
   {
-    audio: require('../../../assets/audio/EyeExercise-02.m4a'),
+    audio: require('../../../assets/audio/EyeExercise-02.mp3'),
     image: require('../../../assets/images/EyeExercise-02.gif'),
   },
   {
-    audio: require('../../../assets/audio/EyeExercise-03.m4a'),
+    audio: require('../../../assets/audio/EyeExercise-03.mp3'),
     image: require('../../../assets/images/EyeExercise-03.gif'),
   },
   {
-    audio: require('../../../assets/audio/EyeExercise-04.m4a'),
+    audio: require('../../../assets/audio/EyeExercise-04.mp3'),
     image: require('../../../assets/images/EyeExercise-04.gif'),
   },
   {
-    audio: require('../../../assets/audio/EyeExercise-05.m4a'),
+    audio: require('../../../assets/audio/EyeExercise-05.mp3'),
     image: require('../../../assets/images/EyeExercise-05.gif'),
   },
   {
-    audio: require('../../../assets/audio/EyeExercise-06.m4a'),
+    audio: require('../../../assets/audio/EyeExercise-06.mp3'),
     image: require('../../../assets/images/EyeExercise-06.gif'),
   },
   {
-    audio: require('../../../assets/audio/EyeExercise-07.m4a'),
+    audio: require('../../../assets/audio/EyeExercise-07.mp3'),
     image: require('../../../assets/images/EyeExercise-07.gif'),
-  },
-  {
-    audio: require('../../../assets/audio/EyeExercise-08.m4a'),
-    image: require('../../../assets/images/EyeExercise-08.gif'),
   },
 ];
 
 const intro = {
-  audio: require('../../../assets/audio/EyeExercise-Intro.m4a'),
-  image: require('../../../assets/images/EyeExercise-Intro.gif'),
+  audio: require('../../../assets/audio/EyeExercise-Closed.mp3'),
+  image: require('../../../assets/images/EyeExercise-Closed.gif'),
 };
 const outro = {
-  audio: require('../../../assets/audio/EyeExercise-Outro.m4a'),
-  image: require('../../../assets/images/EyeExercise-Outro.gif'),
+  audio: require('../../../assets/audio/EyeExercise-Closed.mp3'),
+  image: require('../../../assets/images/EyeExercise-Closed.gif'),
 };
 
 /*
