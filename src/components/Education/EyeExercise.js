@@ -128,9 +128,13 @@ export default class EyeExercise extends Component {
     });
   };
 
-  /*componentDidMount() {
-    console.log("mount");
-  }*/
+  componentDidMount() {
+    console.log('mount');
+  }
+
+  componentWillUnmount() {
+    console.log('unmount');
+  }
 
   render() {
     const PressPlayButton = async (playWhichOne) => {
