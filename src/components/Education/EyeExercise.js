@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, Image, Button } from 'react-native';
-import { LinearGradient } from 'expo-linear-gradient';
 import { Audio } from 'expo-av';
 import * as Brightness from 'expo-brightness';
 import { ScreenHeight, ScreenWidth } from '../../../constant/Constant';
