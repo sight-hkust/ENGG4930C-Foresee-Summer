@@ -9,6 +9,7 @@ import {
   Text,
   TouchableOpacity,
   Modal,
+  StatusBar,
 } from "react-native";
 import {
   ScreenHeight,
@@ -305,7 +306,6 @@ const FormDetails = ({
             paddingHorizontal: ScreenWidth * 0.11,
             marginBottom:
               ScreenHeight * 0.1 * (isProfessional && registerPatient),
-            /* position: "absolute", */
             width: "100%",
           }}
           showsVerticalScrollIndicator={false}
@@ -337,8 +337,7 @@ const FormDetails = ({
                 color: "#fff",
               }}
             >
-              {" "}
-              登記病人{" "}
+              登記病人
             </Text>
           )}
 
@@ -352,7 +351,11 @@ const FormDetails = ({
                 <InputTextField
                   label={"姓"}
                   icon={personIcon}
-                  contianerStyle={{ flex: 1, marginRight: "3%" }}
+                  containerStyle={{
+                    flex: 1,
+                    marginRight: "3%",
+                    marginBottom: "-2%",
+                  }}
                   iconStyle={{ flex: 6 }}
                   formikProps={formikProps}
                   formikKey={"lastName"}
@@ -361,7 +364,7 @@ const FormDetails = ({
                 <InputTextField
                   label={"名"}
                   iconStyle={{ flex: 6 }}
-                  contianerStyle={{ flex: 1 }}
+                  containerStyle={{ flex: 1, marginBottom: "-2%" }}
                   formikProps={formikProps}
                   formikKey={"firstName"}
                   hideEmbbededMessage={true}
@@ -376,15 +379,19 @@ const FormDetails = ({
               >
                 <InputTextField
                   label={"Given Name"}
+                  containerStyle={{
+                    flex: 1,
+                    marginRight: "3%",
+                    marginBottom: "-2%",
+                  }}
                   iconStyle={{ flex: 0.3 }}
-                  contianerStyle={{ flex: 1, marginRight: "3%" }}
                   formikProps={formikProps}
                   formikKey={"givenName"}
                   hideEmbbededMessage={true}
                 />
                 <InputTextField
                   label={"Surname"}
-                  contianerStyle={{ flex: 1 }}
+                  containerStyle={{ flex: 1, marginBottom: "-2%" }}
                   iconStyle={{ flex: 0.3 }}
                   formikProps={formikProps}
                   formikKey={"surName"}
@@ -454,11 +461,12 @@ const FormDetails = ({
             (formikProps.errors["chineseNameError"] ||
               formikProps.errors["englishNameError"]) ? (
               <Text
+                adjustsFontSizeToFit={true}
                 style={{
                   paddingTop: ScreenWidth * 0.01,
                   paddingLeft: ScreenWidth * 0.08,
                   textAlign: "left",
-                  fontSize: FontScale * 20,
+                  fontSize: 20,
                   fontWeight: "700",
                   color: "#FFFD78",
                   flexWrap: "wrap",
@@ -738,7 +746,9 @@ const styles = StyleSheet.create({
   logoContainer: {
     marginTop: ScreenHeight * 0.1,
   },
-  inputFieldsContainer: { marginBottom: "10%" },
+  inputFieldsContainer: {
+    marginBottom: "10%",
+  },
   centeredView: {
     flex: 1,
     justifyContent: "center",

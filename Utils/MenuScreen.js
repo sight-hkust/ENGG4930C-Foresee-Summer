@@ -49,7 +49,7 @@ export default class MenuScreen extends Component {
 }
 const styles = StyleSheet.create({
   container: {
-    height: "100%",
+    flex: 1,
   },
   shadow: {
     shadowColor: "#000000",

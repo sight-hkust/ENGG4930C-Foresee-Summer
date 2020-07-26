@@ -161,8 +161,9 @@ export default class RecordsScreen extends Component {
             <TouchableOpacity
               onPress={() => this.setState({ refractive: "3" })}
             >
+              <View >
               <Text
-                style={
+                style={ 
                   this.state.refractive == "3"
                     ? RecordScreenStyle.selectedMenuText
                     : RecordScreenStyle.unselectedMenuText
@@ -170,11 +171,13 @@ export default class RecordsScreen extends Component {
               >
                 視力
               </Text>
+              </View>
             </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => this.setState({ refractive: "1" })}
             >
+              <View>
               <Text
                 style={
                   this.state.refractive == "1"
@@ -184,11 +187,13 @@ export default class RecordsScreen extends Component {
               >
                 遠視
               </Text>
+              </View>
             </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => this.setState({ refractive: "0" })}
             >
+               <View >
               <Text
                 style={
                   this.state.refractive == "0"
@@ -198,11 +203,13 @@ export default class RecordsScreen extends Component {
               >
                 近視
               </Text>
+              </View>
             </TouchableOpacity>
 
             <TouchableOpacity
               onPress={() => this.setState({ refractive: "2" })}
             >
+              <View>
               <Text
                 style={
                   this.state.refractive == "2"
@@ -212,6 +219,7 @@ export default class RecordsScreen extends Component {
               >
                 散光
               </Text>
+              </View>
             </TouchableOpacity>
           </View>
           {data != null && this.state.refractive == "3" && (
@@ -513,7 +521,8 @@ const RecordScreenStyle = StyleSheet.create({
     paddingTop: 4,
     paddingBottom: 4,
     backgroundColor: "white",
-    borderRadius: 10,
+    overflow:'hidden',
+    borderRadius:10,
   },
   unselectedMenuText: {
     fontSize: 18,
@@ -524,8 +533,9 @@ const RecordScreenStyle = StyleSheet.create({
     marginRight: 8,
     paddingTop: 3,
     paddingBottom: 3,
-    borderBottomWidth: 1.5,
-    borderColor: "#B8CAE4",
+    borderBottomWidth:1,
+    borderBottomColor:"white",
+    overflow:'hidden'
   },
 
   eyesButton: {

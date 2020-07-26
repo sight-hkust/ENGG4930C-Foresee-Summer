@@ -42,10 +42,11 @@ export const MultiLinesInputTextField = ({
 
 const styles = StyleSheet.create({
   inputField: {
-    height: hp("20%"),
     borderRadius: hp("2%"),
     color: "#fff",
     backgroundColor: "rgba(255, 255, 255, 0.4)",
+    marginHorizontal: wp("2%"),
+    minHeight: hp("30%"),
     fontSize: 20,
   },
 });

@@ -1,23 +1,9 @@
-import {
-  SafeAreaView,
-  StyleSheet,
-  Text,
-  View,
-  TouchableOpacity,
-  ScrollView,
-  FlatList,
-  Image,
-  Dimensions,
-} from "react-native";
+import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity, ScrollView, FlatList, Image, Dimensions } from "react-native";
 import React, { Component } from "react";
 import Expo from "expo";
 import { database } from "../../config/config";
 import { LinearGradient } from "expo-linear-gradient";
-import {
-  ScreenWidth,
-  ScreenHeight,
-  FontScale,
-} from "../../../constant/Constant";
+import { ScreenWidth, ScreenHeight, FontScale } from "../../../constant/Constant";
 import HeaderRightButton from "../../../Utils/HeaderRightButton";
 import FABView from "../../../Utils/FAB";
 import MenuScreen from "../../../Utils/MenuScreen";
@@ -42,15 +28,13 @@ export default class GetEducated extends Component {
   componentDidMount() {
     database
       .ref("contents/articles")
-      .orderByChild("article_id")
+      //.orderByChild('article_id')
       .on("value", (snapshot) => {
         var temp = [];
-        //console.log(snapshot.toJSON());
         snapshot.forEach((childSnapshot) => {
           var item = childSnapshot.val();
           var key = { _uid: childSnapshot.key };
           var childData = { ...item, ...key };
-          console.log(childData);
           temp.push(childData);
         });
         this.setState({ topArticle: temp[temp.length - 1] });
@@ -62,7 +46,7 @@ export default class GetEducated extends Component {
 
   render() {
     const pressHandler = () => {
-      const id = this.state.topArticle.article_id;
+      const id = this.state.topArticle._uid;
       this.props.navigation.navigate("ArticleDetailScreen", { article_id: id });
       actionCounter("articles", this.state.topArticle._uid, "views");
     };
@@ -89,24 +73,13 @@ export default class GetEducated extends Component {
             <View style={{ flex: 1 }}>
               <View style={GetEducatedScreen.topArticleContainer}>
                 <TouchableOpacity onPress={pressHandler}>
-                  <Image
-                    source={{ uri: this.state.topArticle.image }}
-                    style={GetEducatedScreen.topArticleImage}
-                  />
-                  <Text style={GetEducatedScreen.topArticleText}>
-                    {this.state.topArticle.subject}
-                  </Text>
+                  <Image source={{ uri: this.state.topArticle.image }} style={GetEducatedScreen.topArticleImage} />
+                  <Text style={GetEducatedScreen.topArticleText}>{this.state.topArticle.subject}</Text>
                 </TouchableOpacity>
               </View>
 
               <View style={GetEducatedScreen.articleListContainer}>
-                <FlatList
-                  data={this.state.data}
-                  renderItem={({ item }) => (
-                    <Item item={item} navigation={this.props.navigation} />
-                  )}
-                  keyExtractor={(item) => item.article_id}
-                />
+                <FlatList data={this.state.data} renderItem={({ item }) => <Item item={item} navigation={this.props.navigation} />} keyExtractor={(item) => item._uid} />
               </View>
             </View>
           </View>
@@ -118,8 +91,8 @@ export default class GetEducated extends Component {
 }
 
 function Item({ item, navigation }) {
-  //console.log(item.article_id)
-  const id = item.article_id;
+  //console.log(item.key);
+  const id = item._uid;
   const pressHandler = () => {
     navigation.navigate("ArticleDetailScreen", { article_id: id });
     actionCounter("articles", item._uid, "views");
@@ -127,10 +100,7 @@ function Item({ item, navigation }) {
   return (
     <TouchableOpacity onPress={pressHandler}>
       <View style={GetEducatedScreen.articleItem}>
-        <Image
-          source={{ uri: item.image }}
-          style={GetEducatedScreen.itemImage}
-        />
+        <Image source={{ uri: item.image }} style={GetEducatedScreen.itemImage} />
         <View style={{ flex: 1 }}>
           <Text style={GetEducatedScreen.articleSubject}>{item.subject}</Text>
           <Text style={GetEducatedScreen.articleDate}>{item.date}</Text>

@@ -34,6 +34,7 @@ export const InputDatePickerModal = ({
             backgroundColor: "rgba(255, 255, 255, 0.4)",
             height: heightPercentageToDP("7%"),
             borderRadius: heightPercentageToDP("3.5%"),
+            marginHorizontal: "3%",
           }}
         >
           <Text style={styles.textField} textAlignVertical="center" {...rest}>
@@ -48,8 +49,8 @@ export const InputDatePickerModal = ({
 const styles = StyleSheet.create({
   textField: {
     overflow: "hidden",
-    width: "100%",
     paddingHorizontal: "10%",
+    width: "100%",
     fontSize: 20,
     color: "#FFFFFF",
     textAlign: "center",

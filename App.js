@@ -53,11 +53,17 @@ import {
 } from "./src/components/Tutorial/MiniTutorial";
 import ProfPatientRecordView from "./src/components/Professional/ProfPatientRecrodView/ProfPatientRecordView";
 import { BackButton } from "./src/components/Utils/BackButton";
+import { EditUserInfo } from "./src/components/Profile/EditUserInfo";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 
 function ArticleScreen({ navigation, route }) {
+  if (route.state && route.state.index > 0) {
+    navigation.setOptions({ tabBarVisible: false });
+  } else {
+    navigation.setOptions({ tabBarVisible: true });
+  }
   return (
     <Stack.Navigator screenOptions={headerConfig}>
       <Stack.Screen
@@ -173,6 +179,23 @@ function ProfileScreen({ navigation, route }) {
         component={RegistrationForm}
         options={{
           headerTransparent: true,
+          headerLeft: () => (
+            <BackButton
+              onPress={() => {
+                navigation.navigate("ProfileTabMain");
+              }}
+            />
+          ),
+          headerTintColor: "white",
+          title: null,
+        }}
+      />
+      <Stack.Screen
+        name="Edit User Info"
+        component={EditUserInfo}
+        options={{
+          headerTransparent: true,
+          title: "個人資料",
           headerLeft: () => (
             <BackButton
               onPress={() => {
