@@ -43,6 +43,8 @@ const writeUserData = ({
             inactive: true,
             firstName: values.firstName,
             lastName: values.lastName,
+            givenName: values.givenName,
+            surName: values.surName,
           });
       }
       break;
@@ -77,6 +79,8 @@ const writeUserData = ({
           phone: values.tel_country_code + values.tel_number,
           firstName: values.firstName,
           lastName: values.lastName,
+          givenName: values.givenName,
+          surName: values.surName,
           birthday: moment(values.birthday).toJSON(),
           records: {},
         });
@@ -94,6 +98,8 @@ const writeUserData = ({
           uid: uid,
           firstName: values.firstName,
           lastName: values.lastName,
+          givenName: values.givenName,
+          surName: values.surName,
           email: values.email,
           phone: values.tel_country_code + values.tel_number,
           role: values.role,

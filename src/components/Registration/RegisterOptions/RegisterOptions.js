@@ -1,12 +1,13 @@
 import React from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
 import { LinearGradientBackground } from "../../../../Utils/LinearGradientBackground";
-import Logo from "../../../../Utils/Logo";
+import Logo from "../../Utils/Logo";
 import {
   ScreenHeight,
   FontScale,
   ScreenWidth,
 } from "../../../../constant/Constant";
+import { heightPercentageToDP } from "react-native-responsive-screen";
 
 export const RegisterOptions = ({ navigation }) => {
   return (
@@ -65,10 +66,10 @@ const styles = StyleSheet.create({
   button: {
     margin: ScreenHeight * 0.03,
     borderColor: "white",
-    borderRadius: ScreenWidth * 0.07,
     borderWidth: 1,
     width: ScreenWidth * 0.6,
-    height: ScreenHeight * 0.08,
+    borderRadius: heightPercentageToDP("7%"),
+    height: heightPercentageToDP("8%"),
     shadowRadius: ScreenWidth * 0.07,
     justifyContent: "center",
     alignItems: "center",

@@ -11,6 +11,7 @@ import { connect } from "react-redux";
 import { watchUserInfoUpdate } from "../../reducers/user";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { auth } from "../../config/config";
+import { displayName } from "../../helpers/displayName";
 
 const Profile = ({ navigation, route, userInfoStore }) => {
   const [loading, setLoading] = useState(true);
@@ -38,7 +39,9 @@ const Profile = ({ navigation, route, userInfoStore }) => {
                   }}
                 >
                   <View style={styles.nameContainer}>
-                    <Text style={styles.name}>{user.lastName}</Text>
+                    <Text style={styles.name}>
+                      {user.lastName != "" ? user.lastName : user.givenName[0]}
+                    </Text>
                   </View>
                 </Row>
                 <Row style={styles.qrCodeIconContainer}>
@@ -52,9 +55,12 @@ const Profile = ({ navigation, route, userInfoStore }) => {
                 </Row>
 
                 <Row style={styles.titleContainer}>
-                  <Text style={styles.title}>
-                    {" "}
-                    {user.lastName + user.firstName}{" "}
+                  <Text
+                    style={
+                      user.lastName != "" ? styles.title : styles.titleEnglish
+                    }
+                  >
+                    {displayName(user)}
                   </Text>
                 </Row>
 
@@ -62,8 +68,7 @@ const Profile = ({ navigation, route, userInfoStore }) => {
                   style={{ ...styles.titleContainer, ...{ marginBottom: 7.5 } }}
                 >
                   <Text style={styles.subtitle}>
-                    {" "}
-                    {user.birthday.split("T")[0]}{" "}
+                    {user.birthday.split("T")[0]}
                   </Text>
                 </Row>
                 <Row style={{ height: 47.5 }}>
@@ -141,21 +146,24 @@ const Profile = ({ navigation, route, userInfoStore }) => {
               <Button
                 title="詳細設定"
                 type="clear"
-                titleStyle={styles.bottomMenuItem}
+                containerStyle={styles.bottomMenuItemContainer}
+                titleStyle={styles.bottomMenuItemText}
                 TouchableComponent={TouchableOpacity}
                 onPress={() => navigation.navigate("SettingScreen")}
               />
               <Button
                 title="程式教學"
                 type="clear"
-                titleStyle={styles.bottomMenuItem}
+                containerStyle={styles.bottomMenuItemContainer}
+                titleStyle={styles.bottomMenuItemText}
                 TouchableComponent={TouchableOpacity}
                 onPress={() => navigation.navigate("Tutorial")}
               />
               <Button
                 title="創建子帳戶"
                 type="clear"
-                titleStyle={styles.bottomMenuItem}
+                containerStyle={styles.bottomMenuItemContainer}
+                titleStyle={styles.bottomMenuItemText}
                 TouchableComponent={TouchableOpacity}
                 onPress={() =>
                   navigation.navigate("Register", {
@@ -164,16 +172,19 @@ const Profile = ({ navigation, route, userInfoStore }) => {
                   })
                 }
               />
-              <Button
+              {/*  <Button
                 title="變更個人資料"
                 type="clear"
-                titleStyle={styles.bottomMenuItem}
+                containerStyle={styles.bottomMenuItemContainer}
+                titleStyle={styles.bottomMenuItemText}
                 TouchableComponent={TouchableOpacity}
-              />
+                onPress={() => navigation.navigate("Edit User Info", { user })}
+              /> */}
               <Button
                 title="登出"
                 type="clear"
-                titleStyle={styles.bottomMenuItem}
+                containerStyle={styles.bottomMenuItemContainer}
+                titleStyle={styles.bottomMenuItemText}
                 onPress={() => {
                   auth.signOut();
                 }}
@@ -231,6 +242,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
     textAlignVertical: "center",
   },
+  titleEnglish: {
+    color: "#24559E",
+    fontSize: ScreenHeight * 0.04,
+    fontWeight: "bold",
+    textAlign: "center",
+    textAlignVertical: "center",
+  },
   subtitle: {
     color: "#1772A6",
     fontSize: ScreenHeight * 0.025,
@@ -263,11 +281,15 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     marginVertical: ScreenHeight * 0.025,
     borderTopColor: "#8BB5F4",
-    width: 250,
+    width: ScreenWidth * 0.75,
   },
-  bottomMenuItem: {
+  bottomMenuItemContainer: {
+    height: ScreenHeight * 0.06,
+    /* backgroundColor: "lightgreen", */
+  },
+  bottomMenuItemText: {
     color: "#fff",
-    fontSize: 18,
+    fontSize: 16.5,
   },
 });
 
