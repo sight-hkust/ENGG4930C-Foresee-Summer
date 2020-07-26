@@ -1,16 +1,16 @@
-import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity, ScrollView, FlatList, Image, Dimensions } from 'react-native';
-import React, { Component } from 'react';
-import Expo from 'expo';
-import { database } from '../../config/config';
-import { LinearGradient } from 'expo-linear-gradient';
-import { ScreenWidth, ScreenHeight, FontScale } from '../../../constant/Constant';
-import HeaderRightButton from '../../../Utils/HeaderRightButton';
-import FABView from '../../../Utils/FAB';
-import MenuScreen from '../../../Utils/MenuScreen';
-import { actionCounter } from '../../helpers/actionCounter';
-const thumbNail = require('../../../assets/images/interview.png');
-const eyeglasses = require('../../../assets/images/eyeglasses.jpg');
-const Setting = require('../../../assets/images/setting.png');
+import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity, ScrollView, FlatList, Image, Dimensions } from "react-native";
+import React, { Component } from "react";
+import Expo from "expo";
+import { database } from "../../config/config";
+import { LinearGradient } from "expo-linear-gradient";
+import { ScreenWidth, ScreenHeight, FontScale } from "../../../constant/Constant";
+import HeaderRightButton from "../../../Utils/HeaderRightButton";
+import FABView from "../../../Utils/FAB";
+import MenuScreen from "../../../Utils/MenuScreen";
+import { actionCounter } from "../../helpers/actionCounter";
+const thumbNail = require("../../../assets/images/interview.png");
+const eyeglasses = require("../../../assets/images/eyeglasses.jpg");
+const Setting = require("../../../assets/images/setting.png");
 
 export default class GetEducated extends Component {
   static navigationOptions = {
@@ -21,22 +21,20 @@ export default class GetEducated extends Component {
     super(props);
     this.state = {
       data: [],
-      topArticle: '',
+      topArticle: "",
     };
   }
 
   componentDidMount() {
     database
-      .ref('contents/articles')
-      .orderByChild('article_id')
-      .on('value', (snapshot) => {
+      .ref("contents/articles")
+      //.orderByChild('article_id')
+      .on("value", (snapshot) => {
         var temp = [];
-        //console.log(snapshot.toJSON());
         snapshot.forEach((childSnapshot) => {
           var item = childSnapshot.val();
           var key = { _uid: childSnapshot.key };
           var childData = { ...item, ...key };
-          //console.log(childData);
           temp.push(childData);
         });
         this.setState({ topArticle: temp[temp.length - 1] });
@@ -48,22 +46,22 @@ export default class GetEducated extends Component {
 
   render() {
     const pressHandler = () => {
-      const id = this.state.topArticle.article_id;
-      this.props.navigation.navigate('ArticleDetailScreen', { article_id: id });
-      actionCounter('articles', this.state.topArticle._uid, 'views');
+      const id = this.state.topArticle._uid;
+      this.props.navigation.navigate("ArticleDetailScreen", { article_id: id });
+      actionCounter("articles", this.state.topArticle._uid, "views");
     };
     return (
       <>
         <MenuScreen>
           <View
             style={{
-              backgroundColor: 'white',
-              height: '100%',
+              backgroundColor: "white",
+              height: "100%",
             }}
           >
             <View style={GetEducatedScreen.headerContainer}>
               <LinearGradient
-                colors={['#1872a7', '#5a74d1', '#a676ff']}
+                colors={["#1872a7", "#5a74d1", "#a676ff"]}
                 start={[0, 0.9]}
                 end={[1, 0.1]}
                 locations={[0, 0.5, 1]}
@@ -81,7 +79,7 @@ export default class GetEducated extends Component {
               </View>
 
               <View style={GetEducatedScreen.articleListContainer}>
-                <FlatList data={this.state.data} renderItem={({ item }) => <Item item={item} navigation={this.props.navigation} />} keyExtractor={(item) => item.article_id} />
+                <FlatList data={this.state.data} renderItem={({ item }) => <Item item={item} navigation={this.props.navigation} />} keyExtractor={(item) => item._uid} />
               </View>
             </View>
           </View>
@@ -93,11 +91,11 @@ export default class GetEducated extends Component {
 }
 
 function Item({ item, navigation }) {
-  //console.log(item.article_id)
-  const id = item.article_id;
+  //console.log(item.key);
+  const id = item._uid;
   const pressHandler = () => {
-    navigation.navigate('ArticleDetailScreen', { article_id: id });
-    actionCounter('articles', item._uid, 'views');
+    navigation.navigate("ArticleDetailScreen", { article_id: id });
+    actionCounter("articles", item._uid, "views");
   };
   return (
     <TouchableOpacity onPress={pressHandler}>
@@ -117,22 +115,22 @@ const GetEducatedScreen = StyleSheet.create({
   header: {
     paddingTop: 40,
     marginHorizontal: 30,
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
   },
   title: {
     fontSize: 30,
-    color: 'white',
-    fontWeight: 'bold',
+    color: "white",
+    fontWeight: "bold",
   },
   headerContainer: {
-    overflow: 'hidden',
+    overflow: "hidden",
     borderBottomLeftRadius: 35,
     borderBottomRightRadius: 35,
-    position: 'absolute',
+    position: "absolute",
     height: 210,
-    width: Dimensions.get('window').width,
+    width: Dimensions.get("window").width,
   },
   topArticleContainer: {
     marginTop: 90,
@@ -143,7 +141,7 @@ const GetEducatedScreen = StyleSheet.create({
     flex: 1,
   },
   articleItem: {
-    flexDirection: 'row',
+    flexDirection: "row",
     marginVertical: 10,
   },
   itemImage: {
@@ -153,24 +151,24 @@ const GetEducatedScreen = StyleSheet.create({
     marginRight: 20,
   },
   articleSubject: {
-    flexWrap: 'wrap',
-    fontWeight: 'bold',
+    flexWrap: "wrap",
+    fontWeight: "bold",
     fontSize: 18,
-    color: '#24559E',
+    color: "#24559E",
   },
   articleDate: {
     fontSize: 12,
-    color: '#1772A6',
+    color: "#1772A6",
     paddingBottom: 5,
     paddingTop: 2,
   },
   articleAbstract: {
-    flexWrap: 'wrap',
+    flexWrap: "wrap",
     fontSize: 14,
-    color: '#2D9CDB',
+    color: "#2D9CDB",
     paddingBottom: 10,
     borderBottomWidth: 1,
-    borderColor: '#24559E',
+    borderColor: "#24559E",
   },
   topArticleImage: {
     width: ScreenWidth - 60,
@@ -180,7 +178,7 @@ const GetEducatedScreen = StyleSheet.create({
     borderRadius: 14,
   },
   topArticleText: {
-    position: 'absolute',
+    position: "absolute",
     top: ScreenWidth * 0.6 - 86,
     paddingLeft: 20,
     paddingTop: 7,
@@ -190,8 +188,8 @@ const GetEducatedScreen = StyleSheet.create({
     borderBottomLeftRadius: 14,
     borderBottomRightRadius: 14,
     fontSize: 24,
-    fontWeight: 'bold',
-    color: 'white',
-    backgroundColor: 'rgba(0, 0, 0, 0.4)',
+    fontWeight: "bold",
+    color: "white",
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
   },
 });
