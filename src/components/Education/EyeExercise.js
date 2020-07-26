@@ -164,7 +164,7 @@ class EyeEx extends Component {
           {playingStatus == 0 && (
             <View style={styles.secondaryContainer}>
               <View style={styles.textContain}>
-                <Text style={styles.text}>{'按下「開始」，\n讓眼睛離開手機屏幕，\n跟隨聲音導航開始護眼運動'}</Text>
+                <Text style={styles.text}>{'按下「開始」\n讓眼睛離開手機屏幕\n跟隨聲音導航開始護眼運動'}</Text>
               </View>
               <View style={{ flex: 1, alignItems: 'center' }}>
                 <TouchableOpacity
@@ -181,10 +181,16 @@ class EyeEx extends Component {
           {playingStatus == 1 && (
             <View style={styles.secondaryContainer}>
               <View style={styles.textContain}>
-                <Text style={styles.text}>
-                  你已完成{audioIndex}/{audios.length}段護眼運動。{'\n'}
-                  想繼續嗎？
-                </Text>
+                {audioIndex == 0 ? (
+                  <Text style={styles.text}>
+                    剛才放鬆了雙眼{'\n'}現在正式開始，{'\n'}總共{audios.length}段的護眼運動
+                  </Text>
+                ) : (
+                  <Text style={styles.text}>
+                    你已完成{audioIndex}/{audios.length}段護眼運動{'\n'}
+                    想繼續嗎？
+                  </Text>
+                )}
               </View>
               <View
                 style={{
@@ -201,21 +207,23 @@ class EyeEx extends Component {
                 >
                   <Text style={styles.buttonText}>繼續</Text>
                 </TouchableOpacity>
-                <TouchableOpacity
-                  style={styles.boxes}
-                  onPress={() => {
-                    if (this.state.isBuffering == false) PressPlayButton(2);
-                  }}
-                >
-                  <Text style={styles.buttonText}>完前緩和</Text>
-                </TouchableOpacity>
+                {audioIndex != 0 && (
+                  <TouchableOpacity
+                    style={styles.boxes}
+                    onPress={() => {
+                      if (this.state.isBuffering == false) PressPlayButton(2);
+                    }}
+                  >
+                    <Text style={styles.buttonText}>完前緩和</Text>
+                  </TouchableOpacity>
+                )}
               </View>
             </View>
           )}
           {playingStatus == 2 && (
             <View style={styles.secondaryContainer}>
               <View style={styles.textContain}>
-                <Text style={styles.text}>{'你已完成全部護眼運動，\n只差讓眼睛緩和的步驟！'}</Text>
+                <Text style={styles.text}>{'你已完成全部護眼運動\n只差讓眼睛緩和的步驟！'}</Text>
               </View>
               <View style={{ flex: 1, alignItems: 'center' }}>
                 <TouchableOpacity
