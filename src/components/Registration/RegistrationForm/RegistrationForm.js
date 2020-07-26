@@ -614,7 +614,10 @@ const FormDetails = ({
                 />
               </>
             )}
-            {!isProfessional ? (
+
+            {
+              //temporarily not using
+              /* {!isProfessional ? (
               <CheckBox
                 containerStyle={{
                   backgroundColor: "transparent",
@@ -632,7 +635,8 @@ const FormDetails = ({
                 center
                 title={"本人同意提供個人資料予眼科專家參考"}
               />
-            ) : null}
+            ) : null} */
+            }
           </View>
           {errorMessageFromServer != "" && (
             <Text
