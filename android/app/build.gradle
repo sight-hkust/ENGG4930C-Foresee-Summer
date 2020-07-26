@@ -183,6 +183,7 @@ android {
 }
 
 dependencies {
+    implementation project(':@react-native-community_datetimepicker')
     implementation project(':react-native-sound')
     implementation project(':react-native-orientation')
     implementation fileTree(dir: "libs", include: ["*.jar"])

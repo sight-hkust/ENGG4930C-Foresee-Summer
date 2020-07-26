@@ -179,11 +179,11 @@ export default class ArticleDetailScreen extends Component {
         </View>
 
         <View style={{ alignItems: 'center', flex: 1 }}>
-          {!this.state.isVid && this.state.audio !== '' && this.state.audio !== null && (
+          {!this.state.isVid && this.state.audio != '' && this.state.audio != null && (
             <Button title={this.state.play ? '暫停錄音' : '播放錄音'} titleStyle={ArticleDetailStyles.buttonTitle} onPress={() => PressPlayButton()} buttonStyle={ArticleDetailStyles.playButton} />
           )}
           <View style={{ flex: 1, width: ScreenWidth }}>
-            <WebView style={{ backgroundColor: 'transparent', marginTop: ScreenHeight * 0.03 }} originWhitelist={['*']} source={{ html: this.state.content }} />
+            <WebView style={{ backgroundColor: 'transparent', marginTop: ScreenHeight * 0.1 }} originWhitelist={['*']} source={{ html: this.state.content }} />
           </View>
         </View>
       </View>
@@ -195,14 +195,14 @@ const ArticleDetailStyles = StyleSheet.create({
   articleSubject: {
     position: 'absolute',
     top: 210,
-    fontSize: 30,
+    fontSize: ScreenHeight * 0.05,
     paddingLeft: 30,
     color: '#24559E',
     fontWeight: 'bold',
   },
   videoSubject: {
     position: 'absolute',
-    fontSize: 30,
+    fontSize: ScreenHeight * 0.05,
     paddingLeft: 30,
     color: '#24559E',
     fontWeight: 'bold',

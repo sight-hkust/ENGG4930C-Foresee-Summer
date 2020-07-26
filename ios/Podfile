@@ -44,7 +44,8 @@ target 'foresee' do
   # react-native-cli autolinking
   use_native_modules!
 
-  pod 'react-native-orientation', :path => '../node_modules/react-native-orientation'
+  #No react native orientation module installed
+  =begin pod 'react-native-orientation', :path => '../node_modules/react-native-orientation' =end
 
   pod 'RNSound', :path => '../node_modules/react-native-sound'
 
