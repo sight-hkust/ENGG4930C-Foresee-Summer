@@ -1,5 +1,11 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+} from "react-native";
 import MenuScreen from "../../../Utils/MenuScreen";
 import { ScreenHeight, ScreenWidth } from "../../../constant/Constant";
 import { Icon, Input } from "react-native-elements";
@@ -20,8 +26,39 @@ export const EditUserInfo = ({ route, navigation }) => {
 
   return (
     <MenuScreen>
-      {user && (
-        <View style={styles.container}>
+      <View style={styles.container}>
+        {user && (
+          <View style={{ height: 20, width: 300 }}>
+            <View
+              style={{
+                flexDirection: "row",
+                width: "100%",
+                backgroundColor: "red",
+              }}
+            >
+              <Text style={{ textAlign: "center", color: "white", flex: 1 }}>
+                姓名
+              </Text>
+              <View style={{ flexDirection: "row", flex: 2 }}>
+                <TextInput
+                  style={{
+                    borderBottomWidth: 1,
+                    borderBottomColor: "white",
+                    flex: 2,
+                  }}
+                />
+                <TextInput
+                  style={{
+                    borderBottomWidth: 1,
+                    borderBottomColor: "white",
+                    flex: 2,
+                    marginLeft: ScreenWidth * 0.02,
+                  }}
+                />
+              </View>
+            </View>
+          </View>
+          /*         
           <View style={{ width: ScreenWidth * 0.3 }}>
             {!fieldEditingState["lastName"] ? (
               <View
@@ -56,7 +93,9 @@ export const EditUserInfo = ({ route, navigation }) => {
             )}
           </View>
         </View>
-      )}
+       */
+        )}
+      </View>
     </MenuScreen>
   );
 };

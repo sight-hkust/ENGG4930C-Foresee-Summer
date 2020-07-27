@@ -70,61 +70,57 @@ export const LoginWithEmailAndPassword = ({ navigation, route }) => {
   return (
     <>
       <LinearGradientBackground>
-        <KeyboardAvoidingView behavior={"position"}>
-          <View style={styles.content}>
-            <Logo />
-            <View
-              style={{
-                marginTop: ScreenHeight * 0.1,
-                marginBottom: ScreenHeight * 0.05,
+        <KeyboardAvoidingView style={styles.content} behavior={"position"}>
+          <Logo />
+          <View
+            style={{
+              marginTop: ScreenHeight * 0.1,
+              marginBottom: ScreenHeight * 0.05,
+            }}
+          >
+            <InputTextField
+              label="電子郵件"
+              icon={MailIcon}
+              defaultValue={emailInput}
+              setValue={setEmailInput}
+              hideEmbeddedErrorMessage={true}
+            />
+            <InputTextField
+              label="密碼"
+              icon={KeyIcon}
+              defaultValue={passwordInput}
+              setValue={setPasswordInput}
+              secureTextEntry={true}
+              hideEmbeddedErrorMessage
+            />
+            <View>
+              {loginErrorMessage !== "" ? (
+                <Text
+                  style={{
+                    textAlign: "center",
+                    fontSize: FontScale * 18,
+                    fontWeight: "700",
+                    color: "#FFFFFF",
+                    flexWrap: "wrap",
+                  }}
+                >
+                  {loginErrorMessage}
+                </Text>
+              ) : null}
+            </View>
+          </View>
+          <RoundButton title={"登入"} onPress={handleLogin} />
+          <View style={styles.registrationNav}>
+            <Text style={styles.registrationNavText}>未有用戶? </Text>
+            <TouchableOpacity
+              onPress={() => {
+                navigation.navigate("Register");
               }}
             >
-              <InputTextField
-                label="電子郵件"
-                icon={MailIcon}
-                defaultValue={emailInput}
-                setValue={setEmailInput}
-                hideEmbeddedErrorMessage={true}
-              />
-              <InputTextField
-                label="密碼"
-                icon={KeyIcon}
-                defaultValue={passwordInput}
-                setValue={setPasswordInput}
-                secureTextEntry={true}
-                hideEmbeddedErrorMessage
-              />
-              <View>
-                {loginErrorMessage !== "" ? (
-                  <Text
-                    style={{
-                      textAlign: "center",
-                      fontSize: FontScale * 18,
-                      fontWeight: "700",
-                      color: "#FFFFFF",
-                      flexWrap: "wrap",
-                    }}
-                  >
-                    {loginErrorMessage}
-                  </Text>
-                ) : null}
-              </View>
-            </View>
-            <RoundButton title={"登入"} onPress={handleLogin} />
-            <View style={styles.registrationNav}>
-              <Text style={styles.registrationNavText}>未有用戶? </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate("Register");
-                }}
-              >
-                <Text
-                  style={[styles.registrationNavText, { color: "#FFFFFF" }]}
-                >
-                  登記
-                </Text>
-              </TouchableOpacity>
-            </View>
+              <Text style={[styles.registrationNavText, { color: "#FFFFFF" }]}>
+                登記
+              </Text>
+            </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
       </LinearGradientBackground>
@@ -141,7 +137,8 @@ export const LoginWithEmailAndPassword = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
   content: {
-    marginTop: ScreenHeight * 0.15,
+    flex: 1,
+    paddingTop: ScreenHeight * 0.1,
     marginHorizontal: ScreenWidth * 0.15,
   },
   registrationNav: {

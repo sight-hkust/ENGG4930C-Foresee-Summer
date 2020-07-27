@@ -83,3 +83,5 @@ buck-out/
 web-build/
 
 package-lock.json
+
+src/components/Profile/EditUserInfo.js
