@@ -137,7 +137,7 @@ export default class ArticleDetailScreen extends Component {
     };
 
     return (
-      <View style={{ backgroundColor: '#F6F6F6', height: '100%' }}>
+      <View style={{ backgroundColor: '#F6F6F6', flex: 2 }}>
         <View>
           {this.state.isVid && (
             <>
@@ -178,12 +178,12 @@ export default class ArticleDetailScreen extends Component {
           )}
         </View>
 
-        <View style={{ alignItems: 'center', flex: 1 }}>
+        <View style={{ alignItems: 'center', flex: 1, marginTop: ScreenHeight * 0.1, zIndex: 0 }}>
           {!this.state.isVid && this.state.audio != '' && this.state.audio != null && (
             <Button title={this.state.play ? '暫停錄音' : '播放錄音'} titleStyle={ArticleDetailStyles.buttonTitle} onPress={() => PressPlayButton()} buttonStyle={ArticleDetailStyles.playButton} />
           )}
-          <View style={{ flex: 1, width: ScreenWidth }}>
-            <WebView style={{ backgroundColor: 'transparent', marginTop: ScreenHeight * 0.1 }} originWhitelist={['*']} source={{ html: this.state.content }} />
+          <View style={{ width: ScreenWidth, flex: 1 }}>
+            <WebView style={{ backgroundColor: 'transparent' }} originWhitelist={['*']} source={{ html: this.state.content }} />
           </View>
         </View>
       </View>
