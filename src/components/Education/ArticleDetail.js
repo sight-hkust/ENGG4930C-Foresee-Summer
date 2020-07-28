@@ -140,7 +140,17 @@ export default class ArticleDetailScreen extends Component {
       <View style={{ backgroundColor: "#F6F6F6", flex: 1 }}>
         <View style={{ flex: 0.6, zIndex: 1 }}>
           {this.state.isVid && (
-            <View style={{ borderWidth: 3, flex: 1, borderColor: "red" }}>
+            <View>
+              {this.state.isBuffering == true && (
+                <ActivityIndicator
+                  color="#00acc1"
+                  size="large"
+                  style={{
+                    width: ScreenWidth,
+                    height: this.state.videoHeight,
+                  }}
+                />
+              )}
               <Video
                 ref={this.mountVid}
                 resizeMode="contain"
@@ -152,10 +162,8 @@ export default class ArticleDetailScreen extends Component {
                 }}
                 onFullscreenUpdate={this.fullscreencontrol}
                 style={{
-                  width: ScreenWidth,
-                  height: this.state.videoHeight,
-                  borderColor: "green",
-                  borderWidth: 3,
+                  width: this.state.isBuffering == true ? 0 : ScreenWidth,
+                  height: this.state.isBuffering == true ? 0 : this.state.videoHeight,
                 }}
               />
               <Text style={[ArticleDetailStyles.videoSubject, { top: this.state.videoHeight + 20 }]}>{this.state.subject}</Text>
@@ -163,8 +171,8 @@ export default class ArticleDetailScreen extends Component {
           )}
 
           {!this.state.isVid && (
-            <View style={{ borderWidth: 3, flex: 1, borderColor: "red" }}>
-              <Image source={{ uri: this.state.image }} style={{ width: ScreenWidth, height: ScreenWidth * 0.5625, borderColor: "green", borderWidth: 3 }} />
+            <View>
+              <Image source={{ uri: this.state.image }} style={{ width: ScreenWidth, height: ScreenWidth * 0.5625 }} />
               <LinearGradient
                 colors={["transparent", "transparent", "#F6F6F6"]}
                 locations={[0, 0.2, 1]}
@@ -180,7 +188,7 @@ export default class ArticleDetailScreen extends Component {
           )}
         </View>
 
-        <View style={{ alignItems: "center", flex: 1, zIndex: 0, borderColor: "blue", borderWidth: 3 }}>
+        <View style={{ alignItems: "center", flex: 1, zIndex: 0 }}>
           {!this.state.isVid && this.state.audio != "" && this.state.audio != null && (
             <Button title={this.state.play ? "暫停錄音" : "播放錄音"} titleStyle={ArticleDetailStyles.buttonTitle} onPress={() => PressPlayButton()} buttonStyle={ArticleDetailStyles.playButton} />
           )}
