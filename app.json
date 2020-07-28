@@ -2,12 +2,8 @@
   "expo": {
     "name": "foresee",
     "slug": "foresee",
-    "platforms": [
-      "ios",
-      "android",
-      "web"
-    ],
-    "version": "1.0.0",
+    "platforms": ["ios", "android", "web"],
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/images/ApplicationLogo.png",
     "splash": {
@@ -18,25 +14,20 @@
     "updates": {
       "fallbackToCacheTimeout": 0
     },
-    "assetBundlePatterns": [
-      "**/*"
-    ],
+    "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "ios"
+      "bundleIdentifier": "ios",
+      "buildNumber": "1.0.1"
     },
     "android": {
-      "package": "com.android"
+      "package": "hk.ust.sight.foresee",
+      "versionCode": 2
     },
     "entryPoint": "node_modules/expo/AppEntry.js",
     "packagerOpts": {
       "config": "metro.config.js",
-      "sourceExts": [
-        "js",
-        "jsx",
-        "svg",
-        "svgx"
-      ]
+      "sourceExts": ["js", "jsx", "svg", "svgx"]
     }
   }
 }

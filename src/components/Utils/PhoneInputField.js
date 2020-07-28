@@ -17,6 +17,7 @@ import {
 import data from "../Utils/countryTelCodes";
 import { Icon } from "react-native-elements";
 import Modal from "react-native-modal";
+import { heightPercentageToDP } from "react-native-responsive-screen";
 
 export const PhoneInputField = ({
   contianerStyle,
@@ -97,6 +98,7 @@ export const PhoneInputField = ({
             flex: 1,
             marginHorizontal: ScreenWidth * 0.05,
             marginVertical: ScreenHeight * 0.15,
+            overflow: "hidden",
           }}
         >
           <View style={styles.listContainer}>
@@ -116,10 +118,14 @@ export const PhoneInputField = ({
                     }}
                   >
                     <View style={styles.listItem}>
-                      <Text style={styles.listItemFlag}>{item.flag}</Text>
-                      <Text style={styles.listItemText}>
-                        {item.name} ({item.dial_code})
-                      </Text>
+                      <View style={[styles.listItemTextField, { flex: 1 }]}>
+                        <Text style={styles.listItemFlag}>{item.flag}</Text>
+                      </View>
+                      <View style={[styles.listItemTextField, { flex: 3 }]}>
+                        <Text style={styles.listItemText}>
+                          {item.name} ({item.dial_code})
+                        </Text>
+                      </View>
                     </View>
                   </TouchableOpacity>
                 </View>
@@ -160,16 +166,21 @@ const styles = StyleSheet.create({
   listContainer: {
     backgroundColor: "#FFFFFF",
   },
-  listItem: { flex: 1, flexDirection: "row", height: ScreenHeight * 0.1 },
-  listItemFlag: {
+  listItem: {
     flex: 1,
-    fontSize: 20,
+    flexDirection: "row",
+    height: ScreenHeight * 0.1,
+  },
+  listItemTextField: {
+    justifyContent: "center",
+  },
+  listItemFlag: {
+    fontSize: 30,
     textAlign: "center",
     textAlignVertical: "center",
   },
   listItemText: {
-    flex: 3,
-    fontSize:  20,
+    fontSize: 20,
     textAlign: "left",
     textAlignVertical: "center",
   },

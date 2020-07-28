@@ -42,7 +42,6 @@ export default function QrCode({ navigation, route }) {
           style={{
             fontSize: FontScale * 25,
             color: "#FFFFFF",
-            fontFamily: "Roboto",
             textAlignVertical: "center",
             textAlign: "center",
             marginBottom: "5%",

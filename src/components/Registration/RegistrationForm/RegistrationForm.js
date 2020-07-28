@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Formik } from "formik";
 import {
   Keyboard,
@@ -8,6 +8,8 @@ import {
   Picker,
   Text,
   TouchableOpacity,
+  Modal,
+  StatusBar,
 } from "react-native";
 import {
   ScreenHeight,
@@ -17,7 +19,7 @@ import {
 import { SchemaPatient } from "../Schema/SchemaPatient";
 import { SchemaProfessional } from "../Schema/SchemaProfessional";
 import { ScrollView } from "react-native-gesture-handler";
-import { RadioButton, Switch } from "react-native-paper";
+import { RadioButton, Switch, Button, Card } from "react-native-paper";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import moment from "moment";
@@ -27,12 +29,12 @@ import {
   registerChildAccount,
 } from "../RegisterAction";
 import { LinearGradientBackground } from "../../../../Utils/LinearGradientBackground";
-import Logo from "../../../../Utils/Logo";
+import Logo from "../../Utils/Logo";
 import { RoundButton } from "../../../../Utils/RoundButton";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { StyledMultiLinesInput } from "../../../../Utils/StyledMultiLinesInput";
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { SchemaRegisterPatient } from "../Schema/SchemaRegisterPatient";
-import { Portal, Dialog, Provider, List, Modal } from "react-native-paper";
+import { Portal, Dialog, Provider, List } from "react-native-paper";
 import { CheckBox, Icon } from "react-native-elements";
 import { InputTextField } from "../../Utils/InputTextField";
 import { InputDialogPicker } from "../../Utils/InputDialogPicker";
@@ -42,14 +44,38 @@ import { InputDatePickerModal } from "../../Utils/InputDatePickerModal";
 import MenuScreen from "../../../../Utils/MenuScreen";
 import PatientSearchPanel from "../../Utils/PatientSearchPanel";
 import { SchemaRegisterChild } from "../Schema/SchemaRegisterChild";
+import { CommonActions } from "@react-navigation/native";
+import { MultiLinesInputTextField } from "../../Utils/MultiLinesInputTextField";
+import { heightPercentageToDP } from "react-native-responsive-screen";
 
 export const RegistrationForm = ({ navigation, route }) => {
+  const { isProfessional, registerPatient, registerChild } = route.params;
+
+  const useMenuScreen =
+    (isProfessional && registerPatient) || (!isProfessional && registerChild);
+  return (
+    <>
+      {useMenuScreen ? (
+        <MenuScreen>
+          <FormComponent navigation={navigation} route={route} />
+        </MenuScreen>
+      ) : (
+        <LinearGradientBackground>
+          <FormComponent navigation={navigation} route={route} />
+        </LinearGradientBackground>
+      )}
+    </>
+  );
+};
+
+const FormComponent = ({ navigation, route }) => {
   const { isProfessional, registerPatient, registerChild } = route.params;
   const [isLoading, setIsLoading] = useState(false);
   const [
     isRegisterMethodDialogVisible,
     setRegisterMethodDialogVisibility,
   ] = useState(true);
+  const dateTimePickerIOSConfirmButton = useState(false);
   const [errorMessageFromServer, setErrorMessageFromServer] = useState("");
 
   const _showRegisterMethodDialog = () =>
@@ -75,128 +101,109 @@ export const RegistrationForm = ({ navigation, route }) => {
     { key: "1", label: "以電話註冊" },
   ];
   return (
-    <>
-      <LinearGradientBackground>
-        <Formik
-          initialValues={{
-            firstName: "",
-            lastName: "",
-            surName: "",
-            givenName: "",
-            selectedNameFields: "chi",
-            chineseNameError: "",
-            englishNameError: "",
-            birthday: "",
-            parent: {},
-            parentSelectionDisabled: false,
-            email: "",
-            password: "",
-            confirmPassword: "",
-            tel_country_code: "+852",
-            tel_number: "",
-            job: "",
-            role: "",
-            history: "",
-            disease: "",
-            allowedSearch: false,
-          }}
-          onSubmit={async (
-            values,
-            { setSubmitting, resetForm, setStatus, setErrors }
-          ) => {
-            try {
-              switch (true) {
-                case registerChild:
-                  registerChildAccount({
-                    values,
-                    registerChild,
-                    returnOnComplete: () => {
-                      setIsLoading(false);
-                      navigation.navigate("HomeScreen");
-                      resetForm({});
-                      setStatus({ success: true });
-                    },
-                  });
-                  break;
-                case registerPatient:
-                  registerPatientAccount({
-                    values,
-                    returnOnComplete: () => {
-                      setIsLoading(false);
-                      navigation.navigate("ProfMainMenu");
-                      resetForm({});
-                      setStatus({ success: true });
-                    },
-                    setServerError: setServerError,
-                  });
-                  break;
-                default:
-                  createAccount({
-                    values,
-                    navigation,
-                    isProfessional,
-                    setServerError: setServerError,
-                    returnOnComplete: () => {
-                      setIsLoading(false);
-                      resetForm({});
-                      setStatus({ success: true });
-                    },
-                  });
-                  break;
-              }
-              /* isProfessional && registerPatient
-                ? registerPatientAccount({
-                    values,
-                    isProfessional,
-                    registerPatient,
-                    returnOnComplete: () => {
-                      setIsLoading(false);
-                      navigation.navigate("ProfMainMenu");
-                    },
-                    setServerError: setServerError,
-                  })
-                : createAccount({
-                    values,
-                    navigation,
-                    isProfessional,
-                    setServerError: setServerError,
-                  });
-              resetForm({});
-              setStatus({ success: true }); */
-            } catch (error) {
-              setSubmitting(false);
-              setStatus({ success: false });
-              setErrors({ submit: error.message });
-            }
-          }}
-          validationSchema={
-            isProfessional
-              ? registerPatient
-                ? SchemaRegisterPatient
-                : SchemaProfessional
-              : registerChild
-              ? SchemaRegisterChild
-              : SchemaPatient
+    <Formik
+      initialValues={{
+        firstName: "",
+        lastName: "",
+        surName: "",
+        givenName: "",
+        selectedNameFields: "chi",
+        chineseNameError: "",
+        englishNameError: "",
+        birthday: "",
+        parent: {},
+        parentSelectionDisabled: false,
+        email: "",
+        password: "",
+        confirmPassword: "",
+        tel_country_code: "+852",
+        tel_number: "",
+        job: "",
+        role: "",
+        history: "",
+        disease: "",
+        allowedSearch: false,
+      }}
+      onSubmit={async (
+        values,
+        { setSubmitting, resetForm, setStatus, setErrors }
+      ) => {
+        try {
+          switch (true) {
+            case registerChild:
+              registerChildAccount({
+                values,
+                registerChild,
+                returnOnComplete: () => {
+                  setIsLoading(false);
+                  navigation.dispatch(
+                    CommonActions.navigate({
+                      name: "HomeScreen",
+                      params: {
+                        actions: navigation.popToTop(),
+                      },
+                    })
+                  );
+                  resetForm({});
+                  setStatus({ success: true });
+                },
+              });
+              break;
+            case registerPatient:
+              registerPatientAccount({
+                values,
+                returnOnComplete: () => {
+                  setIsLoading(false);
+                  navigation.navigate("ProfMainMenu");
+                  resetForm({});
+                  setStatus({ success: true });
+                },
+                setServerError: setServerError,
+              });
+              break;
+            default:
+              createAccount({
+                values,
+                navigation,
+                isProfessional,
+                setServerError: setServerError,
+                returnOnComplete: () => {
+                  setIsLoading(false);
+                  resetForm({});
+                  setStatus({ success: true });
+                },
+              });
+              break;
           }
-          validateOnBlur={false}
-          validateOnChange={false}
-        >
-          {(formikProps) => (
-            <FormDetails
-              formikProps={formikProps}
-              isProfessional={isProfessional}
-              registerPatient={registerPatient}
-              isLoading={isLoading}
-              errorMessageFromServer={errorMessageFromServer}
-              registerChild={registerChild}
-            />
-          )}
-        </Formik>
-      </LinearGradientBackground>
-      <Provider>
-        <Modal visible={isRegisterMethodDialogVisible}></Modal>
-      </Provider>
-    </>
+        } catch (error) {
+          setSubmitting(false);
+          setStatus({ success: false });
+          setErrors({ submit: error.message });
+        }
+      }}
+      validationSchema={
+        isProfessional
+          ? registerPatient
+            ? SchemaRegisterPatient
+            : SchemaProfessional
+          : registerChild
+          ? SchemaRegisterChild
+          : SchemaPatient
+      }
+      validateOnBlur={false}
+      validateOnChange={false}
+    >
+      {(formikProps) => (
+        <FormDetails
+          formikProps={formikProps}
+          isProfessional={isProfessional}
+          registerPatient={registerPatient}
+          isLoading={isLoading}
+          errorMessageFromServer={errorMessageFromServer}
+          registerChild={registerChild}
+        />
+      )}
+    </Formik>
   );
 };
 
@@ -246,8 +253,19 @@ const FormDetails = ({
   };
 
   const handleDateChange = (event, selectedDate) => {
-    _hideDatePicker();
-    setFieldValue("birthday", moment(selectedDate).format("YYYY-MM-DD"));
+    const currentDate = selectedDate || new Date();
+    setDatePickerVisibility(false);
+    setFieldValue("birthday", moment(currentDate).format("YYYY-MM-DD"));
+  };
+
+  const handleDateConfirm = (selectedDate) => {
+    const currentDate = selectedDate || new Date();
+    setDatePickerVisibility(false);
+    setFieldValue("birthday", moment(currentDate).format("YYYY-MM-DD"));
+  };
+
+  const handleDatePickerTouchStart = () => {
+    console.log("HI");
   };
 
   const handleRoleDialogOption = (value) => {
@@ -282,367 +300,422 @@ const FormDetails = ({
 
   return (
     <>
-      {(isProfessional && registerPatient) ||
-      (!isProfessional && registerChild) ? (
-        <MenuScreen />
-      ) : null}
-
-      <ScrollView
-        style={{
-          paddingHorizontal: ScreenWidth * 0.11,
-          marginBottom:
-            ScreenHeight * 0.1 * (isProfessional && registerPatient),
-          position: "absolute",
-          width: "100%",
-          top: 0,
-          bottom: 0,
-        }}
-        showsVerticalScrollIndicator={false}
-        keyboardDismissMode="on-drag"
-      >
-        {!registerPatient ? (
-          !registerChild ? (
-            <Logo style={styles.logoContainer} />
+      <View>
+        <ScrollView
+          style={{
+            paddingHorizontal: ScreenWidth * 0.11,
+            marginBottom:
+              ScreenHeight * 0.1 * (isProfessional && registerPatient),
+            width: "100%",
+          }}
+          showsVerticalScrollIndicator={false}
+          keyboardDismissMode="on-drag"
+        >
+          {!registerPatient ? (
+            !registerChild ? (
+              <Logo style={styles.logoContainer} />
+            ) : (
+              <Text
+                style={{
+                  textAlign: "center",
+                  marginVertical: ScreenHeight * 0.045,
+                  fontSize: 30,
+                  fontWeight: "bold",
+                  color: "#fff",
+                }}
+              >
+                登記子女帳號
+              </Text>
+            )
           ) : (
             <Text
               style={{
                 textAlign: "center",
-                marginVertical: ScreenHeight * 0.045,
-                fontSize: 30,
+                marginVertical: 40,
+                fontSize: 35,
                 fontWeight: "bold",
                 color: "#fff",
               }}
             >
-              {" "}
-              登記子女帳號{" "}
+              登記病人
             </Text>
-          )
-        ) : (
-          <Text
-            style={{
-              textAlign: "center",
-              marginVertical: 40,
-              fontSize: 35,
-              fontWeight: "bold",
-              color: "#fff",
-            }}
-          >
-            {" "}
-            登記病人{" "}
-          </Text>
-        )}
-
-        <View style={styles.inputFieldsContainer}>
-          {selectedNameFields === "chi" ? (
-            <View
-              style={{
-                flexDirection: "row",
-              }}
-            >
-              <InputTextField
-                label={"姓"}
-                icon={personIcon}
-                contianerStyle={{ flex: 1, marginRight: "3%" }}
-                iconStyle={{ flex: 6 }}
-                formikProps={formikProps}
-                formikKey={"lastName"}
-                hideEmbbededMessage={true}
-              />
-              <InputTextField
-                label={"名"}
-                iconStyle={{ flex: 6 }}
-                contianerStyle={{ flex: 1 }}
-                formikProps={formikProps}
-                formikKey={"firstName"}
-                hideEmbbededMessage={true}
-              />
-            </View>
-          ) : null}
-          {selectedNameFields === "eng" ? (
-            <View
-              style={{
-                flexDirection: "row",
-              }}
-            >
-              <InputTextField
-                label={"Given Name"}
-                iconStyle={{ flex: 0.3 }}
-                contianerStyle={{ flex: 1, marginRight: "3%" }}
-                formikProps={formikProps}
-                formikKey={"givenName"}
-                hideEmbbededMessage={true}
-              />
-              <InputTextField
-                label={"Surname"}
-                contianerStyle={{ flex: 1 }}
-                iconStyle={{ flex: 0.3 }}
-                formikProps={formikProps}
-                formikKey={"surName"}
-                hideEmbbededMessage={true}
-              />
-            </View>
-          ) : null}
-          <View
-            style={{ flexDirection: "row", paddingLeft: ScreenWidth * 0.02 }}
-          >
-            <View style={{ flexDirection: "row", marginRight: "4%" }}>
-              <Text
-                style={{
-                  textAlignVertical: "center",
-                  fontSize: 18,
-                  color: "#FFFFFF",
-                }}
-              >
-                中文
-              </Text>
-              <RadioButton
-                value="chi"
-                status={selectedNameFields === "chi" ? "checked" : "unchecked"}
-                onPress={() => {
-                  setSelectedNameFields("chi");
-                  setFieldValue("selectedNameFields", "chi");
-                }}
-                color="#FFFFFF"
-                uncheckedColor="#FFFFFF"
-              />
-            </View>
-            <View style={{ flexDirection: "row" }}>
-              <Text
-                style={{
-                  textAlignVertical: "center",
-                  fontSize: 20,
-                  color: "#FFFFFF",
-                }}
-              >
-                Eng
-              </Text>
-              <RadioButton
-                value="eng"
-                status={selectedNameFields === "eng" ? "checked" : "unchecked"}
-                onPress={() => {
-                  setSelectedNameFields("eng");
-                  setFieldValue("selectedNameFields", "eng");
-                }}
-                color="#FFFFFF"
-                uncheckedColor="#FFFFFF"
-              />
-            </View>
-          </View>
-
-          {formikProps.errors &&
-          (formikProps.errors["chineseNameError"] ||
-            formikProps.errors["englishNameError"]) ? (
-            <Text
-              style={{
-                paddingTop: ScreenWidth * 0.01,
-                paddingLeft: ScreenWidth * 0.08,
-                textAlign: "left",
-                fontSize: FontScale * 20,
-                fontWeight: "700",
-                color: "#FFFD78",
-                flexWrap: "wrap",
-              }}
-            >
-              {"* " +
-                (formikProps.errors["chineseNameError"]
-                  ? formikProps.errors["chineseNameError"]
-                  : formikProps.errors["englishNameError"])}
-            </Text>
-          ) : null}
-
-          {isProfessional && !registerPatient ? (
-            <InputDialogPicker
-              label={"職業"}
-              icon={jobIcon}
-              onDismiss={() => _hideRoleDialog()}
-              value={values.role}
-              list={roleList}
-              formikKey={"role"}
-              formikProps={formikProps}
-              showDialog={_showRoleDialog}
-            />
-          ) : (
-            <InputDatePickerModal
-              icon={hourGlassIcon}
-              formikProps={formikProps}
-              formikKey="birthday"
-              showDatePicker={_showDatePicker}
-              value={values.birthday}
-            />
           )}
-          {registerPatient ? (
-            <>
+
+          <View style={styles.inputFieldsContainer}>
+            {selectedNameFields === "chi" ? (
               <View
                 style={{
                   flexDirection: "row",
-                  paddingLeft: "4%",
-                  marginVertical: ScreenHeight * 0.02,
                 }}
               >
-                <View
-                  style={{
-                    flex: 2,
-                    alignItems: "center",
-                    justifyContent: "center",
-                    alignSelf: "center",
+                <InputTextField
+                  label={"姓"}
+                  icon={personIcon}
+                  containerStyle={{
+                    flex: 1,
+                    marginRight: "3%",
+                    marginBottom: "-2%",
                   }}
-                >
-                  {FamilyIcon}
-                </View>
-                <Text
-                  style={{
-                    flex: 8,
-                    fontSize: FontScale * 18,
-                    color: "white",
-                    textAlignVertical: "center",
-                  }}
-                >
-                  搜尋病人家屬
-                </Text>
-                <Switch
-                  value={isFamilySearchFieldVisible}
-                  onValueChange={_toggleFamilySearchSwitch}
-                  color="#FFFFFF"
+                  iconStyle={{ flex: 6 }}
+                  formikProps={formikProps}
+                  formikKey={"lastName"}
+                  hideEmbbededMessage={true}
+                />
+                <InputTextField
+                  label={"名"}
+                  iconStyle={{ flex: 6 }}
+                  containerStyle={{ flex: 1, marginBottom: "-2%" }}
+                  formikProps={formikProps}
+                  formikKey={"firstName"}
+                  hideEmbbededMessage={true}
                 />
               </View>
-              {isFamilySearchFieldVisible && (
-                <View>
-                  <TouchableOpacity onPress={_showFamilySearchDialog}>
-                    <Text
-                      style={{
-                        backgroundColor: "rgba(255, 255, 255, 0.4)",
-                        height: ScreenHeight * 0.065,
-                        borderRadius: ScreenHeight * 0.035,
-                        fontSize: FontScale * 18,
-                        marginBottom: ScreenHeight * 0.01,
-                        paddingHorizontal: "10%",
-                        color: "#FFFFFF",
-                        textAlignVertical: "center",
-                        textAlign: "center",
-                      }}
-                    >
-                      {values.parent ? values.parent["name"] : ""}
-                    </Text>
-                  </TouchableOpacity>
-                </View>
-              )}
-            </>
-          ) : null}
-          {!registerChild ? (
-            <>
-              <PhoneInputField
-                label={"電話號碼"}
-                icon={PhoneIcon}
-                formikProps={formikProps}
-                formikKey="tel_number"
-                keyboardType="phone-pad"
-              />
-              <InputTextField
-                label={"電子郵件"}
-                icon={MailIcon}
-                formikProps={formikProps}
-                formikKey={"email"}
-              />
-            </>
-          ) : null}
-          {registerPatient || registerChild ? (
-            <>
-              <InputTextField
-                label="職業（非必須）"
+            ) : null}
+            {selectedNameFields === "eng" ? (
+              <View
+                style={{
+                  flexDirection: "row",
+                }}
+              >
+                <InputTextField
+                  label={"Given Name"}
+                  containerStyle={{
+                    flex: 1,
+                    marginRight: "3%",
+                    marginBottom: "-2%",
+                  }}
+                  iconStyle={{ flex: 0.3 }}
+                  formikProps={formikProps}
+                  formikKey={"givenName"}
+                  hideEmbbededMessage={true}
+                />
+                <InputTextField
+                  label={"Surname"}
+                  containerStyle={{ flex: 1, marginBottom: "-2%" }}
+                  iconStyle={{ flex: 0.3 }}
+                  formikProps={formikProps}
+                  formikKey={"surName"}
+                  hideEmbbededMessage={true}
+                />
+              </View>
+            ) : null}
+            <View
+              style={{ flexDirection: "row", paddingLeft: ScreenWidth * 0.02 }}
+            >
+              <View
+                style={{
+                  flexDirection: "row",
+                  marginRight: "4%",
+                }}
+              >
+                <Text
+                  style={{
+                    alignSelf: "center",
+                    textAlignVertical: "center",
+                    fontSize: 18,
+                    color: "#FFFFFF",
+                  }}
+                >
+                  中文
+                </Text>
+                <RadioButton
+                  value="chi"
+                  status={
+                    selectedNameFields === "chi" ? "checked" : "unchecked"
+                  }
+                  onPress={() => {
+                    setSelectedNameFields("chi");
+                    setFieldValue("selectedNameFields", "chi");
+                  }}
+                  color="#FFFFFF"
+                  uncheckedColor="#FFFFFF"
+                />
+              </View>
+              <View style={{ flexDirection: "row" }}>
+                <Text
+                  style={{
+                    alignSelf: "center",
+                    textAlignVertical: "center",
+                    fontSize: 20,
+                    color: "#FFFFFF",
+                  }}
+                >
+                  Eng
+                </Text>
+                <RadioButton
+                  value="eng"
+                  status={
+                    selectedNameFields === "eng" ? "checked" : "unchecked"
+                  }
+                  onPress={() => {
+                    setSelectedNameFields("eng");
+                    setFieldValue("selectedNameFields", "eng");
+                  }}
+                  color="#FFFFFF"
+                  uncheckedColor="#FFFFFF"
+                />
+              </View>
+            </View>
+
+            {formikProps.errors &&
+            (formikProps.errors["chineseNameError"] ||
+              formikProps.errors["englishNameError"]) ? (
+              <Text
+                adjustsFontSizeToFit={true}
+                style={{
+                  paddingTop: ScreenWidth * 0.01,
+                  paddingLeft: ScreenWidth * 0.08,
+                  textAlign: "left",
+                  fontSize: 20,
+                  fontWeight: "700",
+                  color: "#FFFD78",
+                  flexWrap: "wrap",
+                }}
+              >
+                {"* " +
+                  (formikProps.errors["chineseNameError"]
+                    ? formikProps.errors["chineseNameError"]
+                    : formikProps.errors["englishNameError"])}
+              </Text>
+            ) : null}
+
+            {isProfessional && !registerPatient ? (
+              <InputDialogPicker
+                label={"職業"}
                 icon={jobIcon}
-                formikKey="job"
+                onDismiss={() => _hideRoleDialog()}
+                value={values.role}
+                list={roleList}
+                formikKey={"role"}
                 formikProps={formikProps}
+                showDialog={_showRoleDialog}
               />
-              <StyledMultiLinesInput
-                label="家庭病史（非必須）"
-                icon={historyIcon}
-                formikKey="history"
+            ) : (
+              <InputDatePickerModal
+                icon={hourGlassIcon}
                 formikProps={formikProps}
+                formikKey="birthday"
+                showDatePicker={_showDatePicker}
+                value={values.birthday}
               />
-              <StyledMultiLinesInput
-                label="已知眼疾（非必須）"
-                icon={illnessIcon}
-                formikKey="disease"
-                formikProps={formikProps}
+            )}
+            {registerPatient ? (
+              <>
+                <View
+                  style={{
+                    flexDirection: "row",
+                    paddingLeft: "4%",
+                    marginVertical: ScreenHeight * 0.02,
+                  }}
+                >
+                  <View
+                    style={{
+                      flex: 2,
+                      alignItems: "center",
+                      justifyContent: "center",
+                      alignSelf: "center",
+                    }}
+                  >
+                    {FamilyIcon}
+                  </View>
+                  <Text
+                    style={{
+                      flex: 8,
+                      fontSize: FontScale * 18,
+                      color: "white",
+                      textAlignVertical: "center",
+                    }}
+                  >
+                    搜尋病人家屬
+                  </Text>
+                  <Switch
+                    value={isFamilySearchFieldVisible}
+                    onValueChange={_toggleFamilySearchSwitch}
+                    color="#FFFFFF"
+                  />
+                </View>
+                {isFamilySearchFieldVisible && (
+                  <View>
+                    <TouchableOpacity onPress={_showFamilySearchDialog}>
+                      <Text
+                        style={{
+                          backgroundColor: "rgba(255, 255, 255, 0.4)",
+                          height: ScreenHeight * 0.065,
+                          borderRadius: ScreenHeight * 0.035,
+                          fontSize: FontScale * 18,
+                          marginBottom: ScreenHeight * 0.01,
+                          paddingHorizontal: "10%",
+                          color: "#FFFFFF",
+                          textAlignVertical: "center",
+                          textAlign: "center",
+                        }}
+                      >
+                        {values.parent ? values.parent["name"] : ""}
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              </>
+            ) : null}
+            {!registerChild ? (
+              <>
+                <PhoneInputField
+                  label={"電話號碼"}
+                  icon={PhoneIcon}
+                  formikProps={formikProps}
+                  formikKey="tel_number"
+                  keyboardType="phone-pad"
+                />
+                <InputTextField
+                  label={"電子郵件"}
+                  icon={MailIcon}
+                  formikProps={formikProps}
+                  formikKey={"email"}
+                />
+              </>
+            ) : null}
+            {registerPatient || registerChild ? (
+              <>
+                <InputTextField
+                  label="職業（非必須）"
+                  icon={jobIcon}
+                  formikKey="job"
+                  formikProps={formikProps}
+                />
+                <MultiLinesInputTextField
+                  label="家庭病史（非必須）"
+                  icon={historyIcon}
+                  formikKey="history"
+                  formikProps={formikProps}
+                />
+                <MultiLinesInputTextField
+                  label="已知眼疾（非必須）"
+                  icon={illnessIcon}
+                  formikKey="disease"
+                  formikProps={formikProps}
+                />
+              </>
+            ) : (
+              <>
+                <InputTextField
+                  containerStyle={{ height: "auto" }}
+                  label={"密碼"}
+                  icon={KeyIcon}
+                  formikProps={formikProps}
+                  formikKey="password"
+                  secureTextEntry
+                />
+                <InputTextField
+                  label={"確認密碼"}
+                  icon={KeyIcon}
+                  formikProps={formikProps}
+                  formikKey="confirmPassword"
+                  secureTextEntry
+                />
+              </>
+            )}
+
+            {
+              //temporarily not using
+              /* {!isProfessional ? (
+              <CheckBox
+                containerStyle={{
+                  backgroundColor: "transparent",
+                  borderWidth: 0,
+                }}
+                textStyle={{
+                  textAlign: "center",
+                  fontSize: 20,
+                  color: "#FFFFFF",
+                }}
+                checkedColor={"#FFFFFF"}
+                uncheckedColor={"#E3E3E3"}
+                checked={values.allowedSearch}
+                onPress={toggleCheckbox}
+                center
+                title={"本人同意提供個人資料予眼科專家參考"}
               />
-            </>
-          ) : (
-            <>
-              <InputTextField
-                containerStyle={{ height: "auto" }}
-                label={"密碼"}
-                icon={KeyIcon}
-                formikProps={formikProps}
-                formikKey="password"
-                secureTextEntry
-              />
-              <InputTextField
-                label={"確認密碼"}
-                icon={KeyIcon}
-                formikProps={formikProps}
-                formikKey="confirmPassword"
-                secureTextEntry
-              />
-            </>
-          )}
-          {!isProfessional ? (
-            <CheckBox
-              containerStyle={{
-                backgroundColor: "transparent",
-                borderWidth: 0,
-              }}
-              textStyle={{
+            ) : null} */
+            }
+          </View>
+          {errorMessageFromServer != "" && (
+            <Text
+              style={{
+                paddingBottom: ScreenWidth * 0.02,
                 textAlign: "center",
                 fontSize: 20,
-                color: "#FFFFFF",
+                fontWeight: "700",
+                color: "#F34555D3",
+                flexWrap: "wrap",
               }}
-              checkedColor={"#FFFFFF"}
-              uncheckedColor={"#E3E3E3"}
-              fontFamily="Roboto"
-              checked={values.allowedSearch}
-              onPress={toggleCheckbox}
-              center
-              title={"本人同意提供個人資料予眼科專家參考"}
-            />
-          ) : null}
-        </View>
-        {errorMessageFromServer != "" && (
-          <Text
-            style={{
-              paddingBottom: ScreenWidth * 0.02,
-              textAlign: "center",
-              fontSize: 20,
-              fontWeight: "700",
-              color: "#F34555D3",
-              flexWrap: "wrap",
+            >
+              {errorMessageFromServer}
+            </Text>
+          )}
+          <RoundButton
+            buttonStyle={{ marginBottom: ScreenHeight * 0.1 }}
+            title="提交"
+            onPress={() => {
+              Keyboard.dismiss();
+              formikProps.handleSubmit();
             }}
-          >
-            {errorMessageFromServer}
-          </Text>
+          />
+        </ScrollView>
+        {Platform.OS === "android" ? (
+          isDatePickerVisible && (
+            <DateTimePicker
+              testID="dateTimePicker"
+              mode="date"
+              display="spinner"
+              value={
+                values.birthday === ""
+                  ? new Date()
+                  : moment(values.birthday).toDate()
+              }
+              onChange={handleDateChange}
+            />
+          )
+        ) : (
+          <DateTimePickerModal
+            date={
+              values.birthday === ""
+                ? new Date()
+                : moment(values.birthday).toDate()
+            }
+            maximumDate={new Date()}
+            isVisible={isDatePickerVisible}
+            onConfirm={handleDateConfirm}
+            onCancel={_hideDatePicker}
+          />
         )}
-        <RoundButton
-          buttonStyle={{ marginBottom: ScreenHeight * 0.1 }}
-          title="提交"
-          onPress={() => {
-            Keyboard.dismiss();
-            formikProps.handleSubmit();
-          }}
-        />
-      </ScrollView>
-      {isDatePickerVisible && (
-        <DateTimePicker
-          mode="date"
-          display={Platform.OS === "android" ? "spinner" : "default"}
-          value={
-            values.birthday === ""
-              ? new Date()
-              : moment(values.birthday).toDate()
-          }
-          onChange={handleDateChange}
-        />
-      )}
+      </View>
       <Provider>
         <Portal>
+          {/* {Platform.OS === "ios" ? (
+            <Modal visible={isDatePickerVisible} onDismiss={_hideDatePicker}>
+              <View
+                style={{
+                  backgroundColor: "white",
+                }}
+              >
+                <DateTimePicker
+                  testID="dateTimePicker"
+                  mode="date"
+                  display="spinner"
+                  value={
+                    values.birthday === ""
+                      ? new Date()
+                      : moment(values.birthday).toDate()
+                  }
+                  onDateChange
+                />
+                <View>
+                  <Button onPress={_hideDatePicker}>CONFIRM</Button>
+                </View>
+              </View>
+            </Modal>
+          ) : null} */}
+
           <Dialog visible={isRoleDialogVisible} onDismiss={_hideRoleDialog}>
             <Dialog.Title>請選擇你的職業</Dialog.Title>
             <Dialog.Content>
@@ -677,7 +750,9 @@ const styles = StyleSheet.create({
   logoContainer: {
     marginTop: ScreenHeight * 0.1,
   },
-  inputFieldsContainer: { marginBottom: "10%" },
+  inputFieldsContainer: {
+    marginBottom: "10%",
+  },
   centeredView: {
     flex: 1,
     justifyContent: "center",

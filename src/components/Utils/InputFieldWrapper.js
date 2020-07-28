@@ -7,7 +7,7 @@ import {
 } from "../../../constant/Constant";
 
 export const InputFieldWrapper = ({
-  contianerStyle,
+  containerStyle,
   labelContainerStyle,
   iconStyle,
   labelStyle,
@@ -19,10 +19,12 @@ export const InputFieldWrapper = ({
   hideEmbbededMessage,
 }) => {
   return (
-    <View style={[styles.container, contianerStyle]}>
+    <View style={[styles.container, containerStyle]}>
       <View style={[styles.labelContainer, labelContainerStyle]}>
         <View style={[styles.icon, iconStyle]}>{icon}</View>
-        <Text style={[styles.label, labelStyle]}>{label}</Text>
+        <View style={{ flex: 8, justifyContent: "center" }}>
+          <Text style={[styles.label, labelStyle]}>{label}</Text>
+        </View>
       </View>
       <View style={styles.inputContainer}>{children}</View>
       {!hideEmbbededMessage &&
@@ -46,7 +48,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingLeft: "2%",
     paddingBottom: "5%",
-    height: ScreenHeight * 0.06,
+    height: ScreenHeight * 0.08,
   },
   icon: {
     flex: 2,
@@ -55,7 +57,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   label: {
-    flex: 8,
     fontSize: 20,
     color: "white",
     textAlignVertical: "center",
