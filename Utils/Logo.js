@@ -7,14 +7,10 @@ import { ScreenWidth, ScreenHeight, FontScale } from "../constant/Constant";
 export const Logo = ({ style, iconStyle, textStyle, hideText = false }) => {
   return (
     <View style={[styles.logoContainer, style]}>
-      <Image
-        style={[styles.icon, iconStyle]}
-        source={icon}
-        resizeMode="contain"
-      />
+      <Image style={[styles.icon, iconStyle]} source={icon} resizeMode="contain" />
       {hideText ? null : (
         <View style={{ flex: 4, justifyContent: "center" }}>
-          <Text style={[styles.logoText, textStyle]}>ForeSEE</Text>
+          <Text style={[styles.logoText, textStyle]}>ForeSee</Text>
         </View>
       )}
     </View>

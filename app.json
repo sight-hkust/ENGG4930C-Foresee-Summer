@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "foresee",
+    "name": "ForeSee",
     "slug": "foresee",
     "platforms": ["ios", "android", "web"],
     "version": "1.0.1",
