@@ -424,6 +424,8 @@ const FormDetails = ({
                     selectedNameFields === "chi" ? "checked" : "unchecked"
                   }
                   onPress={() => {
+                    setFieldValue("givenName", "");
+                    setFieldValue("surName", "");
                     setSelectedNameFields("chi");
                     setFieldValue("selectedNameFields", "chi");
                   }}
@@ -448,6 +450,8 @@ const FormDetails = ({
                     selectedNameFields === "eng" ? "checked" : "unchecked"
                   }
                   onPress={() => {
+                    setFieldValue("firstName", "");
+                    setFieldValue("lastName", "");
                     setSelectedNameFields("eng");
                     setFieldValue("selectedNameFields", "eng");
                   }}
