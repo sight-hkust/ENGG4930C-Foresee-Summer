@@ -2,14 +2,7 @@ import React, { useEffect, useState } from "react";
 import { LinearGradientBackground } from "../Utils/LinearGradientBackground";
 import { connect } from "react-redux";
 import { getRecordsUpdate } from "../../reducers/records";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Image,
-  FlatList,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Image, FlatList } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { ScreenHeight, ScreenWidth } from "../../../constant/Constant";
 import { RenderLineChart, DetailButton } from "../../../Screens/RecordsScreen";
@@ -21,15 +14,10 @@ const BackArrow = require("../../../assets/images/BackArrow.png");
 const NextArrow = require("../../../assets/images/NextArrow.png");
 import { Modal, Portal, Provider, Dialog } from "react-native-paper";
 
-const FamilyRecordDetails = ({
-  navigation,
-  route,
-  recordStore,
-  getRecordsHandler,
-}) => {
+const FamilyRecordDetails = ({ navigation, route, recordStore, getRecordsHandler }) => {
   useEffect(() => {
     const { familyMembers } = route.params;
-    console.log(familyMembers);
+    //console.log(familyMembers);
     const { uid, inactive } = familyMembers[0];
     setSelectedFamily(familyMembers[0]);
     getRecordsHandler(uid, inactive);
@@ -52,11 +40,7 @@ const FamilyRecordDetails = ({
   const [selectedDate, setSelectedDate] = useState("");
   const [index, setIndex] = useState(null);
   const [leftEyeSelected, setLeftEyeStatus] = useState(false);
-  const [isFamilyListModalVisible, setFamilyListModalVisibility] = useState(
-    false
-  );
-
-
+  const [isFamilyListModalVisible, setFamilyListModalVisibility] = useState(false);
 
   const _selectFamily = (member) => {
     const { uid, inactive } = member;
@@ -85,12 +69,7 @@ const FamilyRecordDetails = ({
 
   return (
     <>
-      <LinearGradientBackground
-        colors={["#1872a7", "#5a74d1", "#a676ff"]}
-        start={[0, 0.9]}
-        end={[1, 0.1]}
-        locations={[0, 0.5, 1]}
-      >
+      <LinearGradientBackground colors={["#1872a7", "#5a74d1", "#a676ff"]} start={[0, 0.9]} end={[1, 0.1]} locations={[0, 0.5, 1]}>
         <SafeAreaView
           style={{
             paddingTop: "24%",
@@ -113,10 +92,7 @@ const FamilyRecordDetails = ({
                     justifyContent: "center",
                   }}
                 >
-                  <Text
-                    style={{ fontSize: 28, color: "#3CA1B7" }}
-                    adjustsFontSizeToFit={true}
-                  >
+                  <Text style={{ fontSize: 28, color: "#3CA1B7" }} adjustsFontSizeToFit={true}>
                     {selectedFamily.lastName + selectedFamily.firstName}
                   </Text>
                   <View
@@ -125,12 +101,7 @@ const FamilyRecordDetails = ({
                       alignSelf: "center",
                     }}
                   >
-                    <Icon
-                      name="caretdown"
-                      type="antdesign"
-                      color="#3CA1B7"
-                      size={ScreenHeight * 0.02}
-                    />
+                    <Icon name="caretdown" type="antdesign" color="#3CA1B7" size={ScreenHeight * 0.02} />
                   </View>
                 </View>
               </TouchableOpacity>
@@ -161,77 +132,32 @@ const FamilyRecordDetails = ({
           </View>
           <View style={styles.refractiveMenu}>
             <TouchableOpacity onPress={() => setRefractive("1")}>
-              <Text
-                style={
-                  refractive == "1"
-                    ? styles.selectedMenuText
-                    : styles.unselectedMenuText
-                }
-              >
-                遠視
-              </Text>
+              <Text style={refractive == "1" ? styles.selectedMenuText : styles.unselectedMenuText}>遠視</Text>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => setRefractive("0")}>
-              <Text
-                style={
-                  refractive == "0"
-                    ? styles.selectedMenuText
-                    : styles.unselectedMenuText
-                }
-              >
-                近視
-              </Text>
+              <Text style={refractive == "0" ? styles.selectedMenuText : styles.unselectedMenuText}>近視</Text>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => setRefractive("2")}>
-              <Text
-                style={
-                  refractive == "2"
-                    ? styles.selectedMenuText
-                    : styles.unselectedMenuText
-                }
-              >
-                散光
-              </Text>
+              <Text style={refractive == "2" ? styles.selectedMenuText : styles.unselectedMenuText}>散光</Text>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => setRefractive("3")}>
-              <Text
-                style={
-                  refractive == "3"
-                    ? styles.selectedMenuText
-                    : styles.unselectedMenuText
-                }
-              >
-                視力
-              </Text>
+              <Text style={refractive == "3" ? styles.selectedMenuText : styles.unselectedMenuText}>視力</Text>
             </TouchableOpacity>
           </View>
           <View style={styles.linechart}>
-            <RenderLineChart
-              dataArr={records}
-              dateArr={dateList}
-              refractive={refractive}
-              isLeft={leftEyeSelected}
-              selectedIndex={index}
-            />
+            <RenderLineChart dataArr={records} dateArr={dateList} refractive={refractive} isLeft={leftEyeSelected} selectedIndex={index} />
           </View>
 
           {records && (
             <View style={styles.contentContainer}>
               <View style={styles.eyesButton}>
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  onPress={() => setLeftEyeStatus(true)}
-                >
+                <TouchableOpacity activeOpacity={0.8} onPress={() => setLeftEyeStatus(true)}>
                   <Image source={leftEyeSelected ? Open : Close} />
                 </TouchableOpacity>
-                <TouchableOpacity
-                  activeOpacity={0.8}
-                  onPress={() => setLeftEyeStatus(false)}
-                  style={{ paddingLeft: 40 }}
-                >
+                <TouchableOpacity activeOpacity={0.8} onPress={() => setLeftEyeStatus(false)} style={{ paddingLeft: 40 }}>
                   <Image source={leftEyeSelected ? Close : Open} />
                 </TouchableOpacity>
               </View>
@@ -246,25 +172,12 @@ const FamilyRecordDetails = ({
                 </TouchableOpacity>
               </View>
               <View style={styles.content}>
-                <RenderContent
-                  isLeft={leftEyeSelected}
-                  ddlValue={refractive}
-                  data={records}
-                  selectedDate={selectedDate}
-                  index={index}
-                  dateArr={dateList}
-                />
+                <RenderContent isLeft={leftEyeSelected} ddlValue={refractive} data={records} selectedDate={selectedDate} index={index} dateArr={dateList} />
               </View>
             </View>
           )}
           <View style={styles.buttonGroup}>
-            {records && (
-              <DetailButton
-                data={records}
-                selectedDate={selectedDate}
-                isAdj={false}
-              />
-            )}
+            {records && <DetailButton data={records} selectedDate={selectedDate} isAdj={false} />}
             <Button
               icon={<Icon name="add" size={25} color="#2D9CDB" />}
               onPress={() => {
@@ -285,22 +198,13 @@ const FamilyRecordDetails = ({
                 paddingRight: 0,
               }}
             />
-            {records && (
-              <DetailButton
-                data={records}
-                selectedDate={selectedDate}
-                isAdj={true}
-              />
-            )}
+            {records && <DetailButton data={records} selectedDate={selectedDate} isAdj={true} />}
           </View>
         </SafeAreaView>
       </LinearGradientBackground>
       <Provider>
         <Portal>
-          <Modal
-            visible={isFamilyListModalVisible}
-            onDismiss={_hideFamilyListModal}
-          >
+          <Modal visible={isFamilyListModalVisible} onDismiss={_hideFamilyListModal}>
             <View
               style={{
                 backgroundColor: "white",
@@ -334,11 +238,7 @@ const FamilyRecordDetails = ({
                         paddingVertical: ScreenHeight * 0.02,
                       }}
                     >
-                      <Text style={{ fontSize: 20, textAlign: "center" }}>
-                        {item.surName && item.givenName
-                          ? item.surName + item.givenName
-                          : item.lastName + item.firstName}
-                      </Text>
+                      <Text style={{ fontSize: 20, textAlign: "center" }}>{item.surName && item.givenName ? item.surName + item.givenName : item.lastName + item.firstName}</Text>
                     </View>
                   </TouchableOpacity>
                 )}
@@ -352,21 +252,15 @@ const FamilyRecordDetails = ({
 };
 
 const mapStateToProps = (state) => {
-  return {
-    
-  };
+  return {};
 };
 const mapDispatchToProps = (dispatch) => {
   return {
-    getRecordsHandler: (uid, inactive) =>
-      dispatch(getRecordsUpdate(uid, inactive)),
+    getRecordsHandler: (uid, inactive) => dispatch(getRecordsUpdate(uid, inactive)),
   };
 };
 
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(FamilyRecordDetails);
+export default connect(mapStateToProps, mapDispatchToProps)(FamilyRecordDetails);
 
 const styles = StyleSheet.create({
   refractiveMenu: {

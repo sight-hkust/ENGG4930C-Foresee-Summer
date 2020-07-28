@@ -47,7 +47,7 @@ export const LoginWithEmailAndPassword = ({ navigation, route }) => {
           handleLoginError("帳號不存在，\n該帳戶有可能已被刪除");
           break;
         default:
-          console.log(err.code);
+          //console.log(err.code);
           handleLoginError(err.code + ": " + err.message);
       }
     });
