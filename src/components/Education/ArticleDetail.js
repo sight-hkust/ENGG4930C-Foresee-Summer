@@ -28,6 +28,7 @@ export default class ArticleDetailScreen extends Component {
       video: null,
       isVid: false,
       videoHeight: ScreenWidth * 0.5625,
+      loading: true,
     };
   }
 
@@ -138,9 +139,9 @@ export default class ArticleDetailScreen extends Component {
 
     return (
       <View style={{ backgroundColor: '#F6F6F6', flex: 1 }}>
-        <View style={{ flex: 0.6, zIndex: 1 }}>
+        <View>
           {this.state.isVid && (
-            <View style={{ borderWidth: 3, flex: 1, borderColor: 'red' }}>
+            <>
               <Video
                 ref={this.mountVid}
                 resizeMode="contain"
@@ -154,33 +155,36 @@ export default class ArticleDetailScreen extends Component {
                 style={{
                   width: ScreenWidth,
                   height: this.state.videoHeight,
-                  borderColor: 'green',
-                  borderWidth: 3,
                 }}
               />
-              <Text style={[ArticleDetailStyles.videoSubject, { top: this.state.videoHeight + 20 }]}>{this.state.subject}</Text>
-            </View>
+
+              <Text style={[ArticleDetailStyles.videoSubject, { marginTop: ScreenHeight * 0.03 }]}>{this.state.subject}</Text>
+            </>
           )}
 
           {!this.state.isVid && (
-            <View style={{ borderWidth: 3, flex: 1, borderColor: 'red' }}>
-              <Image source={{ uri: this.state.image }} style={{ width: ScreenWidth, height: ScreenWidth * 0.5625, borderColor: 'green', borderWidth: 3 }} />
-              <LinearGradient
-                colors={['transparent', 'transparent', '#F6F6F6']}
-                locations={[0, 0.2, 1]}
-                style={{
-                  position: 'absolute',
-                  height: ScreenWidth * 0.5625,
-                  width: Dimensions.get('window').width,
-                  resizeMode: 'cover',
-                }}
-              ></LinearGradient>
-              <Text style={[ArticleDetailStyles.articleSubject, { top: ScreenWidth * 0.5625 - 30 }]}>{this.state.subject}</Text>
-            </View>
+            <>
+              <View style={{ position: 'absolute' }}>
+                <Image source={{ uri: this.state.image }} style={{ width: ScreenWidth, height: ScreenWidth * 0.5625 }} />
+                <LinearGradient
+                  colors={['transparent', 'transparent', '#F6F6F6']}
+                  locations={[0, 0.2, 1]}
+                  style={{
+                    position: 'absolute',
+                    height: ScreenWidth * 0.5625,
+                    width: Dimensions.get('window').width,
+                    resizeMode: 'cover',
+                  }}
+                ></LinearGradient>
+              </View>
+              <View style={{ marginTop: ScreenWidth * 0.45 }}>
+                <Text style={[ArticleDetailStyles.articleSubject]}>{this.state.subject}</Text>
+              </View>
+            </>
           )}
         </View>
 
-        <View style={{ alignItems: 'center', flex: 1, zIndex: 0, borderColor: 'blue', borderWidth: 3 }}>
+        <View style={{ alignItems: 'center', flex: 1, marginTop: ScreenHeight * 0.03 }}>
           {!this.state.isVid && this.state.audio != '' && this.state.audio != null && (
             <Button title={this.state.play ? '暫停錄音' : '播放錄音'} titleStyle={ArticleDetailStyles.buttonTitle} onPress={() => PressPlayButton()} buttonStyle={ArticleDetailStyles.playButton} />
           )}
@@ -195,17 +199,14 @@ export default class ArticleDetailScreen extends Component {
 
 const ArticleDetailStyles = StyleSheet.create({
   articleSubject: {
-    position: 'absolute',
-    top: 210,
     fontSize: ScreenHeight * 0.04,
-    paddingLeft: 30,
+    paddingHorizontal: 30,
     color: '#24559E',
     fontWeight: 'bold',
   },
   videoSubject: {
-    position: 'absolute',
     fontSize: ScreenHeight * 0.04,
-    paddingLeft: 30,
+    paddingHorizontal: 30,
     color: '#24559E',
     fontWeight: 'bold',
   },

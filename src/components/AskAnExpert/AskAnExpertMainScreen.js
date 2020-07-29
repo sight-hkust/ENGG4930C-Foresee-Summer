@@ -15,6 +15,8 @@ import { actionCounter } from '../../helpers/actionCounter';
 
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
+import { Surface } from 'react-native-paper';
+
 const SPECIAL_TAG_1 = '眼睛疼痛';
 const SPECIAL_TAG_2 = '視力模糊';
 const SPECIAL_TAG_3 = '分泌物';
@@ -72,18 +74,7 @@ const AskAnExpertMainScreen = ({ route, navigation, questionListStore }) => {
                   horizontal={true}
                   renderItem={({ item }) => {
                     hotTopicCounter++;
-                    return (
-                      <HotQuestionCard
-                        style={
-                          hotTopicCounter == 1 && {
-                            marginLeft: ScreenWidth * 0.03,
-                          }
-                        }
-                        faq={item}
-                        key={item.id}
-                        counter={hotTopicCounter - 1}
-                      />
-                    );
+                    return <HotQuestionCard faq={item} key={item.id} counter={hotTopicCounter - 1} />;
                   }}
                   keyExtractor={(item) => item.id}
                   style={{ marginTop: hp('3%'), height: 180, zIndex: 4 }}
@@ -149,27 +140,35 @@ export const HotQuestionCard = (props) => {
   };
 
   return (
-    <View style={{ ...styles.shadow }}>
-      <TouchableOpacity
-        style={{ ...styles.hotTopicCard, ...props.style }}
-        onPress={() => {
-          toggleModal();
-          actionCounter('askProf', props.faq.question_id, 'views');
-        }}
-      >
-        <LinearGradientBackground
-          colors={[
-            `rgb(${RGB[0] + (props.counter % 4) * 12},${RGB[1] + (props.counter % 4) * 36}, ${RGB[2] + (props.counter % 4) * 28})`,
-            `rgb(${RGB[0] + ((props.counter % 4) + 1) * 12},${RGB[1] + ((props.counter % 4) + 1) * 36}, ${RGB[2] + ((props.counter % 4) + 1) * 28})`,
-          ]}
-          start={[0, 1]}
-          end={[1, 0]}
-          locations={[0.2, 0.7]}
-        >
-          <Text style={styles.hotTopicCardText}>{props.faq.question_title.length <= 14 ? props.faq.question_title : props.faq.question_title.substring(0, 14) + '...'}</Text>
-        </LinearGradientBackground>
-      </TouchableOpacity>
-      <QuestionCard isVisible={isVisible} toggleModal={toggleModal} faq={props.faq} />
+    <View
+      style={{
+        ...styles.shadow,
+        ...{ paddingHorizontal: wp('2.3%') },
+      }}
+    >
+      <Surface style={{ ...{ elevation: 12, borderRadius: 30 } }}>
+        <View style={styles.hotTopicCard}>
+          <TouchableOpacity
+            onPress={() => {
+              toggleModal();
+              actionCounter('askProf', props.faq.question_id, 'views');
+            }}
+          >
+            <LinearGradientBackground
+              colors={[
+                `rgb(${RGB[0] + (props.counter % 4) * 12},${RGB[1] + (props.counter % 4) * 36}, ${RGB[2] + (props.counter % 4) * 28})`,
+                `rgb(${RGB[0] + ((props.counter % 4) + 1) * 12},${RGB[1] + ((props.counter % 4) + 1) * 36}, ${RGB[2] + ((props.counter % 4) + 1) * 28})`,
+              ]}
+              start={[0, 1]}
+              end={[1, 0]}
+              locations={[0.2, 0.7]}
+            >
+              <Text style={styles.hotTopicCardText}>{props.faq.question_title.length <= 14 ? props.faq.question_title : props.faq.question_title.substring(0, 14) + '...'}</Text>
+            </LinearGradientBackground>
+          </TouchableOpacity>
+          <QuestionCard isVisible={isVisible} toggleModal={toggleModal} faq={props.faq} />
+        </View>
+      </Surface>
     </View>
   );
 };
@@ -183,33 +182,34 @@ export const MiniQuestionCard = (props) => {
 
   return (
     <View style={styles.shadow}>
-      <TouchableOpacity
-        style={styles.miniQuestion}
-        onPress={() => {
-          toggleModal();
-          actionCounter('askProf', props.faq.question_id, 'views');
-        }}
-      >
-        <View style={{ paddingHorizontal: wp('3%'), paddingTop: hp('1%'), width: '100%' }}>
-          <View style={{ flexDirection: 'row', marginBottom: 10, marginTop: 5 }}>
-            {props.faq.tags.map((item) => {
-              switch (item) {
-                case SPECIAL_TAG_1:
-                  return <Label color={SPECIAL_TAG_1_COLOR} text={item} />;
-                case SPECIAL_TAG_2:
-                  return <Label color={SPECIAL_TAG_2_COLOR} text={item} />;
-                case SPECIAL_TAG_3:
-                  return <Label color={SPECIAL_TAG_3_COLOR} text={item} />;
-                default:
-                  return <Label color={NORMAL_TAG_COLOR} text={item} />;
-              }
-            })}
+      <Surface style={styles.miniQuestion}>
+        <TouchableOpacity
+          onPress={() => {
+            toggleModal();
+            actionCounter('askProf', props.faq.question_id, 'views');
+          }}
+        >
+          <View style={{ paddingHorizontal: wp('3%'), paddingTop: hp('1%'), width: '100%' }}>
+            <View style={{ flexDirection: 'row', marginBottom: 10, marginTop: 5 }}>
+              {props.faq.tags.map((item) => {
+                switch (item) {
+                  case SPECIAL_TAG_1:
+                    return <Label color={SPECIAL_TAG_1_COLOR} text={item} />;
+                  case SPECIAL_TAG_2:
+                    return <Label color={SPECIAL_TAG_2_COLOR} text={item} />;
+                  case SPECIAL_TAG_3:
+                    return <Label color={SPECIAL_TAG_3_COLOR} text={item} />;
+                  default:
+                    return <Label color={NORMAL_TAG_COLOR} text={item} />;
+                }
+              })}
+            </View>
+            <Text style={styles.miniQuestionTitle}>{'問。' + props.faq.question_title}</Text>
+            <Text style={styles.miniQuestionContent}>{props.faq.question_content.length > 34 ? props.faq.question_content.substring(0, 38) + ' . . . . ' : props.faq.question_content}</Text>
           </View>
-          <Text style={styles.miniQuestionTitle}>{'問。' + props.faq.question_title}</Text>
-          <Text style={styles.miniQuestionContent}>{props.faq.question_content.length > 34 ? props.faq.question_content.substring(0, 38) + ' . . . . ' : props.faq.question_content}</Text>
-        </View>
-      </TouchableOpacity>
-      <QuestionCard isVisible={isVisible} toggleModal={toggleModal} faq={props.faq} />
+        </TouchableOpacity>
+        <QuestionCard isVisible={isVisible} toggleModal={toggleModal} faq={props.faq} />
+      </Surface>
     </View>
   );
 };
@@ -292,7 +292,7 @@ const styles = StyleSheet.create({
   },
   scrollView: {
     height: ScreenHeight * 0.45,
-    paddingHorizontal: ScreenWidth * 0.1,
+    // paddingHorizontal: ScreenWidth * 0.1,
     marginTop: ScreenHeight * 0.7,
     marginBottom: 30,
   },
@@ -301,7 +301,6 @@ const styles = StyleSheet.create({
     height: wp('30%'),
     borderRadius: 30,
     overflow: 'hidden',
-    marginRight: 20,
   },
   hotTopicCardText: {
     fontSize: hp('2.4%'),
@@ -314,9 +313,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#E1EDFF',
     borderRadius: 30,
     height: hp('19%'),
-    alignItems: 'center',
-    marginBottom: hp('3.5%'),
+    width: wp('80%'),
+    marginVertical: hp('1.8%'),
     overflow: 'hidden',
+    alignSelf: 'center',
+    elevation: 7,
   },
   miniQuestionTitle: {
     fontSize: hp('1.8%'),
@@ -377,6 +378,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 5, height: 10 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
+    elevation: 7,
   },
 });
 
