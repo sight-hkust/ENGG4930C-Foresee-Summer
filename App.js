@@ -234,9 +234,9 @@ function Main({ route, navigation }) {
             options={{
               tabBarLabel: '護眼秘笈',
               tabBarIcon: () => (
-                <View elevation={10} style={{ width: 30, height: 30 }}>
+                <TouchableOpacity onPress={() => navigation.navigate('GetEducated')}>
                   <Image source={require('./assets/images/Articles_dark.png')} style={styles.icon} />
-                </View>
+                </TouchableOpacity>
               ),
             }}
           />
@@ -246,7 +246,13 @@ function Main({ route, navigation }) {
             component={ExerciseScreen}
             options={{
               tabBarLabel: '護眼運動',
-              tabBarIcon: () => <Image source={require('./assets/images/Exercise_dark.png')} style={styles.icon} />,
+              tabBarIcon: () => (
+                <>
+                  <TouchableOpacity onPress={() => navigation.navigate('ExerciseScreen')}>
+                    <Image source={require('./assets/images/Exercise_dark.png')} style={styles.icon} />
+                  </TouchableOpacity>
+                </>
+              ),
             }}
           />
 
@@ -255,7 +261,11 @@ function Main({ route, navigation }) {
             component={HomeScreen}
             options={{
               tabBarLabel: '主頁',
-              tabBarIcon: () => <Image source={require('./assets/images/Icon_solid.png')} style={{ ...styles.icon, ...{ width: 50, height: 50 } }} />,
+              tabBarIcon: () => (
+                <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')} style={{ elevation: 4, borderRadius: 25, width: 48, height: 48 }}>
+                  <Image source={require('./assets/images/Icon_solid.png')} style={{ ...styles.icon, ...{ width: 50, height: 50 } }} />
+                </TouchableOpacity>
+              ),
             }}
           />
 
@@ -264,7 +274,11 @@ function Main({ route, navigation }) {
             component={FaqScreen}
             options={{
               tabBarLabel: '專家解答',
-              tabBarIcon: () => <Image source={require('./assets/images/Qna_dark.png')} style={styles.icon} />,
+              tabBarIcon: () => (
+                <TouchableOpacity onPress={() => navigation.navigate('FaqScreen')}>
+                  <Image source={require('./assets/images/Qna_dark.png')} style={styles.icon} />
+                </TouchableOpacity>
+              ),
             }}
           />
 
@@ -273,7 +287,11 @@ function Main({ route, navigation }) {
             component={ProfileScreen}
             options={{
               tabBarLabel: '個人檔案',
-              tabBarIcon: () => <Image source={require('./assets/images/Profile.png')} style={styles.icon} />,
+              tabBarIcon: () => (
+                <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen')}>
+                  <Image source={require('./assets/images/Profile.png')} style={styles.icon} />
+                </TouchableOpacity>
+              ),
             }}
           />
         </>
