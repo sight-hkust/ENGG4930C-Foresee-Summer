@@ -48,6 +48,7 @@ import { BackButton } from './src/components/Utils/BackButton';
 import { EditUserInfo } from './src/components/Profile/EditUserInfo';
 import { Surface } from 'react-native-paper';
 import { View } from 'react-native-animatable';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -186,7 +187,7 @@ function Main({ route, navigation }) {
         style: {
           position: 'absolute',
           backgroundColor: 'transparent',
-          height: Platform.OS === 'ios' ? Dimensions.get('window').height * 0.09 : Dimensions.get('window').height * 0.08,
+          height: Platform.OS === 'ios' ? hp('9%') : hp('8%'),
           borderTopWidth: 0,
           borderTopColor: 'transparent',
           paddingHorizontal: auth.currentUser.displayName == 'professional' ? 80 : 30,
@@ -262,7 +263,7 @@ function Main({ route, navigation }) {
             options={{
               tabBarLabel: '主頁',
               tabBarIcon: () => (
-                <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')} style={{ elevation: 4, borderRadius: 25, width: 48, height: 48 }}>
+                <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')}>
                   <Image source={require('./assets/images/Icon_solid.png')} style={{ ...styles.icon, ...{ width: 50, height: 50 } }} />
                 </TouchableOpacity>
               ),

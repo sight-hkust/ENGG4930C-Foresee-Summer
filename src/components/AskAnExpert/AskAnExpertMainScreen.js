@@ -146,7 +146,7 @@ export const HotQuestionCard = (props) => {
         ...{ paddingHorizontal: wp('2.3%') },
       }}
     >
-      <Surface style={{ ...{ elevation: 12, borderRadius: 30 } }}>
+      <Surface style={{ ...{ elevation: 12, borderRadius: 31 } }}>
         <View style={styles.hotTopicCard}>
           <TouchableOpacity
             onPress={() => {

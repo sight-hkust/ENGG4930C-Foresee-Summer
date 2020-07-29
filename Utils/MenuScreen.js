@@ -3,6 +3,7 @@ import { View, StyleSheet, Platform } from 'react-native';
 import { LinearGradientBackground } from './LinearGradientBackground';
 import { ScreenHeight, Scale } from '../constant/Constant';
 import { Surface } from 'react-native-paper';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 export default class MenuScreen extends Component {
   constructor(props) {
@@ -61,7 +62,7 @@ const styles = StyleSheet.create({
     elevation: 12,
   },
   backgroundContainer: {
-    height: Platform.OS === 'ios' ? ScreenHeight * 0.9 : ScreenHeight * 0.92,
+    height: Platform.OS === 'ios' ? hp('90%') : hp('92%'),
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,
     overflow: 'hidden',
