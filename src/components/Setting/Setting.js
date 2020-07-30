@@ -1,14 +1,24 @@
-import React, { useState } from "react";
-import { ScrollView, View, Text, StyleSheet, Switch, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import {
+  ScrollView,
+  View,
+  Text,
+  StyleSheet,
+  Switch,
+  TouchableOpacity,
+} from "react-native";
 import { ListItem, Input, Overlay, Icon, Button } from "react-native-elements";
 import Collapsible from "react-native-collapsible";
 
 import { ScreenWidth, ScreenHeight } from "../../../constant/Constant";
 import MenuScreen from "../../../Utils/MenuScreen";
-import { auth } from "../../config/config";
+import { auth, database } from "../../config/config";
 import { RoundButton } from "../../../Utils/RoundButton";
 import { Grid, Col, Row } from "react-native-easy-grid";
-import { Snackbar } from "react-native-paper";
+import { Snackbar, Portal } from "react-native-paper";
+import { useSelector, useDispatch } from "react-redux";
+import { watchUserInfoUpdate } from "../../reducers/user";
+import moment from "moment";
 
 export default function Setting({ route, navigation }) {
   const [selectedLabel, setSelectedLabel] = useState();
@@ -26,15 +36,29 @@ export default function Setting({ route, navigation }) {
       }
     >
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <ListItem title={"深色主題"} containerStyle={styles.listItem} titleStyle={styles.title} rightIcon={<ThemeSwitch />} />
-        <ListItem Component={TouchableOpacity} title={"程式教學"} containerStyle={styles.listItem} titleStyle={styles.title} chevron={{ size: 30 }} onPress={() => navigation.navigate("Tutorial")} />
+        <ListItem
+          title={"深色主題"}
+          containerStyle={styles.listItem}
+          titleStyle={styles.title}
+          rightIcon={<ThemeSwitch />}
+        />
+        <ListItem
+          Component={TouchableOpacity}
+          title={"程式教學"}
+          containerStyle={styles.listItem}
+          titleStyle={styles.title}
+          chevron={{ size: 30 }}
+          onPress={() => navigation.navigate("Tutorial")}
+        />
         <ListItem
           Component={TouchableOpacity}
           title={"聯絡我們"}
           containerStyle={styles.listItem}
           titleStyle={styles.title}
           chevron={{ size: 30 }}
-          onPress={() => setSelectedLabel(selectedLabel == "contact-us" ? "" : "contact-us")}
+          onPress={() =>
+            setSelectedLabel(selectedLabel == "contact-us" ? "" : "contact-us")
+          }
         />
         <Collapsible collapsed={selectedLabel != "contact-us"}>
           <ContactUs />
@@ -45,7 +69,9 @@ export default function Setting({ route, navigation }) {
           containerStyle={styles.listItem}
           titleStyle={styles.title}
           chevron={{ size: 30 }}
-          onPress={() => setSelectedLabel(selectedLabel == "feedback" ? "" : "feedback")}
+          onPress={() =>
+            setSelectedLabel(selectedLabel == "feedback" ? "" : "feedback")
+          }
         />
         <Collapsible collapsed={selectedLabel != "feedback"}>
           <Feedback />
@@ -56,7 +82,9 @@ export default function Setting({ route, navigation }) {
           containerStyle={styles.listItem}
           titleStyle={styles.title}
           chevron={{ size: 30 }}
-          onPress={() => setSelectedLabel(selectedLabel == "permission" ? "" : "permission")}
+          onPress={() =>
+            setSelectedLabel(selectedLabel == "permission" ? "" : "permission")
+          }
         />
         <Collapsible collapsed={selectedLabel != "permission"}>
           <PermissionSetting />
@@ -98,61 +126,91 @@ const ThemeSwitch = () => {
 
   return (
     <>
-      <Switch trackColor={{ false: "#767577", true: "#9AFF98" }} thumbColor={isLightTheme ? "white" : "#f4f3f4"} ios_backgroundColor="#3e3e3e" onValueChange={toggleSwitch} value={isLightTheme} />
+      <Switch
+        trackColor={{ false: "#767577", true: "#9AFF98" }}
+        thumbColor={isLightTheme ? "white" : "#f4f3f4"}
+        ios_backgroundColor="#3e3e3e"
+        onValueChange={toggleSwitch}
+        value={isLightTheme}
+      />
     </>
   );
 };
 
-export const ContactUs = (props) => {
+export const ContactUs = ({ containerStyle, ...props }) => {
   return (
     <View
-      style={{
-        width: "90%",
-        alignSelf: "center",
-        padding: 10,
-        backgroundColor: "rgba(0,0,0,0.05)",
-        borderRadius: 4,
-        height: "100%",
-      }}
+      style={[
+        {
+          width: "90%",
+          alignSelf: "center",
+          padding: 10,
+          backgroundColor: "rgba(0,0,0,0.05)",
+          borderRadius: 4,
+          height: "100%",
+        },
+        containerStyle,
+      ]}
     >
       <Grid>
         <Row style={styles.contactUsRow}>
           <Col style={styles.contactUsLeftCol}>
             <Icon type="entypo" name="instagram" color="pink" />
-            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}> Instagram</Text>
+            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>
+              {" "}
+              Instagram
+            </Text>
           </Col>
           <Col style={styles.contactUsRightCol}>
-            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>@foresee_offical</Text>
+            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>
+              @foresee_offical
+            </Text>
           </Col>
         </Row>
 
         <Row style={styles.contactUsRow}>
           <Col style={styles.contactUsLeftCol}>
             <Icon type="entypo" name="facebook" color="#33D1FF" />
-            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}> Facebook</Text>
+            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>
+              {" "}
+              Facebook
+            </Text>
           </Col>
           <Col style={styles.contactUsRightCol}>
-            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>@ForeSee HQ</Text>
+            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>
+              @ForeSee HQ
+            </Text>
           </Col>
         </Row>
 
         <Row style={styles.contactUsRow}>
           <Col style={styles.contactUsLeftCol}>
             <Icon type="fontisto" name="whatsapp" color="#3FF961" />
-            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}> Whatsapp</Text>
+            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>
+              {" "}
+              Whatsapp
+            </Text>
           </Col>
           <Col style={styles.contactUsRightCol}>
-            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}> +85230624700</Text>
+            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>
+              {" "}
+              +85230624700
+            </Text>
           </Col>
         </Row>
 
         <Row style={styles.contactUsRow}>
           <Col style={styles.contactUsLeftCol}>
             <Icon type="material-icon" name="email" color="#F0886F" />
-            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}> Email</Text>
+            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>
+              {" "}
+              Email
+            </Text>
           </Col>
           <Col style={styles.contactUsRightCol}>
-            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>sight.foresee@gmail.com</Text>
+            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>
+              sight.foresee@gmail.com
+            </Text>
           </Col>
         </Row>
       </Grid>
@@ -160,11 +218,43 @@ export const ContactUs = (props) => {
   );
 };
 
-export const Feedback = (props) => {
+export const Feedback = ({ contentConatinerStyle, ...props }) => {
   const [feedback, setFeedback] = useState("");
   const [alertSuccess, setAlertSuccess] = useState(false);
+  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(watchUserInfoUpdate());
+  }, []);
 
   let timer = 0;
+
+  const handleFeedbackSubmission = () => {
+    const datetime = moment();
+    const date = datetime.format("YYYYMMDD");
+    const timestamp = datetime.format("YYYYMMDDHHmmss");
+    if (feedback == "") {
+      return;
+    } else {
+      database.ref("/feedbacks/" + date).push({
+        content: feedback,
+        userInfo: {
+          email: user.email,
+          surName: user.lastName ? user.lastName : user.surName,
+        },
+      });
+
+      setFeedback("");
+      setAlertSuccess(true);
+      let showSuccess = setInterval(() => {
+        timer += 1;
+        if (timer >= 2) {
+          clearInterval(showSuccess);
+          setAlertSuccess(false);
+        }
+      }, 3000);
+    }
+  };
 
   return (
     <View style={{ width: "90%", alignSelf: "center", padding: 10 }}>
@@ -174,9 +264,15 @@ export const Feedback = (props) => {
         multiline={true}
         value={feedback}
         placeholder="歡迎留下意見"
-        inputContainerStyle={{ ...styles.contentContainer, ...props.content }}
+        inputContainerStyle={[styles.contentContainer, contentConatinerStyle]}
         inputStyle={{ ...styles.textAreaContainer, ...props.contentFontColor }}
-        rightIcon={<Text style={{ ...styles.wordCounter, ...props.wordCounterFontColor }}>{feedback.length}/200</Text>}
+        rightIcon={
+          <Text
+            style={{ ...styles.wordCounter, ...props.wordCounterFontColor }}
+          >
+            {feedback.length}/200
+          </Text>
+        }
         rightIconContainerStyle={{
           position: "absolute",
           bottom: 0,
@@ -185,15 +281,7 @@ export const Feedback = (props) => {
       />
       <RoundButton
         onPress={() => {
-          setFeedback("");
-          setAlertSuccess(true);
-          let showSuccess = setInterval(() => {
-            timer += 1;
-            if (timer >= 2) {
-              clearInterval(showSuccess);
-              setAlertSuccess(false);
-            }
-          }, 1000);
+          handleFeedbackSubmission();
         }}
         title="提交"
         buttonStyle={{ width: 96, ...props.buttonColor }}
@@ -217,10 +305,12 @@ export const Feedback = (props) => {
 
 const PermissionSetting = () => {
   const [allowView, setAllowView] = useState(false);
-  const toggleAllowViewSwitch = () => setAllowView((previousState) => !previousState);
+  const toggleAllowViewSwitch = () =>
+    setAllowView((previousState) => !previousState);
 
   const [allowSearch, setAllowSearch] = useState(false);
-  const toggleAllowSearchSwitch = () => setAllowSearch((previousState) => !previousState);
+  const toggleAllowSearchSwitch = () =>
+    setAllowSearch((previousState) => !previousState);
 
   return (
     <View
