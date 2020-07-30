@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, View, KeyboardAvoidingView, ActivityIndicator, StyleSheet } from "react-native";
+import { Text, TouchableOpacity, View, KeyboardAvoidingView, ActivityIndicator, StyleSheet, Dimensions } from "react-native";
 import React, { useState } from "react";
 import Logo from "../Utils/Logo";
 import { auth, config } from "../../config/config";
@@ -61,7 +61,7 @@ export const LoginWithEmailAndPassword = ({ navigation, route }) => {
             <Logo />
             <View
               style={{
-                marginTop: ScreenHeight * 0.1,
+                marginTop: ScreenHeight * 0.045,
                 marginBottom: ScreenHeight * 0.05,
               }}
             >
