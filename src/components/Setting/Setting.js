@@ -224,7 +224,7 @@ export const Feedback = ({ contentConatinerStyle, ...props }) => {
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
   useEffect(() => {
-    dispatch(watchUserInfoUpdate());
+    return dispatch(watchUserInfoUpdate());
   }, []);
 
   let timer = 0;
@@ -232,15 +232,20 @@ export const Feedback = ({ contentConatinerStyle, ...props }) => {
   const handleFeedbackSubmission = () => {
     const datetime = moment();
     const date = datetime.format("YYYYMMDD");
-    const timestamp = datetime.format("YYYYMMDDHHmmss");
+    const time = datetime.format("h:mm:ss a");
     if (feedback == "") {
       return;
     } else {
       database.ref("/feedbacks/" + date).push({
         content: feedback,
+        submissionDate: date,
+        timestamp: time,
         userInfo: {
           email: user.email,
-          surName: user.lastName ? user.lastName : user.surName,
+          ...(user.lastName
+            ? { lastName: user.lastName }
+            : { surName: user.surName }),
+          gender: user.gender ? user.gender : "F",
         },
       });
 
