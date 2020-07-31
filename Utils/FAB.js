@@ -26,7 +26,6 @@ const FABView = () => {
         <Portal>
           <FAB.Group
             open={open}
-            small
             icon={open ? 'window-close' : 'information-variant'}
             color="#1772A6"
             actions={[

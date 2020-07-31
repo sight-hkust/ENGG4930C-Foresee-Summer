@@ -1,9 +1,10 @@
-const { combineReducers } = require("redux");
-import { patientList } from "./patientList";
-import { questionList } from "./askProfessionalList";
-import { user } from "./user";
-import { familyMembers } from "./familyMembers";
-import { records } from "./records";
+const { combineReducers } = require('redux');
+import { patientList } from './patientList';
+import { questionList } from './askProfessionalList';
+import { user } from './user';
+import { familyMembers } from './familyMembers';
+import { records } from './records';
+import { userArticleScoreList } from './userArticleScores';
 
 export default combineReducers({
   patientList,
@@ -11,4 +12,5 @@ export default combineReducers({
   familyMembers,
   records,
   user,
+  userArticleScoreList,
 });
