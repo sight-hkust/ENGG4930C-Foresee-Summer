@@ -2,6 +2,7 @@ import { auth, database } from "../../config/config";
 import moment from "moment";
 import * as firebase from "firebase";
 import { nanoid } from "nanoid/async/index.native";
+import { encryptData } from "../../utils/encryptData";
 require("firebase/functions");
 
 const writeUserData = ({
@@ -76,7 +77,8 @@ const writeUserData = ({
         database.ref("/users/" + uid).set({
           uid: uid,
           email: values.email,
-          phone: values.tel_country_code + values.tel_number,
+          tel_code: values.tel_country_code,
+          phone: values.tel_number,
           firstName: values.firstName,
           lastName: values.lastName,
           givenName: values.givenName,
@@ -101,7 +103,8 @@ const writeUserData = ({
           givenName: values.givenName,
           surName: values.surName,
           email: values.email,
-          phone: values.tel_country_code + values.tel_number,
+          tel_code: values.tel_country_code,
+          phone: values.tel_number,
           role: values.role,
         });
       }
