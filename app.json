@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "foresee",
+    "name": "ForeSee",
     "slug": "foresee",
     "platforms": ["ios", "android", "web"],
     "version": "1.0.1",
@@ -17,10 +17,12 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "ios"
+      "bundleIdentifier": "ios",
+      "buildNumber": "1.0.1"
     },
     "android": {
-      "package": "hk.ust.sight.foresee"
+      "package": "hk.ust.sight.foresee",
+      "versionCode": 2
     },
     "entryPoint": "node_modules/expo/AppEntry.js",
     "packagerOpts": {

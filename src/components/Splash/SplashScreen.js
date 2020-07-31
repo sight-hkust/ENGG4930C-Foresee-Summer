@@ -17,7 +17,7 @@ export const SplashScreen = () => {
           iconStyle={{ flex: 1 }}
           hideText={true}
         />
-        <Text style={styles.title}>ForeSEE</Text>
+        <Text style={styles.title}>ForeSee</Text>
         <Text style={styles.description}>準確追蹤{"\n"}你的眼睛健康走勢</Text>
       </View>
     </LinearGradientBackground>

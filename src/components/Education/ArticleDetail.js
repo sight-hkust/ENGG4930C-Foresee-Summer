@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { database, storage } from '../../config/config';
 import React, { Component } from 'react';
 import { Audio, Video } from 'expo-av';
@@ -19,7 +19,7 @@ export default class ArticleDetailScreen extends Component {
       play: false,
       playbackObject: null,
       volume: 1.0,
-      isBuffering: false,
+      isBuffering: true,
       article_id: article_id, //this.props.route.params.article_id then remove from state
       content: '',
       subject: '',
@@ -50,7 +50,7 @@ export default class ArticleDetailScreen extends Component {
       };
       const source = { uri: vid };
       await this.video.loadAsync(source, status, false);
-      this.setState({ playbackObject: this.video });
+      this.setState({ playbackObject: this.video, isBuffering: false });
     } catch (e) {
       console.log(e);
     }
@@ -141,7 +141,17 @@ export default class ArticleDetailScreen extends Component {
       <View style={{ backgroundColor: '#F6F6F6', flex: 1 }}>
         <View>
           {this.state.isVid && (
-            <>
+            <View>
+              {this.state.isBuffering == true && (
+                <ActivityIndicator
+                  color="#00acc1"
+                  size="large"
+                  style={{
+                    width: ScreenWidth,
+                    height: this.state.videoHeight,
+                  }}
+                />
+              )}
               <Video
                 ref={this.mountVid}
                 resizeMode="contain"
@@ -153,13 +163,13 @@ export default class ArticleDetailScreen extends Component {
                 }}
                 onFullscreenUpdate={this.fullscreencontrol}
                 style={{
-                  width: ScreenWidth,
-                  height: this.state.videoHeight,
+                  width: this.state.isBuffering == true ? 0 : ScreenWidth,
+                  height: this.state.isBuffering == true ? 0 : this.state.videoHeight,
                 }}
               />
 
               <Text style={[ArticleDetailStyles.videoSubject, { marginTop: ScreenHeight * 0.03 }]}>{this.state.subject}</Text>
-            </>
+            </View>
           )}
 
           {!this.state.isVid && (

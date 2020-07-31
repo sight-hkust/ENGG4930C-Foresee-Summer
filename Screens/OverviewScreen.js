@@ -113,7 +113,7 @@ class OverviewScreen extends Component {
       }
     };
 
-    console.log(selectedFamily);
+    //console.log(selectedFamily);
 
     return (
       <>

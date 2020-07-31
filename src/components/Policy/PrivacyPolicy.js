@@ -1,7 +1,7 @@
-import React from 'react';
-import { Text } from 'react-native';
-import { WebView } from 'react-native-webview';
-import { LinearGradientBackground } from '../../../Utils/LinearGradientBackground';
+import React from "react";
+import { Text } from "react-native";
+import { WebView } from "react-native-webview";
+import { LinearGradientBackground } from "../../../Utils/LinearGradientBackground";
 
 const PRIVACY_POLICY = `
 <h1 style="text-align: justify;"><span style="color: #ffffff;">I. Privacy Policy</span></h1>
@@ -59,14 +59,13 @@ const PRIVACY_POLICY = `
 <p style="text-align: justify;">&nbsp;</p>
 <h1 style="text-align: justify;"><span style="color: #ffffff;"><strong>IX. Contact Us</strong></span></h1>
 <hr />
-<h1 style="text-align: justify;"><span style="color: #ffffff;">If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us at foresee@ust.hk.</span></h1>
+<h1 style="text-align: justify;"><span style="color: #ffffff;">If you have any questions or suggestions about our Privacy Policy, do not hesitate to contact us at sight.foresee@gmail.com</span></h1>
 `;
 
 export default function PrivacyPolicy() {
   return (
-    <LinearGradientBackground style={{ height: '100%' }} colors={['#2c3e50', '#2980b9']} start={[1, 1]} end={[0, 0]} locations={[0.2, 0.7]}>
-      <WebView style={{ backgroundColor: 'transparent', marginTop: 100, padding: 100 }} originWhitelist={['*']} source={{ html: PRIVACY_POLICY }} />
-      <Text style={{ marginTop: 20, color: 'white', alignSelf: 'center', marginBottom: 20 }}>© 2020 ForeSee</Text>
+    <LinearGradientBackground style={{ height: "100%" }} colors={["#2c3e50", "#2980b9"]} start={[1, 1]} end={[0, 0]} locations={[0.2, 0.7]}>
+      <WebView style={{ backgroundColor: "transparent", marginTop: 100, padding: 100 }} originWhitelist={["*"]} source={{ html: PRIVACY_POLICY }} />
     </LinearGradientBackground>
   );
 }
