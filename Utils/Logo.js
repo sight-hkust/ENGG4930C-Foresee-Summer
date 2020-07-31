@@ -1,8 +1,8 @@
 import React from "react";
-import icon from "../../../assets/images/icon.png";
+import icon from "../assets/images/icon.png";
 import { Image, View, Text } from "react-native";
 import { StyleSheet } from "react-native";
-import { ScreenWidth, ScreenHeight, FontScale } from "../../../constant/Constant";
+import { ScreenWidth, ScreenHeight, FontScale } from "../constant/Constant";
 
 export const Logo = ({ style, iconStyle, textStyle, hideText = false }) => {
   return (
@@ -29,6 +29,7 @@ const styles = StyleSheet.create({
     fontWeight: "700",
     fontSize: 20,
     left: ScreenWidth * 0.03,
+    backgroundColor: "cyan",
   },
   icon: {
     flex: 3,

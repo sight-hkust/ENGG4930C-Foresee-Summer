@@ -12,7 +12,7 @@ export default class MenuScreen extends Component {
   }
 
   render() {
-    console.log(this.props.containerStyle);
+    //console.log(this.props.containerStyle);
     return (
       <View
         style={{
@@ -30,11 +30,7 @@ export default class MenuScreen extends Component {
           >
             <LinearGradientBackground
               style={{ height: "100%" }}
-              colors={
-                this.state.isLightTheme
-                  ? ["#1772A6", "#A377FF"]
-                  : ["#2D404B", "#2D404B"]
-              }
+              colors={this.state.isLightTheme ? ["#1772A6", "#A377FF"] : ["#2D404B", "#2D404B"]}
               start={[0, 1]}
               end={[1, 0]}
               locations={[0.12, 0.92]}

@@ -1,9 +1,13 @@
-import React, { useEffect } from 'react';
-import { View, StyleSheet, Text } from 'react-native';
-import { ScreenHeight, FontScale, ScreenWidth } from '../../../../constant/Constant';
-import { LinearGradientBackground } from '../../../../Utils/LinearGradientBackground';
-import Logo from '../../Utils/Logo';
-import { RoundButton } from '../../../../Utils/RoundButton';
+import React, { useEffect } from "react";
+import { View, StyleSheet, Text } from "react-native";
+import {
+  ScreenHeight,
+  FontScale,
+  ScreenWidth,
+} from "../../../../constant/Constant";
+import { LinearGradientBackground } from "../../../../Utils/LinearGradientBackground";
+import Logo from "../../../../Utils/Logo";
+import { RoundButton } from "../../../../Utils/RoundButton";
 
 const test = async () => {
   return await nanoid();
@@ -18,17 +22,17 @@ export const LinkExistingUserInfo = ({ navigation }) => {
           <Text style={styles.title}>是否已登記用戶?</Text>
           <View
             style={{
-              flexDirection: 'row',
+              flexDirection: "row",
               marginTop: ScreenWidth * 0.12,
-              width: '100%',
+              width: "100%",
               paddingHorizontal: ScreenWidth * 0.2,
-              alignContent: 'space-between',
+              alignContent: "space-between",
             }}
           >
             <View style={{ flex: 1 }}>
               <RoundButton
                 onPress={() =>
-                  navigation.navigate('Register With Phone Number', {
+                  navigation.navigate("Register With Phone Number", {
                     isProfessional: true,
                   })
                 }
@@ -38,13 +42,13 @@ export const LinkExistingUserInfo = ({ navigation }) => {
                   borderRadius: ScreenWidth * 0.075,
                 }}
                 type="outline"
-                icon={{ name: 'check', type: 'feather', color: 'white' }}
+                icon={{ name: "check", type: "feather", color: "white" }}
               />
             </View>
             <View style={{ flex: 1 }}>
               <RoundButton
                 onPress={() =>
-                  navigation.navigate('Registration Form', {
+                  navigation.navigate("Registration Form", {
                     isProfessional: false,
                   })
                 }
@@ -54,7 +58,7 @@ export const LinkExistingUserInfo = ({ navigation }) => {
                   borderRadius: ScreenWidth * 0.075,
                 }}
                 type="outline"
-                icon={{ name: 'close', type: 'ant', color: 'white' }}
+                icon={{ name: "close", type: "ant", color: "white" }}
               />
             </View>
           </View>
@@ -70,28 +74,28 @@ const styles = StyleSheet.create({
   },
   optionsContainer: {
     marginTop: ScreenHeight * 0.1,
-    width: '100%',
-    height: '100%',
+    width: "100%",
+    height: "100%",
   },
   title: {
-    alignSelf: 'center',
-    textAlign: 'center',
+    alignSelf: "center",
+    textAlign: "center",
     fontSize: 25,
-    color: 'white',
+    color: "white",
   },
   button: {
     margin: ScreenHeight * 0.03,
-    borderColor: 'white',
+    borderColor: "white",
     borderRadius: ScreenWidth * 0.07,
     borderWidth: 1,
     width: ScreenWidth * 0.45,
     height: ScreenHeight * 0.07,
     shadowRadius: ScreenWidth * 0.07,
-    justifyContent: 'center',
-    alignItems: 'center',
+    justifyContent: "center",
+    alignItems: "center",
   },
   buttonTitle: {
-    color: 'white',
+    color: "white",
     fontSize: 18,
   },
 });

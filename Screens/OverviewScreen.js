@@ -113,6 +113,8 @@ class OverviewScreen extends Component {
       }
     };
 
+    //console.log(selectedFamily);
+
     return (
       <>
         <MenuScreen>

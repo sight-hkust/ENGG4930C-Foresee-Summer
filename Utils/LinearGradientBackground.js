@@ -1,7 +1,6 @@
 import React from "react";
 import { LinearGradient } from "expo-linear-gradient";
 import { SafeAreaView, View } from "react-native";
-import { ScreenHeight } from "../constant/Constant";
 
 export const LinearGradientBackground = ({ children, ...props }) => {
   return (

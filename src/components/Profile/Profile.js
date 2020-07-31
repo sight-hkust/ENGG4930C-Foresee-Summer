@@ -172,14 +172,14 @@ const Profile = ({ navigation, route, userInfoStore }) => {
                   })
                 }
               />
-               <Button
+              {/*  <Button
                 title="變更個人資料"
                 type="clear"
                 containerStyle={styles.bottomMenuItemContainer}
                 titleStyle={styles.bottomMenuItemText}
                 TouchableComponent={TouchableOpacity}
                 onPress={() => navigation.navigate("Edit User Info", { user })}
-              />
+              /> */}
               <Button
                 title="登出"
                 type="clear"

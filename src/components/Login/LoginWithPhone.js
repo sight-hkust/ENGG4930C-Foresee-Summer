@@ -1,11 +1,4 @@
-import {
-  Text,
-  TouchableOpacity,
-  View,
-  KeyboardAvoidingView,
-  ActivityIndicator,
-  StyleSheet,
-} from "react-native";
+import { Text, TouchableOpacity, View, KeyboardAvoidingView, ActivityIndicator, StyleSheet } from "react-native";
 import React, { useState, useRef } from "react";
 import Logo from "../Utils/Logo";
 import firebase from "firebase";
@@ -13,12 +6,7 @@ import { auth } from "../../config/config";
 import { useEffect } from "react";
 import { LinearGradientBackground } from "../../../Utils/LinearGradientBackground";
 import { RoundButton } from "../../../Utils/RoundButton";
-import {
-  ScreenHeight,
-  FontScale,
-  Scale,
-  ScreenWidth,
-} from "../../../constant/Constant";
+import { ScreenHeight, FontScale, Scale, ScreenWidth } from "../../../constant/Constant";
 import { KeyIcon, MailIcon, PhoneIcon } from "../Utils/Icons";
 import Modal from "react-native-modal";
 import { FirebaseRecaptchaVerifierModal } from "expo-firebase-recaptcha";
@@ -35,9 +23,7 @@ export const LoginWithPhone = ({ navigation, route }) => {
     });
   });
 
-  const firebaseConfig = firebase.apps.length
-    ? firebase.app().options
-    : undefined;
+  const firebaseConfig = firebase.apps.length ? firebase.app().options : undefined;
   const recaptchaVerifierRef = useRef(null);
 
   const [phoneNumber, setPhoneNumber] = useState("");
@@ -58,7 +44,7 @@ export const LoginWithPhone = ({ navigation, route }) => {
   };
 
   const handleLoginError = (message) => {
-    console.log(message);
+    //console.log(message);
     /* setLoginErrorMessage(message); */
     setLoadingState(false);
   };
@@ -69,10 +55,7 @@ export const LoginWithPhone = ({ navigation, route }) => {
         <KeyboardAvoidingView behavior={"position"}>
           <View style={styles.content}>
             <Logo />
-            <FirebaseRecaptchaVerifierModal
-              ref={recaptchaVerifierRef}
-              firebaseConfig={firebaseConfig}
-            />
+            <FirebaseRecaptchaVerifierModal ref={recaptchaVerifierRef} firebaseConfig={firebaseConfig} />
             <View
               style={{
                 marginTop: ScreenHeight * 0.1,
@@ -111,27 +94,14 @@ export const LoginWithPhone = ({ navigation, route }) => {
                   navigation.navigate("Register");
                 }}
               >
-                <Text
-                  style={[styles.registrationNavText, { color: "#FFFFFF" }]}
-                >
-                  登記
-                </Text>
+                <Text style={[styles.registrationNavText, { color: "#FFFFFF" }]}>登記</Text>
               </TouchableOpacity>
             </View>
           </View>
         </KeyboardAvoidingView>
       </LinearGradientBackground>
-      <Modal
-        isVisible={isVerficationModalShown}
-        animationIn={"fadeIn"}
-        animationOut={"fadeOut"}
-        backdropOpacity={0.5}
-        onBackdropPress={() => setVerifcationModalState(false)}
-      >
-        <VerificationInput
-          confirmationResult={confirmationResult}
-          setVerifcationModalState={setVerifcationModalState}
-        />
+      <Modal isVisible={isVerficationModalShown} animationIn={"fadeIn"} animationOut={"fadeOut"} backdropOpacity={0.5} onBackdropPress={() => setVerifcationModalState(false)}>
+        <VerificationInput confirmationResult={confirmationResult} setVerifcationModalState={setVerifcationModalState} />
       </Modal>
     </>
   );
