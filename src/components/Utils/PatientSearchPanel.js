@@ -10,7 +10,7 @@ import {
   Scale,
 } from "../../../constant/Constant";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { displayName } from "../../helpers/displayName";
+import { displayName } from "../../utils/displayName";
 
 const PatientSearchPanel = ({
   patientListStore,

@@ -3,7 +3,7 @@ import React from "react";
 import { InputFieldWrapper } from "./InputFieldWrapper";
 import { StyleSheet } from "react-native";
 import { ScreenHeight, FontScale } from "../../../constant/Constant";
-import jsonPathToValue from "../../helpers/jsonPathToValue";
+import jsonPathToValue from "../../utils/jsonPathToValue";
 import { Input } from "react-native-elements";
 import {
   heightPercentageToDP,
