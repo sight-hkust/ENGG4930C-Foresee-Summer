@@ -12,6 +12,10 @@ const thumbNail = require('../../../assets/images/interview.png');
 const eyeglasses = require('../../../assets/images/eyeglasses.jpg');
 const Setting = require('../../../assets/images/setting.png');
 
+function rand(x) {
+  return Math.floor(Math.random() * x);
+}
+
 export default class GetEducated extends Component {
   static navigationOptions = {
     title: (navigation) => `Chat with `,
@@ -37,8 +41,10 @@ export default class GetEducated extends Component {
           var childData = { ...item, ...key };
           temp.push(childData);
         });
-        this.setState({ topArticle: temp[temp.length - 1] });
-        temp.pop();
+        let x = rand(temp.length);
+        console.log('topArticle', x, temp[x].subject);
+        this.setState({ topArticle: temp[x] });
+        temp.splice(x, 1);
         temp.reverse();
         this.setState({ data: temp });
       });
