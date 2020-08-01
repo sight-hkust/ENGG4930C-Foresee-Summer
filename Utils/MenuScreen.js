@@ -1,7 +1,9 @@
 import React, { Component } from "react";
-import { View, StyleSheet, Platform } from "react-native";
+import { View, StyleSheet, Platform, Dimensions } from "react-native";
 import { LinearGradientBackground } from "./LinearGradientBackground";
 import { ScreenHeight, Scale } from "../constant/Constant";
+import { Surface } from "react-native-paper";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 export default class MenuScreen extends Component {
   constructor(props) {
@@ -21,7 +23,7 @@ export default class MenuScreen extends Component {
           ...this.props.containerStyle,
         }}
       >
-        <View style={styles.shadow}>
+        <Surface style={styles.shadow}>
           <View
             style={{
               ...styles.backgroundContainer,
@@ -38,7 +40,7 @@ export default class MenuScreen extends Component {
               {this.props.children}
             </LinearGradientBackground>
           </View>
-        </View>
+        </Surface>
       </View>
     );
   }
@@ -53,9 +55,14 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
+
+    borderBottomLeftRadius: 40,
+    borderBottomRightRadius: 40,
+
+    elevation: 12,
   },
   backgroundContainer: {
-    height: Platform.OS === "ios" ? ScreenHeight * 0.9 : ScreenHeight * 0.92,
+    height: Platform.OS === "ios" ? hp("90%") : Dimensions.get("screen").height * 0.92,
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,
     overflow: "hidden",

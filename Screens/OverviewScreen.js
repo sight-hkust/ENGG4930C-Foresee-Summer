@@ -465,7 +465,8 @@ const OverviewScreenStyle = StyleSheet.create({
     flex: 1,
   },
   dateText: {
-    alignSelf: "center",
+    alignSelf: "flex-start",
+    paddingLeft: ScreenWidth * 0.07,
     fontSize: ScreenHeight * 0.028,
     color: "#FFFFFF",
     textAlignVertical: "center",
