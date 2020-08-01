@@ -9,7 +9,7 @@ import { connect } from "react-redux";
 import { watchFamilyMembersUpdate } from "../src/reducers/familyMembers";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Provider, Portal, Modal } from "react-native-paper";
-import { displayName } from "../src/helpers/displayName";
+import { displayName } from "../src/utils/displayName";
 import { getRecordsUpdate } from "../src/reducers/records";
 
 import FABView from "../Utils/FAB";
@@ -113,7 +113,7 @@ class OverviewScreen extends Component {
       }
     };
 
-    console.log(selectedFamily);
+    //console.log(selectedFamily);
 
     return (
       <>

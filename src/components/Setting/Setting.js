@@ -9,24 +9,31 @@ import { auth } from '../../config/config';
 import { RoundButton } from '../../../Utils/RoundButton';
 import { Grid, Col, Row } from 'react-native-easy-grid';
 import { Snackbar } from 'react-native-paper';
+import { LinearGradientBackground } from '../../../Utils/LinearGradientBackground';
 
 export default function Setting({ route, navigation }) {
+  return (
+    <>
+      {route.params?.isProfessional ? (
+        <MenuScreen>
+          <SettingContent navigation={navigation} route={route} />
+        </MenuScreen>
+      ) : (
+        <LinearGradientBackground style={{ height: '100%' }} colors={['#1772A6', '#A377FF']} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]}>
+          <SettingContent navigation={navigation} route={route} />
+        </LinearGradientBackground>
+      )}
+    </>
+  );
+}
+
+const SettingContent = ({ route, navigation }) => {
   const [selectedLabel, setSelectedLabel] = useState();
 
   return (
-    <MenuScreen
-      backgroundContainer={
-        !route.params?.isProfessional
-          ? {
-              height: ScreenHeight,
-              borderBottomLeftRadius: 0,
-              borderBottomRightRadius: 0,
-            }
-          : {}
-      }
-    >
+    <>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        <ListItem title={'深色主題'} containerStyle={styles.listItem} titleStyle={styles.title} rightIcon={<ThemeSwitch />} />
+        {/* <ListItem title={'深色主題'} containerStyle={styles.listItem} titleStyle={styles.title} rightIcon={<ThemeSwitch />} /> */}
         <ListItem Component={TouchableOpacity} title={'程式教學'} containerStyle={styles.listItem} titleStyle={styles.title} chevron={{ size: 30 }} onPress={() => navigation.navigate('Tutorial')} />
         <ListItem
           Component={TouchableOpacity}
@@ -50,17 +57,17 @@ export default function Setting({ route, navigation }) {
         <Collapsible collapsed={selectedLabel != 'feedback'}>
           <Feedback />
         </Collapsible>
-        <ListItem
-          Component={TouchableOpacity}
-          title={'權限'}
-          containerStyle={styles.listItem}
-          titleStyle={styles.title}
-          chevron={{ size: 30 }}
-          onPress={() => setSelectedLabel(selectedLabel == 'permission' ? '' : 'permission')}
-        />
-        <Collapsible collapsed={selectedLabel != 'permission'}>
-          <PermissionSetting />
-        </Collapsible>
+        {/* <ListItem
+      Component={TouchableOpacity}
+      title={'權限'}
+      containerStyle={styles.listItem}
+      titleStyle={styles.title}
+      chevron={{ size: 30 }}
+      onPress={() => setSelectedLabel(selectedLabel == 'permission' ? '' : 'permission')}
+    />
+    <Collapsible collapsed={selectedLabel != 'permission'}>
+      <PermissionSetting />
+    </Collapsible> */}
         <ListItem
           Component={TouchableOpacity}
           title={'條款及細則'}
@@ -99,9 +106,9 @@ export default function Setting({ route, navigation }) {
       >
         © 2020 ForeSee
       </Text>
-    </MenuScreen>
+    </>
   );
-}
+};
 
 const ThemeSwitch = () => {
   const [isLightTheme, setIsLightTheme] = useState(false);
@@ -143,7 +150,7 @@ export const ContactUs = (props) => {
             <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}> Facebook</Text>
           </Col>
           <Col style={styles.contactUsRightCol}>
-            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>@Foresee_Sight</Text>
+            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>@ForeSee HQ</Text>
           </Col>
         </Row>
 
@@ -163,7 +170,7 @@ export const ContactUs = (props) => {
             <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}> Email</Text>
           </Col>
           <Col style={styles.contactUsRightCol}>
-            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>foresee@ust.hk</Text>
+            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>sight.foresee@gmail.com</Text>
           </Col>
         </Row>
       </Grid>

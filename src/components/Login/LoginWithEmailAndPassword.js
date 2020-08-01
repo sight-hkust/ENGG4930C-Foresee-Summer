@@ -1,11 +1,4 @@
-import {
-  Text,
-  TouchableOpacity,
-  View,
-  KeyboardAvoidingView,
-  ActivityIndicator,
-  StyleSheet,
-} from "react-native";
+import { Text, TouchableOpacity, View, KeyboardAvoidingView, ActivityIndicator, StyleSheet, Dimensions } from "react-native";
 import React, { useState } from "react";
 import Logo from "../Utils/Logo";
 import { auth, config } from "../../config/config";
@@ -13,12 +6,7 @@ import { useEffect } from "react";
 import { InputTextField } from "../Utils/InputTextField";
 import { LinearGradientBackground } from "../../../Utils/LinearGradientBackground";
 import { RoundButton } from "../../../Utils/RoundButton";
-import {
-  ScreenHeight,
-  FontScale,
-  Scale,
-  ScreenWidth,
-} from "../../../constant/Constant";
+import { ScreenHeight, FontScale, Scale, ScreenWidth } from "../../../constant/Constant";
 import { KeyIcon, MailIcon } from "../Utils/Icons";
 import Modal from "react-native-modal";
 
@@ -47,24 +35,22 @@ export const LoginWithEmailAndPassword = ({ navigation, route }) => {
 
   const handleLogin = () => {
     setLoadingState(true);
-    auth
-      .signInWithEmailAndPassword(emailInput, passwordInput)
-      .catch(function onFailure(err) {
-        switch (err.code) {
-          case "auth/invalid-email":
-            handleLoginError("電子郵件格式無效");
-            break;
-          case "auth/wrong-password":
-            handleLoginError("密碼錯誤");
-            break;
-          case "auth/user-not-found":
-            handleLoginError("帳號不存在，\n該帳戶有可能已被刪除");
-            break;
-          default:
-            console.log(err.code);
-            handleLoginError(err.code + ": " + err.message);
-        }
-      });
+    auth.signInWithEmailAndPassword(emailInput, passwordInput).catch(function onFailure(err) {
+      switch (err.code) {
+        case "auth/invalid-email":
+          handleLoginError("電子郵件格式無效");
+          break;
+        case "auth/wrong-password":
+          handleLoginError("密碼錯誤");
+          break;
+        case "auth/user-not-found":
+          handleLoginError("帳號不存在，\n該帳戶有可能已被刪除");
+          break;
+        default:
+          //console.log(err.code);
+          handleLoginError(err.code + ": " + err.message);
+      }
+    });
   };
 
   return (
@@ -75,25 +61,12 @@ export const LoginWithEmailAndPassword = ({ navigation, route }) => {
             <Logo />
             <View
               style={{
-                marginTop: ScreenHeight * 0.1,
+                marginTop: ScreenHeight * 0.045,
                 marginBottom: ScreenHeight * 0.05,
               }}
             >
-              <InputTextField
-                label="電子郵件"
-                icon={MailIcon}
-                defaultValue={emailInput}
-                setValue={setEmailInput}
-                hideEmbeddedErrorMessage={true}
-              />
-              <InputTextField
-                label="密碼"
-                icon={KeyIcon}
-                defaultValue={passwordInput}
-                setValue={setPasswordInput}
-                secureTextEntry={true}
-                hideEmbeddedErrorMessage
-              />
+              <InputTextField label="電子郵件" icon={MailIcon} defaultValue={emailInput} setValue={setEmailInput} hideEmbeddedErrorMessage={true} />
+              <InputTextField label="密碼" icon={KeyIcon} defaultValue={passwordInput} setValue={setPasswordInput} secureTextEntry={true} hideEmbeddedErrorMessage />
               <View>
                 {loginErrorMessage !== "" ? (
                   <Text
@@ -118,22 +91,14 @@ export const LoginWithEmailAndPassword = ({ navigation, route }) => {
                   navigation.navigate("Register");
                 }}
               >
-                <Text
-                  style={[styles.registrationNavText, { color: "#FFFFFF" }]}
-                >
-                  登記
-                </Text>
+                <Text style={[styles.registrationNavText, { color: "#FFFFFF" }]}>登記</Text>
               </TouchableOpacity>
             </View>
           </View>
         </KeyboardAvoidingView>
       </LinearGradientBackground>
-      <Modal
-        isVisible={isLoading}
-        animationIn={"fadeIn"}
-        animationOut={"fadeOut"}
-      >
-        <ActivityIndicator size={Scale * 30} color="lightskyblue" />
+      <Modal isVisible={isLoading} animationIn={"fadeIn"} animationOut={"fadeOut"}>
+        <ActivityIndicator size={Scale * 30} color="#00acc1" />
       </Modal>
     </>
   );

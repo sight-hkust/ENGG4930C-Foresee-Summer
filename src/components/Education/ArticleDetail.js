@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, ScrollView } from 'react-native';
+import { SafeAreaView, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
 import { database, storage } from '../../config/config';
 import React, { Component } from 'react';
 import { Audio, Video } from 'expo-av';
@@ -19,7 +19,7 @@ export default class ArticleDetailScreen extends Component {
       play: false,
       playbackObject: null,
       volume: 1.0,
-      isBuffering: false,
+      isBuffering: true,
       article_id: article_id, //this.props.route.params.article_id then remove from state
       content: '',
       subject: '',
@@ -28,6 +28,7 @@ export default class ArticleDetailScreen extends Component {
       video: null,
       isVid: false,
       videoHeight: ScreenWidth * 0.5625,
+      loading: true,
     };
   }
 
@@ -49,7 +50,7 @@ export default class ArticleDetailScreen extends Component {
       };
       const source = { uri: vid };
       await this.video.loadAsync(source, status, false);
-      this.setState({ playbackObject: this.video });
+      this.setState({ playbackObject: this.video, isBuffering: false });
     } catch (e) {
       console.log(e);
     }
@@ -137,10 +138,20 @@ export default class ArticleDetailScreen extends Component {
     };
 
     return (
-      <View style={{ backgroundColor: '#F6F6F6', height: '100%' }}>
+      <View style={{ backgroundColor: '#F6F6F6', flex: 1 }}>
         <View>
           {this.state.isVid && (
-            <>
+            <View>
+              {this.state.isBuffering == true && (
+                <ActivityIndicator
+                  color="#00acc1"
+                  size="large"
+                  style={{
+                    width: ScreenWidth,
+                    height: this.state.videoHeight,
+                  }}
+                />
+              )}
               <Video
                 ref={this.mountVid}
                 resizeMode="contain"
@@ -152,38 +163,43 @@ export default class ArticleDetailScreen extends Component {
                 }}
                 onFullscreenUpdate={this.fullscreencontrol}
                 style={{
-                  width: ScreenWidth,
-                  height: this.state.videoHeight,
+                  width: this.state.isBuffering == true ? 0 : ScreenWidth,
+                  height: this.state.isBuffering == true ? 0 : this.state.videoHeight,
                 }}
               />
-              <Text style={[ArticleDetailStyles.videoSubject, { top: this.state.videoHeight + 20 }]}>{this.state.subject}</Text>
-            </>
+
+              <Text style={[ArticleDetailStyles.videoSubject, { marginTop: ScreenHeight * 0.03 }]}>{this.state.subject}</Text>
+            </View>
           )}
 
           {!this.state.isVid && (
             <>
-              <Image source={{ uri: this.state.image }} style={{ width: ScreenWidth, height: ScreenWidth * 0.5625 }} />
-              <LinearGradient
-                colors={['transparent', 'transparent', '#F6F6F6']}
-                locations={[0, 0.2, 1]}
-                style={{
-                  position: 'absolute',
-                  height: ScreenWidth * 0.5625,
-                  width: Dimensions.get('window').width,
-                  resizeMode: 'cover',
-                }}
-              ></LinearGradient>
-              <Text style={[ArticleDetailStyles.articleSubject, { top: ScreenWidth * 0.5625 - 30 }]}>{this.state.subject}</Text>
+              <View style={{ position: 'absolute' }}>
+                <Image source={{ uri: this.state.image }} style={{ width: ScreenWidth, height: ScreenWidth * 0.5625 }} />
+                <LinearGradient
+                  colors={['transparent', 'transparent', '#F6F6F6']}
+                  locations={[0, 0.2, 1]}
+                  style={{
+                    position: 'absolute',
+                    height: ScreenWidth * 0.5625,
+                    width: Dimensions.get('window').width,
+                    resizeMode: 'cover',
+                  }}
+                ></LinearGradient>
+              </View>
+              <View style={{ marginTop: ScreenWidth * 0.45 }}>
+                <Text style={[ArticleDetailStyles.articleSubject]}>{this.state.subject}</Text>
+              </View>
             </>
           )}
         </View>
 
-        <View style={{ alignItems: 'center', flex: 1 }}>
+        <View style={{ alignItems: 'center', flex: 1, marginTop: ScreenHeight * 0.03 }}>
           {!this.state.isVid && this.state.audio != '' && this.state.audio != null && (
             <Button title={this.state.play ? '暫停錄音' : '播放錄音'} titleStyle={ArticleDetailStyles.buttonTitle} onPress={() => PressPlayButton()} buttonStyle={ArticleDetailStyles.playButton} />
           )}
-          <View style={{ flex: 1, width: ScreenWidth }}>
-            <WebView style={{ backgroundColor: 'transparent', marginTop: ScreenHeight * 0.1 }} originWhitelist={['*']} source={{ html: this.state.content }} />
+          <View style={{ width: ScreenWidth, flex: 1 }}>
+            <WebView style={{ backgroundColor: 'transparent' }} originWhitelist={['*']} source={{ html: this.state.content }} />
           </View>
         </View>
       </View>
@@ -193,17 +209,14 @@ export default class ArticleDetailScreen extends Component {
 
 const ArticleDetailStyles = StyleSheet.create({
   articleSubject: {
-    position: 'absolute',
-    top: 210,
-    fontSize: ScreenHeight * 0.05,
-    paddingLeft: 30,
+    fontSize: ScreenHeight * 0.04,
+    paddingHorizontal: 30,
     color: '#24559E',
     fontWeight: 'bold',
   },
   videoSubject: {
-    position: 'absolute',
-    fontSize: ScreenHeight * 0.05,
-    paddingLeft: 30,
+    fontSize: ScreenHeight * 0.04,
+    paddingHorizontal: 30,
     color: '#24559E',
     fontWeight: 'bold',
   },

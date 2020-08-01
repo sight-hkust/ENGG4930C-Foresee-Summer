@@ -8,6 +8,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 import GetEducatedScreen from './src/components/Education/GetEducated';
+import DashboardScreen from './src/components/Education/EducationGame/DashboardScreen';
 import EyeExerciseScreen from './src/components/Education/EyeExercise';
 import ArticleDetailScreen from './src/components/Education/ArticleDetail';
 import PostQuestion from './src/components/AskAnExpert/PostQuestionScreen';
@@ -45,6 +46,9 @@ import { RecordTutorial, AddRecordTutorial } from './src/components/Tutorial/Min
 import ProfPatientRecordView from './src/components/Professional/ProfPatientRecrodView/ProfPatientRecordView';
 import { BackButton } from './src/components/Utils/BackButton';
 import { EditUserInfo } from './src/components/Profile/EditUserInfo';
+import { Surface } from 'react-native-paper';
+import { View } from 'react-native-animatable';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -58,6 +62,7 @@ function ArticleScreen({ navigation, route }) {
   return (
     <Stack.Navigator screenOptions={headerConfig}>
       <Stack.Screen name="GetEducatedScreen" component={GetEducatedScreen} options={{ title: '護眼秘笈' }} />
+      <Stack.Screen name="DashboardScreen" component={DashboardScreen} options={{ title: '成就統計' }} />
       <Stack.Screen name="ArticleDetailScreen" component={ArticleDetailScreen} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
@@ -182,7 +187,7 @@ function Main({ route, navigation }) {
         style: {
           position: 'absolute',
           backgroundColor: 'transparent',
-          height: Platform.OS === 'ios' ? Dimensions.get('window').height * 0.09 : Dimensions.get('window').height * 0.08,
+          height: Platform.OS === 'ios' ? hp('9%') : hp('8%'),
           borderTopWidth: 0,
           borderTopColor: 'transparent',
           paddingHorizontal: auth.currentUser.displayName == 'professional' ? 80 : 30,
@@ -229,7 +234,11 @@ function Main({ route, navigation }) {
             component={ArticleScreen}
             options={{
               tabBarLabel: '護眼秘笈',
-              tabBarIcon: () => <Image source={require('./assets/images/Articles_dark.png')} style={styles.icon} />,
+              tabBarIcon: () => (
+                <TouchableOpacity onPress={() => navigation.navigate('GetEducated')}>
+                  <Image source={require('./assets/images/Articles_dark.png')} style={styles.icon} />
+                </TouchableOpacity>
+              ),
             }}
           />
 
@@ -238,7 +247,13 @@ function Main({ route, navigation }) {
             component={ExerciseScreen}
             options={{
               tabBarLabel: '護眼運動',
-              tabBarIcon: () => <Image source={require('./assets/images/Exercise_dark.png')} style={styles.icon} />,
+              tabBarIcon: () => (
+                <>
+                  <TouchableOpacity onPress={() => navigation.navigate('ExerciseScreen')}>
+                    <Image source={require('./assets/images/Exercise_dark.png')} style={styles.icon} />
+                  </TouchableOpacity>
+                </>
+              ),
             }}
           />
 
@@ -247,7 +262,11 @@ function Main({ route, navigation }) {
             component={HomeScreen}
             options={{
               tabBarLabel: '主頁',
-              tabBarIcon: () => <Image source={require('./assets/images/Icon_solid.png')} style={{ ...styles.icon, ...{ width: 50, height: 50 } }} />,
+              tabBarIcon: () => (
+                <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')}>
+                  <Image source={require('./assets/images/Icon_solid.png')} style={{ ...styles.icon, ...{ width: 50, height: 50 } }} />
+                </TouchableOpacity>
+              ),
             }}
           />
 
@@ -256,7 +275,11 @@ function Main({ route, navigation }) {
             component={FaqScreen}
             options={{
               tabBarLabel: '專家解答',
-              tabBarIcon: () => <Image source={require('./assets/images/Qna_dark.png')} style={styles.icon} />,
+              tabBarIcon: () => (
+                <TouchableOpacity onPress={() => navigation.navigate('FaqScreen')}>
+                  <Image source={require('./assets/images/Qna_dark.png')} style={styles.icon} />
+                </TouchableOpacity>
+              ),
             }}
           />
 
@@ -265,7 +288,11 @@ function Main({ route, navigation }) {
             component={ProfileScreen}
             options={{
               tabBarLabel: '個人檔案',
-              tabBarIcon: () => <Image source={require('./assets/images/Profile.png')} style={styles.icon} />,
+              tabBarIcon: () => (
+                <TouchableOpacity onPress={() => navigation.navigate('ProfileScreen')}>
+                  <Image source={require('./assets/images/Profile.png')} style={styles.icon} />
+                </TouchableOpacity>
+              ),
             }}
           />
         </>

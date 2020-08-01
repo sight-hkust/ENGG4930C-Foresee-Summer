@@ -550,7 +550,7 @@ export const VA6Slider = (props) => {
   //const VA6Arr = ["6/4.8", "6/6", "6/7.5", "6/9", "6/12", "6/15", "6/30", "6/60", "6/120", "6/240"];
   const SliderHandler = () => {
     setFieldValue(isLeft ? "L_VA" : "R_VA", sliderValue.toString(), false);
-    console.log(sliderValue.toString());
+    //console.log(sliderValue.toString());
   };
   return (
     <View style={{ alignSelf: "center" }}>
