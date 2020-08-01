@@ -88,5 +88,6 @@ export const SchemaRegisterChild = object().shape({
       return true;
     },
   }),
+  gender: string().required("請選擇性別"),
   birthday: string().required("請輸入病人出生日期"),
 });

@@ -89,6 +89,7 @@ export const SchemaPatient = object().shape({
       return true;
     },
   }),
+  gender: string().required("請選擇性別"),
   birthday: string().required("請輸入出生年份和月份"),
   email: string()
     .email("電郵地址無效，請以有效格式輸入電郵(例如：foresee@gmail.com)")
