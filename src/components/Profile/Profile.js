@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Button, Icon } from "react-native-elements";
 import { Grid, Col, Row } from "react-native-easy-grid";
 import moment from "moment";
@@ -7,16 +7,37 @@ import moment from "moment";
 import { ScreenWidth, ScreenHeight } from "../../../constant/Constant";
 import MenuScreen from "../../../Utils/MenuScreen";
 
-import { connect } from "react-redux";
+import { connect, useDispatch, useSelector } from "react-redux";
 import { watchUserInfoUpdate } from "../../reducers/user";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { auth } from "../../config/config";
 import { displayName } from "../../utils/displayName";
+import { watchFamilyMembersUpdate } from "../../reducers/familyMembers";
 
-const Profile = ({ navigation, route, userInfoStore }) => {
+const Profile = ({ navigation, route }) => {
+  const disptach = useDispatch();
+  const { user } = useSelector((state) => state.user);
+  const familyMembers = useSelector((state) => state.familyMembers);
+
+  useEffect(() => {
+    return () => {
+      disptach(watchUserInfoUpdate());
+      disptach(watchFamilyMembersUpdate());
+    };
+  }, []);
+
+  useEffect(() => {
+    console.log(familyMembers);
+  }, [familyMembers]);
+
+  useEffect(() => {
+    console.log(user);
+  }, [user]);
+
   const [loading, setLoading] = useState(true);
 
-  const { user } = userInfoStore;
+  const { selectedFamilyMember, setSelectedFamilyMember } = useState(null);
+
+  useDispatch(() => {}, []);
 
   useEffect(() => {
     if (user != undefined) {
@@ -293,15 +314,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => {
-  return {
-    userInfoStore: state.user,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  dispatch(watchUserInfoUpdate());
-  return {};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
+export default Profile;

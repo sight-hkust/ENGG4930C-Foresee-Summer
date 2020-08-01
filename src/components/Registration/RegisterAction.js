@@ -17,96 +17,101 @@ const writeUserData = ({
   console.log(registerChild);
   switch (true) {
     case registerPatient:
-      database.ref("professionals/" + uid + "/patients/" + patientUid).set({
-        uid: patientUid,
-        inactive: true,
-        firstName: values.firstName || "",
-        lastName: values.lastName || "",
-        surName: values.surName || "",
-        givenName: values.givenName || "",
-      });
-      database.ref("users/" + patientUid).set({
-        uid: patientUid,
-        inactive: true,
-        firstName: values.firstName,
-        lastName: values.lastName,
-        email: values.email,
-        birthday: moment(values.birthday).toJSON(),
-        job: values.job,
-        history: values.history,
-        disease: values.disease,
-      });
+      database.ref("professionals/" + uid + "/patients/" + patientUid).set(
+        encryptData({
+          uid: patientUid,
+          inactive: true,
+          firstName: values.firstName || "",
+          lastName: values.lastName || "",
+          surName: values.surName || "",
+          givenName: values.givenName || "",
+        })
+      );
+      database.ref("users/" + patientUid).set(
+        encryptData({
+          uid: patientUid,
+          inactive: true,
+          firstName: values.firstName,
+          lastName: values.lastName,
+          email: values.email,
+          birthday: moment(values.birthday).toJSON(),
+          job: values.job,
+          history: values.history,
+          disease: values.disease,
+        })
+      );
       if (!values.parentSelectionDisalbed && values.parent.uid) {
         database
           .ref("users/" + values.parent.uid + "/familyMembers/" + patientUid)
-          .set({
-            uid: patientUid,
-            inactive: true,
+          .set(
+            encryptData({
+              uid: patientUid,
+              inactive: true,
+              firstName: values.firstName,
+              lastName: values.lastName,
+              givenName: values.givenName,
+              surName: values.surName,
+            })
+          );
+      }
+      break;
+    case registerChild:
+      database.ref("users/" + uid + "/familyMembers/" + childUid).set(
+        encryptData({
+          uid: childUid,
+          inactive: true,
+          firstName: values.firstName || "",
+          lastName: values.lastName || "",
+          surName: values.surName || "",
+          givenName: values.givenName || "",
+        })
+      );
+      database.ref("users/" + childUid).set(
+        encryptData({
+          uid: childUid,
+          inactive: true,
+          firstName: values.firstName || "",
+          lastName: values.lastName || "",
+          surName: values.surName || "",
+          givenName: values.givenName || "",
+          birthday: moment(values.birthday).toJSON(),
+          job: values.job,
+          history: values.history,
+          disease: values.disease,
+          allowedSearch: values.allowedSearch,
+        })
+      );
+      break;
+    default:
+      if (!isProfessional) {
+        database.ref("/users/" + uid).set(
+          encryptData({
+            uid: uid,
+            email: values.email,
+            tel_code: values.tel_country_code,
+            phone: values.tel_number,
             firstName: values.firstName,
             lastName: values.lastName,
             givenName: values.givenName,
             surName: values.surName,
-          });
-      }
-      break;
-    case registerChild:
-      database.ref("users/" + uid + "/familyMembers/" + childUid).set({
-        uid: childUid,
-        inactive: true,
-        firstName: values.firstName || "",
-        lastName: values.lastName || "",
-        surName: values.surName || "",
-        givenName: values.givenName || "",
-      });
-      database.ref("users/" + childUid).set({
-        uid: childUid,
-        inactive: true,
-        firstName: values.firstName || "",
-        lastName: values.lastName || "",
-        surName: values.surName || "",
-        givenName: values.givenName || "",
-        birthday: moment(values.birthday).toJSON(),
-        job: values.job,
-        history: values.history,
-        disease: values.disease,
-        allowedSearch: values.allowedSearch,
-      });
-      break;
-    default:
-      if (!isProfessional) {
-        database.ref("/users/" + uid).set({
-          uid: uid,
-          email: values.email,
-          tel_code: values.tel_country_code,
-          phone: values.tel_number,
-          firstName: values.firstName,
-          lastName: values.lastName,
-          givenName: values.givenName,
-          surName: values.surName,
-          birthday: moment(values.birthday).toJSON(),
-          records: {},
-        });
-        /* database.ref("userInfo/" + uid).set({
-          uid: uid,
-          firstName: values.firstName,
-          lastName: values.lastName,
-          email: values.email,
-          phone: values.tel_country_code + values.tel_number,
-          birthday: moment(values.birthday).toJSON(),
-          allowedSearch: values.allowedSearch,
-        }); */
+            birthday: moment(values.birthday).toJSON(),
+            records: {},
+          })
+        );
       } else {
-        database.ref("/professionals/" + uid).set({
-          uid: uid,
-          firstName: values.firstName,
-          lastName: values.lastName,
-          givenName: values.givenName,
-          surName: values.surName,
-          email: values.email,
-          tel_code: values.tel_country_code,
-          phone: values.tel_number,
-          role: values.role,
-        });
+        database.ref("/professionals/" + uid).set(
+          encryptData({
+            uid: uid,
+            firstName: values.firstName,
+            lastName: values.lastName,
+            givenName: values.givenName,
+            surName: values.surName,
+            email: values.email,
+            tel_code: values.tel_country_code,
+            phone: values.tel_number,
+            role: values.role,
+          })
+        );
       }
       break;
   }
