@@ -41,11 +41,10 @@ export default class GetEducated extends Component {
           var childData = { ...item, ...key };
           temp.push(childData);
         });
+        temp.reverse();
         let x = rand(temp.length);
         console.log('topArticle', x, temp[x].subject);
         this.setState({ topArticle: temp[x] });
-        temp.splice(x, 1);
-        temp.reverse();
         this.setState({ data: temp });
       });
   }
