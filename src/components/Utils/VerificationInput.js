@@ -25,7 +25,6 @@ export const VerificationInput = ({
         .confirm(code)
         .then((result) => {
           setVerifcationModalState(false);
-          console.log(result);
         })
         .catch((err) => console.log(err));
     }

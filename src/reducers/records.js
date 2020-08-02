@@ -24,7 +24,7 @@ export const updateRecords = (dateList, records) => {
   };
 };
 
-export const getRecordsUpdate = (uid, inactive) => {
+export const getRecordsUpdate = (uid) => {
   return (dispatch) => {
     let recordsRef = database.ref("/users/" + uid + "/records");
     recordsRef

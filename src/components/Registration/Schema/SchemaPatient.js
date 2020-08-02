@@ -102,7 +102,6 @@ export const SchemaPatient = object().shape({
       (val) => {
         if (val !== null && val !== undefined) {
           passwordSchemaHasError = !(val.length >= 8 && val.length <= 16);
-          console.log(passwordSchemaHasError);
           return !passwordSchemaHasError;
         }
       }

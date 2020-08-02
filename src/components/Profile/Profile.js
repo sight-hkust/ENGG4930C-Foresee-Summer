@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Button, Icon } from "react-native-elements";
 import { Grid, Col, Row } from "react-native-easy-grid";
@@ -7,48 +7,39 @@ import moment from "moment";
 import { ScreenWidth, ScreenHeight } from "../../../constant/Constant";
 import MenuScreen from "../../../Utils/MenuScreen";
 
-import { connect, useDispatch, useSelector } from "react-redux";
-import { watchUserInfoUpdate } from "../../reducers/user";
-import { auth } from "../../config/config";
-import { displayName } from "../../utils/displayName";
-import { watchFamilyMembersUpdate } from "../../reducers/familyMembers";
+import { auth, database } from "../../config/config";
+import { connect, useSelector } from "react-redux";
+import FamilyListPicker from "../FamilyListPicker/FamilyListPicker";
+import { decryptData } from "../../utils/encryptData";
+import { updateFamilyMembers } from "../../reducers/familyMembers";
 
 const Profile = ({ navigation, route }) => {
-  const disptach = useDispatch();
-  const { user } = useSelector((state) => state.user);
   const familyMembers = useSelector((state) => state.familyMembers);
+  const [loading, setLoading] = useState(true);
+  const [userData, setUserData] = useState(null);
+
+  const updateUserData = (uid) => {
+    database
+      .ref("users/" + uid)
+      .once("value")
+      .then((snap) => setUserData(decryptData(snap.val())));
+  };
 
   useEffect(() => {
-    return () => {
-      disptach(watchUserInfoUpdate());
-      disptach(watchFamilyMembersUpdate());
-    };
-  }, []);
-
-  useEffect(() => {
-    console.log(familyMembers);
+    if (!userData) {
+      updateUserData(familyMembers[0].uid);
+    }
   }, [familyMembers]);
 
-  useEffect(() => {
-    console.log(user);
-  }, [user]);
-
-  const [loading, setLoading] = useState(true);
-
-  const { selectedFamilyMember, setSelectedFamilyMember } = useState(null);
-
-  useDispatch(() => {}, []);
-
-  useEffect(() => {
-    if (user != undefined) {
-      setLoading(false);
-    }
-  }, [user]);
+  const updateSelectedFamilyMember = (member) => {
+    const { uid } = member;
+    updateUserData(uid);
+  };
 
   return (
     <MenuScreen>
       <View style={styles.container}>
-        {!loading && (
+        {userData && (
           <>
             <View style={styles.card}>
               <Grid>
@@ -61,7 +52,9 @@ const Profile = ({ navigation, route }) => {
                 >
                   <View style={styles.nameContainer}>
                     <Text style={styles.name}>
-                      {user.lastName != "" ? user.lastName : user.givenName[0]}
+                      {userData.lastName != ""
+                        ? userData.lastName
+                        : userData.givenName[0]}
                     </Text>
                   </View>
                 </Row>
@@ -75,21 +68,32 @@ const Profile = ({ navigation, route }) => {
                   />
                 </Row>
 
-                <Row style={styles.titleContainer}>
-                  <Text
+                <Row style={[styles.titleContainer]}>
+                  {/*  <Text
                     style={
                       user.lastName != "" ? styles.title : styles.titleEnglish
                     }
                   >
                     {displayName(user)}
-                  </Text>
+                  </Text> */}
+                  <FamilyListPicker
+                    containerStyle={{
+                      width: "100%",
+                      justifyContent: "center",
+                    }}
+                    textStyle={{
+                      fontSize: ScreenHeight * 0.045,
+                      color: "#1772A6",
+                    }}
+                    onSelectionUpdate={updateSelectedFamilyMember}
+                  />
                 </Row>
 
                 <Row
                   style={{ ...styles.titleContainer, ...{ marginBottom: 7.5 } }}
                 >
                   <Text style={styles.subtitle}>
-                    {user.birthday.split("T")[0]}
+                    {userData.birthday.split("T")[0]}
                   </Text>
                 </Row>
                 <Row style={{ height: 47.5 }}>
@@ -136,7 +140,7 @@ const Profile = ({ navigation, route }) => {
                     <Text style={styles.info}>
                       <Text style={{ fontSize: 30 }}>
                         {moment
-                          .duration(moment().diff(user.birthday, "YYYY"))
+                          .duration(moment().diff(userData.birthday, "YYYY"))
                           .years()}
                       </Text>
                       歲
@@ -154,11 +158,11 @@ const Profile = ({ navigation, route }) => {
                         },
                       }}
                     >
-                      {user.email}
+                      {userData.email}
                     </Text>
                   </Col>
                   <Col style={styles.infoContainer}>
-                    <Text style={styles.info}>{user.phone}</Text>
+                    <Text style={styles.info}>{userData.phone}</Text>
                   </Col>
                 </Row>
               </Grid>
@@ -217,6 +221,8 @@ const Profile = ({ navigation, route }) => {
     </MenuScreen>
   );
 };
+
+export default Profile;
 
 const styles = StyleSheet.create({
   container: {
@@ -313,5 +319,3 @@ const styles = StyleSheet.create({
     fontSize: 16.5,
   },
 });
-
-export default Profile;

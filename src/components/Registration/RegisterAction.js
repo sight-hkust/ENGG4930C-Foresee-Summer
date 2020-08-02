@@ -14,7 +14,6 @@ const writeUserData = ({
   registerChild = false,
   childUid = null,
 }) => {
-  console.log(registerChild);
   switch (true) {
     case registerPatient:
       database.ref("professionals/" + uid + "/patients/" + patientUid).set(

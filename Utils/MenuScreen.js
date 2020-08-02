@@ -14,7 +14,6 @@ export default class MenuScreen extends Component {
   }
 
   render() {
-    //console.log(this.props.containerStyle);
     return (
       <View
         style={{

@@ -42,7 +42,6 @@ const PatientSearchPanel = ({
         (givenName && keyword.includes(givenName))
       );
     });
-    console.log(newResult);
     setResult(newResult);
     setSearch(keyword);
   };

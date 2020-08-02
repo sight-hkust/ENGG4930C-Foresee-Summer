@@ -1,5 +1,5 @@
 import CryptoJS from "crypto-js";
-import { SECRET_KEY } from "../config/config";
+import { cryptoJSkey } from "../../secrets";
 
 const encryptDataType = ["birthday", "email", "phone"];
 
@@ -9,7 +9,10 @@ export const encryptData = (data) => {
   const keys = Object.keys(data);
   keys.forEach((key) => {
     if (encryptDataType.includes(key)) {
-      const encryptedData = CryptoJS.AES.encrypt(data[key], key).toString();
+      const encryptedData = CryptoJS.AES.encrypt(
+        data[key],
+        cryptoJSkey
+      ).toString();
       result[key] = encryptedData;
     } else {
       result[key] = data[key];
@@ -26,7 +29,7 @@ export const decryptData = (encryptedData) => {
     if (encryptDataType.includes(key)) {
       const decryptedData = CryptoJS.AES.decrypt(
         encryptedData[key],
-        key
+        cryptoJSkey
       ).toString(CryptoJS.enc.Utf8);
       result[key] = decryptedData;
     } else {
