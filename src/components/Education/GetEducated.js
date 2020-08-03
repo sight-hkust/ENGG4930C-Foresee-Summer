@@ -7,7 +7,7 @@ import { ScreenWidth, ScreenHeight, FontScale } from '../../../constant/Constant
 import HeaderRightButton from '../../../Utils/HeaderRightButton';
 import FABView from '../../../Utils/FAB';
 import MenuScreen from '../../../Utils/MenuScreen';
-import { actionCounter } from '../../helpers/actionCounter';
+import { actionCounter } from '../../utils/actionCounter';
 const thumbNail = require('../../../assets/images/interview.png');
 const eyeglasses = require('../../../assets/images/eyeglasses.jpg');
 const Setting = require('../../../assets/images/setting.png');
