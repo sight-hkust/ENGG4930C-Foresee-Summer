@@ -12,6 +12,7 @@ import { Snackbar, Portal } from 'react-native-paper';
 import { useSelector, useDispatch } from 'react-redux';
 import { watchUserInfoUpdate } from '../../reducers/user';
 import moment from 'moment';
+import { LinearGradientBackground } from '../../../Utils/LinearGradientBackground';
 
 export default function Setting({ route, navigation }) {
   return (
