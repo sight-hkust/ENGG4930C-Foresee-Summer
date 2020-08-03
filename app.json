@@ -28,11 +28,6 @@
     "packagerOpts": {
       "config": "metro.config.js",
       "sourceExts": ["js", "jsx", "svg", "svgx"]
-    },
-    "androidNavigationBar": {
-      "visible": "sticky-immersive",
-      "barStyle": "light-content",
-      "backgroundColor": "#3689b1"
     }
   }
 }
