@@ -1,9 +1,9 @@
-import React, { Component } from "react";
-import { View, StyleSheet, Platform, Dimensions } from "react-native";
-import { LinearGradientBackground } from "./LinearGradientBackground";
-import { ScreenHeight, Scale } from "../constant/Constant";
-import { Surface } from "react-native-paper";
-import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import React, { Component } from 'react';
+import { View, StyleSheet, Platform, Dimensions } from 'react-native';
+import { LinearGradientBackground } from './LinearGradientBackground';
+import { ScreenHeight, Scale } from '../constant/Constant';
+import { Surface } from 'react-native-paper';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 export default class MenuScreen extends Component {
   constructor(props) {
@@ -19,7 +19,7 @@ export default class MenuScreen extends Component {
       <View
         style={{
           ...styles.container,
-          backgroundColor: this.state.isLightTheme ? "#BED8FF" : "#2372A5",
+          backgroundColor: this.state.isLightTheme ? '#BED8FF' : '#2372A5',
           ...this.props.containerStyle,
         }}
       >
@@ -30,13 +30,7 @@ export default class MenuScreen extends Component {
               ...this.props.backgroundContainer,
             }}
           >
-            <LinearGradientBackground
-              style={{ height: "100%" }}
-              colors={this.state.isLightTheme ? ["#1772A6", "#A377FF"] : ["#2D404B", "#2D404B"]}
-              start={[0, 1]}
-              end={[1, 0]}
-              locations={[0.12, 0.92]}
-            >
+            <LinearGradientBackground style={{ height: '100%' }} colors={this.state.isLightTheme ? ['#1772A6', '#A377FF'] : ['#2D404B', '#2D404B']} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]}>
               {this.props.children}
             </LinearGradientBackground>
           </View>
@@ -50,8 +44,8 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   shadow: {
-    shadowColor: "#000000",
-    shadowColor: "#000",
+    shadowColor: '#000000',
+    shadowColor: '#000',
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.3,
     shadowRadius: 5,
@@ -62,9 +56,9 @@ const styles = StyleSheet.create({
     elevation: 12,
   },
   backgroundContainer: {
-    height: Platform.OS === "ios" ? hp("90%") : Dimensions.get("screen").height * 0.92,
+    height: Platform.OS === 'ios' ? hp('90%') : Dimensions.get('screen').height * 0.92,
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
 });
