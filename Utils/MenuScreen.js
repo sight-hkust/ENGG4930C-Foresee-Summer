@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     elevation: 12,
   },
   backgroundContainer: {
-    height: Platform.OS === 'ios' ? hp('90%') : Dimensions.get('screen').height * 0.92,
+    height: Platform.OS === 'ios' ? hp('90%') : Dimensions.get('window').height * 0.92,
     borderBottomLeftRadius: 40,
     borderBottomRightRadius: 40,
     overflow: 'hidden',
