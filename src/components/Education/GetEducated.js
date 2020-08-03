@@ -7,10 +7,14 @@ import { ScreenWidth, ScreenHeight, FontScale } from '../../../constant/Constant
 import HeaderRightButton from '../../../Utils/HeaderRightButton';
 import FABView from '../../../Utils/FAB';
 import MenuScreen from '../../../Utils/MenuScreen';
-import { actionCounter } from '../../helpers/actionCounter';
+import { actionCounter } from '../../utils/actionCounter';
 const thumbNail = require('../../../assets/images/interview.png');
 const eyeglasses = require('../../../assets/images/eyeglasses.jpg');
 const Setting = require('../../../assets/images/setting.png');
+
+function rand(x) {
+  return Math.floor(Math.random() * x);
+}
 
 export default class GetEducated extends Component {
   static navigationOptions = {
@@ -28,7 +32,7 @@ export default class GetEducated extends Component {
   componentDidMount() {
     database
       .ref('contents/articles')
-      //.orderByChild('article_id')
+      .orderByChild('date')
       .on('value', (snapshot) => {
         var temp = [];
         snapshot.forEach((childSnapshot) => {
@@ -37,9 +41,10 @@ export default class GetEducated extends Component {
           var childData = { ...item, ...key };
           temp.push(childData);
         });
-        this.setState({ topArticle: temp[temp.length - 1] });
-        temp.pop();
         temp.reverse();
+        let x = rand(temp.length);
+        console.log('topArticle', x, temp[x].subject);
+        this.setState({ topArticle: temp[x] });
         this.setState({ data: temp });
       });
   }

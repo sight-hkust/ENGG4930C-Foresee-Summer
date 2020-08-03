@@ -1,7 +1,7 @@
-import { database } from "../config/config";
+import { database } from '../config/config';
 
-export const GET_EYE_TEST_RECORDS = "GET_EYE_TEST_RECORDS";
-export const UPDATE_EYE_TEST_RECORDS = "UPDATE_EYE_TEST_RECORDS";
+export const GET_EYE_TEST_RECORDS = 'GET_EYE_TEST_RECORDS';
+export const UPDATE_EYE_TEST_RECORDS = 'UPDATE_EYE_TEST_RECORDS';
 
 /* export const setRecordStore = (records, uid, inactive) => {
   return {
@@ -26,10 +26,10 @@ export const updateRecords = (dateList, records) => {
 
 export const getRecordsUpdate = (uid, inactive) => {
   return (dispatch) => {
-    let recordsRef = database.ref("/users/" + uid + "/records");
+    let recordsRef = database.ref('/users/' + uid + '/records');
     recordsRef
       .orderByKey()
-      .once("value")
+      .once('value')
       .then((snap) => {
         let date = [];
         snap.forEach((data) => {
@@ -39,22 +39,6 @@ export const getRecordsUpdate = (uid, inactive) => {
       });
   };
 };
-
-/* export const watchRecordsUpdate = () => {
-  return (dispatch) => {
-    let recordsRef = database.ref("/users/" + uid + "/records");
-    if (inactive) {
-      recordsRef = database.ref("/userInfo/" + uid + "/records");
-    }
-    recordsRef.once("value").then((snap) => {
-      let records = [];
-      snap.forEach((data) => {
-        records.push(data.val());
-      });
-      dispatch(updateRecords(records));
-    });
-  };
-}; */
 
 const initialState = {};
 export const records = (state = initialState, { type, payload }) => {

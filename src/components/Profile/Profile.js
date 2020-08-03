@@ -11,7 +11,7 @@ import { connect } from "react-redux";
 import { watchUserInfoUpdate } from "../../reducers/user";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { auth } from "../../config/config";
-import { displayName } from "../../helpers/displayName";
+import { displayName } from "../../utils/displayName";
 
 const Profile = ({ navigation, route, userInfoStore }) => {
   const [loading, setLoading] = useState(true);
