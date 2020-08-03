@@ -35,7 +35,7 @@ import DateTimePicker from "@react-native-community/datetimepicker";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import { SchemaRegisterPatient } from "../Schema/SchemaRegisterPatient";
 import { Portal, Dialog, Provider, List } from "react-native-paper";
-import { CheckBox, Icon } from "react-native-elements";
+import { CheckBox, Icon, ButtonGroup } from "react-native-elements";
 import { InputTextField } from "../../Utils/InputTextField";
 import { InputDialogPicker } from "../../Utils/InputDialogPicker";
 import { MailIcon, KeyIcon, PhoneIcon, FamilyIcon } from "../../Utils/Icons";
@@ -47,6 +47,7 @@ import { SchemaRegisterChild } from "../Schema/SchemaRegisterChild";
 import { CommonActions } from "@react-navigation/native";
 import { MultiLinesInputTextField } from "../../Utils/MultiLinesInputTextField";
 import { heightPercentageToDP } from "react-native-responsive-screen";
+import GenderOptionsInput from "../../GenderOptionsInput/GenderOptionsInput";
 
 export const RegistrationForm = ({ navigation, route }) => {
   const { isProfessional, registerPatient, registerChild } = route.params;
@@ -110,6 +111,7 @@ const FormComponent = ({ navigation, route }) => {
         selectedNameFields: "chi",
         chineseNameError: "",
         englishNameError: "",
+        gender: "",
         birthday: "",
         parent: {},
         parentSelectionDisabled: false,
@@ -482,6 +484,12 @@ const FormDetails = ({
                     : formikProps.errors["englishNameError"])}
               </Text>
             ) : null}
+
+            <GenderOptionsInput
+              formikKey="gender"
+              formikProps={formikProps}
+              label={"性別"}
+            />
 
             {isProfessional && !registerPatient ? (
               <InputDialogPicker
