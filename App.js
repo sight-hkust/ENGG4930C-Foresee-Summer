@@ -2,6 +2,7 @@ import "react-native-gesture-handler";
 import React, { useState, useEffect } from "react";
 import { Image, Dimensions, TouchableOpacity, StyleSheet, Platform } from "react-native";
 import { Icon } from "react-native-elements";
+import { Provider as PaperProvider } from "react-native-paper";
 
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -26,7 +27,7 @@ import { auth } from "./src/config/config";
 
 import ProfMainMenu from "./src/components/Professional/ProfMainMenu";
 import { createStore, applyMiddleware } from "redux";
-import { Provider } from "react-redux";
+import { Provider as StoreProvider } from "react-redux";
 import rootReducer from "./src/reducers";
 import logger from "redux-logger";
 import thunk from "redux-thunk";
@@ -318,33 +319,75 @@ export default App = (props) => {
   });
 
   return (
-    <Provider store={store}>
-      {isLoading ? (
-        <SplashScreen />
-      ) : (
-        <NavigationContainer>
-          <Stack.Navigator screenOptions={headerConfig}>
-            {loggedIn ? (
-              <>
-                <Stack.Screen name="Main" component={Main} options={{ headerShown: false }} />
-                <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
-                <Stack.Screen name="QR Scan" component={QRCodeScannerScreen} options={{ headerShown: false }} />
-                <Stack.Screen name="Terms" component={TermsAndCondition} options={{ title: "條款及細則" }} />
-                <Stack.Screen name="Policy" component={PrivacyPolicy} options={{ title: "私隱政策" }} />
-                <Stack.Screen name="SettingScreen" component={SettingScreen} options={{ title: "設定" }} />
-              </>
-            ) : (
-              <>
-                <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-                <Stack.Screen name="Register" component={RegisterNavigator} options={{ headerShown: false }} />
-                <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
-              </>
-            )}
-            <Stack.Screen name="Tutorial" component={TutorialScreen} options={{ headerShown: false }} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      )}
-    </Provider>
+    <StoreProvider store={store}>
+      <PaperProvider>
+        {isLoading ? (
+          <SplashScreen />
+        ) : (
+          <NavigationContainer>
+            <Stack.Navigator screenOptions={headerConfig}>
+              {loggedIn ? (
+                <>
+                  <Stack.Screen
+                    name="Main"
+                    component={Main}
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="Profile"
+                    component={Profile}
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="QR Scan"
+                    component={QRCodeScannerScreen}
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="Terms"
+                    component={TermsAndCondition}
+                    options={{ title: "條款及細則" }}
+                  />
+                  <Stack.Screen
+                    name="Policy"
+                    component={PrivacyPolicy}
+                    options={{ title: "私隱政策" }}
+                  />
+                  <Stack.Screen
+                    name="SettingScreen"
+                    component={SettingScreen}
+                    options={{ title: "設定" }}
+                  />
+                </>
+              ) : (
+                <>
+                  <Stack.Screen
+                    name="Login"
+                    component={Login}
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="Register"
+                    component={RegisterNavigator}
+                    options={{ headerShown: false }}
+                  />
+                  <Stack.Screen
+                    name="Profile"
+                    component={Profile}
+                    options={{ headerShown: false }}
+                  />
+                </>
+              )}
+              <Stack.Screen
+                name="Tutorial"
+                component={TutorialScreen}
+                options={{ headerShown: false }}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        )}
+      </PaperProvider>
+    </StoreProvider>
   );
 };
 

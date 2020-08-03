@@ -30,7 +30,7 @@
       "sourceExts": ["js", "jsx", "svg", "svgx"]
     },
     "androidNavigationBar": {
-      "visible": "Leanback",
+      "visible": "sticky-immersive",
       "barStyle": "light-content",
       "backgroundColor": "#3689b1"
     }
