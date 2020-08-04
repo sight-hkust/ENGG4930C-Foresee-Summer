@@ -173,9 +173,11 @@ export const RenderWarning = (props) => {
           </View>
         );
       } else {
-        <View>
-          <Text style={DescriptionStyle.contentText}>您有深遠視</Text>
-        </View>;
+        return (
+          <View>
+            <Text style={DescriptionStyle.contentText}>您有深遠視</Text>
+          </View>
+        );
       }
     case "A":
       if (degree < 75) {

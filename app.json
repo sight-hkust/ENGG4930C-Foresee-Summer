@@ -3,7 +3,7 @@
     "name": "ForeSee",
     "slug": "foresee",
     "platforms": ["ios", "android", "web"],
-    "version": "1.0.3",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/images/ApplicationLogo.png",
     "splash": {
@@ -18,11 +18,11 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "ios",
-      "buildNumber": "1.0.3"
+      "buildNumber": "1.0.4"
     },
     "android": {
       "package": "hk.ust.sight.foresee",
-      "versionCode": 4
+      "versionCode": 5
     },
     "entryPoint": "node_modules/expo/AppEntry.js",
     "packagerOpts": {
