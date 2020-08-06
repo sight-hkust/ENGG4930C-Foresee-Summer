@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, ScrollView, View, Text } from "react-native";
 import * as Animatable from "react-native-animatable";
-import { displayName } from "../../../helpers/displayName";
+import { displayName } from "../../../utils/displayName";
 import moment from "moment";
 import { ScreenHeight, ScreenWidth } from "../../../../constant/Constant";
 

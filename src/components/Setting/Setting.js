@@ -1,14 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScrollView, View, Text, StyleSheet, Switch, TouchableOpacity } from 'react-native';
 import { ListItem, Input, Overlay, Icon, Button } from 'react-native-elements';
 import Collapsible from 'react-native-collapsible';
 
 import { ScreenWidth, ScreenHeight } from '../../../constant/Constant';
 import MenuScreen from '../../../Utils/MenuScreen';
-import { auth } from '../../config/config';
+import { auth, database } from '../../config/config';
 import { RoundButton } from '../../../Utils/RoundButton';
 import { Grid, Col, Row } from 'react-native-easy-grid';
-import { Snackbar } from 'react-native-paper';
+import { Snackbar, Portal } from 'react-native-paper';
+import { useSelector, useDispatch } from 'react-redux';
+import { watchUserInfoUpdate } from '../../reducers/user';
+import moment from 'moment';
 import { LinearGradientBackground } from '../../../Utils/LinearGradientBackground';
 
 export default function Setting({ route, navigation }) {
@@ -33,27 +36,18 @@ const SettingContent = ({ route, navigation }) => {
   return (
     <>
       <ScrollView style={styles.container} showsVerticalScrollIndicator={false}>
-        {/* <ListItem title={'深色主題'} containerStyle={styles.listItem} titleStyle={styles.title} rightIcon={<ThemeSwitch />} /> */}
-        <ListItem Component={TouchableOpacity} title={'程式教學'} containerStyle={styles.listItem} titleStyle={styles.title} chevron={{ size: 30 }} onPress={() => navigation.navigate('Tutorial')} />
-        <ListItem
-          Component={TouchableOpacity}
-          title={'聯絡我們'}
+        {/* <ListItem
+          title={"深色主題"}
           containerStyle={styles.listItem}
           titleStyle={styles.title}
-          chevron={{ size: 30 }}
-          onPress={() => setSelectedLabel(selectedLabel == 'contact-us' ? '' : 'contact-us')}
-        />
+          rightIcon={<ThemeSwitch />}
+        /> */}
+        <ListItem Component={TouchableOpacity} title={'程式教學'} containerStyle={styles.listItem} titleStyle={styles.title} chevron={{ size: 30 }} onPress={() => navigation.navigate('Tutorial')} />
+        <ListItem Component={TouchableOpacity} title={'聯絡我們'} containerStyle={styles.listItem} titleStyle={styles.title} chevron={{ size: 30 }} onPress={() => setSelectedLabel(selectedLabel == 'contact-us' ? '' : 'contact-us')} />
         <Collapsible collapsed={selectedLabel != 'contact-us'}>
           <ContactUs />
         </Collapsible>
-        <ListItem
-          Component={TouchableOpacity}
-          title={'意見反饋'}
-          containerStyle={styles.listItem}
-          titleStyle={styles.title}
-          chevron={{ size: 30 }}
-          onPress={() => setSelectedLabel(selectedLabel == 'feedback' ? '' : 'feedback')}
-        />
+        <ListItem Component={TouchableOpacity} title={'意見反饋'} containerStyle={styles.listItem} titleStyle={styles.title} chevron={{ size: 30 }} onPress={() => setSelectedLabel(selectedLabel == 'feedback' ? '' : 'feedback')} />
         <Collapsible collapsed={selectedLabel != 'feedback'}>
           <Feedback />
         </Collapsible>
@@ -74,16 +68,9 @@ const SettingContent = ({ route, navigation }) => {
           containerStyle={styles.listItem}
           titleStyle={{ fontSize: 20, color: 'white' }}
           chevron={{ size: 30 }}
-          onPress={() => navigation.navigate('Terms')}
+          onPress={() => setSelectedLabel(selectedLabel == 'permission' ? '' : 'permission')}
         />
-        <ListItem
-          Component={TouchableOpacity}
-          title={'私隱政策'}
-          containerStyle={styles.listItem}
-          titleStyle={{ fontSize: 20, color: 'white' }}
-          chevron={{ size: 30 }}
-          onPress={() => navigation.navigate('Policy')}
-        />
+        <ListItem Component={TouchableOpacity} title={'私隱政策'} containerStyle={styles.listItem} titleStyle={{ fontSize: 20, color: 'white' }} chevron={{ size: 30 }} onPress={() => navigation.navigate('Policy')} />
         <ListItem
           Component={TouchableOpacity}
           title={'登出'}
@@ -121,17 +108,20 @@ const ThemeSwitch = () => {
   );
 };
 
-export const ContactUs = (props) => {
+export const ContactUs = ({ containerStyle, ...props }) => {
   return (
     <View
-      style={{
-        width: '90%',
-        alignSelf: 'center',
-        padding: 10,
-        backgroundColor: 'rgba(0,0,0,0.05)',
-        borderRadius: 4,
-        height: '100%',
-      }}
+      style={[
+        {
+          width: '90%',
+          alignSelf: 'center',
+          padding: 10,
+          backgroundColor: 'rgba(0,0,0,0.05)',
+          borderRadius: 4,
+          height: '100%',
+        },
+        containerStyle,
+      ]}
     >
       <Grid>
         <Row style={styles.contactUsRow}>
@@ -150,7 +140,7 @@ export const ContactUs = (props) => {
             <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}> Facebook</Text>
           </Col>
           <Col style={styles.contactUsRightCol}>
-            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>@Foresee_Sight</Text>
+            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>@ForeSee HQ</Text>
           </Col>
         </Row>
 
@@ -170,7 +160,7 @@ export const ContactUs = (props) => {
             <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}> Email</Text>
           </Col>
           <Col style={styles.contactUsRightCol}>
-            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>foresee@ust.hk</Text>
+            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>sight.foresee@gmail.com</Text>
           </Col>
         </Row>
       </Grid>
@@ -178,11 +168,48 @@ export const ContactUs = (props) => {
   );
 };
 
-export const Feedback = (props) => {
+export const Feedback = ({ contentConatinerStyle, ...props }) => {
   const [feedback, setFeedback] = useState('');
   const [alertSuccess, setAlertSuccess] = useState(false);
+  const { user } = useSelector((state) => state.user);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    return () => {
+      dispatch(watchUserInfoUpdate());
+    };
+  }, []);
 
   let timer = 0;
+
+  const handleFeedbackSubmission = () => {
+    const datetime = moment();
+    const date = datetime.format('YYYYMMDD');
+    const time = datetime.format('h:mm:ss a');
+    if (feedback == '') {
+      return;
+    } else {
+      database.ref('/feedbacks/' + date).push({
+        content: feedback,
+        submissionDate: date,
+        timestamp: time,
+        userInfo: {
+          email: user.email,
+          ...(user.lastName ? { lastName: user.lastName } : { surName: user.surName }),
+          gender: user.gender ? user.gender : 'F',
+        },
+      });
+
+      setFeedback('');
+      setAlertSuccess(true);
+      let showSuccess = setInterval(() => {
+        timer += 1;
+        if (timer >= 2) {
+          clearInterval(showSuccess);
+          setAlertSuccess(false);
+        }
+      }, 3000);
+    }
+  };
 
   return (
     <View style={{ width: '90%', alignSelf: 'center', padding: 10 }}>
@@ -192,7 +219,7 @@ export const Feedback = (props) => {
         multiline={true}
         value={feedback}
         placeholder="歡迎留下意見"
-        inputContainerStyle={{ ...styles.contentContainer, ...props.content }}
+        inputContainerStyle={[styles.contentContainer, contentConatinerStyle]}
         inputStyle={{ ...styles.textAreaContainer, ...props.contentFontColor }}
         rightIcon={<Text style={{ ...styles.wordCounter, ...props.wordCounterFontColor }}>{feedback.length}/200</Text>}
         rightIconContainerStyle={{
@@ -203,15 +230,7 @@ export const Feedback = (props) => {
       />
       <RoundButton
         onPress={() => {
-          setFeedback('');
-          setAlertSuccess(true);
-          let showSuccess = setInterval(() => {
-            timer += 1;
-            if (timer >= 2) {
-              clearInterval(showSuccess);
-              setAlertSuccess(false);
-            }
-          }, 1000);
+          handleFeedbackSubmission();
         }}
         title="提交"
         buttonStyle={{ width: 96, ...props.buttonColor }}
@@ -256,13 +275,7 @@ const PermissionSetting = () => {
             <Text style={styles.contactUsTitle}> 允許查看紀錄 </Text>
           </Col>
           <Col>
-            <Switch
-              trackColor={{ false: '#767577', true: '#9AFF98' }}
-              thumbColor={allowView ? 'white' : '#f4f3f4'}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={toggleAllowViewSwitch}
-              value={allowView}
-            />
+            <Switch trackColor={{ false: '#767577', true: '#9AFF98' }} thumbColor={allowView ? 'white' : '#f4f3f4'} ios_backgroundColor="#3e3e3e" onValueChange={toggleAllowViewSwitch} value={allowView} />
           </Col>
         </Row>
 
@@ -271,13 +284,7 @@ const PermissionSetting = () => {
             <Text style={styles.contactUsTitle}> 開啟通知 </Text>
           </Col>
           <Col>
-            <Switch
-              trackColor={{ false: '#767577', true: '#9AFF98' }}
-              thumbColor={allowSearch ? 'white' : '#f4f3f4'}
-              ios_backgroundColor="#3e3e3e"
-              onValueChange={toggleAllowSearchSwitch}
-              value={allowSearch}
-            />
+            <Switch trackColor={{ false: '#767577', true: '#9AFF98' }} thumbColor={allowSearch ? 'white' : '#f4f3f4'} ios_backgroundColor="#3e3e3e" onValueChange={toggleAllowSearchSwitch} value={allowSearch} />
           </Col>
         </Row>
       </Grid>

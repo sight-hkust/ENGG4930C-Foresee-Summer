@@ -7,7 +7,7 @@ import moment from 'moment';
 import { database } from '../src/config/config';
 import { Button } from 'react-native-elements';
 
-import { DateSelect, RenderNoraml, RenderCollapseAdj, RemarksInput, DiseasesInput, RenderCollapseVA, RenderCollapsePD } from '../Screens/RecordFormComponents';
+import { DateSelect, RenderNormal, RenderCollapseAdj, RemarksInput, DiseasesInput, RenderCollapseVA, RenderCollapsePD } from '../Screens/RecordFormComponents';
 
 import MenuScreen from '../Utils/MenuScreen';
 
@@ -22,28 +22,11 @@ export default class Form extends Component {
     this.props.navigation.setOptions({
       headerRightContainerStyle: {
         position: 'absolute',
-        transform: [
-          {
-            translateY: this.yScroll.interpolate({
-              inputRange: [0, 80],
-              outputRange: [0, -200],
-              extrapolate: 'clamp',
-            }),
-          },
-        ],
+        transform: [{ translateY: this.yScroll.interpolate({ inputRange: [0, 80], outputRange: [0, -200], extrapolate: 'clamp' }) }],
       },
       headerTitleStyle: {
         //position: 'absolute',
-        transform: [
-          {
-            translateY: this.yScroll.interpolate({
-              inputRange: [0, 80],
-              //outputRange: [-20, -120],
-              outputRange: [0, -200],
-              extrapolate: 'clamp',
-            }),
-          },
-        ],
+        transform: [{ translateY: this.yScroll.interpolate({ inputRange: [0, 80], outputRange: [0, -200], extrapolate: 'clamp' }) }],
         fontSize: 28,
         color: '#E1EDFF',
         fontWeight: '700',
@@ -51,15 +34,7 @@ export default class Form extends Component {
       },
       headerLeftContainerStyle: {
         position: 'absolute',
-        transform: [
-          {
-            translateY: this.yScroll.interpolate({
-              inputRange: [0, 80],
-              outputRange: [0, -200],
-              extrapolate: 'clamp',
-            }),
-          },
-        ],
+        transform: [{ translateY: this.yScroll.interpolate({ inputRange: [0, 80], outputRange: [0, -200], extrapolate: 'clamp' }) }],
       },
     });
   }
@@ -71,15 +46,7 @@ export default class Form extends Component {
       <MenuScreen>
         <ScrollView
           //keyboardShouldPersistTaps="always"
-          onScroll={Animated.event([
-            {
-              nativeEvent: {
-                contentOffset: {
-                  y: this.yScroll,
-                },
-              },
-            },
-          ])}
+          onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: this.yScroll } } }])}
           scrollEventThrottle={1}
         >
           <Formik
@@ -133,7 +100,7 @@ export default class Form extends Component {
               database.ref('users/' + patient_id + '/records/' + values.date).once('value', (snap) => {
                 exist = snap.val() !== null;
 
-                console.log(exist);
+                //console.log(exist);
               });
 
               let data = {
@@ -165,41 +132,24 @@ export default class Form extends Component {
                 disease: values.disease,
               };
 
-              if (values.Lsymbol) {
-                //true: plus: hyper
-                data.L_Hyperopia = parseInt(values.L_SPH);
-              } else {
-                data.L_Myopia = parseInt(values.L_SPH);
-              }
-              if (values.Rsymbol) {
-                data.R_Hyperopia = parseInt(values.R_SPH);
-              } else {
-                data.R_Myopia = parseInt(values.R_SPH);
-              }
-              if (values.L_CYL == 0) {
-                data.L_Axis = 0;
-              }
-              if (values.R_CYL == 0) {
-                data.R_Axis = 0;
-              }
+              //true: plus: hyper
+              if (values.Lsymbol) data.L_Hyperopia = parseInt(values.L_SPH);
+              else data.L_Myopia = parseInt(values.L_SPH);
 
-              if (values.Adj_Lsymbol) {
-                //true: plus: hyper
-                data.Adj_L_Hyperopia = parseInt(values.Adj_L_SPH);
-              } else {
-                data.Adj_L_Myopia = parseInt(values.Adj_L_SPH);
-              }
-              if (values.Adj_Rsymbol) {
-                data.Adj_R_Hyperopia = parseInt(values.Adj_R_SPH);
-              } else {
-                data.Adj_R_Myopia = parseInt(values.Adj_R_SPH);
-              }
-              if (values.Adj_L_CYL == 0) {
-                data.Adj_L_Axis = 0;
-              }
-              if (values.Adj_R_CYL == 0) {
-                data.Adj_R_Axis = 0;
-              }
+              if (values.Rsymbol) data.R_Hyperopia = parseInt(values.R_SPH);
+              else data.R_Myopia = parseInt(values.R_SPH);
+
+              if (values.L_CYL == 0) data.L_Axis = 0;
+              if (values.R_CYL == 0) data.R_Axis = 0;
+
+              if (values.Adj_Lsymbol) data.Adj_L_Hyperopia = parseInt(values.Adj_L_SPH);
+              else data.Adj_L_Myopia = parseInt(values.Adj_L_SPH);
+
+              if (values.Adj_Rsymbol) data.Adj_R_Hyperopia = parseInt(values.Adj_R_SPH);
+              else data.Adj_R_Myopia = parseInt(values.Adj_R_SPH);
+
+              if (values.Adj_L_CYL == 0) data.Adj_L_Axis = 0;
+              if (values.Adj_R_CYL == 0) data.Adj_R_Axis = 0;
 
               if (isProfessional) {
                 //professional user
@@ -239,10 +189,7 @@ export default class Form extends Component {
                     '注意！',
                     '數據庫已存在' + values.date + '的資料，再按提交將會覆蓋舊的資料。',
                     [
-                      {
-                        text: '取消',
-                        style: 'cancel',
-                      },
+                      { text: '取消', style: 'cancel' },
                       {
                         text: '提交',
                         onPress: () => {
@@ -261,7 +208,7 @@ export default class Form extends Component {
               <View style={AddRecordScreen.formContainer}>
                 <DateSelect values={values} setFieldValue={setFieldValue} />
 
-                <RenderNoraml handleChange={handleChange} setFieldValue={setFieldValue} refractive={refractive} setStatus={setStatus} status={status} />
+                <RenderNormal handleChange={handleChange} setFieldValue={setFieldValue} refractive={refractive} setStatus={setStatus} status={status} />
 
                 <RenderCollapseAdj handleChange={handleChange} setFieldValue={setFieldValue} refractive={refractive} setStatus={setStatus} status={status} />
                 <RenderCollapseVA setFieldValue={setFieldValue} />

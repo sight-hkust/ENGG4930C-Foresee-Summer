@@ -11,7 +11,7 @@ import MenuScreen from '../../../Utils/MenuScreen';
 import { connect } from 'react-redux';
 import { watchQuestionListUpdate, questionList } from '../../reducers/askProfessionalList';
 import FABView from '../../../Utils/FAB';
-import { actionCounter } from '../../helpers/actionCounter';
+import { actionCounter } from '../../utils/actionCounter';
 
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 

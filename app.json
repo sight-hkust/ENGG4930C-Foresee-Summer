@@ -3,12 +3,12 @@
     "name": "ForeSee",
     "slug": "foresee",
     "platforms": ["ios", "android", "web"],
-    "version": "1.0.1",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/images/ApplicationLogo.png",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
@@ -18,21 +18,16 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "ios",
-      "buildNumber": "1.0.1"
+      "buildNumber": "1.0.4"
     },
     "android": {
       "package": "hk.ust.sight.foresee",
-      "versionCode": 2
+      "versionCode": 5
     },
     "entryPoint": "node_modules/expo/AppEntry.js",
     "packagerOpts": {
       "config": "metro.config.js",
       "sourceExts": ["js", "jsx", "svg", "svgx"]
-    },
-    "androidNavigationBar": {
-      "visible": "Leanback",
-      "barStyle": "light-content",
-      "backgroundColor": "#3689b1"
     }
   }
 }

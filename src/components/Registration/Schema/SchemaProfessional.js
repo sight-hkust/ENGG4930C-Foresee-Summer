@@ -89,6 +89,7 @@ export const SchemaProfessional = object().shape({
       return true;
     },
   }),
+  gender: string().required("請選擇性別"),
   role: string().required("請選擇你的角色"),
   tel_number: number()
     .typeError("請輸入數字")
