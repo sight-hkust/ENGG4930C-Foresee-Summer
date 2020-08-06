@@ -1,21 +1,10 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, StyleSheet, Image, ScrollView, TouchableOpacity } from "react-native";
 import { Button } from "react-native-elements";
 import { ScreenWidth, ScreenHeight } from "../../../constant/Constant";
 import Swiper from "react-native-swiper";
 import { Grid, Row, Col } from "react-native-easy-grid";
-import {
-  widthPercentageToDP as wp,
-  heightPercentageToDP as hp,
-} from "react-native-responsive-screen";
-import { tutorialContent } from "./Tutorial";
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 const RECORD_IMAGE_0 = require("../../../assets/images/Record_normal.png");
 const RECORD_IMAGE_1 = require("../../../assets/images/Record_disease.png");
@@ -26,11 +15,50 @@ const ADD_RECORD_IMAGE_1 = require("../../../assets/images/AddRecord_1.png");
 const ADD_RECORD_IMAGE_2 = require("../../../assets/images/AddRecord_2.png");
 const ADD_RECORD_IMAGE_3 = require("../../../assets/images/AddRecord_3.png");
 
+const IMAGE_0 = require("../../../assets/images/minitutorial_0.png");
+const IMAGE_1 = require("../../../assets/images/minitutorial_1.png");
+const IMAGE_2 = require("../../../assets/images/minitutorial_2.png");
+const IMAGE_3 = require("../../../assets/images/minitutorial_3.png");
+const IMAGE_4 = require("../../../assets/images/minitutorial_4.png");
+const IMAGE_5 = require("../../../assets/images/minitutorial_5.png");
+
+const tutorialContent = [
+  {
+    image: IMAGE_0,
+    subject: "歡迎使用ForeSee",
+    content: "功能介紹及程式教學",
+  },
+  {
+    image: IMAGE_1,
+    subject: "按下底部圖案切換頁面。",
+    content: "",
+  },
+  {
+    image: IMAGE_2,
+    subject: "護眼秘笈",
+    content: "您可以在這裡瀏覽眼科專業人士的訪問\n及其他護眼資訊。",
+  },
+  {
+    image: IMAGE_3,
+    subject: "護眼運動",
+    content: "您可以在這裡聽著錄音\n做護眼運動放鬆眼睛。",
+  },
+  {
+    image: IMAGE_4,
+    subject: "主頁",
+    content: "您可以在這裡看到自己\n和家人最近的驗眼數據。",
+  },
+  {
+    image: IMAGE_5,
+    subject: "專家解答",
+    content: "您可以在這裡向眼科專業人士發問\n及查看其他人的問答。",
+  },
+];
+
 const RecordTutorialContent = [
   {
     subject: "正常視力",
-    content:
-      "視力20/20指的是離開驗眼圖20呎(約6米)的地方，看到正常視力者在20呎看到的字，屬於標準視力。",
+    content: "視力20/20指的是離開驗眼圖20呎(約6米)的地方，看到正常視力者在20呎看到的字，屬於標準視力。",
     image: RECORD_IMAGE_0,
   },
   {
@@ -50,14 +78,12 @@ const RecordTutorialContent = [
 const AddRecordTutorialContent = [
   {
     subject: "滑動桿輸入數據",
-    content:
-      "滑動桿的上限為  (+700) 及（-700），並請於滑動桿上方的按扭選擇正負輸入。",
+    content: "滑動桿的上限為  (+700) 及（-700），並請於滑動桿上方的按扭選擇正負輸入。",
     image: ADD_RECORD_IMAGE_0,
   },
   {
     subject: "鍵盤輸入數據",
-    content:
-      "若數據超出滑動桿上張，請使用鍵盤輸入，並且該數字必需大於 (+700) 或 小於（-700）。",
+    content: "若數據超出滑動桿上張，請使用鍵盤輸入，並且該數字必需大於 (+700) 或 小於（-700）。",
     image: ADD_RECORD_IMAGE_1,
   },
   {
@@ -67,8 +93,7 @@ const AddRecordTutorialContent = [
   },
   {
     subject: "時間與日期",
-    content:
-      "時間和日期會預設為當下使用應用程式的時間，請按一下並在日曆中選擇您的驗眼日期和時間。",
+    content: "時間和日期會預設為當下使用應用程式的時間，請按一下並在日曆中選擇您的驗眼日期和時間。",
     image: ADD_RECORD_IMAGE_3,
   },
 ];
@@ -122,11 +147,7 @@ export function RecordTutorial() {
       </Row>
       <Row style={{ flexDirection: "column" }}>
         <View style={{ flex: 1 * (index === 0) }}>
-          <Swiper
-            loop={false}
-            showsButtons={index === 0}
-            showsPagination={false}
-          >
+          <Swiper loop={false} showsButtons={index === 0} showsPagination={false}>
             {RecordTutorialContent.map((item, index) => {
               return (
                 <ScrollView style={{ paddingBottom: 20, marginTop: 20 }}>
@@ -141,11 +162,7 @@ export function RecordTutorial() {
           </Swiper>
         </View>
         <View style={{ flex: 1 * (index === 1) }}>
-          <Swiper
-            loop={false}
-            showsButtons={index === 1}
-            showsPagination={false}
-          >
+          <Swiper loop={false} showsButtons={index === 1} showsPagination={false}>
             {tutorialContent.map((item, index) => {
               return (
                 <View
@@ -160,9 +177,7 @@ export function RecordTutorial() {
                         height: (imageViewWidth / 7) * 5,
                         width: (imageViewWidth / 7) * 6,
                       },
-                      index % 2
-                        ? { marginRight: imageViewWidth / 7 }
-                        : { marginLeft: imageViewWidth / 7 },
+                      index % 2 ? { marginRight: imageViewWidth / 7 } : { marginLeft: imageViewWidth / 7 },
                     ]}
                     source={item.image}
                   />
@@ -233,12 +248,7 @@ export function AddRecordTutorial() {
       </Row>
       <Row style={{ flexDirection: "column" }}>
         <View style={{ flex: 1 * (index === 0) }}>
-          <Swiper
-            loop={false}
-            showsButtons={index === 0}
-            showsPagination={false}
-            style={{ borderRadius: 20 }}
-          >
+          <Swiper loop={false} showsButtons={index === 0} showsPagination={false} style={{ borderRadius: 20 }}>
             {AddRecordTutorialContent.map((item, index) => {
               return (
                 <ScrollView>
@@ -257,26 +267,19 @@ export function AddRecordTutorial() {
             <ScrollView style={{ paddingHorizontal: 20 }}>
               <Text style={{ ...addRecordStyle.title }}>
                 OD
-                <Text style={addRecordStyle.content}>
-                  {" "}
-                  (Oculus Dexter)： 拉丁字右眼的意思。{"\n"}
-                </Text>
+                <Text style={addRecordStyle.content}> (Oculus Dexter)： 拉丁字右眼的意思。{"\n"}</Text>
               </Text>
 
               <Text style={{ ...addRecordStyle.title }}>
                 OS
-                <Text style={addRecordStyle.content}>
-                  {" "}
-                  (Oculus Sinister)： 拉丁字左眼的意思 。{"\n"}
-                </Text>
+                <Text style={addRecordStyle.content}> (Oculus Sinister)： 拉丁字左眼的意思 。{"\n"}</Text>
               </Text>
 
               <Text style={{ ...addRecordStyle.title }}>
                 SPH
                 <Text style={addRecordStyle.content}>
                   {" "}
-                  (Spherical correction)：
-                  球面度數，表示你所需的鏡片度數。(+)標示為遠視度數，(-)標示則為近視度數。
+                  (Spherical correction)： 球面度數，表示你所需的鏡片度數。(+)標示為遠視度數，(-)標示則為近視度數。
                   {"\n"}
                 </Text>
               </Text>
@@ -284,26 +287,18 @@ export function AddRecordTutorial() {
                 CYL
                 <Text style={addRecordStyle.content}>
                   {" "}
-                  (Cylinder correction)：
-                  柱狀度數，也就是一般所指的散光度數。若您有散光，則散光軸度不能為空白。
+                  (Cylinder correction)： 柱狀度數，也就是一般所指的散光度數。若您有散光，則散光軸度不能為空白。
                   {"\n"}
                 </Text>
               </Text>
               <Text style={{ ...addRecordStyle.title }}>
                 AXIS
-                <Text style={addRecordStyle.content}>
-                  ：散光軸度，指散光度數在眼球所發生的角度。其角度範圍從 0 ~
-                  180度。{"\n"}
-                </Text>
+                <Text style={addRecordStyle.content}>：散光軸度，指散光度數在眼球所發生的角度。其角度範圍從 0 ~ 180度。{"\n"}</Text>
               </Text>
 
               <Text style={{ ...addRecordStyle.title }}>
                 PD
-                <Text style={addRecordStyle.content}>
-                  {" "}
-                  (Pupillary Distance)：兩眼瞳孔距離(單位是mm(公釐)) [1公分 =
-                  10公釐]。一般PD約為60 ~ 65mm之間。
-                </Text>
+                <Text style={addRecordStyle.content}> (Pupillary Distance)：兩眼瞳孔距離(單位是mm(公釐)) [1公分 = 10公釐]。一般PD約為60 ~ 65mm之間。</Text>
               </Text>
             </ScrollView>
           </View>
