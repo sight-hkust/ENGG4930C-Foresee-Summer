@@ -8,6 +8,7 @@ import { Icon } from 'react-native-elements';
 import * as ScreenOrientation from 'expo-screen-orientation';
 import { ScreenWidth, ScreenHeight, FontScale } from '../../../constant/Constant';
 import { WebView } from 'react-native-webview';
+import moment from 'moment';
 
 export default class ArticleDetailScreen extends Component {
   constructor(props) {
@@ -28,6 +29,7 @@ export default class ArticleDetailScreen extends Component {
       video: null,
       isVid: false,
       videoHeight: ScreenWidth * 0.5625,
+      startTime: null,
     };
   }
 
@@ -92,6 +94,8 @@ export default class ArticleDetailScreen extends Component {
   };
 
   componentDidMount() {
+    let startTime = moment();
+    console.log('MOUNT:', startTime);
     database
       .ref('contents/articles')
       .orderByChild('article_id')
@@ -105,6 +109,7 @@ export default class ArticleDetailScreen extends Component {
               subject: childData.subject,
               isVid: childData.isVid,
               video: childData.video,
+              startTime: startTime,
             });
           } else {
             this.setState(
@@ -114,6 +119,7 @@ export default class ArticleDetailScreen extends Component {
                 isVid: childData.isVid,
                 image: childData.image,
                 audio: childData.audio,
+                startTime: startTime,
               },
               () => {
                 this.getAudio();
@@ -125,8 +131,12 @@ export default class ArticleDetailScreen extends Component {
   }
 
   async componentWillUnmount() {
-    await this.state.playbackObject.pauseAsync();
-    console.log('unmount');
+    let endTime = moment();
+    console.log('MOUNT:', this.state.startTime);
+    console.log('UNMOUNT:', endTime);
+    console.log('USED:', endTime.diff(this.state.startTime));
+    if (this.state.playbackObject) await this.state.playbackObject.pauseAsync();
+    else console.log('No playbackobject');
   }
 
   render() {
