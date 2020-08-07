@@ -5,27 +5,21 @@ import { nanoid } from "nanoid/async/index.native";
 import { encryptData } from "../../utils/encryptData";
 require("firebase/functions");
 
-const writeUserData = ({
-  uid = null,
-  values,
-  isProfessional,
-  registerPatient = false,
-  patientUid = null,
-  registerChild = false,
-  childUid = null,
-}) => {
+const addEncryptDataTag = (object) => {
+  return Object.assign(object, { dataEncrypted: true });
+};
+
+const writeUserData = ({ uid = null, values, isProfessional, registerPatient = false, patientUid = null, registerChild = false, childUid = null }) => {
   switch (true) {
     case registerPatient:
-      database.ref("professionals/" + uid + "/patients/" + patientUid).set(
-        encryptData({
-          uid: patientUid,
-          inactive: true,
-          firstName: values.firstName || "",
-          lastName: values.lastName || "",
-          surName: values.surName || "",
-          givenName: values.givenName || "",
-        })
-      );
+      database.ref("professionals/" + uid + "/patients/" + patientUid).set({
+        uid: patientUid,
+        inactive: true,
+        firstName: values.firstName || "",
+        lastName: values.lastName || "",
+        surName: values.surName || "",
+        givenName: values.givenName || "",
+      });
       database.ref("users/" + patientUid).set(
         encryptData({
           uid: patientUid,
@@ -37,34 +31,30 @@ const writeUserData = ({
           job: values.job,
           history: values.history,
           disease: values.disease,
+          dataEncrypted: true,
         })
       );
       if (!values.parentSelectionDisalbed && values.parent.uid) {
-        database
-          .ref("users/" + values.parent.uid + "/familyMembers/" + patientUid)
-          .set(
-            encryptData({
-              uid: patientUid,
-              inactive: true,
-              firstName: values.firstName,
-              lastName: values.lastName,
-              givenName: values.givenName,
-              surName: values.surName,
-            })
-          );
+        database.ref("users/" + values.parent.uid + "/familyMembers/" + patientUid).set({
+          uid: patientUid,
+          inactive: true,
+          firstName: values.firstName,
+          lastName: values.lastName,
+          givenName: values.givenName,
+          surName: values.surName,
+        });
       }
       break;
     case registerChild:
-      database.ref("users/" + uid + "/familyMembers/" + childUid).set(
-        encryptData({
-          uid: childUid,
-          inactive: true,
-          firstName: values.firstName || "",
-          lastName: values.lastName || "",
-          surName: values.surName || "",
-          givenName: values.givenName || "",
-        })
-      );
+      database.ref("users/" + uid + "/familyMembers/" + childUid).set({
+        uid: childUid,
+        inactive: true,
+        firstName: values.firstName || "",
+        lastName: values.lastName || "",
+        surName: values.surName || "",
+        givenName: values.givenName || "",
+      });
+
       database.ref("users/" + childUid).set(
         encryptData({
           uid: childUid,
@@ -78,6 +68,7 @@ const writeUserData = ({
           history: values.history,
           disease: values.disease,
           allowedSearch: values.allowedSearch,
+          dataEncrypted: true,
         })
       );
       break;
@@ -95,46 +86,41 @@ const writeUserData = ({
             surName: values.surName,
             birthday: moment(values.birthday).toJSON(),
             records: {},
+            dataEncrypted: true,
           })
         );
       } else {
+        encryptedData["dataEncrypted"] = true;
         database.ref("/professionals/" + uid).set(
-          encryptData({
-            uid: uid,
-            firstName: values.firstName,
-            lastName: values.lastName,
-            givenName: values.givenName,
-            surName: values.surName,
-            email: values.email,
-            tel_code: values.tel_country_code,
-            phone: values.tel_number,
-            role: values.role,
-          })
+          addEncryptDataTag(
+            encryptData({
+              uid: uid,
+              firstName: values.firstName,
+              lastName: values.lastName,
+              givenName: values.givenName,
+              surName: values.surName,
+              email: values.email,
+              tel_code: values.tel_country_code,
+              phone: values.tel_number,
+              role: values.role,
+              dataEncrypted: true,
+            })
+          )
         );
       }
       break;
   }
 };
 
-export const registerChildAccount = async ({
-  values,
-  registerChild,
-  returnOnComplete,
-}) => {
+export const registerChildAccount = async ({ values, registerChild, returnOnComplete }) => {
   let childUid = await nanoid();
   childUid = "ch-" + childUid;
   writeUserData({ registerChild, values, childUid, uid: auth.currentUser.uid });
   returnOnComplete();
 };
 
-export const registerPatientAccount = async ({
-  values,
-  registerPatient,
-  returnOnComplete,
-}) => {
-  let createPatientAccount = firebase
-    .functions()
-    .httpsCallable("createPatientAccount");
+export const registerPatientAccount = async ({ values, registerPatient, returnOnComplete }) => {
+  let createPatientAccount = firebase.functions().httpsCallable("createPatientAccount");
   createPatientAccount({
     email: values.email,
   })
@@ -152,13 +138,7 @@ export const registerPatientAccount = async ({
     });
 };
 
-export const createAccount = ({
-  values,
-  navigation,
-  isProfessional,
-  setServerError,
-  returnOnComplete,
-}) => {
+export const createAccount = ({ values, navigation, isProfessional, setServerError, returnOnComplete }) => {
   if (isProfessional) {
     auth
       .createUserWithEmailAndPassword(values.email, values.password)
