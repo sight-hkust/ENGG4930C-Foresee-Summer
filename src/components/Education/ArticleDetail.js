@@ -148,6 +148,7 @@ export default class ArticleDetailScreen extends Component {
       database.ref(`contents/articles/${this.state.article_id}/viewRecords/${views}`).update({
         userid: auth.currentUser.uid,
         startTime: startTime.toJSON(),
+        endTime: endTime.toJSON(),
         usage_ms: usage_ms,
       });
     });
