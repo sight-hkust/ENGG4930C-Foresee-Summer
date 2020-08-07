@@ -13,8 +13,13 @@ export const updateUserInfo = (user) => {
 export const watchUserInfoUpdate = () => {
   return (dispatch) => {
     database.ref("/users/" + auth.currentUser.uid).on("value", (snap) => {
-      const decryptedData = decryptData(snap.val());
-      dispatch(updateUserInfo(decryptedData));
+      const userData = snap.val();
+      if (userData["dataEncrypted"]) {
+        const decrpytedUserData = decryptData(userData);
+        dispatch(updateUserInfo(decrpytedUserData));
+      } else {
+        dispatch(updateUserInfo(userData));
+      }
     });
   };
 };

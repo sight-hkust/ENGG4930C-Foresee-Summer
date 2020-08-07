@@ -22,7 +22,14 @@ const Profile = ({ navigation, route }) => {
     database
       .ref("users/" + uid)
       .once("value")
-      .then((snap) => setUserData(decryptData(snap.val())));
+      .then((snap) => {
+        const userData = snap.val();
+        if (userData["dataEncrypted"]) {
+          setUserData(decryptData(userData));
+        } else {
+          setUserData(userData);
+        }
+      });
   };
 
   useEffect(() => {
@@ -51,21 +58,11 @@ const Profile = ({ navigation, route }) => {
                   }}
                 >
                   <View style={styles.nameContainer}>
-                    <Text style={styles.name}>
-                      {userData.lastName != ""
-                        ? userData.lastName
-                        : userData.givenName[0]}
-                    </Text>
+                    <Text style={styles.name}>{userData.lastName != "" ? userData.lastName : userData.givenName[0]}</Text>
                   </View>
                 </Row>
                 <Row style={styles.qrCodeIconContainer}>
-                  <Icon
-                    type="antdesign"
-                    name="qrcode"
-                    size={40}
-                    containerStyle={{ marginRight: 15, marginTop: 10 }}
-                    onPress={() => navigation.navigate("QrCode")}
-                  />
+                  <Icon type="antdesign" name="qrcode" size={40} containerStyle={{ marginRight: 15, marginTop: 10 }} onPress={() => navigation.navigate("QrCode")} />
                 </Row>
 
                 <Row style={[styles.titleContainer]}>
@@ -89,37 +86,18 @@ const Profile = ({ navigation, route }) => {
                   />
                 </Row>
 
-                <Row
-                  style={{ ...styles.titleContainer, ...{ marginBottom: 7.5 } }}
-                >
-                  <Text style={styles.subtitle}>
-                    {userData.birthday.split("T")[0]}
-                  </Text>
+                <Row style={{ ...styles.titleContainer, ...{ marginBottom: 7.5 } }}>
+                  <Text style={styles.subtitle}>{userData.birthday.split("T")[0]}</Text>
                 </Row>
                 <Row style={{ height: 47.5 }}>
                   <Col style={styles.iconContainer}>
-                    <Icon
-                      type="font-awesome"
-                      name="hourglass-o"
-                      size={40}
-                      containerStyle={{}}
-                    />
+                    <Icon type="font-awesome" name="hourglass-o" size={40} containerStyle={{}} />
                   </Col>
                   <Col style={styles.iconContainer}>
-                    <Icon
-                      type="fontisto"
-                      name="email"
-                      size={40}
-                      containerStyle={{}}
-                    />
+                    <Icon type="fontisto" name="email" size={40} containerStyle={{}} />
                   </Col>
                   <Col style={styles.iconContainer}>
-                    <Icon
-                      type="feather"
-                      name="phone"
-                      size={40}
-                      containerStyle={{}}
-                    />
+                    <Icon type="feather" name="phone" size={40} containerStyle={{}} />
                   </Col>
                 </Row>
                 <Row style={{ height: 20 }}>
@@ -127,9 +105,7 @@ const Profile = ({ navigation, route }) => {
                     <View style={styles.verticalLine} />
                   </Col>
                   <Col>
-                    <View
-                      style={{ ...styles.verticalLine, ...{ height: "250%" } }}
-                    />
+                    <View style={{ ...styles.verticalLine, ...{ height: "250%" } }} />
                   </Col>
                   <Col>
                     <View style={styles.verticalLine} />
@@ -138,12 +114,7 @@ const Profile = ({ navigation, route }) => {
                 <Row>
                   <Col style={styles.infoContainer}>
                     <Text style={styles.info}>
-                      <Text style={{ fontSize: 30 }}>
-                        {moment
-                          .duration(moment().diff(userData.birthday, "YYYY"))
-                          .years()}
-                      </Text>
-                      歲
+                      <Text style={{ fontSize: 30 }}>{moment.duration(moment().diff(userData.birthday, "YYYY")).years()}</Text>歲
                     </Text>
                   </Col>
                   <Col style={styles.infoContainer}>
@@ -168,22 +139,8 @@ const Profile = ({ navigation, route }) => {
               </Grid>
             </View>
             <View style={styles.bottomMenu}>
-              <Button
-                title="詳細設定"
-                type="clear"
-                containerStyle={styles.bottomMenuItemContainer}
-                titleStyle={styles.bottomMenuItemText}
-                TouchableComponent={TouchableOpacity}
-                onPress={() => navigation.navigate("SettingScreen")}
-              />
-              <Button
-                title="程式教學"
-                type="clear"
-                containerStyle={styles.bottomMenuItemContainer}
-                titleStyle={styles.bottomMenuItemText}
-                TouchableComponent={TouchableOpacity}
-                onPress={() => navigation.navigate("Tutorial")}
-              />
+              <Button title="詳細設定" type="clear" containerStyle={styles.bottomMenuItemContainer} titleStyle={styles.bottomMenuItemText} TouchableComponent={TouchableOpacity} onPress={() => navigation.navigate("SettingScreen")} />
+              <Button title="程式教學" type="clear" containerStyle={styles.bottomMenuItemContainer} titleStyle={styles.bottomMenuItemText} TouchableComponent={TouchableOpacity} onPress={() => navigation.navigate("Tutorial")} />
               <Button
                 title="創建子帳戶"
                 type="clear"
