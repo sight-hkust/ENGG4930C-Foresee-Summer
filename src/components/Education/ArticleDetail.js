@@ -9,6 +9,8 @@ import * as ScreenOrientation from 'expo-screen-orientation';
 import { ScreenWidth, ScreenHeight, FontScale } from '../../../constant/Constant';
 import { WebView } from 'react-native-webview';
 import moment from 'moment';
+import { actionCounter } from '../../utils/actionCounter';
+import { auth } from '../../config/config';
 
 export default class ArticleDetailScreen extends Component {
   constructor(props) {
@@ -95,48 +97,60 @@ export default class ArticleDetailScreen extends Component {
 
   componentDidMount() {
     let startTime = moment();
-    console.log('MOUNT:', startTime);
-    database
-      .ref('contents/articles')
-      .orderByChild('article_id')
-      .equalTo(this.state.article_id)
-      .once('value', (snapshot) => {
-        snapshot.forEach((childSnapshot) => {
-          var childData = childSnapshot.val();
-          if (childData.isVid) {
-            this.setState({
-              content: childData.content,
-              subject: childData.subject,
-              isVid: childData.isVid,
-              video: childData.video,
-              startTime: startTime,
-            });
-          } else {
-            this.setState(
-              {
-                content: childData.content,
-                subject: childData.subject,
-                isVid: childData.isVid,
-                image: childData.image,
-                audio: childData.audio,
-                startTime: startTime,
-              },
-              () => {
-                this.getAudio();
-              }
-            );
-          }
+
+    database.ref(`contents/articles/${this.state.article_id}`).once('value', (snapshot) => {
+      var childData = snapshot.val();
+      if (childData.isVid) {
+        this.setState({
+          content: childData.content,
+          subject: childData.subject,
+          isVid: childData.isVid,
+          video: childData.video,
+          startTime: startTime,
         });
-      });
+      } else {
+        this.setState(
+          {
+            content: childData.content,
+            subject: childData.subject,
+            isVid: childData.isVid,
+            image: childData.image,
+            audio: childData.audio,
+            startTime: startTime,
+          },
+          () => {
+            this.getAudio();
+          }
+        );
+      }
+    });
   }
 
   async componentWillUnmount() {
     let endTime = moment();
-    console.log('MOUNT:', this.state.startTime);
+    let startTime = this.state.startTime;
+    let usage_ms = endTime.diff(this.state.startTime);
+    console.log('MOUNT:', startTime);
     console.log('UNMOUNT:', endTime);
-    console.log('USED:', endTime.diff(this.state.startTime));
+    console.log('USED:', usage_ms);
     if (this.state.playbackObject) await this.state.playbackObject.pauseAsync();
     else console.log('No playbackobject');
+    //actionCounter('articles', this.state.article_id, 'views');
+
+    var views;
+
+    database.ref(`contents/articles/${this.state.article_id}`).once('value', (snapshot) => {
+      var snap = snapshot.val();
+      views = snap.views;
+      if (!views) views = 0;
+      ++views;
+      database.ref(`contents/articles/${this.state.article_id}`).update({ views });
+      database.ref(`contents/articles/${this.state.article_id}/viewRecords/${views}`).update({
+        userid: auth.currentUser.uid,
+        startTime: startTime.toJSON(),
+        usage_ms: usage_ms,
+      });
+    });
   }
 
   render() {
@@ -153,8 +167,8 @@ export default class ArticleDetailScreen extends Component {
             <View>
               {this.state.isBuffering == true && (
                 <ActivityIndicator
-                  color="#00acc1"
-                  size="large"
+                  color='#00acc1'
+                  size='large'
                   style={{
                     width: ScreenWidth,
                     height: this.state.videoHeight,
@@ -163,12 +177,10 @@ export default class ArticleDetailScreen extends Component {
               )}
               <Video
                 ref={this.mountVid}
-                resizeMode="contain"
+                resizeMode='contain'
                 useNativeControls={true}
                 onReadyForDisplay={(params) => {
-                  this.setState({
-                    videoHeight: (ScreenWidth / params.naturalSize.width) * params.naturalSize.height,
-                  });
+                  this.setState({ videoHeight: (ScreenWidth / params.naturalSize.width) * params.naturalSize.height });
                 }}
                 onFullscreenUpdate={this.fullscreencontrol}
                 style={{

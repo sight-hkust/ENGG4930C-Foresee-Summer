@@ -7,7 +7,6 @@ import { ScreenWidth, ScreenHeight, FontScale } from '../../../constant/Constant
 import HeaderRightButton from '../../../Utils/HeaderRightButton';
 import FABView from '../../../Utils/FAB';
 import MenuScreen from '../../../Utils/MenuScreen';
-import { actionCounter } from '../../utils/actionCounter';
 const thumbNail = require('../../../assets/images/interview.png');
 const eyeglasses = require('../../../assets/images/eyeglasses.jpg');
 const Setting = require('../../../assets/images/setting.png');
@@ -26,6 +25,7 @@ export default class GetEducated extends Component {
     this.state = {
       data: [],
       topArticle: '',
+      uid_list: [],
     };
   }
 
@@ -34,18 +34,24 @@ export default class GetEducated extends Component {
       .ref('contents/articles')
       .orderByChild('date')
       .on('value', (snapshot) => {
+        console.log('Database updated');
         var temp = [];
+        var temp_uid_list = [];
         snapshot.forEach((childSnapshot) => {
           var item = childSnapshot.val();
           var key = { _uid: childSnapshot.key };
           var childData = { ...item, ...key };
           temp.push(childData);
+          temp_uid_list.push(childSnapshot.key);
         });
-        temp.reverse();
-        let x = rand(temp.length);
-        console.log('topArticle', x, temp[x].subject);
-        this.setState({ topArticle: temp[x] });
-        this.setState({ data: temp });
+        if (JSON.stringify(this.state.uid_list) != JSON.stringify(temp_uid_list)) {
+          console.log(temp_uid_list);
+          console.log('App refreshed');
+          temp.reverse();
+          let x = rand(temp.length);
+          console.log('topArticle', x, temp[x].subject);
+          this.setState({ topArticle: temp[x], data: temp, uid_list: temp_uid_list });
+        } else console.log('NOT refreshed');
       });
   }
 
@@ -53,7 +59,6 @@ export default class GetEducated extends Component {
     const pressHandler = () => {
       const id = this.state.topArticle._uid;
       this.props.navigation.navigate('ArticleDetailScreen', { article_id: id });
-      actionCounter('articles', this.state.topArticle._uid, 'views');
     };
     return (
       <>
@@ -98,10 +103,7 @@ export default class GetEducated extends Component {
 function Item({ item, navigation }) {
   //console.log(item.key);
   const id = item._uid;
-  const pressHandler = () => {
-    navigation.navigate('ArticleDetailScreen', { article_id: id });
-    actionCounter('articles', item._uid, 'views');
-  };
+  const pressHandler = () => navigation.navigate('ArticleDetailScreen', { article_id: id });
   return (
     <TouchableOpacity onPress={pressHandler}>
       <View style={GetEducatedScreen.articleItem}>
