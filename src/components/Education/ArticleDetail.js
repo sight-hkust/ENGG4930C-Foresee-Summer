@@ -142,8 +142,7 @@ export default class ArticleDetailScreen extends Component {
       var snap = snapshot.val();
       views = snap.views;
       if (!views) views = 0;
-      ++views;
-      database.ref(`contents/articles/${this.state.article_id}`).update({ views });
+      database.ref(`contents/articles/${this.state.article_id}`).update({ views: views + 1 });
       database.ref(`contents/articles/${this.state.article_id}/viewRecords/${views}`).update({
         userid: auth.currentUser.uid,
         startTime: startTime.toJSON(),
