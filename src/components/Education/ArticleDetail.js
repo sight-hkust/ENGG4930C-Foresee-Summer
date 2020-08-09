@@ -1,5 +1,5 @@
 import { SafeAreaView, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
-import { database, storage } from '../../config/config';
+import { database, storage, auth } from '../../config/config';
 import React, { Component } from 'react';
 import { Audio, Video } from 'expo-av';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -10,7 +10,6 @@ import { ScreenWidth, ScreenHeight, FontScale } from '../../../constant/Constant
 import { WebView } from 'react-native-webview';
 import moment from 'moment';
 import { actionCounter } from '../../utils/actionCounter';
-import { auth } from '../../config/config';
 
 export default class ArticleDetailScreen extends Component {
   constructor(props) {
