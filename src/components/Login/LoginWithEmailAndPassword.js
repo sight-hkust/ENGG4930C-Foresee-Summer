@@ -4,7 +4,7 @@ import Logo from "../Utils/Logo";
 import { auth, config } from "../../config/config";
 import { useEffect } from "react";
 import { InputTextField } from "../Utils/InputTextField";
-import { LinearGradientBackground } from "../../../Utils/LinearGradientBackground";
+import { LinearGradientBackground } from "../Utils/LinearGradientBackground";
 import { RoundButton } from "../../../Utils/RoundButton";
 import { ScreenHeight, FontScale, Scale, ScreenWidth } from "../../../constant/Constant";
 import { KeyIcon, MailIcon } from "../Utils/Icons";
