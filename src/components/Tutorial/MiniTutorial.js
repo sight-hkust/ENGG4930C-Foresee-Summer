@@ -25,33 +25,33 @@ const IMAGE_5 = require("../../../assets/images/minitutorial_5.png");
 const tutorialContent = [
   {
     image: IMAGE_0,
-    subject: "歡迎使用ForeSee",
-    content: "功能介紹及程式教學",
+    subject: "如何看不同日期的記錄?",
+    content: "按下箭咀看前一次或後一次的紀錄",
   },
   {
     image: IMAGE_1,
-    subject: "按下底部圖案切換頁面。",
-    content: "",
+    subject: "如何切換不同眼睛的紀錄?",
+    content: "按下眼睛圖像切換左右眼睛\n打開的眼睛代表現正顯示的紀錄",
   },
   {
     image: IMAGE_2,
-    subject: "護眼秘笈",
-    content: "您可以在這裡瀏覽眼科專業人士的訪問\n及其他護眼資訊。",
+    subject: "顏色代表甚麼?",
+    content: "視力趨勢圖中不同顏色\n代表屈光不正的深淺",
   },
   {
     image: IMAGE_3,
-    subject: "護眼運動",
-    content: "您可以在這裡聽著錄音\n做護眼運動放鬆眼睛。",
+    subject: "數字代表甚麼?",
+    content: "數字越大\n屈光不正程度越嚴重",
   },
   {
     image: IMAGE_4,
-    subject: "主頁",
-    content: "您可以在這裡看到自己\n和家人最近的驗眼數據。",
+    subject: "斜度代表什麼?",
+    content: "斜度代表度數上升速度",
   },
   {
     image: IMAGE_5,
-    subject: "專家解答",
-    content: "您可以在這裡向眼科專業人士發問\n及查看其他人的問答。",
+    subject: "底部圖案代表甚麼功能?",
+    content: "按下真實度數顯示眼睛詳細度數\n按下加號輸入驗眼數據\n調整度數顯示眼鏡詳細度數",
   },
 ];
 
