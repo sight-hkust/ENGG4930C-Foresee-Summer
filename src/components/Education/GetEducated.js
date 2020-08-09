@@ -1,15 +1,10 @@
 import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity, ScrollView, FlatList, Image, Dimensions } from 'react-native';
 import React, { Component } from 'react';
-import Expo from 'expo';
 import { database } from '../../config/config';
 import { LinearGradient } from 'expo-linear-gradient';
 import { ScreenWidth, ScreenHeight, FontScale } from '../../../constant/Constant';
-import HeaderRightButton from '../../../Utils/HeaderRightButton';
 import FABView from '../../../Utils/FAB';
 import MenuScreen from '../../../Utils/MenuScreen';
-const thumbNail = require('../../../assets/images/interview.png');
-const eyeglasses = require('../../../assets/images/eyeglasses.jpg');
-const Setting = require('../../../assets/images/setting.png');
 
 function rand(x) {
   return Math.floor(Math.random() * x);
