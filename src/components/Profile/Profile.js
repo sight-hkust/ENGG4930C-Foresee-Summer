@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useState, useEffect, useCallback } from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Button, Icon } from "react-native-elements";
 import { Grid, Col, Row } from "react-native-easy-grid";
 import moment from "moment";
@@ -7,27 +7,46 @@ import moment from "moment";
 import { ScreenWidth, ScreenHeight } from "../../../constant/Constant";
 import MenuScreen from "../../../Utils/MenuScreen";
 
-import { connect } from "react-redux";
-import { watchUserInfoUpdate } from "../../reducers/user";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { auth } from "../../config/config";
-import { displayName } from "../../utils/displayName";
+import { auth, database } from "../../config/config";
+import { connect, useSelector } from "react-redux";
+import FamilyListPicker from "../FamilyListPicker/FamilyListPicker";
+import { decryptData } from "../../utils/encryptData";
+import { updateFamilyMembers } from "../../reducers/familyMembers";
 
-const Profile = ({ navigation, route, userInfoStore }) => {
+const Profile = ({ navigation, route }) => {
+  const familyMembers = useSelector((state) => state.familyMembers);
   const [loading, setLoading] = useState(true);
+  const [userData, setUserData] = useState(null);
 
-  const { user } = userInfoStore;
+  const updateUserData = (uid) => {
+    database
+      .ref("users/" + uid)
+      .once("value")
+      .then((snap) => {
+        const userData = snap.val();
+        if (userData["dataEncrypted"]) {
+          setUserData(decryptData(userData));
+        } else {
+          setUserData(userData);
+        }
+      });
+  };
 
   useEffect(() => {
-    if (user != undefined) {
-      setLoading(false);
+    if (!userData) {
+      updateUserData(familyMembers[0].uid);
     }
-  }, [user]);
+  }, [familyMembers]);
+
+  const updateSelectedFamilyMember = (member) => {
+    const { uid } = member;
+    updateUserData(uid);
+  };
 
   return (
     <MenuScreen>
       <View style={styles.container}>
-        {!loading && (
+        {userData && (
           <>
             <View style={styles.card}>
               <Grid>
@@ -39,62 +58,46 @@ const Profile = ({ navigation, route, userInfoStore }) => {
                   }}
                 >
                   <View style={styles.nameContainer}>
-                    <Text style={styles.name}>
-                      {user.lastName != "" ? user.lastName : user.givenName[0]}
-                    </Text>
+                    <Text style={styles.name}>{userData.lastName != "" ? userData.lastName[0] : userData.givenName[0]}</Text>
                   </View>
                 </Row>
                 <Row style={styles.qrCodeIconContainer}>
-                  <Icon
-                    type="antdesign"
-                    name="qrcode"
-                    size={40}
-                    containerStyle={{ marginRight: 15, marginTop: 10 }}
-                    onPress={() => navigation.navigate("QrCode")}
-                  />
+                  <Icon type="antdesign" name="qrcode" size={40} containerStyle={{ marginRight: 15, marginTop: 10 }} onPress={() => navigation.navigate("QrCode")} />
                 </Row>
 
-                <Row style={styles.titleContainer}>
-                  <Text
+                <Row style={[styles.titleContainer]}>
+                  {/*  <Text
                     style={
                       user.lastName != "" ? styles.title : styles.titleEnglish
                     }
                   >
                     {displayName(user)}
-                  </Text>
+                  </Text> */}
+                  <FamilyListPicker
+                    containerStyle={{
+                      width: "100%",
+                      justifyContent: "center",
+                    }}
+                    textStyle={{
+                      fontSize: ScreenHeight * 0.045,
+                      color: "#1772A6",
+                    }}
+                    onSelectionUpdate={updateSelectedFamilyMember}
+                  />
                 </Row>
 
-                <Row
-                  style={{ ...styles.titleContainer, ...{ marginBottom: 7.5 } }}
-                >
-                  <Text style={styles.subtitle}>
-                    {user.birthday.split("T")[0]}
-                  </Text>
+                <Row style={{ ...styles.titleContainer, ...{ marginBottom: 7.5 } }}>
+                  <Text style={styles.subtitle}>{userData.birthday.split("T")[0]}</Text>
                 </Row>
                 <Row style={{ height: 47.5 }}>
                   <Col style={styles.iconContainer}>
-                    <Icon
-                      type="font-awesome"
-                      name="hourglass-o"
-                      size={40}
-                      containerStyle={{}}
-                    />
+                    <Icon type="font-awesome" name="hourglass-o" size={40} containerStyle={{}} />
                   </Col>
                   <Col style={styles.iconContainer}>
-                    <Icon
-                      type="fontisto"
-                      name="email"
-                      size={40}
-                      containerStyle={{}}
-                    />
+                    <Icon type="fontisto" name="email" size={40} containerStyle={{}} />
                   </Col>
                   <Col style={styles.iconContainer}>
-                    <Icon
-                      type="feather"
-                      name="phone"
-                      size={40}
-                      containerStyle={{}}
-                    />
+                    <Icon type="feather" name="phone" size={40} containerStyle={{}} />
                   </Col>
                 </Row>
                 <Row style={{ height: 20 }}>
@@ -102,9 +105,7 @@ const Profile = ({ navigation, route, userInfoStore }) => {
                     <View style={styles.verticalLine} />
                   </Col>
                   <Col>
-                    <View
-                      style={{ ...styles.verticalLine, ...{ height: "250%" } }}
-                    />
+                    <View style={{ ...styles.verticalLine, ...{ height: "250%" } }} />
                   </Col>
                   <Col>
                     <View style={styles.verticalLine} />
@@ -113,12 +114,7 @@ const Profile = ({ navigation, route, userInfoStore }) => {
                 <Row>
                   <Col style={styles.infoContainer}>
                     <Text style={styles.info}>
-                      <Text style={{ fontSize: 30 }}>
-                        {moment
-                          .duration(moment().diff(user.birthday, "YYYY"))
-                          .years()}
-                      </Text>
-                      歲
+                      <Text style={{ fontSize: 30 }}>{moment.duration(moment().diff(userData.birthday, "YYYY")).years()}</Text>歲
                     </Text>
                   </Col>
                   <Col style={styles.infoContainer}>
@@ -133,32 +129,18 @@ const Profile = ({ navigation, route, userInfoStore }) => {
                         },
                       }}
                     >
-                      {user.email}
+                      {userData.email}
                     </Text>
                   </Col>
                   <Col style={styles.infoContainer}>
-                    <Text style={styles.info}>{user.phone}</Text>
+                    <Text style={styles.info}>{userData.phone}</Text>
                   </Col>
                 </Row>
               </Grid>
             </View>
             <View style={styles.bottomMenu}>
-              <Button
-                title="詳細設定"
-                type="clear"
-                containerStyle={styles.bottomMenuItemContainer}
-                titleStyle={styles.bottomMenuItemText}
-                TouchableComponent={TouchableOpacity}
-                onPress={() => navigation.navigate("SettingScreen")}
-              />
-              <Button
-                title="程式教學"
-                type="clear"
-                containerStyle={styles.bottomMenuItemContainer}
-                titleStyle={styles.bottomMenuItemText}
-                TouchableComponent={TouchableOpacity}
-                onPress={() => navigation.navigate("Tutorial")}
-              />
+              <Button title="詳細設定" type="clear" containerStyle={styles.bottomMenuItemContainer} titleStyle={styles.bottomMenuItemText} TouchableComponent={TouchableOpacity} onPress={() => navigation.navigate("SettingScreen")} />
+              <Button title="程式教學" type="clear" containerStyle={styles.bottomMenuItemContainer} titleStyle={styles.bottomMenuItemText} TouchableComponent={TouchableOpacity} onPress={() => navigation.navigate("Tutorial")} />
               <Button
                 title="創建子帳戶"
                 type="clear"
@@ -196,6 +178,8 @@ const Profile = ({ navigation, route, userInfoStore }) => {
     </MenuScreen>
   );
 };
+
+export default Profile;
 
 const styles = StyleSheet.create({
   container: {
@@ -292,16 +276,3 @@ const styles = StyleSheet.create({
     fontSize: 16.5,
   },
 });
-
-const mapStateToProps = (state) => {
-  return {
-    userInfoStore: state.user,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  dispatch(watchUserInfoUpdate());
-  return {};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);

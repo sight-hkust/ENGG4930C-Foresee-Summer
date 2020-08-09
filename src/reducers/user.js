@@ -1,6 +1,7 @@
-import { database, auth } from '../config/config';
+import { database, auth } from "../config/config";
+import { decryptData } from "../utils/encryptData";
 
-export const UPDATE_USER_INFO = 'UPDATE_USER_INFO';
+export const UPDATE_USER_INFO = "UPDATE_USER_INFO";
 
 export const updateUserInfo = (user) => {
   return {
@@ -11,8 +12,14 @@ export const updateUserInfo = (user) => {
 
 export const watchUserInfoUpdate = () => {
   return (dispatch) => {
-    database.ref('/users/' + auth.currentUser.uid).on('value', (snap) => {
-      dispatch(updateUserInfo(snap.val()));
+    database.ref("/users/" + auth.currentUser.uid).on("value", (snap) => {
+      const userData = snap.val();
+      if (userData["dataEncrypted"]) {
+        const decrpytedUserData = decryptData(userData);
+        dispatch(updateUserInfo(decrpytedUserData));
+      } else {
+        dispatch(updateUserInfo(userData));
+      }
     });
   };
 };

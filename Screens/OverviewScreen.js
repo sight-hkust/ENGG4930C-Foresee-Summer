@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
-import { database, auth } from '../src/config/config';
-import { Button } from 'react-native-elements';
-import { Icon } from 'react-native-elements';
-import moment from 'moment';
-import { ScreenWidth, ScreenHeight } from '../constant/Constant';
-import { connect } from 'react-redux';
-import { watchFamilyMembersUpdate } from '../src/reducers/familyMembers';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { Provider, Portal, Modal } from 'react-native-paper';
-import { displayName } from '../src/utils/displayName';
-import { getRecordsUpdate } from '../src/reducers/records';
+import React, { Component } from "react";
+import { StyleSheet, Text, View, FlatList } from "react-native";
+import { database, auth } from "../src/config/config";
+import { Button } from "react-native-elements";
+import { Icon } from "react-native-elements";
+import moment from "moment";
+import { ScreenWidth, ScreenHeight } from "../constant/Constant";
+import { connect } from "react-redux";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { getRecordsUpdate } from "../src/reducers/records";
 
-import FABView from '../Utils/FAB';
-import MenuScreen from '../Utils/MenuScreen';
+import FABView from "../Utils/FAB";
+import MenuScreen from "../Utils/MenuScreen";
+import FamilyListPicker from "../src/components/FamilyListPicker/FamilyListPicker";
+import { watchFamilyMembersUpdate } from "../src/reducers/familyMembers";
+import { watchUserInfoUpdate } from "../src/reducers/user";
 
 var patient_id;
 auth.onAuthStateChanged((user) => {
@@ -28,63 +28,47 @@ class OverviewScreen extends Component {
       dateArr: [],
       accountOwner: null,
       isFamilyListModalVisible: false,
-      selectedFamily: null,
-      familyList: [],
+      selectedFamilyUid: null,
     };
   }
 
   componentDidMount() {
-    const { familyList } = this.state;
-
-    const ref = database.ref('users/' + patient_id);
-
-    ref.child('records').on('value', (snapshot) => {
+    const ref = database.ref("users/" + patient_id);
+    ref.child("records").on("value", (snapshot) => {
       var tempDate = [];
       for (var key in snapshot.val()) tempDate.push(key);
       this.setState({ data: snapshot.toJSON(), dateArr: tempDate });
     });
-
-    ref.once('value', (snapshot) => {
-      const user = snapshot.val();
-      familyList.push({
-        firstName: user.firstName,
-        lastName: user.lastName,
-        surName: user.surName,
-        givenName: user.givenName,
-        uid: user.uid,
-        inactive: false,
+    if (!this.state.selectedFamilyUid) {
+      this.setState({
+        selectedFamilyUid: patient_id,
       });
-      this.setState({ accountOwner: user, selectedFamily: user });
-    });
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
-    const { familyList, accountOwner } = this.state;
-    const { familyMembers } = this.props.familyStore;
-    if (familyMembers && familyMembers != prevProps.familyStore.familyMembers) {
-      familyList.splice(1, familyList.length);
-      familyMembers.forEach((member) => familyList.push(member));
-    }
-    if (familyList.length == 1 && familyMembers) {
-      familyMembers.forEach((member) => familyList.push(member));
-    }
-    if (prevProps.recordStore.records != this.props.recordStore.records && prevProps.recordStore.dateList != this.props.recordStore.dateList) {
-      this.setState({ data: this.props.recordStore.records, dateArr: this.props.recordStore.dateList });
+    if (
+      prevProps.recordStore.records != this.props.recordStore.records &&
+      prevProps.recordStore.dateList != this.props.recordStore.dateList
+    ) {
+      this.setState({
+        data: this.props.recordStore.records,
+        dateArr: this.props.recordStore.dateList,
+      });
     }
   }
 
-  _showFamilyListModal = () => this.setState({ isFamilyListModalVisible: true });
-  _hideFamilyListModal = () => this.setState({ isFamilyListModalVisible: false });
-  _selectFamily = (member) => {
+  updateSelectedFamilyMember = (member) => {
     const { getRecordsHandler } = this.props;
-    this.setState({ selectedFamily: member });
-    const { uid, inactive } = member;
-    getRecordsHandler(uid, inactive);
-    this._hideFamilyListModal();
+    const { uid } = member;
+    this.setState({
+      selectedFamilyUid: member.uid,
+    });
+    getRecordsHandler(uid);
   };
 
   render() {
-    const { isFamilyListModalVisible, selectedFamily, familyList } = this.state;
+    const { selectedFamilyUid } = this.state;
     const calDateDifference = () => {
       if (this.state.dateArr.length < 1) return false;
       const length = this.state.dateArr.length;
@@ -94,8 +78,6 @@ class OverviewScreen extends Component {
       else return false;
     };
 
-    //console.log(selectedFamily);
-
     return (
       <>
         <MenuScreen>
@@ -103,8 +85,14 @@ class OverviewScreen extends Component {
             <View style={{ flex: 3 }}>
               {calDateDifference() ? (
                 <View style={OverviewScreenStyle.reminderContainer}>
-                  <Icon name="error-outline" color="#24559E" containerStyle={OverviewScreenStyle.iconstyle} />
-                  <Text style={OverviewScreenStyle.reminderText}>距離上次驗眼已超過一年，建議盡快預約驗眼</Text>
+                  <Icon
+                    name="error-outline"
+                    color="#24559E"
+                    containerStyle={OverviewScreenStyle.iconstyle}
+                  />
+                  <Text style={OverviewScreenStyle.reminderText}>
+                    距離上次驗眼已超過一年，建議盡快預約驗眼
+                  </Text>
                 </View>
               ) : null}
             </View>
@@ -112,32 +100,45 @@ class OverviewScreen extends Component {
               <View style={{ flex: 1, alignItems: 'center' }}>
                 <View style={OverviewScreenStyle.greetingContainer}>
                   <Text style={OverviewScreenStyle.greetingText}>您好，</Text>
-                  <TouchableOpacity style={{ width: '110%', flexDirection: 'row' }} onPress={this._showFamilyListModal}>
-                    {selectedFamily && (
-                      <>
-                        <Text style={selectedFamily.lastName != '' ? OverviewScreenStyle.userName : OverviewScreenStyle.userNameEnglish}>{displayName(selectedFamily)}</Text>
-                        <View style={{ marginLeft: ScreenWidth * 0.02, justifyContent: 'center' }}>
-                          <Icon name="caretdown" type="antdesign" size={ScreenWidth * 0.05} color="black" />
-                        </View>
-                      </>
-                    )}
-                  </TouchableOpacity>
+                  <FamilyListPicker
+                    onSelectionUpdate={this.updateSelectedFamilyMember}
+                  />
                 </View>
                 <View style={{ flex: 2.3, alignSelf: 'center' }}>
                   <View style={OverviewScreenStyle.leftEyeContainer}>
-                    <DisplayDegree data={this.state.data} dateArr={this.state.dateArr} isLeft={true} />
+                    <DisplayDegree
+                      data={this.state.data}
+                      dateArr={this.state.dateArr}
+                      isLeft={true}
+                    />
                   </View>
                 </View>
               </View>
               <View style={{ flex: 1, alignItems: 'center', marginTop: ScreenHeight * 0.01 }}>
                 <View style={OverviewScreenStyle.rightEyeContainer}>
-                  <DisplayDegree data={this.state.data} dateArr={this.state.dateArr} isLeft={false} />
+                  <DisplayDegree
+                    data={this.state.data}
+                    dateArr={this.state.dateArr}
+                    isLeft={false}
+                  />
                 </View>
                 <View style={OverviewScreenStyle.nextPageContainer}>
-                  <Text style={OverviewScreenStyle.nextPageText}>詳細度數趨勢/{'\n'}輸入數據</Text>
+                  <Text style={OverviewScreenStyle.nextPageText}>
+                    詳細度數趨勢/{"\n"}輸入數據
+                  </Text>
                   <Button
-                    icon={<Icon name="keyboard-arrow-right" size={40} color="#24559E" />}
-                    onPress={() => this.props.navigation.navigate('RecordsScreen', { patient_id: selectedFamily.uid })}
+                    icon={
+                      <Icon
+                        name="keyboard-arrow-right"
+                        size={40}
+                        color="#24559E"
+                      />
+                    }
+                    onPress={() => {
+                      this.props.navigation.navigate("RecordsScreen", {
+                        patient_id: selectedFamilyUid,
+                      });
+                    }}
                     buttonStyle={{
                       backgroundColor: 'white',
                       width: 45,
@@ -154,44 +155,16 @@ class OverviewScreen extends Component {
             </View>
             <View style={OverviewScreenStyle.dateContainer}>
               <Text style={OverviewScreenStyle.dateText}>
-                {'最近驗眼日期: '}
-                {this.state.dateArr == null ? '' : moment(this.state.dateArr[this.state.dateArr.length - 1]).format('YYYY-MM-DD')}
+                {"最近驗眼日期: "}
+                {this.state.dateArr == null
+                  ? ""
+                  : moment(
+                      this.state.dateArr[this.state.dateArr.length - 1]
+                    ).format("YYYY-MM-DD")}
               </Text>
             </View>
           </View>
           <FABView />
-          <Provider>
-            <Portal>
-              <Modal visible={isFamilyListModalVisible} onDismiss={this._hideFamilyListModal}>
-                <View
-                  style={{
-                    backgroundColor: 'white',
-                    marginHorizontal: ScreenWidth * 0.12,
-                    minHeight: ScreenHeight * 0.2,
-                    elevation: 3,
-                    borderRadius: ScreenWidth * 0.02,
-                    padding: ScreenWidth * 0.03,
-                  }}
-                >
-                  <Text style={{ fontSize: 23 }}>選擇家庭成員</Text>
-                  <FlatList
-                    data={familyList}
-                    keyExtractor={(item, index) => index.toString()}
-                    renderItem={({ item }) => {
-                      /* console.log("LINE242:", item.firstName); */
-                      return (
-                        <TouchableOpacity onPress={() => this._selectFamily(item)}>
-                          <View style={{ width: '100%', paddingVertical: ScreenHeight * 0.02 }}>
-                            <Text style={{ fontSize: 20, textAlign: 'center' }}>{displayName(item)}</Text>
-                          </View>
-                        </TouchableOpacity>
-                      );
-                    }}
-                  />
-                </View>
-              </Modal>
-            </Portal>
-          </Provider>
         </MenuScreen>
       </>
     );
@@ -204,7 +177,9 @@ export const DisplayDegree = (props) => {
     return (
       <>
         <View style={OverviewScreenStyle.topContainer}>
-          <Text style={OverviewScreenStyle.topText}>{isLeft ? '左' : '右'}</Text>
+          <Text style={OverviewScreenStyle.topText}>
+            {isLeft ? "左" : "右"}
+          </Text>
         </View>
         <View>
           <Text style={OverviewScreenStyle.noRecordText}>暫無數據</Text>
@@ -215,22 +190,36 @@ export const DisplayDegree = (props) => {
   const length = dateArr.length - 1;
   const curData = data[dateArr[length]];
 
-  if (isLeft && curData.L_Myopia == '0' && curData.L_Hyperopia == '0' && curData.L_CYL == '0') {
+  if (
+    isLeft &&
+    curData.L_Myopia == "0" &&
+    curData.L_Hyperopia == "0" &&
+    curData.L_CYL == "0"
+  ) {
     return (
       <>
         <View style={OverviewScreenStyle.topContainer}>
-          <Text style={OverviewScreenStyle.topText}>{isLeft ? '左' : '右'}</Text>
+          <Text style={OverviewScreenStyle.topText}>
+            {isLeft ? "左" : "右"}
+          </Text>
         </View>
         <View>
           <Text style={OverviewScreenStyle.noRecordText}>沒有屈光不正</Text>
         </View>
       </>
     );
-  } else if (!isLeft && curData.R_Myopia == '0' && curData.R_Hyperopia == '0' && curData.R_CYL == '0') {
+  } else if (
+    !isLeft &&
+    curData.R_Myopia == "0" &&
+    curData.R_Hyperopia == "0" &&
+    curData.R_CYL == "0"
+  ) {
     return (
       <>
         <View style={OverviewScreenStyle.topContainer}>
-          <Text style={OverviewScreenStyle.topText}>{isLeft ? '左' : '右'}</Text>
+          <Text style={OverviewScreenStyle.topText}>
+            {isLeft ? "左" : "右"}
+          </Text>
         </View>
         <View>
           <Text style={OverviewScreenStyle.noRecordText}>沒有屈光不正</Text>
@@ -245,9 +234,26 @@ export const DisplayDegree = (props) => {
         <Text style={OverviewScreenStyle.topText}>{isLeft ? '左' : '右'}</Text>
       </View>
 
-      {(isLeft ? curData.L_Myopia != 0 : curData.R_Myopia != 0) && <RenderItem degree={isLeft ? curData.L_Myopia : curData.R_Myopia} refractive={'M'} />}
-      {(isLeft ? curData.L_Hyperopia != 0 : curData.R_Hyperopia != 0) && <RenderItem degree={isLeft ? curData.L_Hyperopia : curData.R_Hyperopia} refractive={'H'} />}
-      {(isLeft ? curData.L_CYL != 0 : curData.R_CYL != 0) && <RenderItem degree={isLeft ? curData.L_CYL : curData.R_CYL} refractive={'A'} />}
+      {(isLeft ? curData.L_Myopia != 0 : curData.R_Myopia != 0) && (
+        <RenderItem
+          degree={isLeft ? curData.L_Myopia : curData.R_Myopia}
+          refractive={"M"}
+        />
+      )}
+
+      {(isLeft ? curData.L_Hyperopia != 0 : curData.R_Hyperopia != 0) && (
+        <RenderItem
+          degree={isLeft ? curData.L_Hyperopia : curData.R_Hyperopia}
+          refractive={"H"}
+        />
+      )}
+
+      {(isLeft ? curData.L_CYL != 0 : curData.R_CYL != 0) && (
+        <RenderItem
+          degree={isLeft ? curData.L_CYL : curData.R_CYL}
+          refractive={"A"}
+        />
+      )}
     </View>
   );
 };
@@ -271,20 +277,26 @@ export const RenderIndicator = (props) => {
     case 'M':
       return (
         <View style={OverviewScreenStyle.levelTextContatiner}>
-          <Text style={OverviewScreenStyle.levelText}>{degree < 300 ? '淺近視' : degree < 575 ? '中度近視' : '深近視'}</Text>
+          <Text style={OverviewScreenStyle.levelText}>
+            {degree < 300 ? "淺近視" : degree < 575 ? "中度近視" : "深近視"}
+          </Text>
         </View>
       );
 
     case 'H':
       return (
         <View style={OverviewScreenStyle.levelTextContatiner}>
-          <Text style={OverviewScreenStyle.levelText}>{degree < 200 ? '淺遠視' : degree < 500 ? '中度遠視' : '深遠視'}</Text>
+          <Text style={OverviewScreenStyle.levelText}>
+            {degree < 200 ? "淺遠視" : degree < 500 ? "中度遠視" : "深遠視"}
+          </Text>
         </View>
       );
     case 'A':
       return (
         <View style={OverviewScreenStyle.levelTextContatiner}>
-          <Text style={OverviewScreenStyle.levelText}>{degree < 75 ? '淺散光' : degree < 175 ? '中度散光' : '深散光'}</Text>
+          <Text style={OverviewScreenStyle.levelText}>
+            {degree < 75 ? "淺散光" : degree < 175 ? "中度散光" : "深散光"}
+          </Text>
         </View>
       );
   }
@@ -292,14 +304,15 @@ export const RenderIndicator = (props) => {
 
 const mapStateToProps = (state) => {
   return {
-    familyStore: state.familyMembers,
     recordStore: state.records,
   };
 };
 const mapDispatchToProps = (dispatch) => {
-  dispatch(watchFamilyMembersUpdate());
+  watchUserInfoUpdate(dispatch);
+  watchFamilyMembersUpdate(dispatch);
   return {
-    getRecordsHandler: (uid, inactive) => dispatch(getRecordsUpdate(uid, inactive)),
+    updateUserInfoHandler: (uid) => dispatch(getUserInfoUpdate(uid)),
+    getRecordsHandler: (uid) => dispatch(getRecordsUpdate(uid)),
   };
 };
 

@@ -356,6 +356,8 @@ PODS:
     - React
   - RNCMaskedView (0.1.6):
     - React
+  - RNCPicker (1.6.5):
+    - React
   - RNDateTimePicker (2.2.2):
     - React
   - RNGestureHandler (1.6.1):
@@ -452,6 +454,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native/ReactCommon`)
   - ReactNativeLocalization (from `../node_modules/react-native-localization`)
   - "RNCMaskedView (from `../node_modules/@react-native-community/masked-view`)"
+  - "RNCPicker (from `../node_modules/@react-native-community/picker`)"
   - "RNDateTimePicker (from `../node_modules/@react-native-community/datetimepicker`)"
   - RNGestureHandler (from `../node_modules/react-native-gesture-handler`)
   - RNReanimated (from `../node_modules/react-native-reanimated`)
@@ -591,6 +594,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-localization"
   RNCMaskedView:
     :path: "../node_modules/@react-native-community/masked-view"
+  RNCPicker:
+    :path: "../node_modules/@react-native-community/picker"
   RNDateTimePicker:
     :path: "../node_modules/@react-native-community/datetimepicker"
   RNGestureHandler:
@@ -699,6 +704,7 @@ SPEC CHECKSUMS:
   ReactCommon: 198c7c8d3591f975e5431bec1b0b3b581aa1c5dd
   ReactNativeLocalization: dbb269b27d8a84bb22b9c2cdec38ba780b51dd72
   RNCMaskedView: a88953beefbd347a29072d9eba90e42945fe291e
+  RNCPicker: 55b9b4240d0a9eba8733d02616775d4040de2e7d
   RNDateTimePicker: 65eadfa62b069b415a6ac1d20a81cacfa26cb37a
   RNGestureHandler: 8f09cd560f8d533eb36da5a6c5a843af9f056b38
   RNReanimated: 4e102df74a9674fa943e05f97f3362b6e44d0b48
@@ -723,6 +729,6 @@ SPEC CHECKSUMS:
   Yoga: f2a7cd4280bfe2cca5a7aed98ba0eb3d1310f18b
   ZXingObjC: fdbb269f25dd2032da343e06f10224d62f537bdb
 
-PODFILE CHECKSUM: 3d456536210827bd5f1a1da963608127f6eb4214
+PODFILE CHECKSUM: 8fa28fe01c2c56e1063b070ad302d54635dfd830
 
 COCOAPODS: 1.8.4

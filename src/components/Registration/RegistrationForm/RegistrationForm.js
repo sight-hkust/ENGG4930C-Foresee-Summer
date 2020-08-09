@@ -86,7 +86,6 @@ const FormComponent = ({ navigation, route }) => {
     setRegisterMethodDialogVisibility(false);
 
   const setServerError = (error) => {
-    console.log(error.code);
     switch (error.code) {
       case "auth/email-already-in-use":
         setErrorMessageFromServer("電子郵件已註冊");
@@ -264,10 +263,6 @@ const FormDetails = ({
     const currentDate = selectedDate || new Date();
     setDatePickerVisibility(false);
     setFieldValue("birthday", moment(currentDate).format("YYYY-MM-DD"));
-  };
-
-  const handleDatePickerTouchStart = () => {
-    console.log("HI");
   };
 
   const handleRoleDialogOption = (value) => {

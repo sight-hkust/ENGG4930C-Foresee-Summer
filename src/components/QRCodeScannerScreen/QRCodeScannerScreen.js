@@ -84,7 +84,6 @@ export const QRCodeScannerScreen = ({ navigation, route }) => {
   const handleQRCodeScanned = ({ type, data, ...rest }) => {
     setScanned(true);
     const code = data; //data here is code.
-    console.log(code);
     const regEx = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/g;
     const hasSpecialCharacterOrSpace = regEx.test(code);
     if (hasSpecialCharacterOrSpace) {
