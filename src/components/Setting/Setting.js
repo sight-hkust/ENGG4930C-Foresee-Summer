@@ -22,7 +22,7 @@ export default function Setting({ route, navigation }) {
           <SettingContent navigation={navigation} route={route} />
         </MenuScreen>
       ) : (
-        <LinearGradientBackground style={{ height: "100%" }} colors={["#1772A6", "#A377FF"]} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]}>
+        <LinearGradientBackground style={{ height: ScreenHeight }} colors={["#1772A6", "#A377FF"]} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]}>
           <SettingContent navigation={navigation} route={route} />
         </LinearGradientBackground>
       )}

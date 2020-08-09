@@ -5,6 +5,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { ScreenWidth, ScreenHeight, FontScale } from "../../../constant/Constant";
 import FABView from "../../../Utils/FAB";
 import MenuScreen from "../../../Utils/MenuScreen";
+import { LinearGradientBackground } from "../Utils/LinearGradientBackground";
 
 function rand(x) {
   return Math.floor(Math.random() * x);
@@ -65,15 +66,7 @@ export default class GetEducated extends Component {
             }}
           >
             <View style={GetEducatedScreen.headerContainer}>
-              <LinearGradient
-                colors={["#1872a7", "#5a74d1", "#a676ff"]}
-                start={[0, 0.9]}
-                end={[1, 0.1]}
-                locations={[0, 0.5, 1]}
-                style={{
-                  height: ScreenHeight,
-                }}
-              ></LinearGradient>
+              <LinearGradientBackground style={{ height: ScreenHeight }} colors={["#1772A6", "#A377FF"]} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]}></LinearGradientBackground>
             </View>
             <View style={{ flex: 1 }}>
               <View style={GetEducatedScreen.topArticleContainer}>

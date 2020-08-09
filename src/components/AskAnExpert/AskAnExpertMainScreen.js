@@ -55,7 +55,7 @@ const AskAnExpertMainScreen = ({ route, navigation, questionListStore }) => {
         <>
           <View style={styles.container}>
             <View style={{ ...styles.linearbackgorundContainer }}>
-              <LinearGradientBackground colors={["#1772A6", "#A377FF"]} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]} />
+              <LinearGradientBackground style={{ height: ScreenHeight }} colors={["#1772A6", "#A377FF"]} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]}></LinearGradientBackground>
             </View>
             <View style={{ width: ScreenWidth, marginTop: hp("7.5%"), zIndex: 3, height: hp("27%") }}>
               <Text

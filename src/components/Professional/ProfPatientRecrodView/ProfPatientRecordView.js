@@ -61,10 +61,7 @@ class ProfPatientRecordView extends Component {
         });
       }
     } else {
-      if (
-        prevProps.recordStore.dateList.length !==
-        this.props.recordStore.dateList.length
-      ) {
+      if (prevProps.recordStore.dateList.length !== this.props.recordStore.dateList.length) {
         this.setState({
           recordsLen: dateList.length,
           selectedIndex: dateList.length - 1,
@@ -81,19 +78,13 @@ class ProfPatientRecordView extends Component {
 
     return (
       <LinearGradientBackground
-        colors={["#1872a7", "#5a74d1", "#a676ff"]}
-        start={[0, 0.9]}
-        end={[1, 0.1]}
-        locations={[0, 0.5, 1]}
-        style={{
-          height: "100%",
-          paddingTop: ScreenHeight * 0.045,
-          paddingHorizontal: ScreenWidth * 0.1,
-        }}
+        style={{ height: ScreenHeight, paddingTop: ScreenHeight * 0.045, paddingHorizontal: ScreenWidth * 0.1 }}
+        colors={["#1772A6", "#A377FF"]}
+        start={[0, 1]}
+        end={[1, 0]}
+        locations={[0.12, 0.92]}
       >
-        <View style={styles.patientInfo}>
-          {info && <PatientProfile info={info} />}
-        </View>
+        <View style={styles.patientInfo}>{info && <PatientProfile info={info} />}</View>
         <View
           style={{
             flex: 3,
@@ -105,40 +96,28 @@ class ProfPatientRecordView extends Component {
             <>
               <View style={styles.boxes}>
                 {!(records && dateList && currentRecords) ? (
-                  <Text style={styles.noDataText}>
-                    {"暫無數據\n請按 + 輸入資料"}
-                  </Text>
+                  <Text style={styles.noDataText}>{"暫無數據\n請按 + 輸入資料"}</Text>
                 ) : (
                   <View style={{ height: "100%" }}>
                     <RoundButton
                       buttonStyle={{ backgroundColor: "#2D9CDB" }}
                       textStyle={{ color: "white" }}
                       title={this.state.isAdj ? "查看真實度數" : "查看調整度數"}
-                      onPress={() =>
-                        this.setState({ isAdj: !this.state.isAdj })
-                      }
+                      onPress={() => this.setState({ isAdj: !this.state.isAdj })}
                     />
                     <View style={styles.datePickerContainer}>
                       {dateList.length < 2 ? null : (
                         <TouchableOpacity
                           onPress={() =>
                             this.setState({
-                              selectedIndex:
-                                (selectedIndex + recordsLen - 1) % recordsLen,
+                              selectedIndex: (selectedIndex + recordsLen - 1) % recordsLen,
                             })
                           }
                         >
-                          <Icon
-                            name="swapleft"
-                            type="antdesign"
-                            size={ScreenWidth * 0.1}
-                            color="#2D9CDB"
-                          />
+                          <Icon name="swapleft" type="antdesign" size={ScreenWidth * 0.1} color="#2D9CDB" />
                         </TouchableOpacity>
                       )}
-                      <Text style={styles.dateText}>
-                        {dateList[selectedIndex]}
-                      </Text>
+                      <Text style={styles.dateText}>{dateList[selectedIndex]}</Text>
                       {dateList.length < 2 ? null : (
                         <TouchableOpacity
                           onPress={() =>
@@ -147,19 +126,11 @@ class ProfPatientRecordView extends Component {
                             })
                           }
                         >
-                          <Icon
-                            name="swapright"
-                            type="antdesign"
-                            size={ScreenWidth * 0.1}
-                            color="#2D9CDB"
-                          />
+                          <Icon name="swapright" type="antdesign" size={ScreenWidth * 0.1} color="#2D9CDB" />
                         </TouchableOpacity>
                       )}
                     </View>
-                    <DisplayRecords
-                      curRecord={currentRecords}
-                      isAdj={this.state.isAdj}
-                    />
+                    <DisplayRecords curRecord={currentRecords} isAdj={this.state.isAdj} />
                     <View style={{ height: 20 }} />
                   </View>
                 )}
@@ -209,10 +180,7 @@ const mapDispatchToProps = (dispatch) => {
     getRecordsUpdateHandler: (uid) => dispatch(getRecordsUpdate(uid)),
   };
 };
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(ProfPatientRecordView);
+export default connect(mapStateToProps, mapDispatchToProps)(ProfPatientRecordView);
 
 const styles = StyleSheet.create({
   patientInfo: {
