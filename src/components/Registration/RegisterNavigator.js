@@ -13,7 +13,7 @@ const RegistrationStack = createStackNavigator();
 export const RegisterNavigator = () => {
   return (
     <RegistrationStack.Navigator
-      initialRouteName="Register Form"
+      initialRouteName="Registration Form"
       screenOptions={({ navigation, route }) => ({
         headerTransparent: true,
         headerTintColor: "white",
