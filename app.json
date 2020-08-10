@@ -3,7 +3,7 @@
     "name": "ForeSee",
     "slug": "foresee",
     "platforms": ["ios", "android", "web"],
-    "version": "1.0.6",
+    "version": "1.0.7",
     "orientation": "portrait",
     "icon": "./assets/images/ApplicationLogo.png",
     "splash": {
@@ -22,7 +22,7 @@
     },
     "android": {
       "package": "hk.ust.sight.foresee",
-      "versionCode": 7
+      "versionCode": 8
     },
     "entryPoint": "node_modules/expo/AppEntry.js",
     "packagerOpts": {

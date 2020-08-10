@@ -86,7 +86,7 @@ const FormComponent = ({ navigation, route }) => {
         selectedNameFields: "chi",
         chineseNameError: "",
         englishNameError: "",
-        gender: "",
+        gender: "M",
         birthday: "",
         parent: {},
         parentSelectionDisabled: false,
