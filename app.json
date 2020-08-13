@@ -3,12 +3,12 @@
     "name": "ForeSee",
     "slug": "foresee",
     "platforms": ["ios", "android", "web"],
-    "version": "1.0.1",
+    "version": "1.0.7",
     "orientation": "portrait",
     "icon": "./assets/images/ApplicationLogo.png",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "updates": {
@@ -18,11 +18,11 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "ios",
-      "buildNumber": "1.0.1"
+      "buildNumber": "1.0.7"
     },
     "android": {
       "package": "hk.ust.sight.foresee",
-      "versionCode": 2
+      "versionCode": 9
     },
     "entryPoint": "node_modules/expo/AppEntry.js",
     "packagerOpts": {

@@ -45,7 +45,7 @@ target 'foresee' do
   use_native_modules!
 
   #No react native orientation module installed
-  =begin pod 'react-native-orientation', :path => '../node_modules/react-native-orientation' =end
+  #=begin pod 'react-native-orientation', :path => '../node_modules/react-native-orientation' =end
 
   pod 'RNSound', :path => '../node_modules/react-native-sound'
 

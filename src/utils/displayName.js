@@ -5,7 +5,6 @@ export const displayName = (user) => {
     return user.givenName + " " + user.surName;
   }
   if (true) {
-
   } else {
     if (user.surName && user.giveName) {
       return user.surName + user.giveName;

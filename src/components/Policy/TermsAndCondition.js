@@ -1,7 +1,7 @@
 import React from "react";
 import { Text } from "react-native";
 import { WebView } from "react-native-webview";
-import { LinearGradientBackground } from "../../../Utils/LinearGradientBackground";
+import { LinearGradientBackground } from "../Utils/LinearGradientBackground";
 
 const TERMS_AND_CONDITION = `
 <h1 style="text-align: justify;"><span style="color: #ffffff;">I. Terms &amp; Conditions</span></h1>

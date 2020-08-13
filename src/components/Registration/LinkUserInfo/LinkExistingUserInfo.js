@@ -1,12 +1,8 @@
 import React, { useEffect } from "react";
 import { View, StyleSheet, Text } from "react-native";
-import {
-  ScreenHeight,
-  FontScale,
-  ScreenWidth,
-} from "../../../../constant/Constant";
-import { LinearGradientBackground } from "../../../../Utils/LinearGradientBackground";
-import Logo from "../../../../Utils/Logo";
+import { ScreenHeight, FontScale, ScreenWidth } from "../../../../constant/Constant";
+import { LinearGradientBackground } from "../../Utils/LinearGradientBackground";
+import Logo from "../../Utils/Logo";
 import { RoundButton } from "../../../../Utils/RoundButton";
 
 const test = async () => {

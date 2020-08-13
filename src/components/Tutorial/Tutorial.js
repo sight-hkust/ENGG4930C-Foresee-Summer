@@ -1,46 +1,58 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet } from 'react-native';
-import { Button } from 'react-native-elements';
-import Swiper from 'react-native-swiper';
-import { ScreenHeight, ScreenWidth } from '../../../constant/Constant';
+import React from "react";
+import { View, Text, Image, StyleSheet } from "react-native";
+import { Button } from "react-native-elements";
+import Swiper from "react-native-swiper";
+import { ScreenHeight, ScreenWidth } from "../../../constant/Constant";
 
-const IMAGE_0 = require('../../../assets/images/tutorial_0.png');
-const IMAGE_1 = require('../../../assets/images/tutorial_1.png');
-const IMAGE_2 = require('../../../assets/images/tutorial_2.png');
-const IMAGE_3 = require('../../../assets/images/tutorial_3.png');
-const IMAGE_4 = require('../../../assets/images/tutorial_4.png');
-const IMAGE_5 = require('../../../assets/images/tutorial_5.png');
+const IMAGE_0 = require("../../../assets/images/tutorial_0.png");
+const IMAGE_1 = require("../../../assets/images/tutorial_1.png");
+const IMAGE_2 = require("../../../assets/images/tutorial_2.png");
+const IMAGE_3 = require("../../../assets/images/tutorial_3.png");
+const IMAGE_4 = require("../../../assets/images/tutorial_4.png");
+const IMAGE_5 = require("../../../assets/images/tutorial_5.png");
+const IMAGE_6 = require("../../../assets/images/tutorial_6.png");
+const IMAGE_7 = require("../../../assets/images/tutorial_7.png");
 
 export const tutorialContent = [
   {
     image: IMAGE_0,
-    subject: '如何看不同日期的記錄?',
-    content: '按下箭咀看前一次或後一次的紀錄',
+    subject: "歡迎使用ForeSee",
+    content: "功能介紹及程式教學",
   },
   {
     image: IMAGE_1,
-    subject: '如何切換不同眼睛的紀錄?',
-    content: '按下眼睛圖像切換左右眼睛\n打開的眼睛代表現正顯示的紀錄',
+    subject: "按下底部圖案切換頁面。",
+    content: "",
   },
   {
     image: IMAGE_2,
-    subject: '顏色代表甚麼?',
-    content: '視力趨勢圖中不同顏色\n代表屈光不正的深淺',
+    subject: "護眼秘笈",
+    content: "您可以在這裡瀏覽眼科專業人士的訪問\n及其他護眼資訊。",
   },
   {
     image: IMAGE_3,
-    subject: '數字代表甚麼?',
-    content: '數字越大\n屈光不正程度越嚴重',
+    subject: "護眼運動",
+    content: "您可以在這裡聽著錄音\n做護眼運動放鬆眼睛。",
   },
   {
     image: IMAGE_4,
-    subject: '斜度代表什麼?',
-    content: '斜度代表度數上升速度',
+    subject: "主頁",
+    content: "您可以在這裡看到自己\n和家人最近的驗眼數據。",
   },
   {
     image: IMAGE_5,
-    subject: '底部圖案代表甚麼功能?',
-    content: '按下真實度數顯示眼睛詳細度數\n按下加號輸入驗眼數據\n調整度數顯示眼鏡詳細度數',
+    subject: "專家解答",
+    content: "您可以在這裡向眼科專業人士發問\n及查看其他人的問答。",
+  },
+  {
+    image: IMAGE_6,
+    subject: "我的檔案",
+    content: "您可以在這裡查看個人資料，設定，\n程式教學及開設子帳戶。",
+  },
+  {
+    image: IMAGE_7,
+    subject: "對ForeSee有意見/查詢?",
+    content: "按下左下角的白色按鈕即可填寫問卷，\n提交意見或直接聯絡我們。",
   },
 ];
 
@@ -52,7 +64,7 @@ const Tutorial = ({ route, navigation }) => {
       dot={
         <View
           style={{
-            backgroundColor: 'rgba(0,0,0,.2)',
+            backgroundColor: "rgba(0,0,0,.2)",
             width: 8,
             height: 8,
             borderRadius: 4,
@@ -63,7 +75,7 @@ const Tutorial = ({ route, navigation }) => {
       activeDot={
         <View
           style={{
-            backgroundColor: '#007aff',
+            backgroundColor: "#007aff",
             width: 8,
             height: 8,
             borderRadius: 4,
@@ -76,21 +88,21 @@ const Tutorial = ({ route, navigation }) => {
         return (
           <View style={styles.slide1}>
             <Image style={[styles.image, index % 2 ? { marginRight: ScreenWidth / 7 } : { marginLeft: ScreenWidth / 7 }]} source={item.image} />
-            <View style={{ height: ScreenHeight * 0.1, justifyContent: 'center' }}>
+            <View style={{ height: ScreenHeight * 0.1, justifyContent: "center" }}>
               <Text style={styles.title}>{item.subject}</Text>
             </View>
             <Text style={styles.content}>{item.content}</Text>
             {index == tutorialContent.length - 1 && (
               <View
                 style={{
-                  position: 'absolute',
+                  position: "absolute",
                   width: ScreenWidth,
                   bottom: ScreenHeight * 0.14,
                   flex: 1,
-                  alignItems: 'center',
+                  alignItems: "center",
                 }}
               >
-                <Button buttonStyle={styles.buttonStyle} titleStyle={{ fontSize: ScreenWidth / 24 }} type="clear" title="開始使用" onPress={() => navigation.navigate('Main')} />
+                <Button buttonStyle={styles.buttonStyle} titleStyle={{ fontSize: ScreenWidth / 24 }} type="clear" title="開始使用" onPress={() => navigation.navigate("Main")} />
               </View>
             )}
           </View>
@@ -103,9 +115,9 @@ const Tutorial = ({ route, navigation }) => {
 const styles = StyleSheet.create({
   slide1: {
     flex: 1,
-    justifyContent: 'flex-end',
-    alignItems: 'center',
-    backgroundColor: '#fff',
+    justifyContent: "flex-end",
+    alignItems: "center",
+    backgroundColor: "#fff",
     paddingBottom: ScreenHeight * 0.15,
   },
   image: {
@@ -113,25 +125,25 @@ const styles = StyleSheet.create({
     width: (ScreenWidth * 6) / 7,
   },
   title: {
-    color: '#1772A6',
+    color: "#1772A6",
     fontSize: ScreenWidth / 15,
-    fontWeight: 'bold',
-    textAlign: 'center',
+    fontWeight: "bold",
+    textAlign: "center",
   },
   content: {
-    textAlign: 'center',
-    color: '#2D9CDB',
+    textAlign: "center",
+    color: "#2D9CDB",
     fontSize: ScreenWidth / 22,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     height: ScreenHeight * 0.2,
   },
   buttonStyle: {
     borderWidth: 1,
-    borderColor: '#8BB5F4',
+    borderColor: "#8BB5F4",
     borderRadius: ScreenWidth / 22,
     height: (ScreenWidth / 22) * 2,
     paddingHorizontal: 18,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
 });
 
