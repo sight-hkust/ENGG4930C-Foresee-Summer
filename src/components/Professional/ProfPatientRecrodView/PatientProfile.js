@@ -15,39 +15,19 @@ export const PatientProfile = ({ info }) => {
       <AnimatableScrollView animation="fadeIn">
         <View style={{ flexDirection: "row" }}>
           <Text style={[styles.profileText, styles.infoLabel]}>年齡:</Text>
-          <Text style={[styles.profileText, styles.infoValues]}>
-            {Math.abs(moment(info.birthday).diff(moment(), "years"))}
-          </Text>
+          <Text style={[styles.profileText, styles.infoValues]}>{Math.abs(moment(info.birthday).diff(moment(), "years"))}</Text>
         </View>
         <View style={{ flexDirection: "row" }}>
           <Text style={[styles.profileText, styles.infoLabel]}>職業:</Text>
-          {info.job ? (
-            <Text style={[styles.profileText, styles.infoValues]}>
-              {info.job}
-            </Text>
-          ) : (
-            <Text style={[styles.profileText, styles.infoValues]}>不詳</Text>
-          )}
+          {info.job ? <Text style={[styles.profileText, styles.infoValues]}>{info.job}</Text> : <Text style={[styles.profileText, styles.infoValues]}>不詳</Text>}
         </View>
         <View style={{ flexDirection: "row" }}>
           <Text style={[styles.profileText, styles.infoLabel]}>家族病史:</Text>
-          {info.history != "" ? (
-            <Text style={[styles.profileText, styles.infoValues]}>
-              {info.history}
-            </Text>
-          ) : (
-            <Text style={[styles.profileText, styles.infoValues]}>不適用</Text>
-          )}
+          <Text style={[styles.profileText, styles.infoValues]}>{info.history ? info.history : "不適用"}</Text>
         </View>
         <View style={{ flexDirection: "row" }}>
           <Text style={[styles.profileText, styles.infoLabel]}>已知眼疾:</Text>
-          {info.disease != "" ? (
-            <Text style={[styles.profileText, styles.infoValues]}>
-              {info.disease}
-            </Text>
-          ) : (
-            <Text style={[styles.profileText, styles.infoValues]}>不適用</Text>
-          )}
+          <Text style={[styles.profileText, styles.infoValues]}>{info.disease ? info.disease : "不適用"}</Text>
         </View>
       </AnimatableScrollView>
     </>
@@ -56,6 +36,7 @@ export const PatientProfile = ({ info }) => {
 
 const styles = StyleSheet.create({
   patientName: {
+    marginLeft: 20,
     fontSize: 31,
     color: "white",
     fontWeight: "bold",
