@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  ActivityIndicator,
-} from "react-native";
+import { StyleSheet, Text, View, ScrollView, ActivityIndicator } from "react-native";
 import { Icon, ListItem, SearchBar } from "react-native-elements";
 
 import { ScreenWidth, ScreenHeight } from "../../../constant/Constant";
@@ -40,11 +34,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
   const [showList, setShowList] = useState([]);
 
   useEffect(() => {
-    if (
-      patientList !== null &&
-      patientList !== undefined &&
-      searchContent === ""
-    ) {
+    if (patientList !== null && patientList !== undefined && searchContent === "") {
       setIsLoading(false);
       setShowList(patientList);
     }
@@ -90,13 +80,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                 }}
                 inputContainerStyle={{ backgroundColor: "#A6ACE9", height: 35 }}
               />
-              <Icon
-                name="qrcode-scan"
-                type="material-community"
-                color="white"
-                size={30}
-                onPress={() => navigation.navigate("QR Scan")}
-              />
+              <Icon name="qrcode-scan" type="material-community" color="white" size={30} onPress={() => navigation.navigate("QR Scan")} />
             </View>
             <ScrollView
               style={{
@@ -107,12 +91,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
               }}
             >
               {showList.length == 0 ? (
-                <Text
-                  style={{ textAlign: "center", color: "white", fontSize: 30 }}
-                >
-                  {" "}
-                  找不到資料{" "}
-                </Text>
+                <Text style={{ textAlign: "center", color: "white", fontSize: 30 }}> 找不到資料 </Text>
               ) : (
                 showList.map((patient, index) => {
                   const key = patient.uid;
@@ -153,10 +132,11 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                               }}
                               onPress={() => {
                                 navigation.navigate("AddRecordScreen", {
+                                  //will navigate to ProfAddRecord
                                   isProfessional: true,
                                   professional_id: auth.currentUser.uid,
                                   patient_id: key,
-                                  inactive: inactive,
+                                  //inactive: inactive,
                                 });
                               }}
                             />

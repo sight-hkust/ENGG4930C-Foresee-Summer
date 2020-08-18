@@ -17,6 +17,7 @@ import AskAnExpertMainScreen from "./src/components/AskAnExpert/AskAnExpertMainS
 
 import RecordsScreen from "./Screens/RecordsScreen";
 import AddRecordScreen from "./Screens/AddRecordScreen";
+import ProfAddRecord from "./src/components/Professional/ProfAddRecord";
 import OverviewScreen from "./Screens/OverviewScreen";
 
 import { Login } from "./src/components/Login/Login";
@@ -169,7 +170,7 @@ function ProfessionalScreen({ navigation, route }) {
     <Stack.Navigator screenOptions={headerConfig}>
       <Stack.Screen name="ProfMainMenu" component={ProfMainMenu} options={{ title: "病人名單" }} />
       <Stack.Screen name="Patient Record" component={ProfPatientRecordView} options={{ title: "" }} />
-      <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} options={{ title: "新增資料" }} />
+      <Stack.Screen name="AddRecordScreen" component={ProfAddRecord} options={{ title: "新增資料" }} />
       <Stack.Screen name="SettingScreen" component={SettingScreen} options={{ title: "設定" }} />
       <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
     </Stack.Navigator>
@@ -328,61 +329,21 @@ export default App = (props) => {
             <Stack.Navigator screenOptions={headerConfig}>
               {loggedIn ? (
                 <>
-                  <Stack.Screen
-                    name="Main"
-                    component={Main}
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="Profile"
-                    component={Profile}
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="QR Scan"
-                    component={QRCodeScannerScreen}
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="Terms"
-                    component={TermsAndCondition}
-                    options={{ title: "條款及細則" }}
-                  />
-                  <Stack.Screen
-                    name="Policy"
-                    component={PrivacyPolicy}
-                    options={{ title: "私隱政策" }}
-                  />
-                  <Stack.Screen
-                    name="SettingScreen"
-                    component={SettingScreen}
-                    options={{ title: "設定" }}
-                  />
+                  <Stack.Screen name="Main" component={Main} options={{ headerShown: false }} />
+                  <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
+                  <Stack.Screen name="QR Scan" component={QRCodeScannerScreen} options={{ headerShown: false }} />
+                  <Stack.Screen name="Terms" component={TermsAndCondition} options={{ title: "條款及細則" }} />
+                  <Stack.Screen name="Policy" component={PrivacyPolicy} options={{ title: "私隱政策" }} />
+                  <Stack.Screen name="SettingScreen" component={SettingScreen} options={{ title: "設定" }} />
                 </>
               ) : (
                 <>
-                  <Stack.Screen
-                    name="Login"
-                    component={Login}
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="Register"
-                    component={RegisterNavigator}
-                    options={{ headerShown: false }}
-                  />
-                  <Stack.Screen
-                    name="Profile"
-                    component={Profile}
-                    options={{ headerShown: false }}
-                  />
+                  <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+                  <Stack.Screen name="Register" component={RegisterNavigator} options={{ headerShown: false }} />
+                  <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
                 </>
               )}
-              <Stack.Screen
-                name="Tutorial"
-                component={TutorialScreen}
-                options={{ headerShown: false }}
-              />
+              <Stack.Screen name="Tutorial" component={TutorialScreen} options={{ headerShown: false }} />
             </Stack.Navigator>
           </NavigationContainer>
         )}
