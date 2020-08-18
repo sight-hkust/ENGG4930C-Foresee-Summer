@@ -105,23 +105,6 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                         rightIcon={
                           <>
                             <Icon
-                              size={25}
-                              name="search"
-                              type="feather"
-                              color="#88D3E3"
-                              containerStyle={{
-                                backgroundColor: "white",
-                                borderRadius: 5,
-                                padding: 3,
-                                marginRight: 5,
-                              }}
-                              onPress={() => {
-                                navigation.navigate("Patient Record", {
-                                  key: key,
-                                });
-                              }}
-                            />
-                            <Icon
                               key={index}
                               size={25}
                               name="plus"
@@ -130,7 +113,10 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                               containerStyle={{
                                 backgroundColor: "white",
                                 borderRadius: 5,
-                                padding: 3,
+                                paddingLeft: 10,
+                                paddingRight: 10,
+                                paddingTop: 3,
+                                paddingBottom: 3,
                               }}
                               onPress={() => {
                                 navigation.navigate("AddRecordScreen", {
