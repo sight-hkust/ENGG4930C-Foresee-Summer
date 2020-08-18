@@ -16,7 +16,8 @@ import { displayName } from "../../utils/displayName";
 function SearchPatient(key, referenceList) {
   const targetList = [];
   referenceList.map((u, i) => {
-    let name = u.lastName + u.firstName;
+    //let name = u.lastName + u.firstName;
+    let name = displayName(u);
     if (name != undefined && name.includes(key)) {
       targetList.push(u);
     }
@@ -68,10 +69,11 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                   setShowList(SearchPatient(e, patientList));
                 }}
                 value={searchContent}
+                inputStyle={{ color: "black" }}
                 round
                 lightTheme
                 placeholderTextColor="white"
-                leftIconContainerStyle={{ color: "white" }}
+                searchIcon={{ color: "white" }}
                 containerStyle={{
                   backgroundColor: "transparent",
                   width: ScreenWidth * 0.8,
