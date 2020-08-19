@@ -4,16 +4,7 @@ import { ButtonGroup } from "react-native-elements";
 import { ScreenHeight, ScreenWidth } from "../../../constant/Constant";
 import { GenderIcon } from "../Icons";
 
-const GenderOptionsInput = ({
-  containerStyle,
-  iconStyle,
-  labelContainerStyle,
-  hideEmbbededMessage,
-  icon,
-  label,
-  formikKey,
-  formikProps,
-}) => {
+const GenderOptionsInput = ({ containerStyle, iconStyle, labelContainerStyle, hideEmbbededMessage, icon, label, formikKey, formikProps }) => {
   const [selectedGenderIndex, setSelectedGenderIndex] = useState(0);
   const genderOptions = ["男", "女"];
   const updateSelectedGenderIndex = (selectedIndex) => {

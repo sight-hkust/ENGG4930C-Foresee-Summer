@@ -1,15 +1,15 @@
-import { SafeAreaView, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, ScrollView, ActivityIndicator } from 'react-native';
-import { database, storage, auth } from '../../config/config';
-import React, { Component } from 'react';
-import { Audio, Video } from 'expo-av';
-import { LinearGradient } from 'expo-linear-gradient';
-import { Button } from 'react-native-elements';
-import { Icon } from 'react-native-elements';
-import * as ScreenOrientation from 'expo-screen-orientation';
-import { ScreenWidth, ScreenHeight, FontScale } from '../../../constant/Constant';
-import { WebView } from 'react-native-webview';
-import moment from 'moment';
-import { actionCounter } from '../../utils/actionCounter';
+import { SafeAreaView, StyleSheet, Text, View, Image, Dimensions, TouchableOpacity, ScrollView, ActivityIndicator } from "react-native";
+import { database, storage, auth } from "../../config/config";
+import React, { Component } from "react";
+import { Audio, Video } from "expo-av";
+import { LinearGradient } from "expo-linear-gradient";
+import { Button } from "react-native-elements";
+import { Icon } from "react-native-elements";
+import * as ScreenOrientation from "expo-screen-orientation";
+import { ScreenWidth, ScreenHeight, FontScale } from "../../../constant/Constant";
+import { WebView } from "react-native-webview";
+import moment from "moment";
+import { actionCounter } from "../../utils/actionCounter";
 
 export default class ArticleDetailScreen extends Component {
   constructor(props) {
@@ -23,9 +23,9 @@ export default class ArticleDetailScreen extends Component {
       volume: 1.0,
       isBuffering: true,
       article_id: article_id, //this.props.route.params.article_id then remove from state
-      content: '',
-      subject: '',
-      image: '',
+      content: "",
+      subject: "",
+      image: "",
       audio: null,
       video: null,
       isVid: false,
@@ -42,7 +42,7 @@ export default class ArticleDetailScreen extends Component {
   async _handleVidRef(playing) {
     const { video } = this.state;
     var vid;
-    if (video.slice(-16) == '_mp4compress.mp4') {
+    if (video.slice(-16) == "_mp4compress.mp4") {
       vid = await storage.ref(video).getDownloadURL();
       //console.log(vid);
     } else vid = video;
@@ -97,7 +97,7 @@ export default class ArticleDetailScreen extends Component {
   componentDidMount() {
     let startTime = moment();
 
-    database.ref(`contents/articles/${this.state.article_id}`).once('value', (snapshot) => {
+    database.ref(`contents/articles/${this.state.article_id}`).once("value", (snapshot) => {
       var childData = snapshot.val();
       if (childData.isVid) {
         this.setState({
@@ -129,16 +129,16 @@ export default class ArticleDetailScreen extends Component {
     let endTime = moment();
     let startTime = this.state.startTime;
     let usage_ms = endTime.diff(this.state.startTime);
-    console.log('MOUNT:', startTime);
-    console.log('UNMOUNT:', endTime);
-    console.log('USED:', usage_ms);
+    console.log("MOUNT:", startTime);
+    console.log("UNMOUNT:", endTime);
+    console.log("USED:", usage_ms);
     if (this.state.playbackObject) await this.state.playbackObject.pauseAsync();
-    else console.log('No playbackobject');
+    else console.log("No playbackobject");
     //actionCounter('articles', this.state.article_id, 'views');
 
     var views;
 
-    database.ref(`contents/articles/${this.state.article_id}`).once('value', (snapshot) => {
+    database.ref(`contents/articles/${this.state.article_id}`).once("value", (snapshot) => {
       var snap = snapshot.val();
       views = snap.views;
       if (!views) views = 0;
@@ -160,14 +160,14 @@ export default class ArticleDetailScreen extends Component {
     };
 
     return (
-      <View style={{ backgroundColor: '#F6F6F6', flex: 1 }}>
+      <View style={{ backgroundColor: "#F6F6F6", flex: 1 }}>
         <View>
           {this.state.isVid && (
             <View>
               {this.state.isBuffering == true && (
                 <ActivityIndicator
-                  color='#00acc1'
-                  size='large'
+                  color="#00acc1"
+                  size="large"
                   style={{
                     width: ScreenWidth,
                     height: this.state.videoHeight,
@@ -176,7 +176,7 @@ export default class ArticleDetailScreen extends Component {
               )}
               <Video
                 ref={this.mountVid}
-                resizeMode='contain'
+                resizeMode="contain"
                 useNativeControls={true}
                 onReadyForDisplay={(params) => {
                   this.setState({ videoHeight: (ScreenWidth / params.naturalSize.width) * params.naturalSize.height });
@@ -194,16 +194,16 @@ export default class ArticleDetailScreen extends Component {
 
           {!this.state.isVid && (
             <>
-              <View style={{ position: 'absolute' }}>
+              <View style={{ position: "absolute" }}>
                 <Image source={{ uri: this.state.image }} style={{ width: ScreenWidth, height: ScreenWidth * 0.5625 }} />
                 <LinearGradient
-                  colors={['transparent', 'transparent', '#F6F6F6']}
+                  colors={["transparent", "transparent", "#F6F6F6"]}
                   locations={[0, 0.2, 1]}
                   style={{
-                    position: 'absolute',
+                    position: "absolute",
                     height: ScreenWidth * 0.5625,
-                    width: Dimensions.get('window').width,
-                    resizeMode: 'cover',
+                    width: Dimensions.get("window").width,
+                    resizeMode: "cover",
                   }}
                 ></LinearGradient>
               </View>
@@ -214,12 +214,12 @@ export default class ArticleDetailScreen extends Component {
           )}
         </View>
 
-        <View style={{ alignItems: 'center', flex: 1, marginTop: ScreenHeight * 0.03 }}>
-          {!this.state.isVid && this.state.audio != '' && this.state.audio != null && (
-            <Button title={this.state.play ? '暫停錄音' : '播放錄音'} titleStyle={ArticleDetailStyles.buttonTitle} onPress={() => PressPlayButton()} buttonStyle={ArticleDetailStyles.playButton} />
+        <View style={{ alignItems: "center", flex: 1, marginTop: ScreenHeight * 0.03 }}>
+          {!this.state.isVid && this.state.audio != "" && this.state.audio != null && (
+            <Button title={this.state.play ? "暫停錄音" : "播放錄音"} titleStyle={ArticleDetailStyles.buttonTitle} onPress={() => PressPlayButton()} buttonStyle={ArticleDetailStyles.playButton} />
           )}
           <View style={{ width: ScreenWidth, flex: 1 }}>
-            <WebView style={{ backgroundColor: 'transparent' }} originWhitelist={['*']} source={{ html: this.state.content }} />
+            <WebView style={{ backgroundColor: "transparent" }} originWhitelist={["*"]} source={{ html: this.state.content }} />
           </View>
         </View>
       </View>
@@ -231,14 +231,14 @@ const ArticleDetailStyles = StyleSheet.create({
   articleSubject: {
     fontSize: ScreenHeight * 0.04,
     paddingHorizontal: 30,
-    color: '#24559E',
-    fontWeight: 'bold',
+    color: "#24559E",
+    fontWeight: "bold",
   },
   videoSubject: {
     fontSize: ScreenHeight * 0.04,
     paddingHorizontal: 30,
-    color: '#24559E',
-    fontWeight: 'bold',
+    color: "#24559E",
+    fontWeight: "bold",
   },
   articleContent: {
     paddingTop: 20,
@@ -246,9 +246,9 @@ const ArticleDetailStyles = StyleSheet.create({
     paddingRight: 30,
     paddingBottom: 15,
     fontSize: 18,
-    color: '#4D8AE4',
-    textAlign: 'justify',
-    width: '100%',
+    color: "#4D8AE4",
+    textAlign: "justify",
+    width: "100%",
   },
   videoContent: {
     paddingTop: 70,
@@ -256,12 +256,12 @@ const ArticleDetailStyles = StyleSheet.create({
     paddingRight: 30,
     paddingBottom: 15,
     fontSize: 18,
-    color: '#4D8AE4',
-    textAlign: 'justify',
-    width: '100%',
+    color: "#4D8AE4",
+    textAlign: "justify",
+    width: "100%",
   },
   playButton: {
-    backgroundColor: '#8BB5F4',
+    backgroundColor: "#8BB5F4",
     marginTop: 25,
     paddingTop: 5,
     width: 120,
