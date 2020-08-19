@@ -27,26 +27,10 @@ const PostQuestionScreen = ({ route, navigation }) => {
   navigation.setOptions({
     headerRightContainerStyle: {
       position: "absolute",
-      transform: [
-        {
-          translateY: yScroll.interpolate({
-            inputRange: [0, 80],
-            outputRange: [0, -200],
-            extrapolate: "clamp",
-          }),
-        },
-      ],
+      transform: [{ translateY: yScroll.interpolate({ inputRange: [0, 80], outputRange: [0, -200], extrapolate: "clamp" }) }],
     },
     headerTitleStyle: {
-      transform: [
-        {
-          translateY: yScroll.interpolate({
-            inputRange: [0, 80],
-            outputRange: [0, -200],
-            extrapolate: "clamp",
-          }),
-        },
-      ],
+      transform: [{ translateY: yScroll.interpolate({ inputRange: [0, 80], outputRange: [0, -200], extrapolate: "clamp" }) }],
       fontWeight: "bold",
       fontSize: 28,
       color: "#E1EDFF",
@@ -54,42 +38,18 @@ const PostQuestionScreen = ({ route, navigation }) => {
     },
     headerLeftContainerStyle: {
       position: "absolute",
-      transform: [
-        {
-          translateY: yScroll.interpolate({
-            inputRange: [0, 80],
-            outputRange: [0, -200],
-            extrapolate: "clamp",
-          }),
-        },
-      ],
+      transform: [{ translateY: yScroll.interpolate({ inputRange: [0, 80], outputRange: [0, -200], extrapolate: "clamp" }) }],
     },
   });
 
   return (
     <MenuScreen>
       <View>
-        <ScrollView
-          onScroll={Animated.event([
-            {
-              nativeEvent: {
-                contentOffset: {
-                  y: yScroll,
-                },
-              },
-            },
-          ])}
-          scrollEventThrottle={1}
-        >
+        <ScrollView onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: yScroll } } }])} scrollEventThrottle={1}>
           <View style={styles.container}>
             {!isSubmitted ? (
               <Formik
-                initialValues={{
-                  title: "",
-                  content: "",
-                  tags: [],
-                  allowInspect: false,
-                }}
+                initialValues={{ title: "", content: "", tags: [], allowInspect: false }}
                 validationSchema={PostQuestionSchema}
                 onSubmit={(values) => {
                   if (values.title.length != 0 && values.content.length != 0) {
@@ -101,9 +61,7 @@ const PostQuestionScreen = ({ route, navigation }) => {
                         tags: values.tags,
                         createdBy: auth.currentUser.uid,
                         createdDate: moment().format("YYYY-MM-DD HH:mm:ss"),
-                        settings: {
-                          allowInspect: values.allowInspect,
-                        },
+                        settings: { allowInspect: values.allowInspect },
                       })
                       .catch((err) => console.log(err));
 
@@ -140,11 +98,7 @@ const PostQuestionScreen = ({ route, navigation }) => {
                       inputContainerStyle={styles.contentContainer}
                       inputStyle={styles.textAreaContainer}
                       rightIcon={<Text style={styles.wordCounter}>{formikProps.values.content.length}/200</Text>}
-                      rightIconContainerStyle={{
-                        position: "absolute",
-                        bottom: 0,
-                        right: 15,
-                      }}
+                      rightIconContainerStyle={{ position: "absolute", bottom: 0, right: 15 }}
                       errorMessage={formikProps.errors.content}
                     />
                     <Tag formikProps={formikProps} />
@@ -155,11 +109,7 @@ const PostQuestionScreen = ({ route, navigation }) => {
                       checkedColor="#E1EDFF"
                       uncheckedIcon="checkbox-passive"
                       uncheckedColor="#E1EDFF"
-                      containerStyle={{
-                        backgroundColor: "transparent",
-                        borderColor: "transparent",
-                        paddingBottom: 10,
-                      }}
+                      containerStyle={{ backgroundColor: "transparent", borderColor: "transparent", paddingBottom: 10 }}
                       textStyle={{ color: "#E1EDFF", fontSize: 18 }}
                       size={18}
                       onPress={() => formikProps.setFieldValue("allowInspect", !formikProps.values.allowInspect)}
@@ -171,26 +121,13 @@ const PostQuestionScreen = ({ route, navigation }) => {
                 )}
               </Formik>
             ) : (
-              <View
-                style={{
-                  justifyContent: "center",
-                  height: ScreenHeight * 0.6,
-                  width: ScreenWidth * 0.82,
-                  top: 60,
-                  alignSelf: "center",
-                }}
-              >
+              <View style={{ justifyContent: "center", height: ScreenHeight * 0.6, width: ScreenWidth * 0.82, top: 60, alignSelf: "center" }}>
                 <Text style={styles.farewellTitle}>謝謝你的提問</Text>
                 <Text style={styles.farewellMessage}>收集問題後，我們的專家會在一星期內回答你的，請耐心等候。如有緊急需要，請聯絡你的眼科醫生。</Text>
                 <Button
                   title="返回"
                   type="clear"
-                  containerStyle={{
-                    width: 120,
-                    position: "absolute",
-                    bottom: 0,
-                    right: 15,
-                  }}
+                  containerStyle={{ width: 120, position: "absolute", bottom: 0, right: 15 }}
                   titleStyle={{ color: "white", fontSize: 23 }}
                   iconContainerStyle={{ position: "absolute", bottom: 0 }}
                   icon={<Icon type="antdesign" name="swapleft" size={50} color="white" />}
