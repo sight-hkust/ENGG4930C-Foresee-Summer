@@ -18,13 +18,11 @@ class ProfPatientRecordView extends Component {
       info: null,
       selectedIndex: -1,
       recordsLen: -1,
-      currentRecords: null,
       isAdj: true,
     };
   }
 
   componentDidMount() {
-    console.log("mount");
     const { key } = this.props.route.params;
     const { getRecordsUpdateHandler } = this.props;
 
@@ -40,25 +38,22 @@ class ProfPatientRecordView extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    console.log("update");
-    const { currentRecords } = this.state;
-    if (currentRecords == null) {
+    const { selectedIndex } = this.state;
+    if (selectedIndex == -1) {
       const { records, dateList } = this.props.recordStore;
       if (records && dateList) {
         this.setState({
           recordsLen: dateList.length,
           selectedIndex: dateList.length - 1,
-          currentRecords: records[dateList[dateList.length - 1]],
         });
       }
     }
-    if (Object.keys(prevProps.recordStore).length == 0) {
+    /*if (Object.keys(prevProps.recordStore).length == 0) {
       const { records, dateList } = this.props.recordStore;
       if (records && dateList) {
         this.setState({
           recordsLen: dateList.length,
           selectedIndex: dateList.length - 1,
-          currentRecords: records[dateList[dateList.length - 1]],
         });
       }
     } else {
@@ -66,14 +61,13 @@ class ProfPatientRecordView extends Component {
         this.setState({
           recordsLen: dateList.length,
           selectedIndex: dateList.length - 1,
-          currentRecords: records[dateList[dateList.length - 1]],
         });
       }
-    }
+    }*/
   }
 
   render() {
-    const { selectedIndex, recordsLen, currentRecords, info } = this.state;
+    const { selectedIndex, recordsLen, info } = this.state;
     const { records, dateList } = this.props.recordStore;
     const { key, inactive } = this.props.route.params;
 
@@ -85,7 +79,7 @@ class ProfPatientRecordView extends Component {
             {info && (
               <>
                 <View style={styles.boxes}>
-                  {!(records && dateList && currentRecords) ? (
+                  {!(records && dateList) ? (
                     <Text style={styles.noDataText}>{"暫無數據\n請按 + 輸入資料"}</Text>
                   ) : (
                     <View style={{ height: "100%" }}>
@@ -108,7 +102,7 @@ class ProfPatientRecordView extends Component {
                           </TouchableOpacity>
                         )}
                       </View>
-                      <DisplayRecords curRecord={currentRecords} isAdj={this.state.isAdj} />
+                      <DisplayRecords curRecord={records[dateList[selectedIndex]]} isAdj={this.state.isAdj} />
                       <View style={{ height: 20 }} />
                     </View>
                   )}
