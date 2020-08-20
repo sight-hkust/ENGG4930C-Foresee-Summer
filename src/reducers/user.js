@@ -1,6 +1,6 @@
-import { database, auth } from '../config/config';
+import { database, auth } from "../config/config";
 
-export const UPDATE_USER_INFO = 'UPDATE_USER_INFO';
+export const UPDATE_USER_INFO = "UPDATE_USER_INFO";
 
 export const updateUserInfo = (user) => {
   return {
@@ -11,9 +11,41 @@ export const updateUserInfo = (user) => {
 
 export const watchUserInfoUpdate = () => {
   return (dispatch) => {
-    database.ref('/users/' + auth.currentUser.uid).on('value', (snap) => {
-      dispatch(updateUserInfo(snap.val()));
+    database.ref("/users/" + auth.currentUser.uid).on("value", (snap) => {
+      //dispatch(updateUserInfo(snap.val()));
+      if (snap.val() != null) {
+        dispatch(updateUserInfo(snap.val()));
+      }
     });
+    database.ref("/professionals/" + auth.currentUser.uid).on("value", (snap) => {
+      //dispatch(updateUserInfo(snap.val()));
+      if (snap.val() != null) {
+        dispatch(updateUserInfo(snap.val()));
+      }
+    });
+    // database.ref("/users/" + auth.currentUser.uid).on("value", (snap) => {
+    //   dispatch(updateUserInfo(snap.val()));
+    // });
+  };
+};
+
+export const getUserInfoUpdate = (uid, isProfessional) => {
+  return (dispatch) => {
+    let node = (isProfessional ? "/professionals/" : "/users/") + uid;
+    if (isProfessional) {
+      database
+        .ref(node)
+        .once("value")
+        .then((snapshot) => {
+          const userData = snapshot.val();
+          if (userData["dataEncrypted"]) {
+            const decrpytedUserData = decryptData(userData);
+            dispatch(updateUserInfo(decrpytedUserData));
+          } else {
+            dispatch(updateUserInfo(userData));
+          }
+        });
+    }
   };
 };
 

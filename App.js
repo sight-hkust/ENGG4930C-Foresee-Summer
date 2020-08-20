@@ -124,9 +124,10 @@ function FaqScreen({ navigation, route }) {
 }
 
 function ProfileScreen({ navigation, route }) {
+  console.log("here", route.params.type);
   return (
     <Stack.Navigator screenOptions={headerConfig}>
-      <Stack.Screen name="ProfileTabMain" component={Profile} options={{ title: "我的檔案" }} />
+      <Stack.Screen name="ProfileTabMain" component={Profile} options={{ title: "我的檔案" }} initialParams={{ type: route.params.type }} />
       <Stack.Screen name="QrCode" component={QrCode} options={{ headerShown: false }} />
       <Stack.Screen
         name="Register"
@@ -220,12 +221,25 @@ function Main({ route, navigation }) {
               tabBarIcon: () => <Image source={require("./assets/images/Icon_solid.png")} style={{ ...styles.icon, ...{ width: 55, height: 55 } }} />,
             }}
           />
-          <Tab.Screen
+          {/* <Tab.Screen
             name="SettingScreen"
             component={SettingScreen}
             initialParams={{ isProfessional: true }}
             options={{
               tabBarIcon: () => <Icon name="setting" type="antdesign" color="#23559E" size={32.5} containerStyle={styles.icon} />,
+            }}
+          /> */}
+
+          <Tab.Screen
+            name="ProfileScreen"
+            component={ProfileScreen}
+            options={{
+              tabBarLabel: "個人檔案",
+              tabBarIcon: () => (
+                <TouchableOpacity onPress={() => navigation.navigate("ProfileScreen", { type: "professional" })}>
+                  <Image source={require("./assets/images/Profile.png")} style={styles.icon} />
+                </TouchableOpacity>
+              ),
             }}
           />
         </>
@@ -291,7 +305,7 @@ function Main({ route, navigation }) {
             options={{
               tabBarLabel: "個人檔案",
               tabBarIcon: () => (
-                <TouchableOpacity onPress={() => navigation.navigate("ProfileScreen")}>
+                <TouchableOpacity onPress={() => navigation.navigate("ProfileScreen", { type: "normal" })}>
                   <Image source={require("./assets/images/Profile.png")} style={styles.icon} />
                 </TouchableOpacity>
               ),

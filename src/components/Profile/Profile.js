@@ -14,11 +14,15 @@ import { auth } from "../../config/config";
 import { displayName } from "../../utils/displayName";
 
 const Profile = ({ navigation, route, userInfoStore }) => {
+  const { type } = route.params; //type: "normal", "professional"
+  console.log(route);
+
   const [loading, setLoading] = useState(true);
 
   const { user } = userInfoStore;
 
   useEffect(() => {
+    //console.log(user);
     if (user != undefined) {
       setLoading(false);
     }
@@ -39,62 +43,27 @@ const Profile = ({ navigation, route, userInfoStore }) => {
                   }}
                 >
                   <View style={styles.nameContainer}>
-                    <Text style={styles.name}>
-                      {user.lastName != "" ? user.lastName : user.givenName[0]}
-                    </Text>
+                    <Text style={styles.name}>{user.lastName != "" ? user.lastName : user.givenName[0]}</Text>
                   </View>
                 </Row>
                 <Row style={styles.qrCodeIconContainer}>
-                  <Icon
-                    type="antdesign"
-                    name="qrcode"
-                    size={40}
-                    containerStyle={{ marginRight: 15, marginTop: 10 }}
-                    onPress={() => navigation.navigate("QrCode")}
-                  />
+                  {type == "noraml" && <Icon type="antdesign" name="qrcode" size={40} containerStyle={{ marginRight: 15, marginTop: 10 }} onPress={() => navigation.navigate("QrCode")} />}
                 </Row>
 
                 <Row style={styles.titleContainer}>
-                  <Text
-                    style={
-                      user.lastName != "" ? styles.title : styles.titleEnglish
-                    }
-                  >
-                    {displayName(user)}
-                  </Text>
+                  <Text style={user.lastName != "" ? styles.title : styles.titleEnglish}>{displayName(user)}</Text>
                 </Row>
 
-                <Row
-                  style={{ ...styles.titleContainer, ...{ marginBottom: 7.5 } }}
-                >
-                  <Text style={styles.subtitle}>
-                    {user.birthday.split("T")[0]}
-                  </Text>
-                </Row>
+                <Row style={{ ...styles.titleContainer, ...{ marginBottom: 7.5 } }}>{type == "normal" && <Text style={styles.subtitle}>{user.birthday.split("T")[0]}</Text>}</Row>
                 <Row style={{ height: 47.5 }}>
                   <Col style={styles.iconContainer}>
-                    <Icon
-                      type="font-awesome"
-                      name="hourglass-o"
-                      size={40}
-                      containerStyle={{}}
-                    />
+                    <Icon type="font-awesome" name="hourglass-o" size={40} containerStyle={{}} />
                   </Col>
                   <Col style={styles.iconContainer}>
-                    <Icon
-                      type="fontisto"
-                      name="email"
-                      size={40}
-                      containerStyle={{}}
-                    />
+                    <Icon type="fontisto" name="email" size={40} containerStyle={{}} />
                   </Col>
                   <Col style={styles.iconContainer}>
-                    <Icon
-                      type="feather"
-                      name="phone"
-                      size={40}
-                      containerStyle={{}}
-                    />
+                    <Icon type="feather" name="phone" size={40} containerStyle={{}} />
                   </Col>
                 </Row>
                 <Row style={{ height: 20 }}>
@@ -102,9 +71,7 @@ const Profile = ({ navigation, route, userInfoStore }) => {
                     <View style={styles.verticalLine} />
                   </Col>
                   <Col>
-                    <View
-                      style={{ ...styles.verticalLine, ...{ height: "250%" } }}
-                    />
+                    <View style={{ ...styles.verticalLine, ...{ height: "250%" } }} />
                   </Col>
                   <Col>
                     <View style={styles.verticalLine} />
@@ -113,12 +80,7 @@ const Profile = ({ navigation, route, userInfoStore }) => {
                 <Row>
                   <Col style={styles.infoContainer}>
                     <Text style={styles.info}>
-                      <Text style={{ fontSize: 30 }}>
-                        {moment
-                          .duration(moment().diff(user.birthday, "YYYY"))
-                          .years()}
-                      </Text>
-                      歲
+                      <Text style={{ fontSize: 30 }}>{moment.duration(moment().diff(user.birthday, "YYYY")).years()}</Text>歲
                     </Text>
                   </Col>
                   <Col style={styles.infoContainer}>
@@ -159,19 +121,21 @@ const Profile = ({ navigation, route, userInfoStore }) => {
                 TouchableComponent={TouchableOpacity}
                 onPress={() => navigation.navigate("Tutorial")}
               />
-              <Button
-                title="創建子帳戶"
-                type="clear"
-                containerStyle={styles.bottomMenuItemContainer}
-                titleStyle={styles.bottomMenuItemText}
-                TouchableComponent={TouchableOpacity}
-                onPress={() =>
-                  navigation.navigate("Register", {
-                    isProfessional: false,
-                    registerChild: true,
-                  })
-                }
-              />
+              {type == "normal" && (
+                <Button
+                  title="創建子帳戶"
+                  type="clear"
+                  containerStyle={styles.bottomMenuItemContainer}
+                  titleStyle={styles.bottomMenuItemText}
+                  TouchableComponent={TouchableOpacity}
+                  onPress={() =>
+                    navigation.navigate("Register", {
+                      isProfessional: false,
+                      registerChild: true,
+                    })
+                  }
+                />
+              )}
               {/*  <Button
                 title="變更個人資料"
                 type="clear"
