@@ -24,6 +24,7 @@ class ProfPatientRecordView extends Component {
   }
 
   componentDidMount() {
+    console.log("mount");
     const { key } = this.props.route.params;
     const { getRecordsUpdateHandler } = this.props;
 
@@ -39,6 +40,7 @@ class ProfPatientRecordView extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    console.log("update");
     const { currentRecords } = this.state;
     if (currentRecords == null) {
       const { records, dateList } = this.props.recordStore;
