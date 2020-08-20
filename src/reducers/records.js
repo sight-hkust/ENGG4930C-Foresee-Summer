@@ -1,7 +1,7 @@
-import { database } from '../config/config';
+import { database } from "../config/config";
 
-export const GET_EYE_TEST_RECORDS = 'GET_EYE_TEST_RECORDS';
-export const UPDATE_EYE_TEST_RECORDS = 'UPDATE_EYE_TEST_RECORDS';
+export const GET_EYE_TEST_RECORDS = "GET_EYE_TEST_RECORDS";
+export const UPDATE_EYE_TEST_RECORDS = "UPDATE_EYE_TEST_RECORDS";
 
 /* export const setRecordStore = (records, uid, inactive) => {
   return {
@@ -26,17 +26,14 @@ export const updateRecords = (dateList, records) => {
 
 export const getRecordsUpdate = (uid) => {
   return (dispatch) => {
-    let recordsRef = database.ref('/users/' + uid + '/records');
-    recordsRef
-      .orderByKey()
-      .once('value')
-      .then((snap) => {
-        let date = [];
-        snap.forEach((data) => {
-          date.push(data.key);
-        });
-        dispatch(updateRecords(date, snap.toJSON()));
+    let recordsRef = database.ref("/users/" + uid + "/records");
+    recordsRef.orderByKey().on("value", (snap) => {
+      let date = [];
+      snap.forEach((data) => {
+        date.push(data.key);
       });
+      dispatch(updateRecords(date, snap.toJSON()));
+    });
   };
 };
 

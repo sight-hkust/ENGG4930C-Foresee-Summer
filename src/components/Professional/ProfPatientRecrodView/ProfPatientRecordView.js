@@ -38,8 +38,7 @@ class ProfPatientRecordView extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { selectedIndex } = this.state;
-    if (selectedIndex == -1) {
+    if (prevProps.recordStore.records != this.props.recordStore.records || prevProps.recordStore.dateList != this.props.recordStore.dateList) {
       const { records, dateList } = this.props.recordStore;
       if (records && dateList) {
         this.setState({
@@ -48,8 +47,18 @@ class ProfPatientRecordView extends Component {
         });
       }
     }
-    /*if (Object.keys(prevProps.recordStore).length == 0) {
-      const { records, dateList } = this.props.recordStore;
+
+    /*const { selectedIndex } = this.state;
+    const { records, dateList } = this.props.recordStore;
+    if (selectedIndex == -1) {
+      if (records && dateList) {
+        this.setState({
+          recordsLen: dateList.length,
+          selectedIndex: dateList.length - 1,
+        });
+      }
+    }
+    if (Object.keys(prevProps.recordStore).length == 0) {
       if (records && dateList) {
         this.setState({
           recordsLen: dateList.length,
@@ -57,7 +66,7 @@ class ProfPatientRecordView extends Component {
         });
       }
     } else {
-      if (prevProps.recordStore.dateList.length !== this.props.recordStore.dateList.length) {
+      if (prevProps.recordStore.dateList.length !== dateList.length) {
         this.setState({
           recordsLen: dateList.length,
           selectedIndex: dateList.length - 1,
@@ -79,7 +88,7 @@ class ProfPatientRecordView extends Component {
             {info && (
               <>
                 <View style={styles.boxes}>
-                  {!(records && dateList) ? (
+                  {!(records && dateList && selectedIndex != -1) ? (
                     <Text style={styles.noDataText}>{"暫無數據\n請按 + 輸入資料"}</Text>
                   ) : (
                     <View style={{ height: "100%" }}>
