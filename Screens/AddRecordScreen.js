@@ -1,47 +1,47 @@
-import React, { Component, useState } from 'react';
-import { StyleSheet, View, ScrollView, Alert, Animated, TouchableOpacity } from 'react-native';
+import React, { Component, useState } from "react";
+import { StyleSheet, View, ScrollView, Alert, Animated, TouchableOpacity } from "react-native";
 
-import { Formik } from 'formik';
-import moment from 'moment';
+import { Formik } from "formik";
+import moment from "moment";
 
-import { database } from '../src/config/config';
-import { Button } from 'react-native-elements';
+import { database } from "../src/config/config";
+import { Button } from "react-native-elements";
 
-import { DateSelect, RenderNormal, RenderCollapseAdj, RemarksInput, DiseasesInput, RenderCollapseVA, RenderCollapsePD } from '../Screens/RecordFormComponents';
+import { DateSelect, RenderNormal, RenderCollapseAdj, RemarksInput, DiseasesInput, RenderCollapseVA, RenderCollapsePD } from "../Screens/RecordFormComponents";
 
-import MenuScreen from '../Utils/MenuScreen';
+import MenuScreen from "../Utils/MenuScreen";
 
 export default class Form extends Component {
   yScroll = new Animated.Value(0);
   constructor(props) {
     super(props);
-    this.state = { mode: true, selectedLabel: '' }; //true: slider mode ; false: input box mode
+    this.state = { mode: true, selectedLabel: "" }; //true: slider mode ; false: input box mode
   }
 
   componentDidMount() {
     this.props.navigation.setOptions({
       headerRightContainerStyle: {
-        position: 'absolute',
-        transform: [{ translateY: this.yScroll.interpolate({ inputRange: [0, 80], outputRange: [0, -200], extrapolate: 'clamp' }) }],
+        position: "absolute",
+        transform: [{ translateY: this.yScroll.interpolate({ inputRange: [0, 80], outputRange: [0, -200], extrapolate: "clamp" }) }],
       },
       headerTitleStyle: {
         //position: 'absolute',
-        transform: [{ translateY: this.yScroll.interpolate({ inputRange: [0, 80], outputRange: [0, -200], extrapolate: 'clamp' }) }],
+        transform: [{ translateY: this.yScroll.interpolate({ inputRange: [0, 80], outputRange: [0, -200], extrapolate: "clamp" }) }],
         fontSize: 28,
-        color: '#E1EDFF',
-        fontWeight: '700',
-        overflow: 'hidden',
+        color: "#E1EDFF",
+        fontWeight: "700",
+        overflow: "hidden",
       },
       headerLeftContainerStyle: {
-        position: 'absolute',
-        transform: [{ translateY: this.yScroll.interpolate({ inputRange: [0, 80], outputRange: [0, -200], extrapolate: 'clamp' }) }],
+        position: "absolute",
+        transform: [{ translateY: this.yScroll.interpolate({ inputRange: [0, 80], outputRange: [0, -200], extrapolate: "clamp" }) }],
       },
     });
   }
 
   render() {
     const mode = this.state.mode;
-    const { isProfessional, professional_id, patient_id, refractive } = this.props.route.params;
+    const { isProfessional, professional_id, patient_id } = this.props.route.params;
     return (
       <MenuScreen>
         <ScrollView
@@ -51,56 +51,53 @@ export default class Form extends Component {
         >
           <Formik
             initialValues={{
-              date: moment().format('YYYY-MM-DD HH:mm'),
-              L_SPH: '0',
-              Lsymbol: true, //true: +, false: -
-              R_SPH: '0',
-              Rsymbol: true,
-              L_Myopia: '0',
-              R_Myopia: '0',
-              L_Hyperopia: '0',
-              R_Hyperopia: '0',
+              date: moment().format("YYYY-MM-DD HH:mm"),
+              L_SPH: "0",
+              L_symbol: false, //true: +, false: -
+              R_SPH: "0",
+              R_symbol: false,
+              L_Myopia: "0",
+              R_Myopia: "0",
+              L_Hyperopia: "0",
+              R_Hyperopia: "0",
 
-              L_CYL: '0',
-              R_CYL: '0',
-              L_Axis: '0',
-              R_Axis: '0',
+              L_CYL: "0",
+              R_CYL: "0",
+              L_Axis: "0",
+              R_Axis: "0",
 
-              Adj_L_SPH: '0',
-              Adj_R_SPH: '0',
-              Adj_Lsymbol: true,
-              Adj_Rsymbol: true,
-              Adj_L_CYL: '0',
-              Adj_R_CYL: '0',
-              Adj_L_Axis: '0',
-              Adj_R_Axis: '0',
+              Adj_L_SPH: "0",
+              Adj_R_SPH: "0",
+              Adj_L_symbol: false,
+              Adj_R_symbol: false,
+              Adj_L_CYL: "0",
+              Adj_R_CYL: "0",
+              Adj_L_Axis: "0",
+              Adj_R_Axis: "0",
 
-              L_VA: '20/20',
-              R_VA: '20/20',
+              L_VA: "20/20",
+              R_VA: "20/20",
 
-              L_PD: '0',
-              R_PD: '0',
-              remarks: '',
+              L_PD: "0",
+              R_PD: "0",
+              remarks: "",
               disease: [],
             }}
             initialStatus={{
-              L_SPH_errors: '',
-              R_SPH_errors: '',
-              Adj_L_SPH_errors: '',
-              Adj_R_SPH_errors: '',
+              L_SPH_errors: "",
+              R_SPH_errors: "",
+              Adj_L_SPH_errors: "",
+              Adj_R_SPH_errors: "",
 
-              L_CYL_errors: '',
-              R_CYL_errors: '',
-              Adj_L_CYL_errors: '',
-              Adj_R_CYL_errors: '',
+              L_CYL_errors: "",
+              R_CYL_errors: "",
+              Adj_L_CYL_errors: "",
+              Adj_R_CYL_errors: "",
             }}
-            //validationSchema={SchemaRecords}
             onSubmit={(values) => {
               var exist = false;
-              database.ref('users/' + patient_id + '/records/' + values.date).once('value', (snap) => {
+              database.ref("users/" + patient_id + "/records/" + values.date).once("value", (snap) => {
                 exist = snap.val() !== null;
-
-                //console.log(exist);
               });
 
               let data = {
@@ -133,47 +130,34 @@ export default class Form extends Component {
               };
 
               //true: plus: hyper
-              if (values.Lsymbol) data.L_Hyperopia = parseInt(values.L_SPH);
+              if (values.L_symbol) data.L_Hyperopia = parseInt(values.L_SPH);
               else data.L_Myopia = parseInt(values.L_SPH);
 
-              if (values.Rsymbol) data.R_Hyperopia = parseInt(values.R_SPH);
+              if (values.R_symbol) data.R_Hyperopia = parseInt(values.R_SPH);
               else data.R_Myopia = parseInt(values.R_SPH);
 
               if (values.L_CYL == 0) data.L_Axis = 0;
               if (values.R_CYL == 0) data.R_Axis = 0;
 
-              if (values.Adj_Lsymbol) data.Adj_L_Hyperopia = parseInt(values.Adj_L_SPH);
+              if (values.Adj_L_symbol) data.Adj_L_Hyperopia = parseInt(values.Adj_L_SPH);
               else data.Adj_L_Myopia = parseInt(values.Adj_L_SPH);
 
-              if (values.Adj_Rsymbol) data.Adj_R_Hyperopia = parseInt(values.Adj_R_SPH);
+              if (values.Adj_R_symbol) data.Adj_R_Hyperopia = parseInt(values.Adj_R_SPH);
               else data.Adj_R_Myopia = parseInt(values.Adj_R_SPH);
 
               if (values.Adj_L_CYL == 0) data.Adj_L_Axis = 0;
               if (values.Adj_R_CYL == 0) data.Adj_R_Axis = 0;
 
               if (isProfessional) {
-                //professional user
-                //change, need to also add to users/patient_id/records, but what if the patient doesnt exist? will it automatically create one entry for the patient?
-                // database
-                //   .ref(
-                //     "professionals/" +
-                //     professional_id +
-                //     "/patients/" +
-                //     patient_id +
-                //     "/records/" +
-                //     values.date
-                //   )
-                //   .set(data)
-                //   .catch((error) => console.log(error));
                 database
-                  .ref('users/' + patient_id)
-                  .once('value')
+                  .ref("users/" + patient_id)
+                  .once("value")
                   .then(function (snapshot) {
-                    return snapshot.val()['uid'];
+                    return snapshot.val()["uid"];
                   })
                   .then((uid) => {
                     database
-                      .ref('users/' + uid + '/records/' + values.date)
+                      .ref("users/" + uid + "/records/" + values.date)
                       .set(data)
                       .catch((error) => console.log(error));
                     this.props.navigation.goBack();
@@ -182,18 +166,18 @@ export default class Form extends Component {
                 //not professional user
                 if (!exist) {
                   //no existed record
-                  database.ref('users/' + patient_id + '/records/' + values.date).set(data, (err) => console.log(err));
+                  database.ref("users/" + patient_id + "/records/" + values.date).set(data, (err) => console.log(err));
                   this.props.navigation.goBack();
                 } else {
                   Alert.alert(
-                    '注意！',
-                    '數據庫已存在' + values.date + '的資料，再按提交將會覆蓋舊的資料。',
+                    "注意！",
+                    "數據庫已存在" + values.date + "的資料，再按提交將會覆蓋舊的資料。",
                     [
-                      { text: '取消', style: 'cancel' },
+                      { text: "取消", style: "cancel" },
                       {
-                        text: '提交',
+                        text: "提交",
                         onPress: () => {
-                          database.ref('users/' + patient_id + '/records/' + values.date).set(data, (error) => console.log(error));
+                          database.ref("users/" + patient_id + "/records/" + values.date).set(data, (error) => console.log(error));
                           this.props.navigation.goBack();
                         },
                       },
@@ -208,9 +192,9 @@ export default class Form extends Component {
               <View style={AddRecordScreen.formContainer}>
                 <DateSelect values={values} setFieldValue={setFieldValue} />
 
-                <RenderNormal handleChange={handleChange} setFieldValue={setFieldValue} refractive={refractive} setStatus={setStatus} status={status} />
+                <RenderNormal handleChange={handleChange} setFieldValue={setFieldValue} setStatus={setStatus} status={status} />
 
-                <RenderCollapseAdj handleChange={handleChange} setFieldValue={setFieldValue} refractive={refractive} setStatus={setStatus} status={status} />
+                <RenderCollapseAdj handleChange={handleChange} setFieldValue={setFieldValue} setStatus={setStatus} status={status} />
                 <RenderCollapseVA setFieldValue={setFieldValue} />
                 <RenderCollapsePD handleChange={handleChange} />
 
@@ -221,22 +205,22 @@ export default class Form extends Component {
                   <Button
                     title="提交"
                     buttonStyle={AddRecordScreen.submitButton}
-                    titleStyle={{ color: '#3CA1B7', fontSize: 18 }}
+                    titleStyle={{ color: "#3CA1B7", fontSize: 18 }}
                     containerStyle={{
-                      alignItems: 'center',
+                      alignItems: "center",
                       paddingBottom: 10,
                       marginBottom: 200,
                     }}
                     onPress={handleSubmit}
                     disabled={
-                      status.L_SPH_errors == 'error' ||
-                      status.R_SPH_errors == 'error' ||
-                      status.Adj_L_SPH_errors == 'error' ||
-                      status.Adj_R_SPH_errors == 'error' ||
-                      status.L_SPH_errors == 'empty' ||
-                      status.R_SPH_errors == 'empty' ||
-                      status.Adj_L_SPH_errors == 'empty' ||
-                      status.Adj_R_SPH_errors == 'empty'
+                      status.L_SPH_errors == "error" ||
+                      status.R_SPH_errors == "error" ||
+                      status.Adj_L_SPH_errors == "error" ||
+                      status.Adj_R_SPH_errors == "error" ||
+                      status.L_SPH_errors == "empty" ||
+                      status.R_SPH_errors == "empty" ||
+                      status.Adj_L_SPH_errors == "empty" ||
+                      status.Adj_R_SPH_errors == "empty"
                     }
                     TouchableComponent={TouchableOpacity}
                   />
@@ -252,27 +236,27 @@ export default class Form extends Component {
 
 const AddRecordScreen = StyleSheet.create({
   background: {
-    height: '100%',
-    backgroundColor: 'white',
+    height: "100%",
+    backgroundColor: "white",
   },
   selectModeMenu: {
     paddingTop: 100,
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
   selectedMode: {
     fontSize: 18,
-    color: '#3CA1B7',
+    color: "#3CA1B7",
     paddingLeft: 10,
     paddingRight: 10,
     paddingTop: 4,
     paddingBottom: 4,
-    backgroundColor: '#FFFFFF',
+    backgroundColor: "#FFFFFF",
     borderRadius: 10,
   },
   unselectedMode: {
     fontSize: 18,
-    color: '#FFFFFF',
+    color: "#FFFFFF",
     paddingLeft: 1,
     paddingRight: 1,
     marginLeft: 8,
@@ -280,7 +264,7 @@ const AddRecordScreen = StyleSheet.create({
     paddingTop: 3,
     paddingBottom: 3,
     borderBottomWidth: 1.5,
-    borderColor: '#B8CAE4',
+    borderColor: "#B8CAE4",
   },
   formContainer: {
     paddingLeft: 35,
@@ -288,7 +272,7 @@ const AddRecordScreen = StyleSheet.create({
     paddingTop: 100,
   },
   submitButton: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     borderRadius: 20,
     width: 120,
   },
