@@ -131,19 +131,7 @@ const ThemeSwitch = () => {
 
 export const ContactUs = ({ containerStyle, ...props }) => {
   return (
-    <View
-      style={[
-        {
-          width: "90%",
-          alignSelf: "center",
-          padding: 10,
-          backgroundColor: "rgba(0,0,0,0.05)",
-          borderRadius: 4,
-          height: "100%",
-        },
-        containerStyle,
-      ]}
-    >
+    <View style={[{ width: "90%", alignSelf: "center", padding: 10, backgroundColor: "rgba(0,0,0,0.05)", borderRadius: 4, flex: 1 }, containerStyle]}>
       <Grid>
         <Row style={styles.contactUsRow}>
           <Col style={styles.contactUsLeftCol}>
@@ -189,7 +177,7 @@ export const ContactUs = ({ containerStyle, ...props }) => {
   );
 };
 
-export const Feedback = ({ contentConatinerStyle, ...props }) => {
+export const Feedback = ({ contentContainerStyle, ...props }) => {
   const [feedback, setFeedback] = useState("");
   const [alertSuccess, setAlertSuccess] = useState(false);
   const { user } = useSelector((state) => state.user);
@@ -240,14 +228,10 @@ export const Feedback = ({ contentConatinerStyle, ...props }) => {
         multiline={true}
         value={feedback}
         placeholder="歡迎留下意見"
-        inputContainerStyle={[styles.contentContainer, contentConatinerStyle]}
+        inputContainerStyle={[styles.contentContainer, contentContainerStyle]}
         inputStyle={{ ...styles.textAreaContainer, ...props.contentFontColor }}
         rightIcon={<Text style={{ ...styles.wordCounter, ...props.wordCounterFontColor }}>{feedback.length}/200</Text>}
-        rightIconContainerStyle={{
-          position: "absolute",
-          bottom: 0,
-          right: 15,
-        }}
+        rightIconContainerStyle={{ position: "absolute", bottom: 0, right: 15 }}
       />
       <RoundButton
         onPress={() => {
@@ -281,15 +265,7 @@ const PermissionSetting = () => {
   const toggleAllowSearchSwitch = () => setAllowSearch((previousState) => !previousState);
 
   return (
-    <View
-      style={{
-        width: "90%",
-        alignSelf: "center",
-        padding: 10,
-        backgroundColor: "rgba(0,0,0,0.05)",
-        borderRadius: 4,
-      }}
-    >
+    <View style={{ width: "90%", alignSelf: "center", padding: 10, backgroundColor: "rgba(0,0,0,0.05)", borderRadius: 4 }}>
       <Grid>
         <Row style={styles.contactUsRow}>
           <Col>
@@ -350,14 +326,13 @@ const styles = StyleSheet.create({
     borderBottomWidth: 2,
     borderColor: "#E1EDFF",
     borderRadius: 25,
-    paddingHorizontal: 15,
-    height: 230,
+    padding: 20,
+    paddingBottom: 45,
   },
   textAreaContainer: {
     color: "white",
-    height: 230,
+    height: "100%",
     textAlignVertical: "top",
-    paddingTop: 10,
   },
   wordCounter: {
     color: "#B8CAE4",

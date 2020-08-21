@@ -1,49 +1,16 @@
 import React from "react";
 import { TouchableOpacity, View, Text, StyleSheet } from "react-native";
-import {
-  ScreenHeight,
-  FontScale,
-  Scale,
-  ScreenWidth,
-} from "../constant/Constant";
+import { ScreenHeight, FontScale, Scale, ScreenWidth } from "../constant/Constant";
 import { Icon } from "react-native-elements";
 
-export const RoundButton = ({
-  title,
-  icon,
-  onPress,
-  containerStyle,
-  buttonStyle,
-  type = "normal",
-  ...props
-}) => {
+export const RoundButton = ({ title, icon, onPress, containerStyle, buttonStyle, type = "normal", ...props }) => {
   return (
     <TouchableOpacity style={[{ zIndex: 2 }, containerStyle]} onPress={onPress}>
-      <View
-        style={[
-          type === "normal" ? styles.normalButton : styles.outlineButton,
-          { ...props.buttonStyle },
-          buttonStyle,
-        ]}
-      >
+      <View style={[type === "normal" ? styles.normalButton : styles.outlineButton, { ...props.buttonStyle }, buttonStyle]}>
         {icon === undefined ? (
-          <Text
-            style={[
-              type === "normal"
-                ? styles.submitButtonText
-                : styles.outlineButtonText,
-              { ...props.textStyle },
-            ]}
-          >
-            {title}
-          </Text>
+          <Text style={[type === "normal" ? styles.submitButtonText : styles.outlineButtonText, { ...props.textStyle }]}>{title}</Text>
         ) : (
-          <Icon
-            name={icon.name}
-            size={icon.size}
-            type={icon.type}
-            color={icon.color}
-          />
+          <Icon name={icon.name} size={icon.size} type={icon.type} color={icon.color} />
         )}
       </View>
     </TouchableOpacity>
