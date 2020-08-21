@@ -1,21 +1,7 @@
 import React, { useState } from "react";
 import { Formik } from "formik";
-import {
-  Keyboard,
-  View,
-  Platform,
-  StyleSheet,
-  Picker,
-  Text,
-  TouchableOpacity,
-  Modal,
-  StatusBar,
-} from "react-native";
-import {
-  ScreenHeight,
-  ScreenWidth,
-  FontScale,
-} from "../../../../constant/Constant";
+import { Keyboard, View, Platform, StyleSheet, Picker, Text, TouchableOpacity, Modal, StatusBar } from "react-native";
+import { ScreenHeight, ScreenWidth, FontScale } from "../../../../constant/Constant";
 import { SchemaPatient } from "../Schema/SchemaPatient";
 import { SchemaProfessional } from "../Schema/SchemaProfessional";
 import { ScrollView } from "react-native-gesture-handler";
@@ -23,11 +9,7 @@ import { RadioButton, Switch, Button, Card } from "react-native-paper";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import moment from "moment";
-import {
-  createAccount,
-  registerPatientAccount,
-  registerChildAccount,
-} from "../RegisterAction";
+import { createAccount, registerPatientAccount, registerChildAccount } from "../RegisterAction";
 import { LinearGradientBackground } from "../../../../Utils/LinearGradientBackground";
 import Logo from "../../Utils/Logo";
 import { RoundButton } from "../../../../Utils/RoundButton";
@@ -52,8 +34,7 @@ import GenderOptionsInput from "../../GenderOptionsInput/GenderOptionsInput";
 export const RegistrationForm = ({ navigation, route }) => {
   const { isProfessional, registerPatient, registerChild } = route.params;
 
-  const useMenuScreen =
-    (isProfessional && registerPatient) || (!isProfessional && registerChild);
+  const useMenuScreen = (isProfessional && registerPatient) || (!isProfessional && registerChild);
   return (
     <>
       {useMenuScreen ? (
@@ -72,18 +53,13 @@ export const RegistrationForm = ({ navigation, route }) => {
 const FormComponent = ({ navigation, route }) => {
   const { isProfessional, registerPatient, registerChild } = route.params;
   const [isLoading, setIsLoading] = useState(false);
-  const [
-    isRegisterMethodDialogVisible,
-    setRegisterMethodDialogVisibility,
-  ] = useState(true);
+  const [isRegisterMethodDialogVisible, setRegisterMethodDialogVisibility] = useState(true);
   const dateTimePickerIOSConfirmButton = useState(false);
   const [errorMessageFromServer, setErrorMessageFromServer] = useState("");
 
-  const _showRegisterMethodDialog = () =>
-    setRegisterMethodDialogVisibility(true);
+  const _showRegisterMethodDialog = () => setRegisterMethodDialogVisibility(true);
 
-  const _hideRegisterMethodDialog = () =>
-    setRegisterMethodDialogVisibility(false);
+  const _hideRegisterMethodDialog = () => setRegisterMethodDialogVisibility(false);
 
   const setServerError = (error) => {
     console.log(error.code);
@@ -122,14 +98,12 @@ const FormComponent = ({ navigation, route }) => {
         tel_number: "",
         job: "",
         role: "",
+        part: "",
         history: "",
         disease: "",
         allowedSearch: false,
       }}
-      onSubmit={async (
-        values,
-        { setSubmitting, resetForm, setStatus, setErrors }
-      ) => {
+      onSubmit={async (values, { setSubmitting, resetForm, setStatus, setErrors }) => {
         try {
           switch (true) {
             case registerChild:
@@ -183,15 +157,7 @@ const FormComponent = ({ navigation, route }) => {
           setErrors({ submit: error.message });
         }
       }}
-      validationSchema={
-        isProfessional
-          ? registerPatient
-            ? SchemaRegisterPatient
-            : SchemaProfessional
-          : registerChild
-          ? SchemaRegisterChild
-          : SchemaPatient
-      }
+      validationSchema={isProfessional ? (registerPatient ? SchemaRegisterPatient : SchemaProfessional) : registerChild ? SchemaRegisterChild : SchemaPatient}
       validateOnBlur={false}
       validateOnChange={false}
     >
@@ -209,41 +175,27 @@ const FormComponent = ({ navigation, route }) => {
   );
 };
 
-const FormDetails = ({
-  formikProps,
-  isProfessional,
-  registerPatient,
-  registerChild,
-  isLoading,
-  errorMessageFromServer,
-}) => {
-  const selectedNameFieldsOnRefresh =
-    (selectedNameFields == selectedNameFields) == "eng" &&
-    !formikProps.errors["englishNameError"] &&
-    formikProps.errors["chineseNameError"]
-      ? "eng"
-      : "chi";
+const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChild, isLoading, errorMessageFromServer }) => {
+  const selectedNameFieldsOnRefresh = (selectedNameFields == selectedNameFields) == "eng" && !formikProps.errors["englishNameError"] && formikProps.errors["chineseNameError"] ? "eng" : "chi";
   const { setFieldValue, values } = formikProps;
   const [selectedNameFields, setSelectedNameFields] = useState("chi");
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isRoleDialogVisible, setRoleDialogVisibility] = useState(false);
-  const [isFamilySearchFieldVisible, setFamilySearchFieldVisibility] = useState(
-    false
-  );
+  const [isPartDialogVisible, setPartDialogVisibility] = useState(false);
+  const [isFamilySearchFieldVisible, setFamilySearchFieldVisibility] = useState(false);
 
-  const [
-    isFamilySearchDialogVisible,
-    setFamilySearchDialogVisibility,
-  ] = useState(false);
+  const [isFamilySearchDialogVisible, setFamilySearchDialogVisibility] = useState(false);
 
-  const _toggleFamilySearchSwitch = () =>
-    setFamilySearchFieldVisibility(!isFamilySearchFieldVisible);
+  const _toggleFamilySearchSwitch = () => setFamilySearchFieldVisibility(!isFamilySearchFieldVisible);
 
   const _showDatePicker = () => setDatePickerVisibility(true);
   const _hideDatePicker = () => setDatePickerVisibility(false);
 
   const _showRoleDialog = () => setRoleDialogVisibility(true);
   const _hideRoleDialog = () => setRoleDialogVisibility(false);
+
+  const _showPartDialog = () => setPartDialogVisibility(true);
+  const _hidePartDialog = () => setPartDialogVisibility(false);
 
   const _showFamilySearchDialog = () => {
     setFieldValue("parentSelectionDisabled", false);
@@ -275,6 +227,11 @@ const FormDetails = ({
     setFieldValue("role", value);
   };
 
+  const handlePartDialogOption = (value) => {
+    _hidePartDialog();
+    setFieldValue("part", value);
+  };
+
   const toggleCheckbox = () => {
     setFieldValue("allowedSearch", !values.allowedSearch);
   };
@@ -284,21 +241,18 @@ const FormDetails = ({
     { key: "1", label: "視光師", value: "optometrist" },
   ];
 
-  const personIcon = (
-    <Icon name="person" type={"material"} color={"white"} size={35} />
-  ); /* name='person' color={'white'} size={35} /> */
-  const hourGlassIcon = (
-    <SimpleLineIcons name="hourglass" color={"white"} size={32} />
-  );
-  const jobIcon = (
-    <MaterialCommunityIcons name="briefcase" color={"white"} size={35} />
-  );
-  const illnessIcon = (
-    <MaterialCommunityIcons name="pill" color={"white"} size={35} />
-  );
-  const historyIcon = (
-    <MaterialCommunityIcons name="file" color={"white"} size={35} />
-  );
+  const partList = [
+    { key: "0", label: "第一部分", value: "part1" },
+    { key: "1", label: "第二部分 ", value: "part2" },
+    { key: "2", label: "第三部分", value: "part3" },
+    { key: "3", label: "第四部分 ", value: "part4" },
+  ];
+
+  const personIcon = <Icon name="person" type={"material"} color={"white"} size={35} />; /* name='person' color={'white'} size={35} /> */
+  const hourGlassIcon = <SimpleLineIcons name="hourglass" color={"white"} size={32} />;
+  const jobIcon = <MaterialCommunityIcons name="briefcase" color={"white"} size={35} />;
+  const illnessIcon = <MaterialCommunityIcons name="pill" color={"white"} size={35} />;
+  const historyIcon = <MaterialCommunityIcons name="file" color={"white"} size={35} />;
 
   return (
     <>
@@ -306,8 +260,7 @@ const FormDetails = ({
         <ScrollView
           style={{
             paddingHorizontal: ScreenWidth * 0.11,
-            marginBottom:
-              ScreenHeight * 0.1 * (isProfessional && registerPatient),
+            marginBottom: ScreenHeight * 0.1 * (isProfessional && registerPatient),
             width: "100%",
           }}
           showsVerticalScrollIndicator={false}
@@ -363,14 +316,7 @@ const FormDetails = ({
                   formikKey={"lastName"}
                   hideEmbbededMessage={true}
                 />
-                <InputTextField
-                  label={"名"}
-                  iconStyle={{ flex: 6 }}
-                  containerStyle={{ flex: 1, marginBottom: "-2%" }}
-                  formikProps={formikProps}
-                  formikKey={"firstName"}
-                  hideEmbbededMessage={true}
-                />
+                <InputTextField label={"名"} iconStyle={{ flex: 6 }} containerStyle={{ flex: 1, marginBottom: "-2%" }} formikProps={formikProps} formikKey={"firstName"} hideEmbbededMessage={true} />
               </View>
             ) : null}
             {selectedNameFields === "eng" ? (
@@ -401,9 +347,7 @@ const FormDetails = ({
                 />
               </View>
             ) : null}
-            <View
-              style={{ flexDirection: "row", paddingLeft: ScreenWidth * 0.02 }}
-            >
+            <View style={{ flexDirection: "row", paddingLeft: ScreenWidth * 0.02 }}>
               <View
                 style={{
                   flexDirection: "row",
@@ -422,9 +366,7 @@ const FormDetails = ({
                 </Text>
                 <RadioButton
                   value="chi"
-                  status={
-                    selectedNameFields === "chi" ? "checked" : "unchecked"
-                  }
+                  status={selectedNameFields === "chi" ? "checked" : "unchecked"}
                   onPress={() => {
                     setFieldValue("givenName", "");
                     setFieldValue("surName", "");
@@ -448,9 +390,7 @@ const FormDetails = ({
                 </Text>
                 <RadioButton
                   value="eng"
-                  status={
-                    selectedNameFields === "eng" ? "checked" : "unchecked"
-                  }
+                  status={selectedNameFields === "eng" ? "checked" : "unchecked"}
                   onPress={() => {
                     setFieldValue("firstName", "");
                     setFieldValue("lastName", "");
@@ -463,9 +403,7 @@ const FormDetails = ({
               </View>
             </View>
 
-            {formikProps.errors &&
-            (formikProps.errors["chineseNameError"] ||
-              formikProps.errors["englishNameError"]) ? (
+            {formikProps.errors && (formikProps.errors["chineseNameError"] || formikProps.errors["englishNameError"]) ? (
               <Text
                 adjustsFontSizeToFit={true}
                 style={{
@@ -478,18 +416,11 @@ const FormDetails = ({
                   flexWrap: "wrap",
                 }}
               >
-                {"* " +
-                  (formikProps.errors["chineseNameError"]
-                    ? formikProps.errors["chineseNameError"]
-                    : formikProps.errors["englishNameError"])}
+                {"* " + (formikProps.errors["chineseNameError"] ? formikProps.errors["chineseNameError"] : formikProps.errors["englishNameError"])}
               </Text>
             ) : null}
 
-            <GenderOptionsInput
-              formikKey="gender"
-              formikProps={formikProps}
-              label={"性別"}
-            />
+            <GenderOptionsInput formikKey="gender" formikProps={formikProps} label={"性別"} />
 
             {isProfessional && !registerPatient ? (
               <InputDialogPicker
@@ -503,14 +434,22 @@ const FormDetails = ({
                 showDialog={_showRoleDialog}
               />
             ) : (
-              <InputDatePickerModal
-                icon={hourGlassIcon}
+              <InputDatePickerModal icon={hourGlassIcon} formikProps={formikProps} formikKey="birthday" showDatePicker={_showDatePicker} value={values.birthday} />
+            )}
+
+            {isProfessional && !registerPatient && (
+              <InputDialogPicker
+                label={"註冊資格"}
+                icon={jobIcon}
+                onDismiss={() => _hidePartDialog()}
+                value={values.part}
+                list={partList}
+                formikKey={"part"}
                 formikProps={formikProps}
-                formikKey="birthday"
-                showDatePicker={_showDatePicker}
-                value={values.birthday}
+                showDialog={_showPartDialog}
               />
             )}
+
             {registerPatient ? (
               <>
                 <View
@@ -540,11 +479,7 @@ const FormDetails = ({
                   >
                     搜尋病人家屬
                   </Text>
-                  <Switch
-                    value={isFamilySearchFieldVisible}
-                    onValueChange={_toggleFamilySearchSwitch}
-                    color="#FFFFFF"
-                  />
+                  <Switch value={isFamilySearchFieldVisible} onValueChange={_toggleFamilySearchSwitch} color="#FFFFFF" />
                 </View>
                 {isFamilySearchFieldVisible && (
                   <View>
@@ -571,59 +506,20 @@ const FormDetails = ({
             ) : null}
             {!registerChild ? (
               <>
-                <PhoneInputField
-                  label={"電話號碼"}
-                  icon={PhoneIcon}
-                  formikProps={formikProps}
-                  formikKey="tel_number"
-                  keyboardType="phone-pad"
-                />
-                <InputTextField
-                  label={"電子郵件"}
-                  icon={MailIcon}
-                  formikProps={formikProps}
-                  formikKey={"email"}
-                />
+                <PhoneInputField label={"電話號碼"} icon={PhoneIcon} formikProps={formikProps} formikKey="tel_number" keyboardType="phone-pad" />
+                <InputTextField label={"電子郵件"} icon={MailIcon} formikProps={formikProps} formikKey={"email"} />
               </>
             ) : null}
             {registerPatient || registerChild ? (
               <>
-                <InputTextField
-                  label="職業（非必須）"
-                  icon={jobIcon}
-                  formikKey="job"
-                  formikProps={formikProps}
-                />
-                <MultiLinesInputTextField
-                  label="家庭病史（非必須）"
-                  icon={historyIcon}
-                  formikKey="history"
-                  formikProps={formikProps}
-                />
-                <MultiLinesInputTextField
-                  label="已知眼疾（非必須）"
-                  icon={illnessIcon}
-                  formikKey="disease"
-                  formikProps={formikProps}
-                />
+                <InputTextField label="職業（非必須）" icon={jobIcon} formikKey="job" formikProps={formikProps} />
+                <MultiLinesInputTextField label="家庭病史（非必須）" icon={historyIcon} formikKey="history" formikProps={formikProps} />
+                <MultiLinesInputTextField label="已知眼疾（非必須）" icon={illnessIcon} formikKey="disease" formikProps={formikProps} />
               </>
             ) : (
               <>
-                <InputTextField
-                  containerStyle={{ height: "auto" }}
-                  label={"密碼"}
-                  icon={KeyIcon}
-                  formikProps={formikProps}
-                  formikKey="password"
-                  secureTextEntry
-                />
-                <InputTextField
-                  label={"確認密碼"}
-                  icon={KeyIcon}
-                  formikProps={formikProps}
-                  formikKey="confirmPassword"
-                  secureTextEntry
-                />
+                <InputTextField containerStyle={{ height: "auto" }} label={"密碼"} icon={KeyIcon} formikProps={formikProps} formikKey="password" secureTextEntry />
+                <InputTextField label={"確認密碼"} icon={KeyIcon} formikProps={formikProps} formikKey="confirmPassword" secureTextEntry />
               </>
             )}
 
@@ -675,25 +571,11 @@ const FormDetails = ({
         </ScrollView>
         {Platform.OS === "android" ? (
           isDatePickerVisible && (
-            <DateTimePicker
-              testID="dateTimePicker"
-              mode="date"
-              display="spinner"
-              value={
-                values.birthday === ""
-                  ? new Date()
-                  : moment(values.birthday).toDate()
-              }
-              onChange={handleDateChange}
-            />
+            <DateTimePicker testID="dateTimePicker" mode="date" display="spinner" value={values.birthday === "" ? new Date() : moment(values.birthday).toDate()} onChange={handleDateChange} />
           )
         ) : (
           <DateTimePickerModal
-            date={
-              values.birthday === ""
-                ? new Date()
-                : moment(values.birthday).toDate()
-            }
+            date={values.birthday === "" ? new Date() : moment(values.birthday).toDate()}
             maximumDate={new Date()}
             isVisible={isDatePickerVisible}
             onConfirm={handleDateConfirm}
@@ -732,23 +614,23 @@ const FormDetails = ({
             <Dialog.Title>請選擇你的職業</Dialog.Title>
             <Dialog.Content>
               {roleList.map((data) => (
-                <List.Item
-                  key={data.key}
-                  title={data.label}
-                  onPress={handleRoleDialogOption.bind(this, data.value)}
-                />
+                <List.Item key={data.key} title={data.label} onPress={handleRoleDialogOption.bind(this, data.value)} />
               ))}
             </Dialog.Content>
           </Dialog>
-          <Dialog
-            visible={isFamilySearchDialogVisible}
-            onDismiss={_hideFamilySearchDialog}
-          >
+
+          <Dialog visible={isPartDialogVisible} onDismiss={_hidePartDialog}>
+            <Dialog.Title>請選擇你的註冊部分</Dialog.Title>
             <Dialog.Content>
-              <PatientSearchPanel
-                setFieldValue={setFieldValue}
-                hideFamilySearchDialog={_hideFamilySearchDialog}
-              />
+              {partList.map((data) => (
+                <List.Item key={data.key} title={data.label} onPress={handlePartDialogOption.bind(this, data.value)} />
+              ))}
+            </Dialog.Content>
+          </Dialog>
+
+          <Dialog visible={isFamilySearchDialogVisible} onDismiss={_hideFamilySearchDialog}>
+            <Dialog.Content>
+              <PatientSearchPanel setFieldValue={setFieldValue} hideFamilySearchDialog={_hideFamilySearchDialog} />
             </Dialog.Content>
           </Dialog>
           <Dialog visible={isLoading}></Dialog>

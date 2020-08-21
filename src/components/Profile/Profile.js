@@ -54,7 +54,9 @@ const Profile = ({ navigation, route, userInfoStore }) => {
                   <Text style={user.lastName != "" ? styles.title : styles.titleEnglish}>{displayName(user)}</Text>
                 </Row>
 
-                <Row style={{ ...styles.titleContainer, ...{ marginBottom: 7.5 } }}>{type == "normal" && <Text style={styles.subtitle}>{user.birthday.split("T")[0]}</Text>}</Row>
+                <Row style={{ ...styles.titleContainer, ...{ marginBottom: 7.5 } }}>
+                  {type == "normal" ? <Text style={styles.subtitle}>{user.birthday.split("T")[0]}</Text> : <Text style={styles.subtitle}>{user.role == "optometrist" ? "視光師" : "眼科醫生"}</Text>}
+                </Row>
                 <Row style={{ height: 47.5 }}>
                   <Col style={styles.iconContainer}>
                     <Icon type="font-awesome" name="hourglass-o" size={40} containerStyle={{}} />
@@ -79,9 +81,15 @@ const Profile = ({ navigation, route, userInfoStore }) => {
                 </Row>
                 <Row>
                   <Col style={styles.infoContainer}>
-                    <Text style={styles.info}>
-                      <Text style={{ fontSize: 30 }}>{moment.duration(moment().diff(user.birthday, "YYYY")).years()}</Text>歲
-                    </Text>
+                    {type == "noraml" ? (
+                      <Text style={styles.info}>
+                        <Text style={{ fontSize: 30 }}>{moment.duration(moment().diff(user.birthday, "YYYY")).years()}</Text>歲
+                      </Text>
+                    ) : (
+                      <Text style={styles.info}>
+                        <Text style={{ fontSize: 22 }}>{user.part == "part1" ? "第一部分" : user.part == "part2" ? "第二部分" : user.part == "part3" ? "第三部分" : "第四部分"}</Text>
+                      </Text>
+                    )}
                   </Col>
                   <Col style={styles.infoContainer}>
                     <Text
