@@ -1,12 +1,8 @@
 import React from "react";
 import { View, StyleSheet, Text, TouchableOpacity } from "react-native";
-import { LinearGradientBackground } from "../../../../Utils/LinearGradientBackground";
+import { LinearGradientBackground } from "../../Utils/LinearGradientBackground";
 import Logo from "../../Utils/Logo";
-import {
-  ScreenHeight,
-  FontScale,
-  ScreenWidth,
-} from "../../../../constant/Constant";
+import { ScreenHeight, FontScale, ScreenWidth } from "../../../../constant/Constant";
 import { heightPercentageToDP } from "react-native-responsive-screen";
 
 export const RegisterOptions = ({ navigation }) => {

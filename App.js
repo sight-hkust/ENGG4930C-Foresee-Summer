@@ -2,7 +2,6 @@ import "react-native-gesture-handler";
 import React, { useState, useEffect } from "react";
 import { Image, Dimensions, TouchableOpacity, StyleSheet, Platform } from "react-native";
 import { Icon } from "react-native-elements";
-import { Provider as PaperProvider } from "react-native-paper";
 
 import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -28,7 +27,8 @@ import { auth } from "./src/config/config";
 
 import ProfMainMenu from "./src/components/Professional/ProfMainMenu";
 import { createStore, applyMiddleware } from "redux";
-import { Provider as StoreProvider } from "react-redux";
+import { Provider as StoreProvider, useDispatch } from "react-redux";
+import { Provider as PaperProvider } from "react-native-paper";
 import rootReducer from "./src/reducers";
 import logger from "redux-logger";
 import thunk from "redux-thunk";
@@ -40,7 +40,6 @@ import TermsAndCondition from "./src/components/Policy/TermsAndCondition";
 import TutorialScreen from "./src/components/Tutorial/Tutorial";
 import QrCode from "./src/components/Profile/QrCode";
 import { RegistrationForm } from "./src/components/Registration/RegistrationForm/RegistrationForm";
-import { FamilyRouter } from "./src/components/Family/FamilyRouter";
 import { RegisterNavigator } from "./src/components/Registration/RegisterNavigator";
 import { SplashScreen } from "./src/components/Splash/SplashScreen";
 import HeaderRightButton from "./Utils/HeaderRightButton";
@@ -109,7 +108,6 @@ function HomeScreen({ navigation, route }) {
           headerRight: () => <HeaderRightButton navigation={navigation} type="question" content={AddRecordTutorial} />,
         }}
       />
-      <Stack.Screen name="Family Router" component={FamilyRouter} options={{ title: "" }} />
     </Stack.Navigator>
   );
 }
@@ -190,7 +188,7 @@ function Main({ route, navigation }) {
         style: {
           position: "absolute",
           backgroundColor: "transparent",
-          height: Platform.OS === "ios" ? hp("9%") : Dimensions.get("screen").height * 0.08,
+          height: Platform.OS === "ios" ? hp("9%") : hp("8%"),
           borderTopWidth: 0,
           borderTopColor: "transparent",
           paddingHorizontal: auth.currentUser.displayName == "professional" ? 80 : 30,

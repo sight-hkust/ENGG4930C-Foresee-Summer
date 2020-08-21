@@ -10,7 +10,7 @@ import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityI
 import SimpleLineIcons from "react-native-vector-icons/SimpleLineIcons";
 import moment from "moment";
 import { createAccount, registerPatientAccount, registerChildAccount } from "../RegisterAction";
-import { LinearGradientBackground } from "../../../../Utils/LinearGradientBackground";
+import { LinearGradientBackground } from "../../Utils/LinearGradientBackground";
 import Logo from "../../Utils/Logo";
 import { RoundButton } from "../../../../Utils/RoundButton";
 import DateTimePicker from "@react-native-community/datetimepicker";
@@ -62,7 +62,6 @@ const FormComponent = ({ navigation, route }) => {
   const _hideRegisterMethodDialog = () => setRegisterMethodDialogVisibility(false);
 
   const setServerError = (error) => {
-    console.log(error.code);
     switch (error.code) {
       case "auth/email-already-in-use":
         setErrorMessageFromServer("電子郵件已註冊");
@@ -87,7 +86,7 @@ const FormComponent = ({ navigation, route }) => {
         selectedNameFields: "chi",
         chineseNameError: "",
         englishNameError: "",
-        gender: "",
+        gender: "M",
         birthday: "",
         parent: {},
         parentSelectionDisabled: false,
@@ -216,10 +215,6 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
     const currentDate = selectedDate || new Date();
     setDatePickerVisibility(false);
     setFieldValue("birthday", moment(currentDate).format("YYYY-MM-DD"));
-  };
-
-  const handleDatePickerTouchStart = () => {
-    console.log("HI");
   };
 
   const handleRoleDialogOption = (value) => {

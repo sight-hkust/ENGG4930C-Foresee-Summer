@@ -110,118 +110,6 @@ export const RenderCollapseAdj = (props) => {
   );
 };
 
-export const RenderCollapseCon = (props) => {
-  const { values, handleChange, setFieldValue, error_L_SPH, error_R_SPH, error_L_CYL, error_R_CYL, error_L_Axis, error_R_Axis } = props;
-  const [isCollapse, toggleisCollapse] = useState(true);
-  return (
-    <View>
-      <TouchableOpacity onPress={() => toggleisCollapse(!isCollapse)} style={FormItemStyle.collapseButton}>
-        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? "展開" : "收起"}輸入隱形眼鏡度數</Text>
-      </TouchableOpacity>
-      <Collapsible collapsed={isCollapse}>
-        <View style={FormItemStyle.collpaseContainer}>
-          <ExpiryDateInput values={values} setFieldValue={setFieldValue} />
-          <BrandInput handleChange={handleChange} />
-          <SPHInput setFieldValue={setFieldValue} isLeft={false} mode="con" />
-          {error_R_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_R_SPH}</Text>}
-          <CYLInput setFieldValue={setFieldValue} isLeft={false} mode="con" error_CYL={error_R_CYL} error_Axis={error_R_Axis} />
-          <BCInput setFieldValue={setFieldValue} isLeft={false} />
-          <DiaInput setFieldValue={setFieldValue} isLeft={false} />
-
-          <SPHInput setFieldValue={setFieldValue} isLeft={true} mode="con" />
-          {error_L_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_L_SPH}</Text>}
-          <CYLInput setFieldValue={setFieldValue} isLeft={true} mode="con" error_CYL={error_L_CYL} error_Axis={error_L_Axis} />
-          <BCInput setFieldValue={setFieldValue} isLeft={true} />
-          <DiaInput setFieldValue={setFieldValue} isLeft={true} />
-        </View>
-      </Collapsible>
-    </View>
-  );
-};
-
-export const RenderCollapseFar = (props) => {
-  const { setFieldValue, error_L_SPH, error_R_SPH, error_L_CYL, error_R_CYL, error_L_Axis, error_R_Axis } = props;
-  const [isCollapse, toggleisCollapse] = useState(false);
-  return (
-    <View>
-      <TouchableOpacity onPress={() => toggleisCollapse(!isCollapse)} style={FormItemStyle.collapseButton}>
-        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? "展開" : "收起"}輸入遠距度數</Text>
-      </TouchableOpacity>
-      <Collapsible collapsed={isCollapse}>
-        <View style={FormItemStyle.collpaseContainer}>
-          <SPHInput setFieldValue={setFieldValue} isLeft={false} mode="far" />
-          {error_R_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_R_SPH}</Text>}
-          <CYLInput setFieldValue={setFieldValue} isLeft={false} mode="far" error_CYL={error_R_CYL} error_Axis={error_R_Axis} />
-          <PRISMInput setFieldValue={setFieldValue} isLeft={false} mode="far" />
-          <ADDInput setFieldValue={setFieldValue} isLeft={false} mode="far" />
-
-          <SPHInput setFieldValue={setFieldValue} isLeft={true} mode="far" />
-          {error_L_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_L_SPH}</Text>}
-          <CYLInput setFieldValue={setFieldValue} isLeft={true} mode="far" error_CYL={error_L_CYL} error_Axis={error_L_Axis} />
-          <PRISMInput setFieldValue={setFieldValue} isLeft={true} mode="far" />
-          <ADDInput setFieldValue={setFieldValue} isLeft={true} mode="far" />
-        </View>
-      </Collapsible>
-    </View>
-  );
-};
-
-export const RenderCollapseMid = (props) => {
-  const { setFieldValue, error_L_SPH, error_R_SPH, error_L_CYL, error_R_CYL, error_L_Axis, error_R_Axis } = props;
-  const [isCollapse, toggleisCollapse] = useState(false);
-  return (
-    <View>
-      <TouchableOpacity onPress={() => toggleisCollapse(!isCollapse)} style={FormItemStyle.collapseButton}>
-        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? "展開" : "收起"}輸入中距工作度數</Text>
-      </TouchableOpacity>
-      <Collapsible collapsed={isCollapse}>
-        <View style={FormItemStyle.collpaseContainer}>
-          <DistanceInput setFieldValue={setFieldValue} mode="mid" />
-          <SPHInput setFieldValue={setFieldValue} isLeft={false} mode="mid" />
-          {error_R_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_R_SPH}</Text>}
-          <CYLInput setFieldValue={setFieldValue} isLeft={false} mode="mid" error_CYL={error_R_CYL} error_Axis={error_R_Axis} />
-          <PRISMInput setFieldValue={setFieldValue} isLeft={false} mode="mid" />
-          <ADDInput setFieldValue={setFieldValue} isLeft={false} mode="mid" />
-
-          <SPHInput setFieldValue={setFieldValue} isLeft={true} mode="mid" />
-          {error_L_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_L_SPH}</Text>}
-          <CYLInput setFieldValue={setFieldValue} isLeft={true} mode="mid" error_CYL={error_L_CYL} error_Axis={error_L_Axis} />
-          <PRISMInput setFieldValue={setFieldValue} isLeft={true} mode="mid" />
-          <ADDInput setFieldValue={setFieldValue} isLeft={true} mode="mid" />
-        </View>
-      </Collapsible>
-    </View>
-  );
-};
-
-export const RenderCollapseNear = (props) => {
-  const { setFieldValue, error_L_SPH, error_R_SPH, error_L_CYL, error_R_CYL, error_L_Axis, error_R_Axis } = props;
-  const [isCollapse, toggleisCollapse] = useState(false);
-  return (
-    <View>
-      <TouchableOpacity onPress={() => toggleisCollapse(!isCollapse)} style={FormItemStyle.collapseButton}>
-        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? "展開" : "收起"}輸入近距度數</Text>
-      </TouchableOpacity>
-      <Collapsible collapsed={isCollapse}>
-        <View style={FormItemStyle.collpaseContainer}>
-          <DistanceInput setFieldValue={setFieldValue} mode="near" />
-          <SPHInput setFieldValue={setFieldValue} isLeft={false} mode="near" />
-          {error_R_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_R_SPH}</Text>}
-          <CYLInput setFieldValue={setFieldValue} isLeft={false} mode="near" error_CYL={error_R_CYL} error_Axis={error_R_Axis} />
-          <PRISMInput setFieldValue={setFieldValue} isLeft={false} mode="near" />
-          <ADDInput setFieldValue={setFieldValue} isLeft={false} mode="near" />
-
-          <SPHInput setFieldValue={setFieldValue} isLeft={true} mode="near" />
-          {error_L_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_L_SPH}</Text>}
-          <CYLInput setFieldValue={setFieldValue} isLeft={true} mode="near" error_CYL={error_L_CYL} error_Axis={error_L_Axis} />
-          <PRISMInput setFieldValue={setFieldValue} isLeft={true} mode="near" />
-          <ADDInput setFieldValue={setFieldValue} isLeft={true} mode="near" />
-        </View>
-      </Collapsible>
-    </View>
-  );
-};
-
 export const RenderCollapsePD = (props) => {
   const { handleChange, error_L_PD, error_R_PD } = props;
   const [isCollapse, toggleisCollapse] = useState(false);
@@ -256,6 +144,118 @@ export const RenderCollapseVA = (props) => {
           <VAInput setFieldValue={setFieldValue} isLeft={true} error={error_L_VA} />
           <Text style={FormItemStyle.questionText}>請輸入雙眼視力(VA)</Text>
           <TextInput onChangeText={(value) => setFieldValue("VA", value)} keyboardType="default" style={FormItemStyle.answerInputBox} />
+        </View>
+      </Collapsible>
+    </View>
+  );
+};
+
+export const RenderCollapseCon = (props) => {
+  const { values, handleChange, setFieldValue, error_L_SPH, error_R_SPH, error_L_CYL, error_R_CYL, error_L_Axis, error_R_Axis } = props;
+  const [isCollapse, toggleisCollapse] = useState(true);
+  return (
+    <View>
+      <TouchableOpacity onPress={() => toggleisCollapse(!isCollapse)} style={FormItemStyle.collapseButton}>
+        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? "展開" : "收起"}輸入隱形眼鏡度數</Text>
+      </TouchableOpacity>
+      <Collapsible collapsed={isCollapse}>
+        <View style={FormItemStyle.collpaseContainer}>
+          <ExpiryDateInput values={values} setFieldValue={setFieldValue} />
+          <BrandInput handleChange={handleChange} />
+          <SPHInput setFieldValue={setFieldValue} isLeft={false} mode="con" />
+          {error_R_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_R_SPH}</Text>}
+          <CYLInput setFieldValue={setFieldValue} isLeft={false} mode="con" error_CYL={error_R_CYL} error_Axis={error_R_Axis} />
+          <BCInput setFieldValue={setFieldValue} isLeft={false} />
+          <DiaInput setFieldValue={setFieldValue} isLeft={false} />
+
+          <SPHInput setFieldValue={setFieldValue} isLeft={true} mode="con" />
+          {error_L_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_L_SPH}</Text>}
+          <CYLInput setFieldValue={setFieldValue} isLeft={true} mode="con" error_CYL={error_L_CYL} error_Axis={error_L_Axis} />
+          <BCInput setFieldValue={setFieldValue} isLeft={true} />
+          <DiaInput setFieldValue={setFieldValue} isLeft={true} />
+        </View>
+      </Collapsible>
+    </View>
+  );
+};
+
+export const RenderCollapseFar = (props) => {
+  const { setFieldValue, error_L_SPH, error_R_SPH, error_L_CYL, error_R_CYL, error_L_Axis, error_R_Axis } = props;
+  const [isCollapse, toggleisCollapse] = useState(true);
+  return (
+    <View>
+      <TouchableOpacity onPress={() => toggleisCollapse(!isCollapse)} style={FormItemStyle.collapseButton}>
+        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? "展開" : "收起"}輸入遠距度數</Text>
+      </TouchableOpacity>
+      <Collapsible collapsed={isCollapse}>
+        <View style={FormItemStyle.collpaseContainer}>
+          <SPHInput setFieldValue={setFieldValue} isLeft={false} mode="far" />
+          {error_R_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_R_SPH}</Text>}
+          <CYLInput setFieldValue={setFieldValue} isLeft={false} mode="far" error_CYL={error_R_CYL} error_Axis={error_R_Axis} />
+          <PRISMInput setFieldValue={setFieldValue} isLeft={false} mode="far" />
+          <ADDInput setFieldValue={setFieldValue} isLeft={false} mode="far" />
+
+          <SPHInput setFieldValue={setFieldValue} isLeft={true} mode="far" />
+          {error_L_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_L_SPH}</Text>}
+          <CYLInput setFieldValue={setFieldValue} isLeft={true} mode="far" error_CYL={error_L_CYL} error_Axis={error_L_Axis} />
+          <PRISMInput setFieldValue={setFieldValue} isLeft={true} mode="far" />
+          <ADDInput setFieldValue={setFieldValue} isLeft={true} mode="far" />
+        </View>
+      </Collapsible>
+    </View>
+  );
+};
+
+export const RenderCollapseMid = (props) => {
+  const { setFieldValue, error_L_SPH, error_R_SPH, error_L_CYL, error_R_CYL, error_L_Axis, error_R_Axis } = props;
+  const [isCollapse, toggleisCollapse] = useState(true);
+  return (
+    <View>
+      <TouchableOpacity onPress={() => toggleisCollapse(!isCollapse)} style={FormItemStyle.collapseButton}>
+        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? "展開" : "收起"}輸入中距工作度數</Text>
+      </TouchableOpacity>
+      <Collapsible collapsed={isCollapse}>
+        <View style={FormItemStyle.collpaseContainer}>
+          <DistanceInput setFieldValue={setFieldValue} mode="mid" />
+          <SPHInput setFieldValue={setFieldValue} isLeft={false} mode="mid" />
+          {error_R_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_R_SPH}</Text>}
+          <CYLInput setFieldValue={setFieldValue} isLeft={false} mode="mid" error_CYL={error_R_CYL} error_Axis={error_R_Axis} />
+          <PRISMInput setFieldValue={setFieldValue} isLeft={false} mode="mid" />
+          <ADDInput setFieldValue={setFieldValue} isLeft={false} mode="mid" />
+
+          <SPHInput setFieldValue={setFieldValue} isLeft={true} mode="mid" />
+          {error_L_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_L_SPH}</Text>}
+          <CYLInput setFieldValue={setFieldValue} isLeft={true} mode="mid" error_CYL={error_L_CYL} error_Axis={error_L_Axis} />
+          <PRISMInput setFieldValue={setFieldValue} isLeft={true} mode="mid" />
+          <ADDInput setFieldValue={setFieldValue} isLeft={true} mode="mid" />
+        </View>
+      </Collapsible>
+    </View>
+  );
+};
+
+export const RenderCollapseNear = (props) => {
+  const { setFieldValue, error_L_SPH, error_R_SPH, error_L_CYL, error_R_CYL, error_L_Axis, error_R_Axis } = props;
+  const [isCollapse, toggleisCollapse] = useState(true);
+  return (
+    <View>
+      <TouchableOpacity onPress={() => toggleisCollapse(!isCollapse)} style={FormItemStyle.collapseButton}>
+        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? "展開" : "收起"}輸入近距度數</Text>
+      </TouchableOpacity>
+      <Collapsible collapsed={isCollapse}>
+        <View style={FormItemStyle.collpaseContainer}>
+          <DistanceInput setFieldValue={setFieldValue} mode="near" />
+          <SPHInput setFieldValue={setFieldValue} isLeft={false} mode="near" />
+          {error_R_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_R_SPH}</Text>}
+          <CYLInput setFieldValue={setFieldValue} isLeft={false} mode="near" error_CYL={error_R_CYL} error_Axis={error_R_Axis} />
+          <PRISMInput setFieldValue={setFieldValue} isLeft={false} mode="near" />
+          <ADDInput setFieldValue={setFieldValue} isLeft={false} mode="near" />
+
+          <SPHInput setFieldValue={setFieldValue} isLeft={true} mode="near" />
+          {error_L_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_L_SPH}</Text>}
+          <CYLInput setFieldValue={setFieldValue} isLeft={true} mode="near" error_CYL={error_L_CYL} error_Axis={error_L_Axis} />
+          <PRISMInput setFieldValue={setFieldValue} isLeft={true} mode="near" />
+          <ADDInput setFieldValue={setFieldValue} isLeft={true} mode="near" />
         </View>
       </Collapsible>
     </View>

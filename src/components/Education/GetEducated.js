@@ -1,13 +1,11 @@
 import { SafeAreaView, StyleSheet, Text, View, TouchableOpacity, ScrollView, FlatList, Image, Dimensions } from "react-native";
 import React, { Component } from "react";
-import Expo from "expo";
 import { database } from "../../config/config";
 import { LinearGradient } from "expo-linear-gradient";
 import { ScreenWidth, ScreenHeight, FontScale } from "../../../constant/Constant";
-import HeaderRightButton from "../../../Utils/HeaderRightButton";
 import FABView from "../../../Utils/FAB";
 import MenuScreen from "../../../Utils/MenuScreen";
-import { actionCounter } from "../../utils/actionCounter";
+import { LinearGradientBackground } from "../Utils/LinearGradientBackground";
 
 function rand(x) {
   return Math.floor(Math.random() * x);
@@ -23,6 +21,7 @@ export default class GetEducated extends Component {
     this.state = {
       data: [],
       topArticle: "",
+      uid_list: [],
     };
   }
 
@@ -31,18 +30,24 @@ export default class GetEducated extends Component {
       .ref("contents/articles")
       .orderByChild("date")
       .on("value", (snapshot) => {
+        console.log("Database updated");
         var temp = [];
+        var temp_uid_list = [];
         snapshot.forEach((childSnapshot) => {
           var item = childSnapshot.val();
           var key = { _uid: childSnapshot.key };
           var childData = { ...item, ...key };
           temp.push(childData);
+          temp_uid_list.push(childSnapshot.key);
         });
-        temp.reverse();
-        let x = rand(temp.length);
-        console.log("topArticle", x, temp[x].subject);
-        this.setState({ topArticle: temp[x] });
-        this.setState({ data: temp });
+        if (JSON.stringify(this.state.uid_list) != JSON.stringify(temp_uid_list)) {
+          console.log(temp_uid_list);
+          console.log("App refreshed");
+          temp.reverse();
+          let x = rand(temp.length);
+          console.log("topArticle", x, temp[x].subject);
+          this.setState({ topArticle: temp[x], data: temp, uid_list: temp_uid_list });
+        } else console.log("NOT refreshed");
       });
   }
 
@@ -50,7 +55,6 @@ export default class GetEducated extends Component {
     const pressHandler = () => {
       const id = this.state.topArticle._uid;
       this.props.navigation.navigate("ArticleDetailScreen", { article_id: id });
-      actionCounter("articles", this.state.topArticle._uid, "views");
     };
     return (
       <>
@@ -62,15 +66,7 @@ export default class GetEducated extends Component {
             }}
           >
             <View style={GetEducatedScreen.headerContainer}>
-              <LinearGradient
-                colors={["#1872a7", "#5a74d1", "#a676ff"]}
-                start={[0, 0.9]}
-                end={[1, 0.1]}
-                locations={[0, 0.5, 1]}
-                style={{
-                  height: ScreenHeight,
-                }}
-              ></LinearGradient>
+              <LinearGradientBackground style={{ height: ScreenHeight }} colors={["#1772A6", "#A377FF"]} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]}></LinearGradientBackground>
             </View>
             <View style={{ flex: 1 }}>
               <View style={GetEducatedScreen.topArticleContainer}>
@@ -95,10 +91,7 @@ export default class GetEducated extends Component {
 function Item({ item, navigation }) {
   //console.log(item.key);
   const id = item._uid;
-  const pressHandler = () => {
-    navigation.navigate("ArticleDetailScreen", { article_id: id });
-    actionCounter("articles", item._uid, "views");
-  };
+  const pressHandler = () => navigation.navigate("ArticleDetailScreen", { article_id: id });
   return (
     <TouchableOpacity onPress={pressHandler}>
       <View style={GetEducatedScreen.articleItem}>

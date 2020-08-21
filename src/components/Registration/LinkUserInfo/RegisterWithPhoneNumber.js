@@ -1,13 +1,8 @@
 import React from "react";
-import { LinearGradientBackground } from "../../../../Utils/LinearGradientBackground";
+import { LinearGradientBackground } from "../../Utils/LinearGradientBackground";
 import { View, StyleSheet, Text, TextInput } from "react-native";
-import Logo from "../../../../Utils/Logo";
-import {
-  ScreenHeight,
-  FontScale,
-  ScreenWidth,
-  Scale,
-} from "../../../../constant/Constant";
+import Logo from "../../Utils/Logo";
+import { ScreenHeight, FontScale, ScreenWidth, Scale } from "../../../../constant/Constant";
 import { RoundButton } from "../../../../Utils/RoundButton";
 import { Formik } from "formik";
 import { object, number } from "yup";
@@ -48,11 +43,7 @@ export const RegisterWithPhoneNumber = ({ navigation }) => {
         <Logo />
         <View style={styles.optionsContainer}>
           <Text style={styles.title}>請輸入已登記電話號碼</Text>
-          <Formik
-            initialValues={{ phone: "" }}
-            validationSchema={phoneValidation}
-            onSubmit={(values) => checkIfUserInfoExist(values.phone)}
-          >
+          <Formik initialValues={{ phone: "" }} validationSchema={phoneValidation} onSubmit={(values) => checkIfUserInfoExist(values.phone)}>
             {(formikProps) => (
               <>
                 <View
@@ -65,9 +56,7 @@ export const RegisterWithPhoneNumber = ({ navigation }) => {
                     marginTop: ScreenHeight * 0.05,
                   }}
                 >
-                  <Text style={[styles.title, { flex: 4, fontSize: 20 }]}>
-                    +852
-                  </Text>
+                  <Text style={[styles.title, { flex: 4, fontSize: 20 }]}>+852</Text>
                   <TextInput
                     style={{
                       flex: 8,
@@ -80,13 +69,7 @@ export const RegisterWithPhoneNumber = ({ navigation }) => {
                     keyboardType="phone-pad"
                   />
                 </View>
-                {formikProps.errors && (
-                  <Text style={styles.errorMessage}>
-                    {errorMessage === null
-                      ? formikProps.errors["phone"]
-                      : errorMessage}
-                  </Text>
-                )}
+                {formikProps.errors && <Text style={styles.errorMessage}>{errorMessage === null ? formikProps.errors["phone"] : errorMessage}</Text>}
                 <View
                   style={{
                     flexDirection: "row",
@@ -96,18 +79,10 @@ export const RegisterWithPhoneNumber = ({ navigation }) => {
                   }}
                 >
                   <View style={{ flex: 1 }}>
-                    <RoundButton
-                      onPress={() => navigation.navigate("Login")}
-                      type="outline"
-                      title="返回"
-                    />
+                    <RoundButton onPress={() => navigation.navigate("Login")} type="outline" title="返回" />
                   </View>
                   <View style={{ flex: 1 }}>
-                    <RoundButton
-                      onPress={() => formikProps.handleSubmit()}
-                      type="outline"
-                      title="確認"
-                    />
+                    <RoundButton onPress={() => formikProps.handleSubmit()} type="outline" title="確認" />
                   </View>
                 </View>
               </>

@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { ScrollView, View, Text, StyleSheet, Switch, TouchableOpacity } from 'react-native';
-import { ListItem, Input, Overlay, Icon, Button } from 'react-native-elements';
-import Collapsible from 'react-native-collapsible';
+import React, { useState, useEffect } from "react";
+import { ScrollView, View, Text, StyleSheet, Switch, TouchableOpacity } from "react-native";
+import { ListItem, Input, Overlay, Icon, Button } from "react-native-elements";
+import Collapsible from "react-native-collapsible";
 
-import { ScreenWidth, ScreenHeight } from '../../../constant/Constant';
-import MenuScreen from '../../../Utils/MenuScreen';
-import { auth, database } from '../../config/config';
-import { RoundButton } from '../../../Utils/RoundButton';
-import { Grid, Col, Row } from 'react-native-easy-grid';
-import { Snackbar, Portal } from 'react-native-paper';
-import { useSelector, useDispatch } from 'react-redux';
-import { watchUserInfoUpdate } from '../../reducers/user';
-import moment from 'moment';
-import { LinearGradientBackground } from '../../../Utils/LinearGradientBackground';
+import { ScreenWidth, ScreenHeight } from "../../../constant/Constant";
+import MenuScreen from "../../../Utils/MenuScreen";
+import { auth, database } from "../../config/config";
+import { RoundButton } from "../../../Utils/RoundButton";
+import { Grid, Col, Row } from "react-native-easy-grid";
+import { Snackbar, Portal } from "react-native-paper";
+import { useSelector, useDispatch } from "react-redux";
+import { watchUserInfoUpdate } from "../../reducers/user";
+import moment from "moment";
+import { LinearGradientBackground } from "../Utils/LinearGradientBackground";
 
 export default function Setting({ route, navigation }) {
   return (
@@ -22,7 +22,7 @@ export default function Setting({ route, navigation }) {
           <SettingContent navigation={navigation} route={route} />
         </MenuScreen>
       ) : (
-        <LinearGradientBackground style={{ height: '100%' }} colors={['#1772A6', '#A377FF']} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]}>
+        <LinearGradientBackground style={{ height: ScreenHeight }} colors={["#1772A6", "#A377FF"]} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]}>
           <SettingContent navigation={navigation} route={route} />
         </LinearGradientBackground>
       )}
@@ -42,13 +42,27 @@ const SettingContent = ({ route, navigation }) => {
           titleStyle={styles.title}
           rightIcon={<ThemeSwitch />}
         /> */}
-        <ListItem Component={TouchableOpacity} title={'程式教學'} containerStyle={styles.listItem} titleStyle={styles.title} chevron={{ size: 30 }} onPress={() => navigation.navigate('Tutorial')} />
-        <ListItem Component={TouchableOpacity} title={'聯絡我們'} containerStyle={styles.listItem} titleStyle={styles.title} chevron={{ size: 30 }} onPress={() => setSelectedLabel(selectedLabel == 'contact-us' ? '' : 'contact-us')} />
-        <Collapsible collapsed={selectedLabel != 'contact-us'}>
+        <ListItem Component={TouchableOpacity} title={"程式教學"} containerStyle={styles.listItem} titleStyle={styles.title} chevron={{ size: 30 }} onPress={() => navigation.navigate("Tutorial")} />
+        <ListItem
+          Component={TouchableOpacity}
+          title={"聯絡我們"}
+          containerStyle={styles.listItem}
+          titleStyle={styles.title}
+          chevron={{ size: 30 }}
+          onPress={() => setSelectedLabel(selectedLabel == "contact-us" ? "" : "contact-us")}
+        />
+        <Collapsible collapsed={selectedLabel != "contact-us"}>
           <ContactUs />
         </Collapsible>
-        <ListItem Component={TouchableOpacity} title={'意見反饋'} containerStyle={styles.listItem} titleStyle={styles.title} chevron={{ size: 30 }} onPress={() => setSelectedLabel(selectedLabel == 'feedback' ? '' : 'feedback')} />
-        <Collapsible collapsed={selectedLabel != 'feedback'}>
+        <ListItem
+          Component={TouchableOpacity}
+          title={"意見反饋"}
+          containerStyle={styles.listItem}
+          titleStyle={styles.title}
+          chevron={{ size: 30 }}
+          onPress={() => setSelectedLabel(selectedLabel == "feedback" ? "" : "feedback")}
+        />
+        <Collapsible collapsed={selectedLabel != "feedback"}>
           <Feedback />
         </Collapsible>
         {/* <ListItem
@@ -64,19 +78,26 @@ const SettingContent = ({ route, navigation }) => {
     </Collapsible> */}
         <ListItem
           Component={TouchableOpacity}
-          title={'條款及細則'}
+          title={"條款及細則"}
           containerStyle={styles.listItem}
-          titleStyle={{ fontSize: 20, color: 'white' }}
+          titleStyle={{ fontSize: 20, color: "white" }}
           chevron={{ size: 30 }}
-          onPress={() => setSelectedLabel(selectedLabel == 'permission' ? '' : 'permission')}
+          onPress={() => setSelectedLabel(selectedLabel == "permission" ? "" : "permission")}
         />
-        <ListItem Component={TouchableOpacity} title={'私隱政策'} containerStyle={styles.listItem} titleStyle={{ fontSize: 20, color: 'white' }} chevron={{ size: 30 }} onPress={() => navigation.navigate('Policy')} />
         <ListItem
           Component={TouchableOpacity}
-          title={'登出'}
+          title={"私隱政策"}
+          containerStyle={styles.listItem}
+          titleStyle={{ fontSize: 20, color: "white" }}
+          chevron={{ size: 30 }}
+          onPress={() => navigation.navigate("Policy")}
+        />
+        <ListItem
+          Component={TouchableOpacity}
+          title={"登出"}
           containerStyle={styles.listItem}
           titleStyle={styles.title}
-          chevron={{ size: 30, color: '#E1EDFF' }}
+          chevron={{ size: 30, color: "#E1EDFF" }}
           onPress={() => {
             auth.signOut();
           }}
@@ -85,9 +106,9 @@ const SettingContent = ({ route, navigation }) => {
       <Text
         style={{
           marginTop: 100,
-          color: 'white',
-          alignSelf: 'center',
-          position: 'absolute',
+          color: "white",
+          alignSelf: "center",
+          position: "absolute",
           bottom: 20,
         }}
       >
@@ -103,7 +124,7 @@ const ThemeSwitch = () => {
 
   return (
     <>
-      <Switch trackColor={{ false: '#767577', true: '#9AFF98' }} thumbColor={isLightTheme ? 'white' : '#f4f3f4'} ios_backgroundColor="#3e3e3e" onValueChange={toggleSwitch} value={isLightTheme} />
+      <Switch trackColor={{ false: "#767577", true: "#9AFF98" }} thumbColor={isLightTheme ? "white" : "#f4f3f4"} ios_backgroundColor="#3e3e3e" onValueChange={toggleSwitch} value={isLightTheme} />
     </>
   );
 };
@@ -113,12 +134,12 @@ export const ContactUs = ({ containerStyle, ...props }) => {
     <View
       style={[
         {
-          width: '90%',
-          alignSelf: 'center',
+          width: "90%",
+          alignSelf: "center",
           padding: 10,
-          backgroundColor: 'rgba(0,0,0,0.05)',
+          backgroundColor: "rgba(0,0,0,0.05)",
           borderRadius: 4,
-          height: '100%',
+          height: "100%",
         },
         containerStyle,
       ]}
@@ -169,7 +190,7 @@ export const ContactUs = ({ containerStyle, ...props }) => {
 };
 
 export const Feedback = ({ contentConatinerStyle, ...props }) => {
-  const [feedback, setFeedback] = useState('');
+  const [feedback, setFeedback] = useState("");
   const [alertSuccess, setAlertSuccess] = useState(false);
   const { user } = useSelector((state) => state.user);
   const dispatch = useDispatch();
@@ -183,23 +204,23 @@ export const Feedback = ({ contentConatinerStyle, ...props }) => {
 
   const handleFeedbackSubmission = () => {
     const datetime = moment();
-    const date = datetime.format('YYYYMMDD');
-    const time = datetime.format('h:mm:ss a');
-    if (feedback == '') {
+    const date = datetime.format("YYYYMMDD");
+    const time = datetime.format("h:mm:ss a");
+    if (feedback == "") {
       return;
     } else {
-      database.ref('/feedbacks/' + date).push({
+      database.ref("/feedbacks/" + date).push({
         content: feedback,
         submissionDate: date,
         timestamp: time,
         userInfo: {
           email: user.email,
           ...(user.lastName ? { lastName: user.lastName } : { surName: user.surName }),
-          gender: user.gender ? user.gender : 'F',
+          gender: user.gender ? user.gender : "F",
         },
       });
 
-      setFeedback('');
+      setFeedback("");
       setAlertSuccess(true);
       let showSuccess = setInterval(() => {
         timer += 1;
@@ -212,7 +233,7 @@ export const Feedback = ({ contentConatinerStyle, ...props }) => {
   };
 
   return (
-    <View style={{ width: '90%', alignSelf: 'center', padding: 10 }}>
+    <View style={{ width: "90%", alignSelf: "center", padding: 10 }}>
       <Input
         onChangeText={(e) => setFeedback(e)}
         maxLength={200}
@@ -223,7 +244,7 @@ export const Feedback = ({ contentConatinerStyle, ...props }) => {
         inputStyle={{ ...styles.textAreaContainer, ...props.contentFontColor }}
         rightIcon={<Text style={{ ...styles.wordCounter, ...props.wordCounterFontColor }}>{feedback.length}/200</Text>}
         rightIconContainerStyle={{
-          position: 'absolute',
+          position: "absolute",
           bottom: 0,
           right: 15,
         }}
@@ -234,13 +255,13 @@ export const Feedback = ({ contentConatinerStyle, ...props }) => {
         }}
         title="提交"
         buttonStyle={{ width: 96, ...props.buttonColor }}
-        textStyle={{ color: '#3CA1B7', ...props.buttonTitle }}
+        textStyle={{ color: "#3CA1B7", ...props.buttonTitle }}
       />
       <Snackbar
         visible={alertSuccess}
         onDismiss={() => setAlertSuccess(false)}
         action={{
-          label: '確認',
+          label: "確認",
           onPress: () => {
             setAlertSuccess(false);
           },
@@ -262,10 +283,10 @@ const PermissionSetting = () => {
   return (
     <View
       style={{
-        width: '90%',
-        alignSelf: 'center',
+        width: "90%",
+        alignSelf: "center",
         padding: 10,
-        backgroundColor: 'rgba(0,0,0,0.05)',
+        backgroundColor: "rgba(0,0,0,0.05)",
         borderRadius: 4,
       }}
     >
@@ -275,7 +296,13 @@ const PermissionSetting = () => {
             <Text style={styles.contactUsTitle}> 允許查看紀錄 </Text>
           </Col>
           <Col>
-            <Switch trackColor={{ false: '#767577', true: '#9AFF98' }} thumbColor={allowView ? 'white' : '#f4f3f4'} ios_backgroundColor="#3e3e3e" onValueChange={toggleAllowViewSwitch} value={allowView} />
+            <Switch
+              trackColor={{ false: "#767577", true: "#9AFF98" }}
+              thumbColor={allowView ? "white" : "#f4f3f4"}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleAllowViewSwitch}
+              value={allowView}
+            />
           </Col>
         </Row>
 
@@ -284,7 +311,13 @@ const PermissionSetting = () => {
             <Text style={styles.contactUsTitle}> 開啟通知 </Text>
           </Col>
           <Col>
-            <Switch trackColor={{ false: '#767577', true: '#9AFF98' }} thumbColor={allowSearch ? 'white' : '#f4f3f4'} ios_backgroundColor="#3e3e3e" onValueChange={toggleAllowSearchSwitch} value={allowSearch} />
+            <Switch
+              trackColor={{ false: "#767577", true: "#9AFF98" }}
+              thumbColor={allowSearch ? "white" : "#f4f3f4"}
+              ios_backgroundColor="#3e3e3e"
+              onValueChange={toggleAllowSearchSwitch}
+              value={allowSearch}
+            />
           </Col>
         </Row>
       </Grid>
@@ -296,55 +329,55 @@ const styles = StyleSheet.create({
   container: {
     width: ScreenWidth * 0.8,
     height: ScreenHeight * 0.75,
-    position: 'absolute',
+    position: "absolute",
     bottom: 40,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   listItem: {
-    backgroundColor: 'transparent',
+    backgroundColor: "transparent",
   },
   title: {
-    color: '#E1EDFF',
+    color: "#E1EDFF",
     fontSize: 20,
   },
   label: {
-    color: '#E1EDFF',
+    color: "#E1EDFF",
     fontSize: 20,
     marginBottom: 25,
   },
   contentContainer: {
     borderWidth: 2,
     borderBottomWidth: 2,
-    borderColor: '#E1EDFF',
+    borderColor: "#E1EDFF",
     borderRadius: 25,
     paddingHorizontal: 15,
     height: 230,
   },
   textAreaContainer: {
-    color: 'white',
+    color: "white",
     height: 230,
-    textAlignVertical: 'top',
+    textAlignVertical: "top",
     paddingTop: 10,
   },
   wordCounter: {
-    color: '#B8CAE4',
+    color: "#B8CAE4",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   contactUsRow: {
     marginBottom: 10,
     marginTop: 10,
   },
   contactUsLeftCol: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
   },
   contactUsRightCol: {
-    alignItems: 'center',
+    alignItems: "center",
   },
   contactUsTitle: {
-    color: 'white',
+    color: "white",
     fontSize: 15,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });

@@ -4,7 +4,7 @@ import Logo from "../Utils/Logo";
 import firebase from "firebase";
 import { auth } from "../../config/config";
 import { useEffect } from "react";
-import { LinearGradientBackground } from "../../../Utils/LinearGradientBackground";
+import { LinearGradientBackground } from "../Utils/LinearGradientBackground";
 import { RoundButton } from "../../../Utils/RoundButton";
 import { ScreenHeight, FontScale, Scale, ScreenWidth } from "../../../constant/Constant";
 import { KeyIcon, MailIcon, PhoneIcon } from "../Utils/Icons";
@@ -44,7 +44,6 @@ export const LoginWithPhone = ({ navigation, route }) => {
   };
 
   const handleLoginError = (message) => {
-    //console.log(message);
     /* setLoginErrorMessage(message); */
     setLoadingState(false);
   };

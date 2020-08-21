@@ -365,6 +365,21 @@ export default class Form extends Component {
                   error_R_Axis={errors.Adj_R_Axis}
                 />
 
+                <RenderCollapseVA setFieldValue={setFieldValue} error_L_VA={errors.L_VA} error_R_VA={errors.R_VA} />
+                <RenderCollapsePD handleChange={handleChange} error_L_PD={errors.L_PD} error_R_PD={errors.R_PD} />
+
+                <RenderCollapseCon
+                  handleChange={handleChange}
+                  values={values.Con_expiry_date}
+                  setFieldValue={setFieldValue}
+                  error_L_SPH={errors.Con_L_SPH}
+                  error_R_SPH={errors.Con_R_SPH}
+                  error_L_CYL={errors.Con_L_CYL}
+                  error_R_CYL={errors.Con_R_CYL}
+                  error_L_Axis={errors.Con_L_Axis}
+                  error_R_Axis={errors.Con_R_Axis}
+                />
+
                 <RenderCollapseFar
                   setFieldValue={setFieldValue}
                   error_L_SPH={errors.Far_L_SPH}
@@ -393,21 +408,6 @@ export default class Form extends Component {
                   error_R_CYL={errors.Near_R_CYL}
                   error_L_Axis={errors.Near_L_Axis}
                   error_R_Axis={errors.Near_R_Axis}
-                />
-
-                <RenderCollapseVA setFieldValue={setFieldValue} error_L_VA={errors.L_VA} error_R_VA={errors.R_VA} />
-                <RenderCollapsePD handleChange={handleChange} error_L_PD={errors.L_PD} error_R_PD={errors.R_PD} />
-
-                <RenderCollapseCon
-                  handleChange={handleChange}
-                  values={values.Con_expiry_date}
-                  setFieldValue={setFieldValue}
-                  error_L_SPH={errors.Con_L_SPH}
-                  error_R_SPH={errors.Con_R_SPH}
-                  error_L_CYL={errors.Con_L_CYL}
-                  error_R_CYL={errors.Con_R_CYL}
-                  error_L_Axis={errors.Con_L_Axis}
-                  error_R_Axis={errors.Con_R_Axis}
                 />
 
                 <RemarksInput handleChange={handleChange} />

@@ -12,9 +12,9 @@ export const EditUserInfo = ({ route, navigation }) => {
   const [fieldEditingState, setFieldsEditingState] = useState({
     lastName: false,
   });
-
-  //console.log("User found: ", user);
-  const editIcon = <Icon name="pencil" type="foundation" size={30} color="white" />;
+  const editIcon = (
+    <Icon name="pencil" type="foundation" size={30} color="white" />
+  );
 
   return (
     <MenuScreen>
@@ -29,10 +29,18 @@ export const EditUserInfo = ({ route, navigation }) => {
                 }}
               >
                 <View style={{ justifyContent: "center", flex: 2 }}>
-                  <Text style={{ color: "white", fontSize: ScreenHeight * 0.035 }}>{user.firstName}</Text>
+                  <Text
+                    style={{ color: "white", fontSize: ScreenHeight * 0.035 }}
+                  >
+                    {user.firstName}
+                  </Text>
                 </View>
-                <TouchableOpacity onPress={() => setFieldsEditingState({ lastName: true })}>
-                  <View style={{ justifyContent: "center", flex: 2 }}>{editIcon}</View>
+                <TouchableOpacity
+                  onPress={() => setFieldsEditingState({ lastName: true })}
+                >
+                  <View style={{ justifyContent: "center", flex: 2 }}>
+                    {editIcon}
+                  </View>
                 </TouchableOpacity>
               </View>
             ) : (

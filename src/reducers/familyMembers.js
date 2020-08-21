@@ -9,28 +9,43 @@ export const updateFamilyMembers = (familyMembers) => {
   };
 };
 
-export const watchFamilyMembersUpdate = () => {
-  return (dispatch) => {
-    database
-      .ref("/users/" + auth.currentUser.uid + "/familyMembers")
-      .on("value", (snap) => {
-        let familyMembers = [];
-        snap.forEach((data) => {
-          familyMembers.push(data.val());
+export const watchFamilyMembersUpdate = (dispatch) => {
+  database
+    .ref("/users/" + auth.currentUser.uid + "/familyMembers")
+    .on("value", (snap) => {
+      let user = null;
+      let familyMembers = [];
+
+      database
+        .ref("/users/" + auth.currentUser.uid)
+        .once("value")
+        .then((subSnapshot) => {
+          const temp = subSnapshot.val();
+          user = {
+            uid: temp.uid,
+            surName: temp.surName,
+            givenName: temp.givenName,
+            lastName: temp.lastName,
+            firstName: temp.firstName,
+          };
+
+          if (user) {
+            familyMembers.push(user);
+          }
+          snap.forEach((data) => {
+            familyMembers.push(data.val());
+          });
+          dispatch(updateFamilyMembers(familyMembers));
         });
-        dispatch(updateFamilyMembers(familyMembers));
-      });
-  };
+    });
 };
 
-const initialState = [];
+const initialState = null;
 
 export const familyMembers = (state = initialState, { type, payload }) => {
   switch (type) {
     case UPDATE_FAMILY_MEMBERS:
-      return {
-        familyMembers: payload,
-      };
+      return payload;
     default:
       return state;
   }
