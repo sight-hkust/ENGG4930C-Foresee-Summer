@@ -81,11 +81,7 @@ const FormComponent = ({ navigation, route }) => {
       initialValues={{
         firstName: "",
         lastName: "",
-        surName: "",
-        givenName: "",
-        selectedNameFields: "chi",
-        chineseNameError: "",
-        englishNameError: "",
+        nameFieldError: "",
         gender: "M",
         birthday: "",
         parent: {},
@@ -159,16 +155,7 @@ const FormComponent = ({ navigation, route }) => {
       validateOnBlur={false}
       validateOnChange={false}
     >
-      {(formikProps) => (
-        <FormDetails
-          formikProps={formikProps}
-          isProfessional={isProfessional}
-          registerPatient={registerPatient}
-          isLoading={isLoading}
-          errorMessageFromServer={errorMessageFromServer}
-          registerChild={registerChild}
-        />
-      )}
+      {(formikProps) => <FormDetails formikProps={formikProps} isProfessional={isProfessional} registerPatient={registerPatient} isLoading={isLoading} errorMessageFromServer={errorMessageFromServer} registerChild={registerChild} />}
     </Formik>
   );
 };
@@ -315,72 +302,9 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
                   formikKey={"givenName"}
                   hideEmbbededMessage={true}
                 />
-                <InputTextField
-                  label={"Surname"}
-                  containerStyle={{ flex: 1, marginBottom: "-2%" }}
-                  iconStyle={{ flex: 0.3 }}
-                  formikProps={formikProps}
-                  formikKey={"surName"}
-                  hideEmbbededMessage={true}
-                />
+                <InputTextField label={"Surname"} containerStyle={{ flex: 1, marginBottom: "-2%" }} iconStyle={{ flex: 0.3 }} formikProps={formikProps} formikKey={"surName"} hideEmbbededMessage={true} />
               </View>
             ) : null}
-            <View style={{ flexDirection: "row", paddingLeft: ScreenWidth * 0.02 }}>
-              <View
-                style={{
-                  flexDirection: "row",
-                  marginRight: "4%",
-                }}
-              >
-                <Text
-                  style={{
-                    alignSelf: "center",
-                    textAlignVertical: "center",
-                    fontSize: 18,
-                    color: "#FFFFFF",
-                  }}
-                >
-                  中文
-                </Text>
-                <RadioButton
-                  value="chi"
-                  status={selectedNameFields === "chi" ? "checked" : "unchecked"}
-                  onPress={() => {
-                    setFieldValue("givenName", "");
-                    setFieldValue("surName", "");
-                    setSelectedNameFields("chi");
-                    setFieldValue("selectedNameFields", "chi");
-                  }}
-                  color="#FFFFFF"
-                  uncheckedColor="#FFFFFF"
-                />
-              </View>
-              <View style={{ flexDirection: "row" }}>
-                <Text
-                  style={{
-                    alignSelf: "center",
-                    textAlignVertical: "center",
-                    fontSize: 20,
-                    color: "#FFFFFF",
-                  }}
-                >
-                  Eng
-                </Text>
-                <RadioButton
-                  value="eng"
-                  status={selectedNameFields === "eng" ? "checked" : "unchecked"}
-                  onPress={() => {
-                    setFieldValue("firstName", "");
-                    setFieldValue("lastName", "");
-                    setSelectedNameFields("eng");
-                    setFieldValue("selectedNameFields", "eng");
-                  }}
-                  color="#FFFFFF"
-                  uncheckedColor="#FFFFFF"
-                />
-              </View>
-            </View>
-
             {formikProps.errors && (formikProps.errors["chineseNameError"] || formikProps.errors["englishNameError"]) ? (
               <Text
                 adjustsFontSizeToFit={true}
@@ -401,16 +325,7 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
             <GenderOptionsInput formikKey="gender" formikProps={formikProps} label={"性別"} />
 
             {isProfessional && !registerPatient ? (
-              <InputDialogPicker
-                label={"職業"}
-                icon={jobIcon}
-                onDismiss={() => _hideRoleDialog()}
-                value={values.role}
-                list={roleList}
-                formikKey={"role"}
-                formikProps={formikProps}
-                showDialog={_showRoleDialog}
-              />
+              <InputDialogPicker label={"職業"} icon={jobIcon} onDismiss={() => _hideRoleDialog()} value={values.role} list={roleList} formikKey={"role"} formikProps={formikProps} showDialog={_showRoleDialog} />
             ) : (
               <InputDatePickerModal icon={hourGlassIcon} formikProps={formikProps} formikKey="birthday" showDatePicker={_showDatePicker} value={values.birthday} />
             )}
@@ -534,17 +449,9 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
           />
         </ScrollView>
         {Platform.OS === "android" ? (
-          isDatePickerVisible && (
-            <DateTimePicker testID="dateTimePicker" mode="date" display="spinner" value={values.birthday === "" ? new Date() : moment(values.birthday).toDate()} onChange={handleDateChange} />
-          )
+          isDatePickerVisible && <DateTimePicker testID="dateTimePicker" mode="date" display="spinner" value={values.birthday === "" ? new Date() : moment(values.birthday).toDate()} onChange={handleDateChange} />
         ) : (
-          <DateTimePickerModal
-            date={values.birthday === "" ? new Date() : moment(values.birthday).toDate()}
-            maximumDate={new Date()}
-            isVisible={isDatePickerVisible}
-            onConfirm={handleDateConfirm}
-            onCancel={_hideDatePicker}
-          />
+          <DateTimePickerModal date={values.birthday === "" ? new Date() : moment(values.birthday).toDate()} maximumDate={new Date()} isVisible={isDatePickerVisible} onConfirm={handleDateConfirm} onCancel={_hideDatePicker} />
         )}
       </View>
       <Provider>

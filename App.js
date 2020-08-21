@@ -50,6 +50,7 @@ import { EditUserInfo } from "./src/components/Profile/EditUserInfo";
 import { Surface } from "react-native-paper";
 import { View } from "react-native-animatable";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import UpdateProfileScreen from "./Screens/UpdateProfileScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -144,8 +145,8 @@ function ProfileScreen({ navigation, route }) {
         }}
       />
       <Stack.Screen
-        name="Edit User Info"
-        component={EditUserInfo}
+        name="UpdateProfile"
+        component={UpdateProfileScreen}
         options={{
           headerTransparent: true,
           title: "個人資料",

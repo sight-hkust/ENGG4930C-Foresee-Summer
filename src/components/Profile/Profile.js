@@ -16,7 +16,6 @@ import { displayName } from "../../utils/displayName";
 const Profile = ({ navigation, route, userInfoStore }) => {
   const { type } = route.params; //type: "normal", "professional"
   console.log(route);
-
   const [loading, setLoading] = useState(true);
 
   const { user } = userInfoStore;
@@ -46,9 +45,7 @@ const Profile = ({ navigation, route, userInfoStore }) => {
                     <Text style={styles.name}>{user.lastName != "" ? user.lastName : user.givenName[0]}</Text>
                   </View>
                 </Row>
-                <Row style={styles.qrCodeIconContainer}>
-                  {type == "noraml" && <Icon type="antdesign" name="qrcode" size={40} containerStyle={{ marginRight: 15, marginTop: 10 }} onPress={() => navigation.navigate("QrCode")} />}
-                </Row>
+                <Row style={styles.qrCodeIconContainer}>{type == "noraml" && <Icon type="antdesign" name="qrcode" size={40} containerStyle={{ marginRight: 15, marginTop: 10 }} onPress={() => navigation.navigate("QrCode")} />}</Row>
 
                 <Row style={styles.titleContainer}>
                   <Text style={user.lastName != "" ? styles.title : styles.titleEnglish}>{displayName(user)}</Text>
@@ -105,21 +102,14 @@ const Profile = ({ navigation, route, userInfoStore }) => {
               </Grid>
             </View>
             <View style={styles.bottomMenu}>
+              <Button title="詳細設定" type="clear" containerStyle={styles.bottomMenuItemContainer} titleStyle={styles.bottomMenuItemText} TouchableComponent={TouchableOpacity} onPress={() => navigation.navigate("SettingScreen")} />
               <Button
-                title="詳細設定"
+                title="變更個人資料"
                 type="clear"
                 containerStyle={styles.bottomMenuItemContainer}
                 titleStyle={styles.bottomMenuItemText}
                 TouchableComponent={TouchableOpacity}
-                onPress={() => navigation.navigate("SettingScreen")}
-              />
-              <Button
-                title="程式教學"
-                type="clear"
-                containerStyle={styles.bottomMenuItemContainer}
-                titleStyle={styles.bottomMenuItemText}
-                TouchableComponent={TouchableOpacity}
-                onPress={() => navigation.navigate("Tutorial")}
+                onPress={() => navigation.navigate("UpdateProfile", { user, type })}
               />
               {type == "normal" && (
                 <Button
@@ -136,14 +126,6 @@ const Profile = ({ navigation, route, userInfoStore }) => {
                   }
                 />
               )}
-              {/*  <Button
-                title="變更個人資料"
-                type="clear"
-                containerStyle={styles.bottomMenuItemContainer}
-                titleStyle={styles.bottomMenuItemText}
-                TouchableComponent={TouchableOpacity}
-                onPress={() => navigation.navigate("Edit User Info", { user })}
-              /> */}
               <Button
                 title="登出"
                 type="clear"

@@ -21,7 +21,7 @@ export const EditUserInfo = ({ route, navigation }) => {
       {user && (
         <View style={styles.container}>
           <View style={{ width: ScreenWidth * 0.3 }}>
-            {!fieldEditingState["lastName"] ? (
+            {/* {!fieldEditingState["lastName"] ? (
               <View
                 style={{
                   flexDirection: "row",
@@ -51,7 +51,7 @@ export const EditUserInfo = ({ route, navigation }) => {
                   borderRadius: heightPercentageToDP("3.5%"),
                 }}
               />
-            )}
+            )} */}
           </View>
         </View>
       )}
