@@ -35,19 +35,13 @@ const Profile = ({ navigation, route, userInfoStore }) => {
           <>
             <View style={styles.card}>
               <Grid>
-                <Row
-                  style={{
-                    height: 0.1,
-                    justifyContent: "center",
-                    alignItems: "center",
-                  }}
-                >
+                <Row style={{ height: 0.1, justifyContent: "center", alignItems: "center" }}>
                   <View style={styles.nameContainer}>
                     <Text style={styles.name}>{user.lastName != "" ? user.lastName : user.givenName[0]}</Text>
                   </View>
                 </Row>
                 <Row style={styles.qrCodeIconContainer}>
-                  {type == "noraml" && <Icon type="antdesign" name="qrcode" size={40} containerStyle={{ marginRight: 15, marginTop: 10 }} onPress={() => navigation.navigate("QrCode")} />}
+                  {type == "normal" && <Icon type="antdesign" name="qrcode" size={40} containerStyle={{ marginRight: 15, marginTop: 10 }} onPress={() => navigation.navigate("QrCode")} />}
                 </Row>
 
                 <Row style={styles.titleContainer}>
@@ -81,7 +75,7 @@ const Profile = ({ navigation, route, userInfoStore }) => {
                 </Row>
                 <Row>
                   <Col style={styles.infoContainer}>
-                    {type == "noraml" ? (
+                    {type == "normal" ? (
                       <Text style={styles.info}>
                         <Text style={{ fontSize: 30 }}>{moment.duration(moment().diff(user.birthday, "YYYY")).years()}</Text>歲
                       </Text>
@@ -95,12 +89,7 @@ const Profile = ({ navigation, route, userInfoStore }) => {
                     <Text
                       style={{
                         ...styles.info,
-                        ...{
-                          position: "absolute",
-                          top: 50,
-                          width: ScreenWidth,
-                          textAlign: "center",
-                        },
+                        ...{ position: "absolute", top: 50, width: ScreenWidth, textAlign: "center" },
                       }}
                     >
                       {user.email}
