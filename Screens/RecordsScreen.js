@@ -192,26 +192,41 @@ export default class RecordsScreen extends Component {
               </View>
             )}
 
-            <View style={RecordScreenStyle.buttonGroup}>
-              {data != null && <DetailButton data={data} selectedDate={this.state.selectedDate} isAdj={false} refractive={this.state.refractive} />}
-
-              <Button
-                icon={<Icon name="add" size={ScreenHeight / 20} color="#2D9CDB" />}
-                onPress={pressHandler}
-                buttonStyle={{
-                  backgroundColor: "white",
-                  width: ScreenHeight / 15,
-                  height: ScreenHeight / 15,
-                  borderRadius: 24,
-                  paddingLeft: 0,
-                  paddingRight: 0,
-                }}
-                TouchableComponent={TouchableOpacity}
-              />
-              {data != null && <DetailButton data={data} selectedDate={this.state.selectedDate} isAdj={true} refractive={this.state.refractive} />}
-
-              {/* <RenderIncreaseWarning data={data} dateArr={this.state.dates} index={this.state.index} refractive={this.state.refractive} isLeft={true}/> */}
-            </View>
+            {data != null ? (
+              <View style={RecordScreenStyle.buttonGroup}>
+                <DetailButton data={data} selectedDate={this.state.selectedDate} glassType={0} refractive={this.state.refractive} />
+                <Button
+                  icon={<Icon name="add" size={ScreenHeight / 20} color="#2D9CDB" />}
+                  onPress={pressHandler}
+                  buttonStyle={{
+                    backgroundColor: "white",
+                    width: ScreenHeight / 15,
+                    height: ScreenHeight / 15,
+                    borderRadius: 24,
+                    paddingLeft: 0,
+                    paddingRight: 0,
+                  }}
+                  TouchableComponent={TouchableOpacity}
+                />
+                <DetailButton data={data} selectedDate={this.state.selectedDate} glassType={1} refractive={this.state.refractive} />
+              </View>
+            ) : (
+              <View style={RecordScreenStyle.buttonGroup}>
+                <Button
+                  icon={<Icon name="add" size={ScreenHeight / 20} color="#2D9CDB" />}
+                  onPress={pressHandler}
+                  buttonStyle={{
+                    backgroundColor: "white",
+                    width: ScreenHeight / 15,
+                    height: ScreenHeight / 15,
+                    borderRadius: 24,
+                    paddingLeft: 0,
+                    paddingRight: 0,
+                  }}
+                  TouchableComponent={TouchableOpacity}
+                />
+              </View>
+            )}
           </View>
         </View>
       </MenuScreen>
@@ -220,7 +235,7 @@ export default class RecordsScreen extends Component {
 }
 
 export const DetailButton = (props) => {
-  const { data, selectedDate, isAdj, refractive } = props;
+  const { data, selectedDate, glassType, refractive } = props;
 
   const [isVisible, setIsVisible] = useState(false);
 
@@ -230,7 +245,7 @@ export const DetailButton = (props) => {
   return (
     <View style={{ flexDirection: "column", justifyContent: "center", alignItems: "center" }}>
       <Button
-        icon={<Icon name={isAdj ? "eyeglass" : "dehaze"} type={isAdj ? "simple-line-icon" : ""} size={22} color="#2D9CDB" />}
+        icon={<Icon name={glassType ? "eyeglass" : "dehaze"} type={glassType ? "simple-line-icon" : ""} size={22} color="#2D9CDB" />}
         onPress={toggleModal}
         buttonStyle={{
           backgroundColor: "white",
@@ -242,21 +257,21 @@ export const DetailButton = (props) => {
         }}
         TouchableComponent={TouchableOpacity}
       />
-      <Text style={{ color: "white", fontSize: ScreenHeight / 40 }}>{isAdj ? "調整度數" : "真實度數"}</Text>
-      <RenderModal data={data} selectedDate={selectedDate} isVisible={isVisible} toggleModal={toggleModal} isAdj={isAdj} />
+      <Text style={{ color: "white", fontSize: ScreenHeight / 40 }}>{glassType ? "調整度數" : "真實度數"}</Text>
+      <RenderModal data={data} selectedDate={selectedDate} isVisible={isVisible} toggleModal={toggleModal} glassType={glassType} />
     </View>
   );
 };
 
 export const RenderModal = (props) => {
-  const { data, selectedDate, isVisible, toggleModal, isAdj } = props;
+  const { data, selectedDate, isVisible, toggleModal, glassType } = props;
   const curRecord = data[selectedDate];
 
   return (
     <BottomModal isVisible={isVisible} toggleModal={toggleModal} style={{ backgroundColor: "#FFFFFF", height: 350 }}>
       <View style={{ backgroundColor: "#1772A6", height: 4, width: 70, alignSelf: "center", marginBottom: 10 }} />
       <Text style={RecordScreenStyle.colHeader}>日期: {selectedDate}</Text>
-      <DisplayRecords curRecord={curRecord} isAdj={isAdj} />
+      <DisplayRecords curRecord={curRecord} glassType={glassType} />
     </BottomModal>
   );
 };

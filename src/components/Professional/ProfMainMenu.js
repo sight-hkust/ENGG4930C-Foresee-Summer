@@ -51,16 +51,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
           </View>
         ) : (
           <View>
-            <View
-              style={{
-                marginTop: ScreenHeight * 0.078,
-                height: ScreenHeight * 0.078,
-                width: ScreenWidth,
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+            <View style={{ marginTop: ScreenHeight * 0.078, height: ScreenHeight * 0.078, width: ScreenWidth, flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
               <SearchBar
                 placeholder="尋找病人"
                 onChangeText={(e) => {
@@ -74,24 +65,12 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                 lightTheme
                 placeholderTextColor="white"
                 searchIcon={{ color: "white" }}
-                containerStyle={{
-                  backgroundColor: "transparent",
-                  width: ScreenWidth * 0.8,
-                  borderBottomColor: "transparent",
-                  borderTopColor: "transparent",
-                }}
+                containerStyle={{ backgroundColor: "transparent", width: ScreenWidth * 0.8, borderBottomColor: "transparent", borderTopColor: "transparent" }}
                 inputContainerStyle={{ backgroundColor: "#A6ACE9", height: 35 }}
               />
               <Icon name="qrcode-scan" type="material-community" color="white" size={30} onPress={() => navigation.navigate("QR Scan")} />
             </View>
-            <ScrollView
-              style={{
-                height: ScreenHeight * 0.6,
-                width: ScreenWidth * 0.9,
-                backgroundColor: "transparent",
-                alignSelf: "center",
-              }}
-            >
+            <ScrollView style={{ height: ScreenHeight * 0.6, width: ScreenWidth * 0.9, backgroundColor: "transparent", alignSelf: "center" }}>
               {showList.length == 0 ? (
                 <Text style={{ textAlign: "center", color: "white", fontSize: 30 }}> 找不到資料 </Text>
               ) : (
@@ -110,14 +89,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                               name="plus"
                               type="feather"
                               color="#80A4EB"
-                              containerStyle={{
-                                backgroundColor: "white",
-                                borderRadius: 5,
-                                paddingLeft: 10,
-                                paddingRight: 10,
-                                paddingTop: 3,
-                                paddingBottom: 3,
-                              }}
+                              containerStyle={{ backgroundColor: "white", borderRadius: 5, paddingLeft: 10, paddingRight: 10, paddingTop: 3, paddingBottom: 3 }}
                               onPress={() => {
                                 navigation.navigate("AddRecordScreen", {
                                   //will navigate to ProfAddRecord
@@ -130,14 +102,8 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                             />
                           </>
                         }
-                        containerStyle={{
-                          backgroundColor: "transparent",
-                        }}
-                        titleStyle={{
-                          color: "white",
-                          fontSize: 20,
-                          fontWeight: "bold",
-                        }}
+                        containerStyle={{ backgroundColor: "transparent" }}
+                        titleStyle={{ color: "white", fontSize: 20, fontWeight: "bold" }}
                         subtitleStyle={{ color: "white", fontSize: 13 }}
                         onPress={() => {
                           navigation.navigate("Patient Record", {
@@ -145,16 +111,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                           });
                         }}
                       />
-                      <View
-                        style={{
-                          height: 1,
-                          width: ScreenWidth * 0.825,
-                          borderColor: "#E1EDFF",
-                          borderWidth: 1,
-                          alignSelf: "center",
-                          borderRadius: 10,
-                        }}
-                      />
+                      <View style={{ height: 1, width: ScreenWidth * 0.825, borderColor: "#E1EDFF", borderWidth: 1, alignSelf: "center", borderRadius: 10 }} />
                     </View>
                   );
                 })

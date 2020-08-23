@@ -18,7 +18,7 @@ class ProfPatientRecordView extends Component {
       info: null,
       selectedIndex: -1,
       recordsLen: -1,
-      isAdj: true,
+      glassType: 0,
     };
   }
 
@@ -95,8 +95,8 @@ class ProfPatientRecordView extends Component {
                       <RoundButton
                         buttonStyle={{ backgroundColor: "#2D9CDB" }}
                         textStyle={{ color: "white" }}
-                        title={this.state.isAdj ? "查看真實度數" : "查看調整度數"}
-                        onPress={() => this.setState({ isAdj: !this.state.isAdj })}
+                        title={this.state.glassType ? "查看真實度數" : "查看調整度數"}
+                        onPress={() => this.setState({ glassType: 1 - this.state.glassType })}
                       />
                       <View style={styles.datePickerContainer}>
                         {dateList.length < 2 ? null : (
@@ -111,7 +111,7 @@ class ProfPatientRecordView extends Component {
                           </TouchableOpacity>
                         )}
                       </View>
-                      <DisplayRecords curRecord={records[dateList[selectedIndex]]} isAdj={this.state.isAdj} />
+                      <DisplayRecords curRecord={records[dateList[selectedIndex]]} glassType={this.state.glassType} />
                       <View style={{ height: 20 }} />
                     </View>
                   )}
