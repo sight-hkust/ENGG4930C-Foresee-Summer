@@ -11,21 +11,23 @@ export const updateUserInfo = (user) => {
 
 export const watchUserInfoUpdate = () => {
   return (dispatch) => {
-    database.ref("/users/" + auth.currentUser.uid).on("value", (snap) => {
-      //dispatch(updateUserInfo(snap.val()));
-      if (snap.val() != null) {
-        dispatch(updateUserInfo(snap.val()));
-      }
-    });
-    database.ref("/professionals/" + auth.currentUser.uid).on("value", (snap) => {
-      //dispatch(updateUserInfo(snap.val()));
-      if (snap.val() != null) {
-        dispatch(updateUserInfo(snap.val()));
-      }
-    });
-    // database.ref("/users/" + auth.currentUser.uid).on("value", (snap) => {
-    //   dispatch(updateUserInfo(snap.val()));
-    // });
+    if (auth.currentUser) {
+      database.ref("/users/" + auth.currentUser.uid).on("value", (snap) => {
+        //dispatch(updateUserInfo(snap.val()));
+        if (snap.val() != null) {
+          dispatch(updateUserInfo(snap.val()));
+        }
+      });
+      database.ref("/professionals/" + auth.currentUser.uid).on("value", (snap) => {
+        //dispatch(updateUserInfo(snap.val()));
+        if (snap.val() != null) {
+          dispatch(updateUserInfo(snap.val()));
+        }
+      });
+      // database.ref("/users/" + auth.currentUser.uid).on("value", (snap) => {
+      //   dispatch(updateUserInfo(snap.val()));
+      // });
+    }
   };
 };
 
