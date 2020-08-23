@@ -12,10 +12,12 @@ import { connect, useSelector } from "react-redux";
 import FamilyListPicker from "../FamilyListPicker/FamilyListPicker";
 import { decryptData } from "../../utils/encryptData";
 import { updateFamilyMembers } from "../../reducers/familyMembers";
+import { watchUserInfoUpdate } from "../../reducers/user";
 
-const Profile = ({ navigation, route }) => {
+const Profile = ({ navigation, route, userStore }) => {
+  const { user } = userStore;
+  console.log(user);
   const familyMembers = useSelector((state) => state.familyMembers);
-  const [loading, setLoading] = useState(true);
   const [userData, setUserData] = useState(null);
 
   const updateUserData = (uid) => {
@@ -66,13 +68,6 @@ const Profile = ({ navigation, route }) => {
                 </Row>
 
                 <Row style={[styles.titleContainer]}>
-                  {/*  <Text
-                    style={
-                      user.lastName != "" ? styles.title : styles.titleEnglish
-                    }
-                  >
-                    {displayName(user)}
-                  </Text> */}
                   <FamilyListPicker
                     containerStyle={{
                       width: "100%",
@@ -129,11 +124,11 @@ const Profile = ({ navigation, route }) => {
                         },
                       }}
                     >
-                      {userData.email}
+                      {user.email}
                     </Text>
                   </Col>
                   <Col style={styles.infoContainer}>
-                    <Text style={styles.info}>{userData.phone}</Text>
+                    <Text style={styles.info}>{user.phone}</Text>
                   </Col>
                 </Row>
               </Grid>
@@ -179,7 +174,17 @@ const Profile = ({ navigation, route }) => {
   );
 };
 
-export default Profile;
+const mapStateToProps = (state) => {
+  return {
+    userStore: state.user,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  dispatch(watchUserInfoUpdate());
+  return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);
 
 const styles = StyleSheet.create({
   container: {
@@ -269,7 +274,6 @@ const styles = StyleSheet.create({
   },
   bottomMenuItemContainer: {
     height: ScreenHeight * 0.06,
-    /* backgroundColor: "lightgreen", */
   },
   bottomMenuItemText: {
     color: "#fff",
