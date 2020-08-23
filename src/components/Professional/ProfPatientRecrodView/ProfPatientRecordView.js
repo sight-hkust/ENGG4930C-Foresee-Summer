@@ -95,7 +95,7 @@ class ProfPatientRecordView extends Component {
                       <RoundButton
                         buttonStyle={{ backgroundColor: "#2D9CDB" }}
                         textStyle={{ color: "white" }}
-                        title={this.state.glassType ? "查看真實度數" : "查看調整度數"}
+                        title={this.state.glassType ? "調整度數" : "真實度數"}
                         onPress={() => this.setState({ glassType: 1 - this.state.glassType })}
                       />
                       <View style={styles.datePickerContainer}>
