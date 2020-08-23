@@ -1,9 +1,10 @@
-import { auth, database } from '../../config/config';
-import moment from 'moment';
-import * as firebase from 'firebase';
-import { nanoid } from 'nanoid/async/index.native';
-import { encryptData } from '../../utils/encryptData';
-require('firebase/functions');
+import { auth, database } from "../../config/config";
+import moment from "moment";
+import * as firebase from "firebase";
+import { nanoid } from "nanoid/async/index.native";
+import { encryptData } from "../../utils/encryptData";
+import { format } from "crypto-js";
+require("firebase/functions");
 
 const addEncryptDataTag = (object) => {
   return Object.assign(object, { dataEncrypted: true });
@@ -12,13 +13,13 @@ const addEncryptDataTag = (object) => {
 const writeUserData = ({ uid = null, values, isProfessional, registerPatient = false, patientUid = null, registerChild = false, childUid = null }) => {
   switch (true) {
     case registerPatient:
-      database.ref('professionals/' + uid + '/patients/' + patientUid).set({
+      database.ref("professionals/" + uid + "/patients/" + patientUid).set({
         uid: patientUid,
         inactive: true,
-        firstName: values.firstName || '',
-        lastName: values.lastName || '',
-        surName: values.surName || '',
-        givenName: values.givenName || '',
+        firstName: values.firstName || "",
+        lastName: values.lastName || "",
+        surName: values.surName || "",
+        givenName: values.givenName || "",
       });
       database.ref("users/" + patientUid).set(
         encryptData({
@@ -27,7 +28,7 @@ const writeUserData = ({ uid = null, values, isProfessional, registerPatient = f
           firstName: values.firstName,
           lastName: values.lastName,
           email: values.email,
-          birthday: moment(values.birthday).toJSON(),
+          birthday: moment(values.birthday).format("YYYY-MM-DD"),
           job: values.job,
           history: values.history,
           disease: values.disease,
@@ -46,13 +47,13 @@ const writeUserData = ({ uid = null, values, isProfessional, registerPatient = f
       }
       break;
     case registerChild:
-      database.ref('users/' + uid + '/familyMembers/' + childUid).set({
+      database.ref("users/" + uid + "/familyMembers/" + childUid).set({
         uid: childUid,
         inactive: true,
-        firstName: values.firstName || '',
-        lastName: values.lastName || '',
-        surName: values.surName || '',
-        givenName: values.givenName || '',
+        firstName: values.firstName || "",
+        lastName: values.lastName || "",
+        surName: values.surName || "",
+        givenName: values.givenName || "",
       });
 
       database.ref("users/" + childUid).set(
@@ -63,7 +64,7 @@ const writeUserData = ({ uid = null, values, isProfessional, registerPatient = f
           lastName: values.lastName || "",
           surName: values.surName || "",
           givenName: values.givenName || "",
-          birthday: moment(values.birthday).toJSON(),
+          birthday: moment(values.birthday).format("YYYY-MM-DD"),
           job: values.job,
           history: values.history,
           disease: values.disease,
@@ -84,7 +85,7 @@ const writeUserData = ({ uid = null, values, isProfessional, registerPatient = f
             lastName: values.lastName,
             givenName: values.givenName,
             surName: values.surName,
-            birthday: moment(values.birthday).toJSON(),
+            birthday: moment(values.birthday).format("YYYY-MM-DD"),
             records: {},
             dataEncrypted: true,
           })
@@ -114,7 +115,7 @@ const writeUserData = ({ uid = null, values, isProfessional, registerPatient = f
 
 export const registerChildAccount = async ({ values, registerChild, returnOnComplete }) => {
   let childUid = await nanoid();
-  childUid = 'ch-' + childUid;
+  childUid = "ch-" + childUid;
   writeUserData({ registerChild, values, childUid, uid: auth.currentUser.uid });
   returnOnComplete();
 };
@@ -145,9 +146,9 @@ export const createAccount = ({ values, navigation, isProfessional, setServerErr
       .then(function (userCreds) {
         const uid = userCreds.user.uid;
         if (userCreds) {
-          userCreds.user.updateProfile({ displayName: 'professional' });
+          userCreds.user.updateProfile({ displayName: "professional" });
         }
-        navigation.navigate('Tutorial');
+        navigation.navigate("Tutorial");
         writeUserData({ uid, values, navigation, isProfessional });
         returnOnComplete();
       })
@@ -160,9 +161,9 @@ export const createAccount = ({ values, navigation, isProfessional, setServerErr
       .then(function (userCreds) {
         const uid = userCreds.user.uid;
         if (userCreds) {
-          userCreds.user.updateProfile({ displayName: 'user' });
+          userCreds.user.updateProfile({ displayName: "user" });
         }
-        navigation.navigate('Tutorial');
+        navigation.navigate("Tutorial");
         writeUserData({ uid, values, navigation, isProfessional });
         returnOnComplete();
       })
