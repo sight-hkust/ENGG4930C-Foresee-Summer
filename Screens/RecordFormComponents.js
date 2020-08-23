@@ -50,11 +50,11 @@ export const RenderNormal = (props) => {
   const { handleChange, setFieldValue, setStatus, status } = props;
   return (
     <>
-      <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} isAdj={false} setStatus={setStatus} status={status} />
-      <CYLInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} isAdj={false} setStatus={setStatus} status={status} />
+      <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} glassType={0} setStatus={setStatus} status={status} />
+      <CYLInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} glassType={0} setStatus={setStatus} status={status} />
 
-      <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} isAdj={false} setStatus={setStatus} status={status} />
-      <CYLInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} isAdj={false} setStatus={setStatus} status={status} />
+      <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} glassType={0} setStatus={setStatus} status={status} />
+      <CYLInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} glassType={0} setStatus={setStatus} status={status} />
     </>
   );
 };
@@ -69,11 +69,11 @@ export const RenderCollapseAdj = (props) => {
       </TouchableOpacity>
       <Collapsible collapsed={isCollapse}>
         <View style={FormItemStyle.collpaseContainer}>
-          <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} isAdj={true} setStatus={setStatus} status={status} />
-          <CYLInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} isAdj={true} setStatus={setStatus} status={status} />
+          <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} glassType={1} setStatus={setStatus} status={status} />
+          <CYLInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={false} glassType={1} setStatus={setStatus} status={status} />
 
-          <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} isAdj={true} setStatus={setStatus} status={status} />
-          <CYLInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} isAdj={true} setStatus={setStatus} status={status} />
+          <SPHInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} glassType={1} setStatus={setStatus} status={status} />
+          <CYLInput handleChange={handleChange} setFieldValue={setFieldValue} isLeft={true} glassType={1} setStatus={setStatus} status={status} />
         </View>
       </Collapsible>
     </View>
@@ -162,14 +162,14 @@ export const RenderCollapseVA = (props) => {
 };
 
 export const SPHInput = (props) => {
-  const { setFieldValue, isLeft, isAdj, setStatus, status } = props;
+  const { setFieldValue, isLeft, glassType, setStatus, status } = props;
   const [sliderValue, setSliderValue] = useState(0);
   const [symbol, Togglesymbol] = useState(false); //true = positive = hyperopia
   const sliderArr = [0, 25, 50, 75, 100, 125, 150, 175, 200, 225, 250, 275, 300, 325, 350, 375, 300, 400, 425, 450, 475, 500, 525, 550, 575, 600, 625, 650, 675, 700, ">700"];
   const SliderHandler = () => {
     if (sliderValue != ">700") {
       //remove error
-      if (isAdj) {
+      if (glassType) {
         isLeft
           ? setStatus({ L_SPH_errors: status.L_SPH_errors, R_SPH_errors: status.R_SPH_errors, Adj_L_SPH_errors: "", Adj_R_SPH_errors: status.Adj_R_SPH_errors })
           : setStatus({ L_SPH_errors: status.L_SPH_errors, R_SPH_errors: status.R_SPH_errors, Adj_L_SPH_errors: status.Adj_L_SPH_errors, Adj_R_SPH_errors: "" });
@@ -184,7 +184,7 @@ export const SPHInput = (props) => {
       }
     } else {
       //==">700"
-      if (isAdj) {
+      if (glassType) {
         isLeft
           ? setStatus({ L_SPH_errors: status.L_SPH_errors, R_SPH_errors: status.R_SPH_errors, Adj_L_SPH_errors: "empty", Adj_R_SPH_errors: status.Adj_R_SPH_errors })
           : setStatus({ L_SPH_errors: status.L_SPH_errors, R_SPH_errors: status.R_SPH_errors, Adj_L_SPH_errors: status.Adj_L_SPH_errors, Adj_R_SPH_errors: "empty" });
@@ -198,7 +198,7 @@ export const SPHInput = (props) => {
     }
   };
   const TextinputHandler = (value) => {
-    if (isAdj) {
+    if (glassType) {
       if (value <= 700 || value % 25 != 0) {
         //issue error
         isLeft
@@ -226,12 +226,12 @@ export const SPHInput = (props) => {
   };
 
   const TooSmallError = () => {
-    if (isAdj) return isLeft ? status.Adj_L_SPH_errors == "error" : status.Adj_R_SPH_errors == "error";
+    if (glassType) return isLeft ? status.Adj_L_SPH_errors == "error" : status.Adj_R_SPH_errors == "error";
     else return isLeft ? status.L_SPH_errors == "error" : status.R_SPH_errors == "error";
   };
 
   const EmptyError = () => {
-    if (isAdj) return isLeft ? status.Adj_L_SPH_errors == "empty" : status.Adj_R_SPH_errors == "empty";
+    if (glassType) return isLeft ? status.Adj_L_SPH_errors == "empty" : status.Adj_R_SPH_errors == "empty";
     else return isLeft ? status.L_SPH_errors == "empty" : status.R_SPH_errors == "empty";
   };
 
@@ -239,15 +239,15 @@ export const SPHInput = (props) => {
     <View style={{ alignSelf: "center" }}>
       <Text style={FormItemStyle.questionText}>
         請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}
-        {isAdj ? "調整" : ""}球面度數(SPH)
+        {glassType ? "調整" : ""}球面度數(SPH)
       </Text>
       <View style={{ flexDirection: "row", paddingLeft: 10 }}>
         <TouchableOpacity
           style={{ flexDirection: "row", marginRight: 20 }}
           onPress={() => {
             Togglesymbol(false);
-            if (isLeft) setFieldValue(isAdj ? "Adj_L_symbol" : "L_symbol", false, false);
-            else setFieldValue(isAdj ? "Adj_R_symbol" : "R_symbol", false, false);
+            if (isLeft) setFieldValue(glassType ? "Adj_L_symbol" : "L_symbol", false, false);
+            else setFieldValue(glassType ? "Adj_R_symbol" : "R_symbol", false, false);
           }}
         >
           <View style={!symbol ? FormItemStyle.selectedRadioButton : FormItemStyle.unselectedRadioButton} />
@@ -258,8 +258,8 @@ export const SPHInput = (props) => {
           style={{ flexDirection: "row" }}
           onPress={() => {
             Togglesymbol(true);
-            if (isLeft) setFieldValue(isAdj ? "Adj_L_symbol" : "L_symbol", true, false);
-            else setFieldValue(isAdj ? "Adj_R_symbol" : "R_symbol", true, false);
+            if (isLeft) setFieldValue(glassType ? "Adj_L_symbol" : "L_symbol", true, false);
+            else setFieldValue(glassType ? "Adj_R_symbol" : "R_symbol", true, false);
           }}
         >
           <View style={symbol ? FormItemStyle.selectedRadioButton : FormItemStyle.unselectedRadioButton} />
@@ -299,7 +299,7 @@ export const SPHInput = (props) => {
 };
 
 export const CYLInput = (props) => {
-  const { setFieldValue, isLeft, isAdj, handleChange, setStatus, status } = props;
+  const { setFieldValue, isLeft, glassType, handleChange, setStatus, status } = props;
 
   const [isable, setIsable] = useState(false);
   const [sliderValue, setSliderValue] = useState(0);
@@ -307,7 +307,7 @@ export const CYLInput = (props) => {
   const SliderHandler = () => {
     if (sliderValue != ">700") {
       //remove error
-      if (isAdj) {
+      if (glassType) {
         isLeft
           ? setStatus({ L_CYL_errors: status.L_CYL_errors, R_CYL_errors: status.R_CYL_errors, Adj_L_CYL_errors: "", Adj_R_CYL_errors: status.Adj_R_CYL_errors })
           : setStatus({ L_CYL_errors: status.L_CYL_errors, R_CYL_errors: status.R_CYL_errors, Adj_L_CYL_errors: status.Adj_L_CYL_errors, Adj_R_CYL_errors: "" });
@@ -321,7 +321,7 @@ export const CYLInput = (props) => {
         setIsable(sliderValue > 0);
       }
     } else {
-      if (isAdj) {
+      if (glassType) {
         //==">700"
         isLeft
           ? setStatus({ L_CYL_errors: status.L_CYL_errors, R_CYL_errors: status.R_CYL_errors, Adj_L_CYL_errors: "empty", Adj_R_CYL_errors: status.Adj_R_CYL_errors })
@@ -337,7 +337,7 @@ export const CYLInput = (props) => {
   };
 
   const TextinputHandler = (value) => {
-    if (isAdj) {
+    if (glassType) {
       if (value <= 700 || value % 25 != 0) {
         //issue error
         isLeft
@@ -365,12 +365,12 @@ export const CYLInput = (props) => {
   };
 
   const TooSmallError = () => {
-    if (isAdj) return isLeft ? status.Adj_L_CYL_errors == "error" : status.Adj_R_CYL_errors == "error";
+    if (glassType) return isLeft ? status.Adj_L_CYL_errors == "error" : status.Adj_R_CYL_errors == "error";
     else return isLeft ? status.L_CYL_errors == "error" : status.R_CYL_errors == "error";
   };
 
   const EmptyError = () => {
-    if (isAdj) return isLeft ? status.Adj_L_CYL_errors == "empty" : status.Adj_R_CYL_errors == "empty";
+    if (glassType) return isLeft ? status.Adj_L_CYL_errors == "empty" : status.Adj_R_CYL_errors == "empty";
     else return isLeft ? status.L_CYL_errors == "empty" : status.R_CYL_errors == "empty";
   };
 
@@ -378,7 +378,7 @@ export const CYLInput = (props) => {
     <View style={{ alignSelf: "center" }}>
       <Text style={FormItemStyle.questionText}>
         請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}
-        {isAdj ? "調整" : ""}散光度數(CYL)
+        {glassType ? "調整" : ""}散光度數(CYL)
       </Text>
 
       <View>
@@ -403,7 +403,7 @@ export const CYLInput = (props) => {
       {sliderValue == ">700" && (
         <View style={{ flexDirection: "row", justifyContent: "space-around", backgroundColor: "rgba(0,0,0,0.2)", borderRadius: 5, paddingVertical: 8 }}>
           <Text style={{ fontSize: 18, color: "white", paddingLeft: 5 }}>請輸入大於700度的度數: </Text>
-          {isAdj ? (
+          {glassType ? (
             <TextInput onChangeText={TextinputHandler} keyboardType="numeric" style={FormItemStyle.answerInputBox} />
           ) : (
             <TextInput onChangeText={TextinputHandler} keyboardType="numeric" style={FormItemStyle.answerInputBox} />
@@ -412,16 +412,16 @@ export const CYLInput = (props) => {
       )}
       {status != undefined && TooSmallError() && <Text style={FormItemStyle.errortext}>應大於700度並以00, 25, 50或75作尾</Text>}
       {status != undefined && EmptyError() && <Text style={FormItemStyle.errortext}>此項必填</Text>}
-      <View>{isable && <AxisInputB setFieldValue={setFieldValue} isLeft={isLeft} isAdj={isAdj} />}</View>
+      <View>{isable && <AxisInputB setFieldValue={setFieldValue} isLeft={isLeft} glassType={glassType} />}</View>
     </View>
   );
 };
 
 export const AxisInputB = (props) => {
-  const { setFieldValue, isLeft, isAdj } = props;
+  const { setFieldValue, isLeft, glassType } = props;
   const [sliderValue, setSliderValue] = useState(0);
   const SliderHandler = () => {
-    if (isAdj) setFieldValue(isLeft ? "Adj_L_Axis" : "Adj_R_Axis", sliderValue, false);
+    if (glassType) setFieldValue(isLeft ? "Adj_L_Axis" : "Adj_R_Axis", sliderValue, false);
     else setFieldValue(isLeft ? "L_Axis" : "R_Axis", sliderValue, false);
   };
 
@@ -429,7 +429,7 @@ export const AxisInputB = (props) => {
     <View style={{ alignSelf: "center" }}>
       <Text style={FormItemStyle.questionText}>
         請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}
-        {isAdj ? "調整" : ""}散光軸度(Axis)
+        {glassType ? "調整" : ""}散光軸度(Axis)
       </Text>
 
       <View>
