@@ -7,7 +7,7 @@ import moment from "moment";
 import { database } from "../src/config/config";
 import { Button } from "react-native-elements";
 
-import { DateSelect, RenderNormal, RenderCollapseAdj, RemarksInput, DiseasesInput, RenderCollapseVA, RenderCollapsePD } from "../Screens/RecordFormComponents";
+import { DateSelect, RenderNormal, RenderCollapseAdj, RemarksInput, DiseasesInput, RenderCollapseVA, RenderCollapsePD } from "./RecordFormComponents";
 
 import MenuScreen from "../Utils/MenuScreen";
 
@@ -52,34 +52,34 @@ export default class Form extends Component {
           <Formik
             initialValues={{
               date: moment().format("YYYY-MM-DD HH:mm"),
-              L_SPH: "0",
+              L_SPH: 0,
               L_symbol: false, //true: +, false: -
-              R_SPH: "0",
+              R_SPH: 0,
               R_symbol: false,
-              L_Myopia: "0",
-              R_Myopia: "0",
-              L_Hyperopia: "0",
-              R_Hyperopia: "0",
+              L_Myopia: 0,
+              R_Myopia: 0,
+              L_Hyperopia: 0,
+              R_Hyperopia: 0,
 
-              L_CYL: "0",
-              R_CYL: "0",
-              L_Axis: "0",
-              R_Axis: "0",
+              L_CYL: 0,
+              R_CYL: 0,
+              L_Axis: 0,
+              R_Axis: 0,
 
-              Adj_L_SPH: "0",
-              Adj_R_SPH: "0",
+              Adj_L_SPH: 0,
+              Adj_R_SPH: 0,
               Adj_L_symbol: false,
               Adj_R_symbol: false,
-              Adj_L_CYL: "0",
-              Adj_R_CYL: "0",
-              Adj_L_Axis: "0",
-              Adj_R_Axis: "0",
+              Adj_L_CYL: 0,
+              Adj_R_CYL: 0,
+              Adj_L_Axis: 0,
+              Adj_R_Axis: 0,
 
               L_VA: "20/20",
               R_VA: "20/20",
 
-              L_PD: "0",
-              R_PD: "0",
+              L_PD: 0,
+              R_PD: 0,
               remarks: "",
               disease: [],
             }}

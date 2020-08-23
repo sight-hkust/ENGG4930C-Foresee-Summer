@@ -4,6 +4,12 @@ import { Col, Row, Grid } from "react-native-easy-grid";
 
 export default function DisplayRecords(props) {
   const { curRecord, glassType } = props;
+
+  let Left_Myopia = 0,
+    Right_Myopia = 0,
+    Left_Hyperopia = 0,
+    Right_Hyperopia = 0;
+
   const calSPH = (isLeft) => {
     if (isLeft) {
       if (glassType) {
