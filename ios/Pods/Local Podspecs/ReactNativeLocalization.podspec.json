@@ -4,9 +4,13 @@
   "summary": "Simple module to localize the ReactNative interface",
   "homepage": "https://github.com/stefalda/ReactNativeLocalization",
   "license": "MIT",
-  "authors": "Stefano Falda <stefano.falda@gmail.com> (http://www.babisoft.com)",
+  "authors": {
+    "name": "Stefano Falda",
+    "email": "stefano.falda@gmail.com",
+    "url": "http://www.babisoft.com"
+  },
   "source": {
-    "git": "https://github.com/stefalda/ReactNativeLocalization.git",
+    "git": "git+https://github.com/stefalda/ReactNativeLocalization.git",
     "tag": "v2.1.6"
   },
   "platforms": {
