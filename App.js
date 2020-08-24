@@ -50,6 +50,7 @@ import { EditUserInfo } from "./src/components/Profile/EditUserInfo";
 import { Surface } from "react-native-paper";
 import { View } from "react-native-animatable";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import UpdateProfileScreen from "./Screens/UpdateProfileScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -122,7 +123,6 @@ function FaqScreen({ navigation, route }) {
 }
 
 function ProfileScreen({ navigation, route }) {
-  console.log("here", route.params.type);
   return (
     <Stack.Navigator screenOptions={headerConfig}>
       <Stack.Screen name="ProfileTabMain" component={Profile} options={{ title: "我的檔案" }} initialParams={{ type: route.params.type }} />
@@ -144,11 +144,11 @@ function ProfileScreen({ navigation, route }) {
         }}
       />
       <Stack.Screen
-        name="Edit User Info"
-        component={EditUserInfo}
+        name="UpdateProfile"
+        component={UpdateProfileScreen}
         options={{
           headerTransparent: true,
-          title: "個人資料",
+          title: "更新個人資料",
           headerLeft: () => (
             <BackButton
               onPress={() => {
