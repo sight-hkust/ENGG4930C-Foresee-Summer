@@ -63,7 +63,7 @@ const Profile = ({ navigation, route, userStore }) => {
                   </View>
                 </Row>
                 <Row style={styles.qrCodeIconContainer}>
-                  <Icon type="antdesign" name="qrcode" size={40} containerStyle={{ marginRight: 15, marginTop: 10 }} onPress={() => navigation.navigate("QrCode")} />
+                  <Icon type="antdesign" name="qrcode" size={40} containerStyle={{ marginRight: 15, marginTop: 10 }} onPress={() => navigation.navigate("QrCode", { id: userData.uid })} />
                 </Row>
 
                 <Row style={[styles.titleContainer]}>
