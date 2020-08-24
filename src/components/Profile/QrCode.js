@@ -9,7 +9,7 @@ import { RoundButton } from "../../../Utils/RoundButton";
 import MenuScreen from "../../../Utils/MenuScreen";
 
 export default function QrCode({ navigation, route }) {
-  console.log("qr code route: ", route.params.id);
+  // console.log("qr code route: ", route.params.id);
   const handleSignOut = () => {
     auth.signOut();
   };

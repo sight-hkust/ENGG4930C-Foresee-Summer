@@ -75,7 +75,7 @@ export const QRCodeScannerScreen = ({ navigation, route }) => {
 
     const hasSpecialCharacterOrSpace = regEx.test(code);
     const isChildAccount = child_regEx.test(code);
-    console.log("id", data);
+    //console.log("id", data);
     if (hasSpecialCharacterOrSpace && !isChildAccount) {
       setDoesPatientFound(false);
       showModalMessage("QR Code格式錯誤");
