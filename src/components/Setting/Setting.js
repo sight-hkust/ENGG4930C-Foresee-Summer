@@ -76,14 +76,14 @@ const SettingContent = ({ route, navigation }) => {
     <Collapsible collapsed={selectedLabel != 'permission'}>
       <PermissionSetting />
     </Collapsible> */}
-        <ListItem
+        {/* <ListItem
           Component={TouchableOpacity}
           title={"條款及細則"}
           containerStyle={styles.listItem}
           titleStyle={{ fontSize: 20, color: "white" }}
           chevron={{ size: 30 }}
           onPress={() => setSelectedLabel(selectedLabel == "permission" ? "" : "permission")}
-        />
+        /> */}
         <ListItem
           Component={TouchableOpacity}
           title={"私隱政策"}
