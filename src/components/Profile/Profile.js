@@ -123,18 +123,32 @@ const Profile = ({ navigation, route, userStore }) => {
                         },
                       }}
                     >
-                      {user.email}
+                      {user["dataEncrypted"] ? decryptData(user).email : user.email}
                     </Text>
                   </Col>
                   <Col style={styles.infoContainer}>
-                    <Text style={styles.info}>{user.phone}</Text>
+                    <Text style={styles.info}>{user["dataEncrypted"] ? decryptData(user).phone : user.phone}</Text>
                   </Col>
                 </Row>
               </Grid>
             </View>
             <View style={styles.bottomMenu}>
-              <Button title="詳細設定" type="clear" containerStyle={styles.bottomMenuItemContainer} titleStyle={styles.bottomMenuItemText} TouchableComponent={TouchableOpacity} onPress={() => navigation.navigate("SettingScreen")} />
-              <Button title="程式教學" type="clear" containerStyle={styles.bottomMenuItemContainer} titleStyle={styles.bottomMenuItemText} TouchableComponent={TouchableOpacity} onPress={() => navigation.navigate("Tutorial")} />
+              <Button
+                title="詳細設定"
+                type="clear"
+                containerStyle={styles.bottomMenuItemContainer}
+                titleStyle={styles.bottomMenuItemText}
+                TouchableComponent={TouchableOpacity}
+                onPress={() => navigation.navigate("SettingScreen")}
+              />
+              <Button
+                title="程式教學"
+                type="clear"
+                containerStyle={styles.bottomMenuItemContainer}
+                titleStyle={styles.bottomMenuItemText}
+                TouchableComponent={TouchableOpacity}
+                onPress={() => navigation.navigate("Tutorial")}
+              />
               <Button
                 title="創建子帳戶"
                 type="clear"
