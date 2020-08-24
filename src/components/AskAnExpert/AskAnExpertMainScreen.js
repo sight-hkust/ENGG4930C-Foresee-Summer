@@ -58,16 +58,7 @@ const AskAnExpertMainScreen = ({ route, navigation, questionListStore }) => {
               <LinearGradientBackground style={{ height: ScreenHeight }} colors={["#1772A6", "#A377FF"]} start={[0, 1]} end={[1, 0]} locations={[0.12, 0.92]}></LinearGradientBackground>
             </View>
             <View style={{ width: ScreenWidth, marginTop: hp("7.5%"), zIndex: 3, height: hp("27%") }}>
-              <Text
-                style={{
-                  color: "white",
-                  fontWeight: "bold",
-                  fontSize: hp("3%"),
-                  marginLeft: ScreenWidth * 0.05 + 10,
-                }}
-              >
-                熱門
-              </Text>
+              <Text style={{ color: "white", fontWeight: "bold", fontSize: hp("3%"), marginLeft: ScreenWidth * 0.05 + 10 }}>熱門</Text>
               {hotQuestionlist && (
                 <FlatList
                   data={hotQuestionlist.slice(0, 4)}
@@ -84,13 +75,7 @@ const AskAnExpertMainScreen = ({ route, navigation, questionListStore }) => {
             </View>
 
             <View style={styles.background}>
-              <Grid
-                style={{
-                  bottom: ScreenHeight * 0.5,
-                  position: "absolute",
-                  width: ScreenWidth,
-                }}
-              >
+              <Grid style={{ bottom: ScreenHeight * 0.5, position: "absolute", width: ScreenWidth }}>
                 <Col style={{ paddingLeft: ScreenWidth * 0.1 }}>
                   <Button
                     title="最新"
@@ -104,7 +89,7 @@ const AskAnExpertMainScreen = ({ route, navigation, questionListStore }) => {
                 </Col>
                 <Col style={{ paddingLeft: ScreenWidth * 0.1, zIndex: 3 }}>
                   <Button
-                    title=" 發問"
+                    title="發問"
                     icon={<Icon size={wp("7%")} name="edit" type="ionicons" color="#1772A6" />}
                     type="clear"
                     onPress={() => navigation.navigate("PostQuestion")}
@@ -140,12 +125,7 @@ export const HotQuestionCard = (props) => {
   };
 
   return (
-    <View
-      style={{
-        ...styles.shadow,
-        ...{ paddingHorizontal: wp("2.3%") },
-      }}
-    >
+    <View style={{ ...styles.shadow, ...{ paddingHorizontal: wp("2.3%") } }}>
       <Surface style={{ ...{ elevation: 12, borderRadius: 31 } }}>
         <View style={styles.hotTopicCard}>
           <TouchableOpacity

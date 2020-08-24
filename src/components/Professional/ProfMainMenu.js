@@ -1,11 +1,5 @@
 import React, { useState, useEffect } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  ScrollView,
-  ActivityIndicator,
-} from "react-native";
+import { StyleSheet, Text, View, ScrollView, ActivityIndicator } from "react-native";
 import { Icon, ListItem, SearchBar } from "react-native-elements";
 
 import { ScreenWidth, ScreenHeight } from "../../../constant/Constant";
@@ -22,7 +16,8 @@ import { displayName } from "../../utils/displayName";
 function SearchPatient(key, referenceList) {
   const targetList = [];
   referenceList.map((u, i) => {
-    let name = u.lastName + u.firstName;
+    //let name = u.lastName + u.firstName;
+    let name = displayName(u);
     if (name != undefined && name.includes(key)) {
       targetList.push(u);
     }
@@ -40,11 +35,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
   const [showList, setShowList] = useState([]);
 
   useEffect(() => {
-    if (
-      patientList !== null &&
-      patientList !== undefined &&
-      searchContent === ""
-    ) {
+    if (patientList !== null && patientList !== undefined && searchContent === "") {
       setIsLoading(false);
       setShowList(patientList);
     }
@@ -60,16 +51,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
           </View>
         ) : (
           <View>
-            <View
-              style={{
-                marginTop: ScreenHeight * 0.078,
-                height: ScreenHeight * 0.078,
-                width: ScreenWidth,
-                flexDirection: "row",
-                justifyContent: "center",
-                alignItems: "center",
-              }}
-            >
+            <View style={{ marginTop: ScreenHeight * 0.078, height: ScreenHeight * 0.078, width: ScreenWidth, flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
               <SearchBar
                 placeholder="尋找病人"
                 onChangeText={(e) => {
@@ -78,41 +60,19 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                   setShowList(SearchPatient(e, patientList));
                 }}
                 value={searchContent}
+                inputStyle={{ color: "black" }}
                 round
                 lightTheme
                 placeholderTextColor="white"
-                leftIconContainerStyle={{ color: "white" }}
-                containerStyle={{
-                  backgroundColor: "transparent",
-                  width: ScreenWidth * 0.8,
-                  borderBottomColor: "transparent",
-                  borderTopColor: "transparent",
-                }}
+                searchIcon={{ color: "white" }}
+                containerStyle={{ backgroundColor: "transparent", width: ScreenWidth * 0.8, borderBottomColor: "transparent", borderTopColor: "transparent" }}
                 inputContainerStyle={{ backgroundColor: "#A6ACE9", height: 35 }}
               />
-              <Icon
-                name="qrcode-scan"
-                type="material-community"
-                color="white"
-                size={30}
-                onPress={() => navigation.navigate("QR Scan")}
-              />
+              <Icon name="qrcode-scan" type="material-community" color="white" size={30} onPress={() => navigation.navigate("QR Scan")} />
             </View>
-            <ScrollView
-              style={{
-                height: ScreenHeight * 0.6,
-                width: ScreenWidth * 0.9,
-                backgroundColor: "transparent",
-                alignSelf: "center",
-              }}
-            >
+            <ScrollView style={{ height: ScreenHeight * 0.6, width: ScreenWidth * 0.9, backgroundColor: "transparent", alignSelf: "center" }}>
               {showList.length == 0 ? (
-                <Text
-                  style={{ textAlign: "center", color: "white", fontSize: 30 }}
-                >
-                  {" "}
-                  找不到資料{" "}
-                </Text>
+                <Text style={{ textAlign: "center", color: "white", fontSize: 30 }}> 找不到資料 </Text>
               ) : (
                 showList.map((patient, index) => {
                   const key = patient.uid;
@@ -124,52 +84,26 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                         rightIcon={
                           <>
                             <Icon
-                              size={25}
-                              name="search"
-                              type="feather"
-                              color="#88D3E3"
-                              containerStyle={{
-                                backgroundColor: "white",
-                                borderRadius: 5,
-                                padding: 3,
-                                marginRight: 5,
-                              }}
-                              onPress={() => {
-                                navigation.navigate("Patient Record", {
-                                  key: key,
-                                });
-                              }}
-                            />
-                            <Icon
                               key={index}
                               size={25}
                               name="plus"
                               type="feather"
                               color="#80A4EB"
-                              containerStyle={{
-                                backgroundColor: "white",
-                                borderRadius: 5,
-                                padding: 3,
-                              }}
+                              containerStyle={{ backgroundColor: "white", borderRadius: 5, paddingLeft: 10, paddingRight: 10, paddingTop: 3, paddingBottom: 3 }}
                               onPress={() => {
                                 navigation.navigate("AddRecordScreen", {
+                                  //will navigate to ProfAddRecord
                                   isProfessional: true,
                                   professional_id: auth.currentUser.uid,
                                   patient_id: key,
-                                  inactive: inactive,
+                                  //inactive: inactive,
                                 });
                               }}
                             />
                           </>
                         }
-                        containerStyle={{
-                          backgroundColor: "transparent",
-                        }}
-                        titleStyle={{
-                          color: "white",
-                          fontSize: 20,
-                          fontWeight: "bold",
-                        }}
+                        containerStyle={{ backgroundColor: "transparent" }}
+                        titleStyle={{ color: "white", fontSize: 20, fontWeight: "bold" }}
                         subtitleStyle={{ color: "white", fontSize: 13 }}
                         onPress={() => {
                           navigation.navigate("Patient Record", {
@@ -177,16 +111,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                           });
                         }}
                       />
-                      <View
-                        style={{
-                          height: 1,
-                          width: ScreenWidth * 0.825,
-                          borderColor: "#E1EDFF",
-                          borderWidth: 1,
-                          alignSelf: "center",
-                          borderRadius: 10,
-                        }}
-                      />
+                      <View style={{ height: 1, width: ScreenWidth * 0.825, borderColor: "#E1EDFF", borderWidth: 1, alignSelf: "center", borderRadius: 10 }} />
                     </View>
                   );
                 })

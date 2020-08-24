@@ -3,20 +3,8 @@ import { Permissions } from "react-native-unimodules";
 import Modal from "react-native-modal";
 import { Camera } from "expo-camera";
 import { useIsFocused } from "@react-navigation/native";
-import {
-  Text,
-  View,
-  StyleSheet,
-  SafeAreaView,
-  Animated,
-  Button,
-} from "react-native";
-import {
-  FontScale,
-  Scale,
-  ScreenWidth,
-  ScreenHeight,
-} from "../../../constant/Constant";
+import { Text, View, StyleSheet, SafeAreaView, Animated, Button } from "react-native";
+import { FontScale, Scale, ScreenWidth, ScreenHeight } from "../../../constant/Constant";
 import { RoundButton } from "../../../Utils/RoundButton";
 import { database, auth } from "../../config/config";
 
@@ -24,9 +12,7 @@ export const QRCodeScannerScreen = ({ navigation, route }) => {
   const [hasCameraPermission, setCameraPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [animationLineHeight, setAnimationLineHeight] = useState(0);
-  const [focusLineAnimation, setFocusLineAnimation] = useState(
-    new Animated.Value(0)
-  );
+  const [focusLineAnimation, setFocusLineAnimation] = useState(new Animated.Value(0));
   const [isModalVisible, setModalVisibility] = useState(false);
   const [doesPatientFound, setDoesPatientFound] = useState(false);
   const [modalMessage, setModalMessage] = useState("");
@@ -97,14 +83,13 @@ export const QRCodeScannerScreen = ({ navigation, route }) => {
           if (snap.child(code).exists()) {
             const patient = snap.child(code).val();
             database
-              .ref(
-                "/professionals/" + auth.currentUser.uid + "/patients/" + code
-              )
+              .ref("/professionals/" + auth.currentUser.uid + "/patients/" + code)
               .set({
                 firstName: patient.firstName,
                 lastName: patient.lastName,
                 phone: patient.phone,
                 uid: code,
+                birthday: patient.birthday,
                 activeAccount: true,
               })
               .then(() => {
@@ -127,20 +112,11 @@ export const QRCodeScannerScreen = ({ navigation, route }) => {
         </View>
       ) : (
         <View style={StyleSheet.absoluteFillObject}>
-          <Camera
-            onBarCodeScanned={scanned ? undefined : handleQRCodeScanned}
-            style={StyleSheet.absoluteFillObject}
-            ratio="16:9"
-          />
+          <Camera onBarCodeScanned={scanned ? undefined : handleQRCodeScanned} style={StyleSheet.absoluteFillObject} ratio="16:9" />
           <View style={styles.unfocusedContainer} />
           <View style={styles.middleContainer}>
             <View style={styles.unfocusedContainer} />
-            <View
-              onLayout={(e) =>
-                setAnimationLineHeight(e.nativeEvent.layout.height)
-              }
-              style={styles.focusedContainer}
-            >
+            <View onLayout={(e) => setAnimationLineHeight(e.nativeEvent.layout.height)} style={styles.focusedContainer}>
               {!scanned && (
                 <>
                   <Animated.View
@@ -164,15 +140,8 @@ export const QRCodeScannerScreen = ({ navigation, route }) => {
             <View style={styles.unfocusedContainer} />
           </View>
           <View style={[styles.unfocusedContainer, { flex: 2 }]}>
-            <Text style={styles.instruction}>
-              {"請掃描病人\n帳戶上的QR Code"}
-            </Text>
-            <RoundButton
-              onPress={() => navigation.goBack()}
-              containerStyle={{ flex: 2 }}
-              buttonStyle={styles.button}
-              title={"返回"}
-            />
+            <Text style={styles.instruction}>{"請掃描病人\n帳戶上的QR Code"}</Text>
+            <RoundButton onPress={() => navigation.goBack()} containerStyle={{ flex: 2 }} buttonStyle={styles.button} title={"返回"} />
           </View>
         </View>
       )}

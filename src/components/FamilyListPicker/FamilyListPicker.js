@@ -1,33 +1,16 @@
 import React, { useState, useEffect } from "react";
-import {
-  Text,
-  FlatList,
-  TouchableOpacity,
-  View,
-  StyleSheet,
-} from "react-native";
+import { Text, FlatList, TouchableOpacity, View, StyleSheet } from "react-native";
 import { Portal, Modal, Provider } from "react-native-paper";
 import { ScreenWidth, ScreenHeight } from "../../../constant/Constant";
 import { connect } from "react-redux";
 import { watchUserInfoUpdate } from "../../reducers/user";
-import {
-  watchFamilyMembersUpdate,
-  updateFamilyMembers,
-} from "../../reducers/familyMembers";
+import { watchFamilyMembersUpdate, updateFamilyMembers } from "../../reducers/familyMembers";
 import { displayName } from "../../utils/displayName";
 import { Icon } from "react-native-elements";
 
-const FamilyListPicker = ({
-  containerStyle,
-  textStyle,
-  onSelectionUpdate,
-  userStore,
-  familyMembers,
-}) => {
+const FamilyListPicker = ({ containerStyle, textStyle, onSelectionUpdate, userStore, familyMembers }) => {
   const { user } = userStore;
-  const [isFamilyListModalVisible, setFamilyListModalVisibility] = useState(
-    false
-  );
+  const [isFamilyListModalVisible, setFamilyListModalVisibility] = useState(false);
   const [selectedFamilyMember, setSelectedFamilyMember] = useState(null);
 
   /* useEffect(() => {
@@ -66,38 +49,21 @@ const FamilyListPicker = ({
       >
         {selectedFamilyMember && (
           <>
-            <Text
-              style={[
-                selectedFamilyMember.lastName != ""
-                  ? FamilyListPickerStyle.userNameChinese
-                  : FamilyListPickerStyle.userNameEnglish,
-                textStyle,
-              ]}
-            >
-              {displayName(selectedFamilyMember)}
-            </Text>
+            <Text style={[selectedFamilyMember.lastName != "" ? FamilyListPickerStyle.userNameChinese : FamilyListPickerStyle.userNameEnglish, textStyle]}>{displayName(selectedFamilyMember)}</Text>
             <View
               style={{
                 marginLeft: ScreenWidth * 0.02,
                 justifyContent: "center",
               }}
             >
-              <Icon
-                name="caretdown"
-                type="antdesign"
-                size={ScreenWidth * 0.05}
-                color={textStyle ? textStyle.color : "#FFFFFF"}
-              />
+              <Icon name="caretdown" type="antdesign" size={ScreenWidth * 0.05} color={textStyle ? textStyle.color : "#FFFFFF"} />
             </View>
           </>
         )}
       </TouchableOpacity>
 
       <Portal>
-        <Modal
-          visible={isFamilyListModalVisible}
-          onDismiss={_hideFamilyListModal}
-        >
+        <Modal visible={isFamilyListModalVisible} onDismiss={_hideFamilyListModal}>
           <View
             style={{
               backgroundColor: "white",
@@ -121,9 +87,7 @@ const FamilyListPicker = ({
                         paddingVertical: ScreenHeight * 0.02,
                       }}
                     >
-                      <Text style={{ fontSize: 20, textAlign: "center" }}>
-                        {displayName(item)}
-                      </Text>
+                      <Text style={{ fontSize: 20, textAlign: "center" }}>{displayName(item)}</Text>
                     </View>
                   </TouchableOpacity>
                 );

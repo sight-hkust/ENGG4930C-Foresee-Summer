@@ -103,6 +103,7 @@ const writeUserData = ({ uid = null, values, isProfessional, registerPatient = f
               tel_code: values.tel_country_code,
               phone: values.tel_number,
               role: values.role,
+              part: values.part,
               dataEncrypted: true,
             })
           )

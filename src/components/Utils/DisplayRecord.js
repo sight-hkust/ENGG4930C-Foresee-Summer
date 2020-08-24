@@ -1,93 +1,99 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { Col, Row, Grid } from 'react-native-easy-grid';
+import React from "react";
+import { StyleSheet, Text, View } from "react-native";
+import { Col, Row, Grid } from "react-native-easy-grid";
 
 export default function DisplayRecords(props) {
-  const { curRecord, isAdj } = props;
+  const { curRecord, glassType } = props;
+
+  let Left_Myopia = 0,
+    Right_Myopia = 0,
+    Left_Hyperopia = 0,
+    Right_Hyperopia = 0;
+
   const calSPH = (isLeft) => {
     if (isLeft) {
-      if (isAdj) {
+      if (glassType) {
         if (curRecord.Adj_L_Myopia != 0) {
           //myopia, add - sign
           var num = parseFloat(curRecord.Adj_L_Myopia) / 100;
-          return '-' + num.toFixed(2);
+          return "-" + num.toFixed(2);
         } else if (curRecord.Adj_L_Hyperopia != 0) {
           //hyperopia, add + sign
           var num = parseFloat(curRecord.Adj_L_Hyperopia) / 100;
-          return '+' + num.toFixed(2);
-        } else return '0.00';
+          return "+" + num.toFixed(2);
+        } else return "0.00";
       } else {
         if (curRecord.L_Myopia != 0) {
           //myopia, add - sign
           var num = parseFloat(curRecord.L_Myopia) / 100;
-          return '-' + num.toFixed(2);
+          return "-" + num.toFixed(2);
         } else if (curRecord.L_Hyperopia != 0) {
           //hyperopia, add + sign
           var num = parseFloat(curRecord.L_Hyperopia) / 100;
-          return '+' + num.toFixed(2);
-        } else return '0.00';
+          return "+" + num.toFixed(2);
+        } else return "0.00";
       }
     } else {
-      if (isAdj) {
+      if (glassType) {
         if (curRecord.Adj_R_Myopia != 0) {
           //myopia, add - sign
           var num = parseFloat(curRecord.Adj_R_Myopia) / 100;
-          return '-' + num.toFixed(2);
+          return "-" + num.toFixed(2);
         } else if (curRecord.Adj_R_Hyperopia != 0) {
           //hyperopia, add + sign
           var num = parseFloat(curRecord.Adj_R_Hyperopia) / 100;
-          return '+' + num.toFixed(2);
-        } else return '0.00';
+          return "+" + num.toFixed(2);
+        } else return "0.00";
       } else {
         if (curRecord.R_Myopia != 0) {
           //myopia, add - sign
           var num = parseFloat(curRecord.R_Myopia) / 100;
-          return '-' + num.toFixed(2);
+          return "-" + num.toFixed(2);
         } else if (curRecord.R_Hyperopia != 0) {
           //hyperopia, add + sign
           var num = parseFloat(curRecord.R_Hyperopia) / 100;
-          return '+' + num.toFixed(2);
-        } else return '0.00';
+          return "+" + num.toFixed(2);
+        } else return "0.00";
       }
     }
   };
 
   const calCYL = (isLeft) => {
-    if (isAdj) {
+    if (glassType) {
       if (isLeft && curRecord.Adj_L_CYL != 0) {
         var num = parseFloat(curRecord.Adj_L_CYL) / 100;
-        return '-' + num.toFixed(2);
+        return "-" + num.toFixed(2);
       } else if (!isLeft && curRecord.Adj_R_CYL != 0) {
         var num = parseFloat(curRecord.Adj_R_CYL) / 100;
-        return '-' + num.toFixed(2);
-      } else return '0.00';
+        return "-" + num.toFixed(2);
+      } else return "0.00";
     } else {
       if (isLeft && curRecord.L_CYL != 0) {
         var num = parseFloat(curRecord.L_CYL) / 100;
-        return '-' + num.toFixed(2);
+        return "-" + num.toFixed(2);
       } else if (!isLeft && curRecord.R_CYL != 0) {
         var num = parseFloat(curRecord.R_CYL) / 100;
-        return '-' + num.toFixed(2);
-      } else return '0.00';
+        return "-" + num.toFixed(2);
+      } else return "0.00";
     }
   };
 
   const calAxis = (isLeft) => {
-    if (isAdj) {
+    if (glassType) {
       if (isLeft) {
-        if (curRecord.Adj_L_CYL != 0 && curRecord.Adj_L_CYL != ' ') return curRecord.Adj_L_Axis;
-        else return 'NA';
+        if (curRecord.Adj_L_CYL != 0 && curRecord.Adj_L_CYL != " ") return curRecord.Adj_L_Axis;
+        else return "NA";
       } else {
-        if (curRecord.Adj_R_CYL != 0 && curRecord.Adj_R_CYL != ' ') return curRecord.Adj_R_Axis;
-        else return 'NA';
+        if (curRecord.Adj_R_CYL != 0 && curRecord.Adj_R_CYL != " ") return curRecord.Adj_R_Axis;
+        else return "NA";
       }
     } else {
       if (isLeft) {
-        if (curRecord.L_CYL != 0 && curRecord.L_CYL != ' ') return curRecord.L_Axis;
-        else return 'NA';
+        if (curRecord.L_CYL != 0 && curRecord.L_CYL != " ") return curRecord.L_Axis;
+        else return "NA";
       } else {
-        if (curRecord.R_CYL != 0 && curRecord.R_CYL != ' ') return curRecord.R_Axis;
-        else return 'NA';
+        if (curRecord.R_CYL != 0 && curRecord.R_CYL != " ") return curRecord.R_Axis;
+        else return "NA";
       }
     }
   };
@@ -189,25 +195,25 @@ const DisplayRecordsStyle = StyleSheet.create({
   },
   gridContainer: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: "center",
   },
   colHeader: {
-    textAlign: 'center',
+    textAlign: "center",
     fontSize: 18,
-    fontWeight: 'bold',
-    color: '#2D9CDB',
+    fontWeight: "bold",
+    color: "#2D9CDB",
   },
   rowHeader: {
-    textAlign: 'left',
+    textAlign: "left",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     paddingLeft: 35,
-    color: '#2D9CDB',
+    color: "#2D9CDB",
   },
   gridText: {
-    textAlign: 'center',
+    textAlign: "center",
     paddingRight: 5,
     fontSize: 18,
-    color: '#2D9CDB',
+    color: "#2D9CDB",
   },
 });

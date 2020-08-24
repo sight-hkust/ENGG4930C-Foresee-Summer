@@ -92,6 +92,7 @@ const FormComponent = ({ navigation, route }) => {
         tel_number: "",
         job: "",
         role: "",
+        part: "",
         history: "",
         disease: "",
         allowedSearch: false,
@@ -165,6 +166,7 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
   const [selectedNameFields, setSelectedNameFields] = useState("chi");
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isRoleDialogVisible, setRoleDialogVisibility] = useState(false);
+  const [isPartDialogVisible, setPartDialogVisibility] = useState(false);
   const [isFamilySearchFieldVisible, setFamilySearchFieldVisibility] = useState(false);
   const [isFamilySearchDialogVisible, setFamilySearchDialogVisibility] = useState(false);
 
@@ -177,6 +179,9 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
 
   const _showRoleDialog = () => setRoleDialogVisibility(true);
   const _hideRoleDialog = () => setRoleDialogVisibility(false);
+
+  const _showPartDialog = () => setPartDialogVisibility(true);
+  const _hidePartDialog = () => setPartDialogVisibility(false);
 
   const _showFamilySearchDialog = () => {
     setFieldValue("parentSelectionDisabled", false);
@@ -204,6 +209,11 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
     setFieldValue("role", value);
   };
 
+  const handlePartDialogOption = (value) => {
+    _hidePartDialog();
+    setFieldValue("part", value);
+  };
+
   const toggleCheckbox = () => {
     setFieldValue("allowedSearch", !values.allowedSearch);
   };
@@ -211,6 +221,13 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
   const roleList = [
     { key: "0", label: "眼科醫生", value: "ophthalmologist" },
     { key: "1", label: "視光師", value: "optometrist" },
+  ];
+
+  const partList = [
+    { key: "0", label: "第一部分", value: "part1" },
+    { key: "1", label: "第二部分 ", value: "part2" },
+    { key: "2", label: "第三部分", value: "part3" },
+    { key: "3", label: "第四部分 ", value: "part4" },
   ];
 
   const personIcon = <Icon name="person" type={"material"} color={"white"} size={35} />; /* name='person' color={'white'} size={35} /> */
@@ -385,6 +402,20 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
             ) : (
               <InputDatePickerModal icon={hourGlassIcon} formikProps={formikProps} formikKey="birthday" showDatePicker={_showDatePicker} value={values.birthday} />
             )}
+
+            {isProfessional && !registerPatient && (
+              <InputDialogPicker
+                label={"註冊資格"}
+                icon={jobIcon}
+                onDismiss={() => _hidePartDialog()}
+                value={values.part}
+                list={partList}
+                formikKey={"part"}
+                formikProps={formikProps}
+                showDialog={_showPartDialog}
+              />
+            )}
+
             {registerPatient ? (
               <>
                 <View
@@ -545,6 +576,16 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
               ))}
             </Dialog.Content>
           </Dialog>
+
+          <Dialog visible={isPartDialogVisible} onDismiss={_hidePartDialog}>
+            <Dialog.Title>請選擇你的註冊部分</Dialog.Title>
+            <Dialog.Content>
+              {partList.map((data) => (
+                <List.Item key={data.key} title={data.label} onPress={handlePartDialogOption.bind(this, data.value)} />
+              ))}
+            </Dialog.Content>
+          </Dialog>
+
           <Dialog visible={isFamilySearchDialogVisible} onDismiss={_hideFamilySearchDialog}>
             <Dialog.Content>
               <PatientSearchPanel setFieldValue={setFieldValue} hideFamilySearchDialog={_hideFamilySearchDialog} />

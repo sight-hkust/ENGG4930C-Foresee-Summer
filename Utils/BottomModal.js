@@ -1,7 +1,7 @@
-import React, { Component } from 'react';
-import { StyleSheet, View } from 'react-native';
-import Modal from 'react-native-modal';
-import { TouchableOpacity, TouchableWithoutFeedback } from 'react-native-gesture-handler';
+import React, { Component } from "react";
+import { StyleSheet, View } from "react-native";
+import Modal from "react-native-modal";
+import { TouchableOpacity, TouchableWithoutFeedback } from "react-native-gesture-handler";
 
 export default class BottomModal extends Component {
   constructor(props) {
@@ -23,8 +23,8 @@ export default class BottomModal extends Component {
           }
           this.setState({ isVisible: false });
         }}
-        swipeDirection={['down']}
-        style={{ justifyContent: 'flex-end', margin: 0 }}
+        swipeDirection={["down"]}
+        style={{ justifyContent: "flex-end", margin: 0 }}
       >
         <View style={{ ...MainStyles.content, ...this.props.style }}>{this.props.children}</View>
       </Modal>
@@ -34,10 +34,11 @@ export default class BottomModal extends Component {
 
 const MainStyles = StyleSheet.create({
   content: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 20,
     height: 350,
-    borderRadius: 20,
-    width: '100%',
+    borderTopLeftRadius: 20,
+    borderTopRightRadius: 20,
+    width: "100%",
   },
 });

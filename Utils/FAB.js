@@ -63,27 +63,11 @@ const FABView = () => {
           />
         </Portal>
       </Provider>
-      <BottomModalBox
-        modalContainerStyle={
-          index === 0
-            ? { height: ScreenHeight * 0.85 }
-            : { height: ScreenHeight * 0.65 }
-        }
-        isOpen={showContact}
-        onClosed={_closeContact}
-      >
-        <View
-          style={{
-            width: "100%",
-            height: "100%",
-          }}
-        >
+      <BottomModalBox modalContainerStyle={index === 0 ? { height: ScreenHeight * 0.7 } : { height: ScreenHeight * 0.4 }} isOpen={showContact} onClosed={_closeContact}>
+        <View style={{ width: "100%", height: "100%" }}>
           {index === 0 ? (
             <Feedback
-              contentConatinerStyle={{
-                borderColor: "#1772A6",
-                height: ScreenHeight * 0.6,
-              }}
+              contentContainerStyle={{ borderColor: "#1772A6", height: ScreenHeight * 0.5 }}
               contentFontColor={{ color: "#1772A6" }}
               wordCounterFontColor={{ color: "#1772A6" }}
               buttonColor={{ backgroundColor: "#2D9CDB" }}
@@ -92,19 +76,9 @@ const FABView = () => {
           ) : (
             <>
               <View style={{ marginHorizontal: ScreenWidth * 0.05 }}>
-                <Text
-                  style={{ color: "#1772A6", fontSize: ScreenHeight * 0.037 }}
-                >
-                  觀迎聯絡我們:
-                </Text>
+                <Text style={{ color: "#1772A6", fontSize: ScreenHeight * 0.037 }}>觀迎聯絡我們:</Text>
               </View>
-              <ContactUs
-                containerStyle={{
-                  width: "100%",
-                  backgroundColor: "transparent",
-                }}
-                titleColor={{ color: "#1772A6" }}
-              />
+              <ContactUs containerStyle={{ width: "100%", backgroundColor: "transparent" }} titleColor={{ color: "#1772A6" }} />
             </>
           )}
         </View>

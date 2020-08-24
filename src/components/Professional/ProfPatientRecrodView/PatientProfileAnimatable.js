@@ -5,12 +5,18 @@ import { displayName } from "../../../utils/displayName";
 import moment from "moment";
 import { ScreenHeight, ScreenWidth } from "../../../../constant/Constant";
 
-export const PatientProfile = ({ info }) => {
+/************************/
+/* CURRENTLY NOT IN USE */
+/************************/
+
+export const PatientProfileAnimatable = ({ info }) => {
   const AnimatableScrollView = Animatable.createAnimatableComponent(ScrollView);
   return (
     <>
-      <Text style={styles.patientName}>{displayName(info)}</Text>
-      <ScrollView>
+      <Animatable.Text animation="fadeIn" style={styles.patientName}>
+        {displayName(info)}
+      </Animatable.Text>
+      <AnimatableScrollView animation="fadeIn">
         <View style={{ flexDirection: "row" }}>
           <Text style={[styles.profileText, styles.infoLabel]}>年齡:</Text>
           <Text style={[styles.profileText, styles.infoValues]}>{Math.abs(moment(info.birthday).diff(moment(), "years"))}</Text>
@@ -27,7 +33,7 @@ export const PatientProfile = ({ info }) => {
           <Text style={[styles.profileText, styles.infoLabel]}>已知眼疾:</Text>
           <Text style={[styles.profileText, styles.infoValues]}>{info.disease ? info.disease : "不適用"}</Text>
         </View>
-      </ScrollView>
+      </AnimatableScrollView>
     </>
   );
 };

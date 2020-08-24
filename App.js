@@ -16,6 +16,7 @@ import AskAnExpertMainScreen from "./src/components/AskAnExpert/AskAnExpertMainS
 
 import RecordsScreen from "./Screens/RecordsScreen";
 import AddRecordScreen from "./Screens/AddRecordScreen";
+import ProfAddRecord from "./src/components/Professional/ProfAddRecord";
 import OverviewScreen from "./Screens/OverviewScreen";
 
 import { Login } from "./src/components/Login/Login";
@@ -121,9 +122,10 @@ function FaqScreen({ navigation, route }) {
 }
 
 function ProfileScreen({ navigation, route }) {
+  console.log("here", route.params.type);
   return (
     <Stack.Navigator screenOptions={headerConfig}>
-      <Stack.Screen name="ProfileTabMain" component={Profile} options={{ title: "我的檔案" }} />
+      <Stack.Screen name="ProfileTabMain" component={Profile} options={{ title: "我的檔案" }} initialParams={{ type: route.params.type }} />
       <Stack.Screen name="QrCode" component={QrCode} options={{ headerShown: false }} />
       <Stack.Screen
         name="Register"
@@ -167,7 +169,7 @@ function ProfessionalScreen({ navigation, route }) {
     <Stack.Navigator screenOptions={headerConfig}>
       <Stack.Screen name="ProfMainMenu" component={ProfMainMenu} options={{ title: "病人名單" }} />
       <Stack.Screen name="Patient Record" component={ProfPatientRecordView} options={{ title: "" }} />
-      <Stack.Screen name="AddRecordScreen" component={AddRecordScreen} options={{ title: "新增資料" }} />
+      <Stack.Screen name="AddRecordScreen" component={ProfAddRecord} options={{ title: "新增資料" }} />
       <Stack.Screen name="SettingScreen" component={SettingScreen} options={{ title: "設定" }} />
       <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
     </Stack.Navigator>
@@ -180,7 +182,7 @@ function Main({ route, navigation }) {
       initialRouteName={auth.currentUser && auth.currentUser.displayName == "professional" ? "ProfessionalScreen" : "HomeScreen"}
       tabBarOptions={{
         keyboardHidesTabBar: true,
-        showLabel: false,
+        showLabel: true,
         activeTintColor: "#003973",
         inactiveTintColor: "#2D9CDB",
         style: {
@@ -214,15 +216,29 @@ function Main({ route, navigation }) {
             name="ProfessionalScreen"
             component={ProfessionalScreen}
             options={{
+              tabBarLabel: () => null,
               tabBarIcon: () => <Image source={require("./assets/images/Icon_solid.png")} style={{ ...styles.icon, ...{ width: 55, height: 55 } }} />,
             }}
           />
-          <Tab.Screen
+          {/* <Tab.Screen
             name="SettingScreen"
             component={SettingScreen}
             initialParams={{ isProfessional: true }}
             options={{
               tabBarIcon: () => <Icon name="setting" type="antdesign" color="#23559E" size={32.5} containerStyle={styles.icon} />,
+            }}
+          /> */}
+
+          <Tab.Screen
+            name="ProfileScreen"
+            component={ProfileScreen}
+            options={{
+              tabBarLabel: "個人檔案",
+              tabBarIcon: () => (
+                <TouchableOpacity onPress={() => navigation.navigate("ProfileScreen", { type: "professional" })}>
+                  <Image source={require("./assets/images/Profile.png")} style={styles.icon} />
+                </TouchableOpacity>
+              ),
             }}
           />
         </>
@@ -260,7 +276,7 @@ function Main({ route, navigation }) {
             name="HomeScreen"
             component={HomeScreen}
             options={{
-              tabBarLabel: "主頁",
+              tabBarLabel: () => null,
               tabBarIcon: () => (
                 <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")}>
                   <Image source={require("./assets/images/Icon_solid.png")} style={{ ...styles.icon, ...{ width: 50, height: 50 } }} />
@@ -288,7 +304,7 @@ function Main({ route, navigation }) {
             options={{
               tabBarLabel: "個人檔案",
               tabBarIcon: () => (
-                <TouchableOpacity onPress={() => navigation.navigate("ProfileScreen")}>
+                <TouchableOpacity onPress={() => navigation.navigate("ProfileScreen", { type: "normal" })}>
                   <Image source={require("./assets/images/Profile.png")} style={styles.icon} />
                 </TouchableOpacity>
               ),

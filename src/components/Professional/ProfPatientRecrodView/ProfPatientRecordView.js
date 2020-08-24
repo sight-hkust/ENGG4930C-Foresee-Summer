@@ -9,6 +9,7 @@ import { ScreenHeight, ScreenWidth } from "../../../../constant/Constant";
 import { PatientProfile } from "./PatientProfile";
 import { connect } from "react-redux";
 import { getRecordsUpdate, records } from "../../../reducers/records";
+import MenuScreen from "../../../../Utils/MenuScreen";
 
 class ProfPatientRecordView extends Component {
   constructor(props) {
@@ -17,8 +18,7 @@ class ProfPatientRecordView extends Component {
       info: null,
       selectedIndex: -1,
       recordsLen: -1,
-      currentRecords: null,
-      isAdj: true,
+      glassType: 0,
     };
   }
 
@@ -29,9 +29,7 @@ class ProfPatientRecordView extends Component {
     let userInfo = database.ref("users/" + key);
 
     userInfo.once("value").then((snapshot) => {
-      this.setState({
-        info: snapshot.val(),
-      });
+      this.setState({ info: snapshot.val() });
     });
 
     if (key) {
@@ -40,145 +38,108 @@ class ProfPatientRecordView extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { currentRecords } = this.state;
-    if (currentRecords == null) {
+    if (prevProps.recordStore.records != this.props.recordStore.records || prevProps.recordStore.dateList != this.props.recordStore.dateList) {
       const { records, dateList } = this.props.recordStore;
       if (records && dateList) {
         this.setState({
           recordsLen: dateList.length,
           selectedIndex: dateList.length - 1,
-          currentRecords: records[dateList[dateList.length - 1]],
+        });
+      }
+    }
+
+    /*const { selectedIndex } = this.state;
+    const { records, dateList } = this.props.recordStore;
+    if (selectedIndex == -1) {
+      if (records && dateList) {
+        this.setState({
+          recordsLen: dateList.length,
+          selectedIndex: dateList.length - 1,
         });
       }
     }
     if (Object.keys(prevProps.recordStore).length == 0) {
-      const { records, dateList } = this.props.recordStore;
       if (records && dateList) {
         this.setState({
           recordsLen: dateList.length,
           selectedIndex: dateList.length - 1,
-          currentRecords: records[dateList[dateList.length - 1]],
         });
       }
     } else {
-      if (prevProps.recordStore.dateList.length !== this.props.recordStore.dateList.length) {
+      if (prevProps.recordStore.dateList.length !== dateList.length) {
         this.setState({
           recordsLen: dateList.length,
           selectedIndex: dateList.length - 1,
-          currentRecords: records[dateList[dateList.length - 1]],
         });
       }
-    }
+    }*/
   }
 
   render() {
-    const { selectedIndex, recordsLen, currentRecords, info } = this.state;
+    const { selectedIndex, recordsLen, info } = this.state;
     const { records, dateList } = this.props.recordStore;
     const { key, inactive } = this.props.route.params;
 
     return (
-      <LinearGradientBackground
-        style={{ height: ScreenHeight, paddingTop: ScreenHeight * 0.045, paddingHorizontal: ScreenWidth * 0.1 }}
-        colors={["#1772A6", "#A377FF"]}
-        start={[0, 1]}
-        end={[1, 0]}
-        locations={[0.12, 0.92]}
-      >
-        <View style={styles.patientInfo}>{info && <PatientProfile info={info} />}</View>
-        <View
-          style={{
-            flex: 3,
-            justifyContent: "center",
-            alignItems: "center",
-          }}
-        >
-          {info && (
-            <>
-              <View style={styles.boxes}>
-                {!(records && dateList && currentRecords) ? (
-                  <Text style={styles.noDataText}>{"暫無數據\n請按 + 輸入資料"}</Text>
-                ) : (
-                  <View style={{ height: "100%" }}>
-                    <RoundButton
-                      buttonStyle={{ backgroundColor: "#2D9CDB" }}
-                      textStyle={{ color: "white" }}
-                      title={this.state.isAdj ? "查看真實度數" : "查看調整度數"}
-                      onPress={() => this.setState({ isAdj: !this.state.isAdj })}
-                    />
-                    <View style={styles.datePickerContainer}>
-                      {dateList.length < 2 ? null : (
-                        <TouchableOpacity
-                          onPress={() =>
-                            this.setState({
-                              selectedIndex: (selectedIndex + recordsLen - 1) % recordsLen,
-                            })
-                          }
-                        >
-                          <Icon name="swapleft" type="antdesign" size={ScreenWidth * 0.1} color="#2D9CDB" />
-                        </TouchableOpacity>
-                      )}
-                      <Text style={styles.dateText}>{dateList[selectedIndex]}</Text>
-                      {dateList.length < 2 ? null : (
-                        <TouchableOpacity
-                          onPress={() =>
-                            this.setState({
-                              selectedIndex: (selectedIndex + 1) % recordsLen,
-                            })
-                          }
-                        >
-                          <Icon name="swapright" type="antdesign" size={ScreenWidth * 0.1} color="#2D9CDB" />
-                        </TouchableOpacity>
-                      )}
+      <MenuScreen>
+        <View style={{ flex: 1, paddingTop: ScreenHeight * 0.045, paddingHorizontal: ScreenWidth * 0.1 }}>
+          <View style={styles.patientInfo}>{info && <PatientProfile info={info} />}</View>
+          <View style={{ flex: 3, justifyContent: "center", alignItems: "center" }}>
+            {info && (
+              <>
+                <View style={styles.boxes}>
+                  {!(records && dateList && selectedIndex != -1) ? (
+                    <Text style={styles.noDataText}>{"暫無數據\n請按 + 輸入資料"}</Text>
+                  ) : (
+                    <View style={{ height: "100%" }}>
+                      <RoundButton
+                        buttonStyle={{ backgroundColor: "#2D9CDB" }}
+                        textStyle={{ color: "white" }}
+                        title={this.state.glassType ? "查看真實度數" : "查看調整度數"}
+                        onPress={() => this.setState({ glassType: 1 - this.state.glassType })}
+                      />
+                      <View style={styles.datePickerContainer}>
+                        {dateList.length < 2 ? null : (
+                          <TouchableOpacity onPress={() => this.setState({ selectedIndex: (selectedIndex + recordsLen - 1) % recordsLen })}>
+                            <Icon name="swapleft" type="antdesign" size={ScreenWidth * 0.1} color="#2D9CDB" />
+                          </TouchableOpacity>
+                        )}
+                        <Text style={styles.dateText}>{dateList[selectedIndex]}</Text>
+                        {dateList.length < 2 ? null : (
+                          <TouchableOpacity onPress={() => this.setState({ selectedIndex: (selectedIndex + 1) % recordsLen })}>
+                            <Icon name="swapright" type="antdesign" size={ScreenWidth * 0.1} color="#2D9CDB" />
+                          </TouchableOpacity>
+                        )}
+                      </View>
+                      <DisplayRecords curRecord={records[dateList[selectedIndex]]} glassType={this.state.glassType} />
+                      <View style={{ height: 20 }} />
                     </View>
-                    <DisplayRecords curRecord={currentRecords} isAdj={this.state.isAdj} />
-                    <View style={{ height: 20 }} />
-                  </View>
-                )}
-              </View>
-              <View
-                style={{
-                  flex: 0.2,
-                  alignContent: "center",
-                  justifyContent: "center",
-                }}
-              >
-                <TouchableOpacity
-                  onPress={() => {
-                    this.props.navigation.navigate("AddRecordScreen", {
-                      isProfessional: true,
-                      professional_id: auth.currentUser.uid,
-                      patient_id: key,
-                      inactive: inactive,
-                    });
-                  }}
-                  style={{
-                    backgroundColor: "white",
-                    width: 48,
-                    height: 48,
-                    borderRadius: 24,
-                    justifyContent: "center",
-                  }}
-                >
-                  <Icon name="add" size={25} color="#2D9CDB" />
-                </TouchableOpacity>
-              </View>
-            </>
-          )}
+                  )}
+                </View>
+                <View style={{ flex: 0.2, alignContent: "center", justifyContent: "center" }}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.navigate("AddRecordScreen", { isProfessional: true, professional_id: auth.currentUser.uid, patient_id: key, inactive: inactive });
+                    }}
+                    style={{ backgroundColor: "white", width: 48, height: 48, borderRadius: 24, justifyContent: "center" }}
+                  >
+                    <Icon name="add" size={25} color="#2D9CDB" />
+                  </TouchableOpacity>
+                </View>
+              </>
+            )}
+          </View>
         </View>
-      </LinearGradientBackground>
+      </MenuScreen>
     );
   }
 }
 
 const mapStateToProps = (state) => {
-  return {
-    recordStore: state.records,
-  };
+  return { recordStore: state.records };
 };
 const mapDispatchToProps = (dispatch) => {
-  return {
-    getRecordsUpdateHandler: (uid) => dispatch(getRecordsUpdate(uid)),
-  };
+  return { getRecordsUpdateHandler: (uid) => dispatch(getRecordsUpdate(uid)) };
 };
 export default connect(mapStateToProps, mapDispatchToProps)(ProfPatientRecordView);
 

@@ -1,22 +1,22 @@
-import React, { useState } from 'react';
-import { StyleSheet, Text, View, Keyboard, Animated, ScrollView } from 'react-native';
-import { Input, CheckBox, Button, Icon } from 'react-native-elements';
-import { Formik } from 'formik';
-import { object, string } from 'yup';
+import React, { useState } from "react";
+import { StyleSheet, Text, View, Keyboard, Animated, ScrollView } from "react-native";
+import { Input, CheckBox, Button, Icon } from "react-native-elements";
+import { Formik } from "formik";
+import { object, string } from "yup";
 
-import TagInput from 'react-native-tags-input';
-import moment from 'moment';
+import TagInput from "react-native-tags-input";
+import moment from "moment";
 
-import { database, auth } from '../../config/config';
-import { RoundButton } from '../../../Utils/RoundButton';
-import { ScreenHeight, ScreenWidth } from '../../../constant/Constant';
+import { database, auth } from "../../config/config";
+import { RoundButton } from "../../../Utils/RoundButton";
+import { ScreenHeight, ScreenWidth } from "../../../constant/Constant";
 
-import MenuScreen from '../../../Utils/MenuScreen';
-import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import MenuScreen from "../../../Utils/MenuScreen";
+import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 
 const PostQuestionSchema = object({
-  title: string().required('此項必填'),
-  content: string().required('此項必填'),
+  title: string().required("此項必填"),
+  content: string().required("此項必填"),
 });
 
 const PostQuestionScreen = ({ route, navigation }) => {
@@ -26,84 +26,42 @@ const PostQuestionScreen = ({ route, navigation }) => {
 
   navigation.setOptions({
     headerRightContainerStyle: {
-      position: 'absolute',
-      transform: [
-        {
-          translateY: yScroll.interpolate({
-            inputRange: [0, 80],
-            outputRange: [0, -200],
-            extrapolate: 'clamp',
-          }),
-        },
-      ],
+      position: "absolute",
+      transform: [{ translateY: yScroll.interpolate({ inputRange: [0, 80], outputRange: [0, -200], extrapolate: "clamp" }) }],
     },
     headerTitleStyle: {
-      transform: [
-        {
-          translateY: yScroll.interpolate({
-            inputRange: [0, 80],
-            outputRange: [0, -200],
-            extrapolate: 'clamp',
-          }),
-        },
-      ],
-      fontWeight: 'bold',
+      transform: [{ translateY: yScroll.interpolate({ inputRange: [0, 80], outputRange: [0, -200], extrapolate: "clamp" }) }],
+      fontWeight: "bold",
       fontSize: 28,
-      color: '#E1EDFF',
-      overflow: 'hidden',
+      color: "#E1EDFF",
+      overflow: "hidden",
     },
     headerLeftContainerStyle: {
-      position: 'absolute',
-      transform: [
-        {
-          translateY: yScroll.interpolate({
-            inputRange: [0, 80],
-            outputRange: [0, -200],
-            extrapolate: 'clamp',
-          }),
-        },
-      ],
+      position: "absolute",
+      transform: [{ translateY: yScroll.interpolate({ inputRange: [0, 80], outputRange: [0, -200], extrapolate: "clamp" }) }],
     },
   });
 
   return (
     <MenuScreen>
       <View>
-        <ScrollView
-          onScroll={Animated.event([
-            {
-              nativeEvent: {
-                contentOffset: {
-                  y: yScroll,
-                },
-              },
-            },
-          ])}
-          scrollEventThrottle={1}
-        >
+        <ScrollView onScroll={Animated.event([{ nativeEvent: { contentOffset: { y: yScroll } } }])} scrollEventThrottle={1}>
           <View style={styles.container}>
             {!isSubmitted ? (
               <Formik
-                initialValues={{
-                  title: '',
-                  content: '',
-                  tags: [],
-                  allowInspect: false,
-                }}
+                initialValues={{ title: "", content: "", tags: [], allowInspect: false }}
                 validationSchema={PostQuestionSchema}
                 onSubmit={(values) => {
                   if (values.title.length != 0 && values.content.length != 0) {
                     database
-                      .ref('contents/askProf/')
+                      .ref("contents/askProf/")
                       .push({
                         subject: values.title,
                         content: values.content,
                         tags: values.tags,
                         createdBy: auth.currentUser.uid,
-                        createdDate: moment().format('YYYY-MM-DD HH:mm:ss'),
-                        settings: {
-                          allowInspect: values.allowInspect,
-                        },
+                        createdDate: moment().format("YYYY-MM-DD HH:mm:ss"),
+                        settings: { allowInspect: values.allowInspect },
                       })
                       .catch((err) => console.log(err));
 
@@ -115,7 +73,7 @@ const PostQuestionScreen = ({ route, navigation }) => {
                   <View style={styles.form}>
                     <Input
                       label="主題"
-                      onChangeText={formikProps.handleChange('title')}
+                      onChangeText={formikProps.handleChange("title")}
                       maxLength={20}
                       onSubmitEditing={() => {
                         Keyboard.dismiss;
@@ -129,22 +87,18 @@ const PostQuestionScreen = ({ route, navigation }) => {
 
                     <Input
                       label="內容"
-                      onChangeText={formikProps.handleChange('content')}
+                      onChangeText={formikProps.handleChange("content")}
                       maxLength={200}
                       multiline={true}
                       returnKeyLabel="done"
-                      returnKeyType={'done'}
-                      placeholder={formikProps.values.content.length == 0 ? '由於我們會在本程式內發佈專家回應，請注意不要留下個人資料' : ''}
+                      returnKeyType={"done"}
+                      placeholder={formikProps.values.content.length == 0 ? "由於我們會在本程式內發佈專家回應，請注意不要留下個人資料" : ""}
                       placeholderTextColor="#1772A6"
                       labelStyle={styles.label}
                       inputContainerStyle={styles.contentContainer}
                       inputStyle={styles.textAreaContainer}
                       rightIcon={<Text style={styles.wordCounter}>{formikProps.values.content.length}/200</Text>}
-                      rightIconContainerStyle={{
-                        position: 'absolute',
-                        bottom: 0,
-                        right: 15,
-                      }}
+                      rightIconContainerStyle={{ position: "absolute", bottom: 0, right: 15 }}
                       errorMessage={formikProps.errors.content}
                     />
                     <Tag formikProps={formikProps} />
@@ -155,48 +109,31 @@ const PostQuestionScreen = ({ route, navigation }) => {
                       checkedColor="#E1EDFF"
                       uncheckedIcon="checkbox-passive"
                       uncheckedColor="#E1EDFF"
-                      containerStyle={{
-                        backgroundColor: 'transparent',
-                        borderColor: 'transparent',
-                        paddingBottom: 10,
-                      }}
-                      textStyle={{ color: '#E1EDFF', fontSize: 18 }}
+                      containerStyle={{ backgroundColor: "transparent", borderColor: "transparent", paddingBottom: 10 }}
+                      textStyle={{ color: "#E1EDFF", fontSize: 18 }}
                       size={18}
-                      onPress={() => formikProps.setFieldValue('allowInspect', !formikProps.values.allowInspect)}
+                      onPress={() => formikProps.setFieldValue("allowInspect", !formikProps.values.allowInspect)}
                       checked={formikProps.values.allowInspect}
                     />
 
-                    <RoundButton onPress={() => formikProps.handleSubmit()} title="提交" buttonStyle={{ width: 96 }} textStyle={{ color: '#3CA1B7' }} />
+                    <RoundButton onPress={() => formikProps.handleSubmit()} title="提交" buttonStyle={{ width: 96 }} textStyle={{ color: "#3CA1B7" }} />
                   </View>
                 )}
               </Formik>
             ) : (
-              <View
-                style={{
-                  justifyContent: 'center',
-                  height: ScreenHeight * 0.6,
-                  width: ScreenWidth * 0.82,
-                  top: 60,
-                  alignSelf: 'center',
-                }}
-              >
+              <View style={{ justifyContent: "center", height: ScreenHeight * 0.6, width: ScreenWidth * 0.82, top: 60, alignSelf: "center" }}>
                 <Text style={styles.farewellTitle}>謝謝你的提問</Text>
                 <Text style={styles.farewellMessage}>收集問題後，我們的專家會在一星期內回答你的，請耐心等候。如有緊急需要，請聯絡你的眼科醫生。</Text>
                 <Button
                   title="返回"
                   type="clear"
-                  containerStyle={{
-                    width: 120,
-                    position: 'absolute',
-                    bottom: 0,
-                    right: 15,
-                  }}
-                  titleStyle={{ color: 'white', fontSize: 23 }}
-                  iconContainerStyle={{ position: 'absolute', bottom: 0 }}
+                  containerStyle={{ width: 120, position: "absolute", bottom: 0, right: 15 }}
+                  titleStyle={{ color: "white", fontSize: 23 }}
+                  iconContainerStyle={{ position: "absolute", bottom: 0 }}
                   icon={<Icon type="antdesign" name="swapleft" size={50} color="white" />}
                   onPress={() => {
                     setIsSubmitted(false);
-                    navigation.navigate('AskAnExpertMainScreen');
+                    navigation.navigate("AskAnExpertMainScreen");
                   }}
                 />
               </View>
@@ -213,8 +150,8 @@ class Tag extends React.Component {
     super(props);
     this.state = {
       tags: {
-        tag: '',
-        tagsArray: ['眼睛疼痛', '視力模糊'],
+        tag: "",
+        tagsArray: ["眼睛疼痛", "視力模糊"],
       },
     };
   }
@@ -224,7 +161,7 @@ class Tag extends React.Component {
       tags: state,
     });
 
-    this.props.formikProps.setFieldValue('tags', state.tagsArray);
+    this.props.formikProps.setFieldValue("tags", state.tagsArray);
   };
 
   render() {
@@ -235,7 +172,7 @@ class Tag extends React.Component {
           tags={this.state.tags}
           placeholder="主題標籤"
           placeholderTextColor="#fff"
-          leftElement={<Icon name={'tag-multiple'} type={'material-community'} color="#fff" />}
+          leftElement={<Icon name={"tag-multiple"} type={"material-community"} color="#fff" />}
           containerStyle={styles.tagContainer}
           inputContainerStyle={styles.tagInputContainer}
           inputStyle={styles.tagTextInput}
@@ -249,18 +186,18 @@ class Tag extends React.Component {
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: hp('15%'),
-    width: '100%',
+    marginTop: hp("15%"),
+    width: "100%",
     height: ScreenHeight,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   form: {
     height: ScreenHeight * 0.6,
     width: ScreenWidth * 0.82,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   label: {
-    color: 'white',
+    color: "white",
     fontSize: 25,
     marginBottom: 10,
   },
@@ -269,57 +206,57 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderRadius: 13,
     paddingHorizontal: 15,
-    backgroundColor: 'rgba(225, 237, 255, 0.5)',
+    backgroundColor: "rgba(225, 237, 255, 0.5)",
   },
   input: {
-    color: '#1772A6',
+    color: "#1772A6",
   },
   contentContainer: {
     borderRadius: 20,
     paddingHorizontal: 15,
-    height: hp('30%'),
-    backgroundColor: 'rgba(225, 237, 255, 0.5)',
+    height: hp("30%"),
+    backgroundColor: "rgba(225, 237, 255, 0.5)",
   },
   textAreaContainer: {
-    color: '#1772A6',
-    height: hp('30%'),
-    textAlignVertical: 'top',
+    color: "#1772A6",
+    height: hp("30%"),
+    textAlignVertical: "top",
     paddingTop: 10,
   },
   wordCounter: {
-    color: '#1772A6',
+    color: "#1772A6",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   farewellTitle: {
     fontSize: 38,
-    color: 'white',
+    color: "white",
   },
   farewellMessage: {
     fontSize: 18,
-    color: 'white',
+    color: "white",
   },
   tagContainer: {
-    width: '100%',
-    justifyContent: 'center',
-    alignSelf: 'center',
+    width: "100%",
+    justifyContent: "center",
+    alignSelf: "center",
   },
   tagInputContainer: {
     height: 40,
     borderRadius: 13,
-    backgroundColor: 'rgba(225, 237, 255, 0.5)',
+    backgroundColor: "rgba(225, 237, 255, 0.5)",
   },
 
   tagTextInput: {
-    color: '#1772A6',
+    color: "#1772A6",
   },
 
   tag: {
-    backgroundColor: 'rgba(185, 255, 184, 0.7)',
+    backgroundColor: "rgba(185, 255, 184, 0.7)",
   },
   tagText: {
     fontSize: 15,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
 });
 
