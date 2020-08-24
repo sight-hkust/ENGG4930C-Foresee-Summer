@@ -52,13 +52,7 @@ export const RegistrationForm = ({ navigation, route }) => {
 const FormComponent = ({ navigation, route }) => {
   const { isProfessional, registerPatient, registerChild } = route.params;
   const [isLoading, setIsLoading] = useState(false);
-  const [isRegisterMethodDialogVisible, setRegisterMethodDialogVisibility] = useState(true);
-  const dateTimePickerIOSConfirmButton = useState(false);
   const [errorMessageFromServer, setErrorMessageFromServer] = useState("");
-
-  const _showRegisterMethodDialog = () => setRegisterMethodDialogVisibility(true);
-
-  const _hideRegisterMethodDialog = () => setRegisterMethodDialogVisibility(false);
 
   const setServerError = (error) => {
     switch (error.code) {
@@ -156,7 +150,7 @@ const FormComponent = ({ navigation, route }) => {
           setErrors({ submit: error.message });
         }
       }}
-      validationSchema={schemaRegisterPatient}
+      validationSchema={schema}
       validateOnBlur={false}
       validateOnChange={false}
     >
@@ -172,8 +166,9 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isRoleDialogVisible, setRoleDialogVisibility] = useState(false);
   const [isFamilySearchFieldVisible, setFamilySearchFieldVisibility] = useState(false);
-
   const [isFamilySearchDialogVisible, setFamilySearchDialogVisibility] = useState(false);
+
+  console.log(formikProps.errors);
 
   const _toggleFamilySearchSwitch = () => setFamilySearchFieldVisibility(!isFamilySearchFieldVisible);
 

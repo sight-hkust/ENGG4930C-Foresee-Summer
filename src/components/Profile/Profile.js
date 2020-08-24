@@ -16,7 +16,6 @@ import { watchUserInfoUpdate } from "../../reducers/user";
 
 const Profile = ({ navigation, route, userStore }) => {
   const { user } = userStore;
-  console.log(user);
   const familyMembers = useSelector((state) => state.familyMembers);
   const [userData, setUserData] = useState(null);
 
