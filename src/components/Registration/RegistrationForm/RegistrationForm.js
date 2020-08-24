@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { Formik } from "formik";
 import { Keyboard, View, Platform, StyleSheet, Picker, Text, TouchableOpacity, Modal, StatusBar } from "react-native";
 import { ScreenHeight, ScreenWidth, FontScale } from "../../../../constant/Constant";
-import { SchemaPatient } from "../Schema/SchemaPatient";
-import { SchemaProfessional } from "../Schema/SchemaProfessional";
+
 import { ScrollView } from "react-native-gesture-handler";
 import { RadioButton, Switch, Button, Card } from "react-native-paper";
 import MaterialCommunityIcons from "react-native-vector-icons/MaterialCommunityIcons";
@@ -15,9 +14,8 @@ import Logo from "../../Utils/Logo";
 import { RoundButton } from "../../../../Utils/RoundButton";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import DateTimePickerModal from "react-native-modal-datetime-picker";
-import { SchemaRegisterPatient } from "../Schema/SchemaRegisterPatient";
 import { Portal, Dialog, Provider, List } from "react-native-paper";
-import { CheckBox, Icon, ButtonGroup } from "react-native-elements";
+import { Icon } from "react-native-elements";
 import { InputTextField } from "../../Utils/InputTextField";
 import { InputDialogPicker } from "../../Utils/InputDialogPicker";
 import { MailIcon, KeyIcon, PhoneIcon, FamilyIcon } from "../../Utils/Icons";
@@ -25,11 +23,12 @@ import { PhoneInputField } from "../../Utils/PhoneInputField";
 import { InputDatePickerModal } from "../../Utils/InputDatePickerModal";
 import MenuScreen from "../../../../Utils/MenuScreen";
 import PatientSearchPanel from "../../Utils/PatientSearchPanel";
-import { SchemaRegisterChild } from "../Schema/SchemaRegisterChild";
+
 import { CommonActions } from "@react-navigation/native";
 import { MultiLinesInputTextField } from "../../Utils/MultiLinesInputTextField";
-import { heightPercentageToDP } from "react-native-responsive-screen";
 import GenderOptionsInput from "../../GenderOptionsInput/GenderOptionsInput";
+
+import { schemaRegisterPatient, schemaEnrollPatient, schemaRegisterChild, schemaRegisterProfessional } from "../../../utils/schema";
 
 export const RegistrationForm = ({ navigation, route }) => {
   const { isProfessional, registerPatient, registerChild } = route.params;
@@ -53,13 +52,7 @@ export const RegistrationForm = ({ navigation, route }) => {
 const FormComponent = ({ navigation, route }) => {
   const { isProfessional, registerPatient, registerChild } = route.params;
   const [isLoading, setIsLoading] = useState(false);
-  const [isRegisterMethodDialogVisible, setRegisterMethodDialogVisibility] = useState(true);
-  const dateTimePickerIOSConfirmButton = useState(false);
   const [errorMessageFromServer, setErrorMessageFromServer] = useState("");
-
-  const _showRegisterMethodDialog = () => setRegisterMethodDialogVisibility(true);
-
-  const _hideRegisterMethodDialog = () => setRegisterMethodDialogVisibility(false);
 
   const setServerError = (error) => {
     switch (error.code) {
@@ -71,6 +64,8 @@ const FormComponent = ({ navigation, route }) => {
         break;
     }
   };
+
+  const schema = isProfessional ? (registerPatient ? schemaEnrollPatient : schemaRegisterProfessional) : registerChild ? schemaRegisterChild : schemaRegisterPatient;
 
   const registerMethods = [
     { key: "0", label: "以電子郵件註冊" },
@@ -156,20 +151,11 @@ const FormComponent = ({ navigation, route }) => {
           setErrors({ submit: error.message });
         }
       }}
-      validationSchema={isProfessional ? (registerPatient ? SchemaRegisterPatient : SchemaProfessional) : registerChild ? SchemaRegisterChild : SchemaPatient}
+      validationSchema={schema}
       validateOnBlur={false}
       validateOnChange={false}
     >
-      {(formikProps) => (
-        <FormDetails
-          formikProps={formikProps}
-          isProfessional={isProfessional}
-          registerPatient={registerPatient}
-          isLoading={isLoading}
-          errorMessageFromServer={errorMessageFromServer}
-          registerChild={registerChild}
-        />
-      )}
+      {(formikProps) => <FormDetails formikProps={formikProps} isProfessional={isProfessional} registerPatient={registerPatient} isLoading={isLoading} errorMessageFromServer={errorMessageFromServer} registerChild={registerChild} />}
     </Formik>
   );
 };
@@ -182,8 +168,9 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
   const [isRoleDialogVisible, setRoleDialogVisibility] = useState(false);
   const [isPartDialogVisible, setPartDialogVisibility] = useState(false);
   const [isFamilySearchFieldVisible, setFamilySearchFieldVisibility] = useState(false);
-
   const [isFamilySearchDialogVisible, setFamilySearchDialogVisibility] = useState(false);
+
+  console.log(formikProps.errors);
 
   const _toggleFamilySearchSwitch = () => setFamilySearchFieldVisibility(!isFamilySearchFieldVisible);
 
@@ -332,14 +319,7 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
                   formikKey={"givenName"}
                   hideEmbbededMessage={true}
                 />
-                <InputTextField
-                  label={"Surname"}
-                  containerStyle={{ flex: 1, marginBottom: "-2%" }}
-                  iconStyle={{ flex: 0.3 }}
-                  formikProps={formikProps}
-                  formikKey={"surName"}
-                  hideEmbbededMessage={true}
-                />
+                <InputTextField label={"Surname"} containerStyle={{ flex: 1, marginBottom: "-2%" }} iconStyle={{ flex: 0.3 }} formikProps={formikProps} formikKey={"surName"} hideEmbbededMessage={true} />
               </View>
             ) : null}
             <View style={{ flexDirection: "row", paddingLeft: ScreenWidth * 0.02 }}>
@@ -418,16 +398,7 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
             <GenderOptionsInput formikKey="gender" formikProps={formikProps} label={"性別"} />
 
             {isProfessional && !registerPatient ? (
-              <InputDialogPicker
-                label={"職業"}
-                icon={jobIcon}
-                onDismiss={() => _hideRoleDialog()}
-                value={values.role}
-                list={roleList}
-                formikKey={"role"}
-                formikProps={formikProps}
-                showDialog={_showRoleDialog}
-              />
+              <InputDialogPicker label={"職業"} icon={jobIcon} onDismiss={() => _hideRoleDialog()} value={values.role} list={roleList} formikKey={"role"} formikProps={formikProps} showDialog={_showRoleDialog} />
             ) : (
               <InputDatePickerModal icon={hourGlassIcon} formikProps={formikProps} formikKey="birthday" showDatePicker={_showDatePicker} value={values.birthday} />
             )}
@@ -565,17 +536,9 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
           />
         </ScrollView>
         {Platform.OS === "android" ? (
-          isDatePickerVisible && (
-            <DateTimePicker testID="dateTimePicker" mode="date" display="spinner" value={values.birthday === "" ? new Date() : moment(values.birthday).toDate()} onChange={handleDateChange} />
-          )
+          isDatePickerVisible && <DateTimePicker testID="dateTimePicker" mode="date" display="spinner" value={values.birthday === "" ? new Date() : moment(values.birthday).toDate()} onChange={handleDateChange} />
         ) : (
-          <DateTimePickerModal
-            date={values.birthday === "" ? new Date() : moment(values.birthday).toDate()}
-            maximumDate={new Date()}
-            isVisible={isDatePickerVisible}
-            onConfirm={handleDateConfirm}
-            onCancel={_hideDatePicker}
-          />
+          <DateTimePickerModal date={values.birthday === "" ? new Date() : moment(values.birthday).toDate()} maximumDate={new Date()} isVisible={isDatePickerVisible} onConfirm={handleDateConfirm} onCancel={_hideDatePicker} />
         )}
       </View>
       <Provider>

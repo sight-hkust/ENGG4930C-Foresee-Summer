@@ -94,6 +94,15 @@ export const LoginWithEmailAndPassword = ({ navigation, route }) => {
                 <Text style={[styles.registrationNavText, { color: "#FFFFFF" }]}>登記</Text>
               </TouchableOpacity>
             </View>
+            <View style={styles.registrationNav}>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate("Forget Password");
+                }}
+              >
+                <Text style={[styles.registrationNavText, { color: "#FFFFFF" }]}>忘記密碼</Text>
+              </TouchableOpacity>
+            </View>
           </View>
         </KeyboardAvoidingView>
       </LinearGradientBackground>
