@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useState, useEffect, useCallback } from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Button, Icon } from "react-native-elements";
 import { Grid, Col, Row } from "react-native-easy-grid";
 import moment from "moment";
@@ -7,49 +7,82 @@ import moment from "moment";
 import { ScreenWidth, ScreenHeight } from "../../../constant/Constant";
 import MenuScreen from "../../../Utils/MenuScreen";
 
-import { connect } from "react-redux";
+import { auth, database } from "../../config/config";
+import { connect, useSelector } from "react-redux";
+import FamilyListPicker from "../FamilyListPicker/FamilyListPicker";
+import { decryptData } from "../../utils/encryptData";
+import { updateFamilyMembers } from "../../reducers/familyMembers";
 import { watchUserInfoUpdate } from "../../reducers/user";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { auth } from "../../config/config";
-import { displayName } from "../../utils/displayName";
 
-const Profile = ({ navigation, route, userInfoStore }) => {
-  const { type } = route.params; //type: "normal", "professional"
-  console.log(route);
+const Profile = ({ navigation, route, userStore }) => {
+  const { user } = userStore;
+  console.log(user);
+  const familyMembers = useSelector((state) => state.familyMembers);
+  const [userData, setUserData] = useState(null);
 
-  const [loading, setLoading] = useState(true);
-
-  const { user } = userInfoStore;
+  const updateUserData = (uid) => {
+    database
+      .ref("users/" + uid)
+      .once("value")
+      .then((snap) => {
+        const userData = snap.val();
+        if (userData["dataEncrypted"]) {
+          setUserData(decryptData(userData));
+        } else {
+          setUserData(userData);
+        }
+      });
+  };
 
   useEffect(() => {
-    //console.log(user);
-    if (user != undefined) {
-      setLoading(false);
+    if (!userData) {
+      updateUserData(familyMembers[0].uid);
     }
-  }, [user]);
+  }, [familyMembers]);
+
+  const updateSelectedFamilyMember = (member) => {
+    const { uid } = member;
+    updateUserData(uid);
+  };
 
   return (
     <MenuScreen>
       <View style={styles.container}>
-        {!loading && (
+        {userData && (
           <>
             <View style={styles.card}>
               <Grid>
-                <Row style={{ height: 0.1, justifyContent: "center", alignItems: "center" }}>
+                <Row
+                  style={{
+                    height: 0.1,
+                    justifyContent: "center",
+                    alignItems: "center",
+                  }}
+                >
                   <View style={styles.nameContainer}>
-                    <Text style={styles.name}>{user.lastName != "" ? user.lastName : user.givenName[0]}</Text>
+                    <Text style={styles.name}>{userData.lastName != "" ? userData.lastName[0] : userData.givenName[0]}</Text>
                   </View>
                 </Row>
                 <Row style={styles.qrCodeIconContainer}>
-                  {type == "normal" && <Icon type="antdesign" name="qrcode" size={40} containerStyle={{ marginRight: 15, marginTop: 10 }} onPress={() => navigation.navigate("QrCode")} />}
+                  <Icon type="antdesign" name="qrcode" size={40} containerStyle={{ marginRight: 15, marginTop: 10 }} onPress={() => navigation.navigate("QrCode")} />
                 </Row>
 
-                <Row style={styles.titleContainer}>
-                  <Text style={user.lastName != "" ? styles.title : styles.titleEnglish}>{displayName(user)}</Text>
+                <Row style={[styles.titleContainer]}>
+                  <FamilyListPicker
+                    containerStyle={{
+                      width: "100%",
+                      justifyContent: "center",
+                    }}
+                    textStyle={{
+                      fontSize: ScreenHeight * 0.045,
+                      color: "#1772A6",
+                    }}
+                    onSelectionUpdate={updateSelectedFamilyMember}
+                  />
                 </Row>
 
                 <Row style={{ ...styles.titleContainer, ...{ marginBottom: 7.5 } }}>
-                  {type == "normal" ? <Text style={styles.subtitle}>{user.birthday.split("T")[0]}</Text> : <Text style={styles.subtitle}>{user.role == "optometrist" ? "視光師" : "眼科醫生"}</Text>}
+                  <Text style={styles.subtitle}>{userData.birthday.split("T")[0]}</Text>
                 </Row>
                 <Row style={{ height: 47.5 }}>
                   <Col style={styles.iconContainer}>
@@ -75,21 +108,20 @@ const Profile = ({ navigation, route, userInfoStore }) => {
                 </Row>
                 <Row>
                   <Col style={styles.infoContainer}>
-                    {type == "normal" ? (
-                      <Text style={styles.info}>
-                        <Text style={{ fontSize: 30 }}>{moment.duration(moment().diff(user.birthday, "YYYY")).years()}</Text>歲
-                      </Text>
-                    ) : (
-                      <Text style={styles.info}>
-                        <Text style={{ fontSize: 22 }}>{user.part == "part1" ? "第一部分" : user.part == "part2" ? "第二部分" : user.part == "part3" ? "第三部分" : "第四部分"}</Text>
-                      </Text>
-                    )}
+                    <Text style={styles.info}>
+                      <Text style={{ fontSize: 30 }}>{moment.duration(moment().diff(userData.birthday, "YYYY")).years()}</Text>歲
+                    </Text>
                   </Col>
                   <Col style={styles.infoContainer}>
                     <Text
                       style={{
                         ...styles.info,
-                        ...{ position: "absolute", top: 50, width: ScreenWidth, textAlign: "center" },
+                        ...{
+                          position: "absolute",
+                          top: 50,
+                          width: ScreenWidth,
+                          textAlign: "center",
+                        },
                       }}
                     >
                       {user.email}
@@ -102,37 +134,21 @@ const Profile = ({ navigation, route, userInfoStore }) => {
               </Grid>
             </View>
             <View style={styles.bottomMenu}>
+              <Button title="詳細設定" type="clear" containerStyle={styles.bottomMenuItemContainer} titleStyle={styles.bottomMenuItemText} TouchableComponent={TouchableOpacity} onPress={() => navigation.navigate("SettingScreen")} />
+              <Button title="程式教學" type="clear" containerStyle={styles.bottomMenuItemContainer} titleStyle={styles.bottomMenuItemText} TouchableComponent={TouchableOpacity} onPress={() => navigation.navigate("Tutorial")} />
               <Button
-                title="詳細設定"
+                title="創建子帳戶"
                 type="clear"
                 containerStyle={styles.bottomMenuItemContainer}
                 titleStyle={styles.bottomMenuItemText}
                 TouchableComponent={TouchableOpacity}
-                onPress={() => navigation.navigate("SettingScreen")}
+                onPress={() =>
+                  navigation.navigate("Register", {
+                    isProfessional: false,
+                    registerChild: true,
+                  })
+                }
               />
-              <Button
-                title="程式教學"
-                type="clear"
-                containerStyle={styles.bottomMenuItemContainer}
-                titleStyle={styles.bottomMenuItemText}
-                TouchableComponent={TouchableOpacity}
-                onPress={() => navigation.navigate("Tutorial")}
-              />
-              {type == "normal" && (
-                <Button
-                  title="創建子帳戶"
-                  type="clear"
-                  containerStyle={styles.bottomMenuItemContainer}
-                  titleStyle={styles.bottomMenuItemText}
-                  TouchableComponent={TouchableOpacity}
-                  onPress={() =>
-                    navigation.navigate("Register", {
-                      isProfessional: false,
-                      registerChild: true,
-                    })
-                  }
-                />
-              )}
               {/*  <Button
                 title="變更個人資料"
                 type="clear"
@@ -157,6 +173,18 @@ const Profile = ({ navigation, route, userInfoStore }) => {
     </MenuScreen>
   );
 };
+
+const mapStateToProps = (state) => {
+  return {
+    userStore: state.user,
+  };
+};
+const mapDispatchToProps = (dispatch) => {
+  dispatch(watchUserInfoUpdate());
+  return {};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Profile);
 
 const styles = StyleSheet.create({
   container: {
@@ -246,23 +274,9 @@ const styles = StyleSheet.create({
   },
   bottomMenuItemContainer: {
     height: ScreenHeight * 0.06,
-    /* backgroundColor: "lightgreen", */
   },
   bottomMenuItemText: {
     color: "#fff",
     fontSize: 16.5,
   },
 });
-
-const mapStateToProps = (state) => {
-  return {
-    userInfoStore: state.user,
-  };
-};
-
-const mapDispatchToProps = (dispatch) => {
-  dispatch(watchUserInfoUpdate());
-  return {};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Profile);
