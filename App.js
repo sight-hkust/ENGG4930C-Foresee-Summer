@@ -182,7 +182,7 @@ function Main({ route, navigation }) {
       initialRouteName={auth.currentUser && auth.currentUser.displayName == "professional" ? "ProfessionalScreen" : "HomeScreen"}
       tabBarOptions={{
         keyboardHidesTabBar: true,
-        showLabel: false,
+        showLabel: true,
         activeTintColor: "#003973",
         inactiveTintColor: "#2D9CDB",
         style: {
@@ -216,6 +216,7 @@ function Main({ route, navigation }) {
             name="ProfessionalScreen"
             component={ProfessionalScreen}
             options={{
+              tabBarLabel: () => null,
               tabBarIcon: () => <Image source={require("./assets/images/Icon_solid.png")} style={{ ...styles.icon, ...{ width: 55, height: 55 } }} />,
             }}
           />
@@ -275,7 +276,7 @@ function Main({ route, navigation }) {
             name="HomeScreen"
             component={HomeScreen}
             options={{
-              tabBarLabel: "主頁",
+              tabBarLabel: () => null,
               tabBarIcon: () => (
                 <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")}>
                   <Image source={require("./assets/images/Icon_solid.png")} style={{ ...styles.icon, ...{ width: 50, height: 50 } }} />
