@@ -15,6 +15,7 @@ import { updateFamilyMembers } from "../../reducers/familyMembers";
 import { watchUserInfoUpdate } from "../../reducers/user";
 
 const Profile = ({ navigation, route, userStore }) => {
+  const { type } = route.params; //type: "normal", "professional";
   const { user } = userStore;
   const familyMembers = useSelector((state) => state.familyMembers);
   const [userData, setUserData] = useState(null);
@@ -133,22 +134,8 @@ const Profile = ({ navigation, route, userStore }) => {
               </Grid>
             </View>
             <View style={styles.bottomMenu}>
-              <Button
-                title="詳細設定"
-                type="clear"
-                containerStyle={styles.bottomMenuItemContainer}
-                titleStyle={styles.bottomMenuItemText}
-                TouchableComponent={TouchableOpacity}
-                onPress={() => navigation.navigate("SettingScreen")}
-              />
-              <Button
-                title="程式教學"
-                type="clear"
-                containerStyle={styles.bottomMenuItemContainer}
-                titleStyle={styles.bottomMenuItemText}
-                TouchableComponent={TouchableOpacity}
-                onPress={() => navigation.navigate("Tutorial")}
-              />
+              <Button title="詳細設定" type="clear" containerStyle={styles.bottomMenuItemContainer} titleStyle={styles.bottomMenuItemText} TouchableComponent={TouchableOpacity} onPress={() => navigation.navigate("SettingScreen")} />
+              <Button title="程式教學" type="clear" containerStyle={styles.bottomMenuItemContainer} titleStyle={styles.bottomMenuItemText} TouchableComponent={TouchableOpacity} onPress={() => navigation.navigate("Tutorial")} />
               <Button
                 title="創建子帳戶"
                 type="clear"
@@ -162,14 +149,14 @@ const Profile = ({ navigation, route, userStore }) => {
                   })
                 }
               />
-              {/*  <Button
+              <Button
                 title="變更個人資料"
                 type="clear"
                 containerStyle={styles.bottomMenuItemContainer}
                 titleStyle={styles.bottomMenuItemText}
                 TouchableComponent={TouchableOpacity}
-                onPress={() => navigation.navigate("Edit User Info", { user })}
-              /> */}
+                onPress={() => navigation.navigate("UpdateProfile", { user, type })}
+              />
               <Button
                 title="登出"
                 type="clear"

@@ -366,3 +366,62 @@ export const schemaEnrollPatient = object().shape({
   birthday: string().required("請輸入病人出生日期"),
   email: emailValidation,
 });
+
+export const updateProfessionalProfileSchema = object().shape({
+  selectedNameFields: string().test({
+    name: "name_validation",
+    test: function (val) {
+      const { firstName, lastName } = this.parent;
+      if (!firstName || !lastName) {
+        return this.createError({
+          message: "請輸入姓名",
+          path: "nameError",
+        });
+      } else {
+        const chineseValidationFormat = /^[\u4E00-\u9FA5]+$/;
+        const englishValidationFormat = /^[a-zA-Z][0-9a-zA-Z .,'-]*$/;
+        if (chineseValidationFormat.test(firstName) && chineseValidationFormat.test(lastName)) {
+          return true;
+        }
+        if (englishValidationFormat.test(firstName) && englishValidationFormat.test(lastName)) {
+          return true;
+        }
+        return this.createError({
+          message: "請輸入有效姓名",
+          path: "nameError",
+        });
+      }
+    },
+  }),
+  birthday: string().required("請輸入出生年份和月份"),
+  phone: phoneValidation,
+});
+
+export const updatePatientProfileSchema = object().shape({
+  selectedNameFields: string().test({
+    name: "name_validation",
+    test: function (val) {
+      const { firstName, lastName } = this.parent;
+      if (!firstName || !lastName) {
+        return this.createError({
+          message: "請輸入姓名",
+          path: "nameError",
+        });
+      } else {
+        const chineseValidationFormat = /^[\u4E00-\u9FA5]+$/;
+        const englishValidationFormat = /^[a-zA-Z][0-9a-zA-Z .,'-]*$/;
+        if (chineseValidationFormat.test(firstName) && chineseValidationFormat.test(lastName)) {
+          return true;
+        }
+        if (englishValidationFormat.test(firstName) && englishValidationFormat.test(lastName)) {
+          return true;
+        }
+        return this.createError({
+          message: "請輸入有效姓名",
+          path: "nameError",
+        });
+      }
+    },
+  }),
+  phone: phoneValidation,
+});
