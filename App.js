@@ -209,6 +209,7 @@ function Main({ route, navigation }) {
             component={RegistrationForm}
             initialParams={{ isProfessional: true, registerPatient: true }}
             options={{
+              tabBarLabel: "登記病人",
               tabBarIcon: () => <Icon name="md-add-circle-outline" type="ionicon" color="#23559E" size={32.5} containerStyle={styles.icon} />,
             }}
           />
