@@ -37,7 +37,6 @@ const Profile = ({ navigation, route, userStore }) => {
     if (!userData) {
       updateUserData(familyMembers[0].uid);
     }
-    console.log("decrypted", decryptData(user).email);
   }, [familyMembers]);
 
   const updateSelectedFamilyMember = (member) => {
@@ -124,11 +123,11 @@ const Profile = ({ navigation, route, userStore }) => {
                         },
                       }}
                     >
-                      {decryptData(user).email}
+                      {user["dataEncrypted"] ? decryptData(user).email : user.email}
                     </Text>
                   </Col>
                   <Col style={styles.infoContainer}>
-                    <Text style={styles.info}>{decryptData(user).phone}</Text>
+                    <Text style={styles.info}>{user["dataEncrypted"] ? decryptData(user).phone : user.phone}</Text>
                   </Col>
                 </Row>
               </Grid>
