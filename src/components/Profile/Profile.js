@@ -13,7 +13,7 @@ import FamilyListPicker from "../FamilyListPicker/FamilyListPicker";
 import { decryptData } from "../../utils/encryptData";
 import { updateFamilyMembers } from "../../reducers/familyMembers";
 import { watchUserInfoUpdate } from "../../reducers/user";
-import { displayName } from "../../utils/displayName";
+import { RoundButton } from "../../../Utils/RoundButton";
 
 const Profile = ({ navigation, route, userStore }) => {
   const { type } = route.params; //type: "user", "professional";
@@ -147,6 +147,9 @@ const Profile = ({ navigation, route, userStore }) => {
                   <Col style={styles.infoContainer}>
                     <Text style={styles.info}>{user["dataEncrypted"] ? decryptData(user).phone : user.phone}</Text>
                   </Col>
+                </Row>
+                <Row style={{ alignItems: "center", justifyContent: "center" }}>
+                  <RoundButton title="更改密碼" onPress={() => navigation.navigate("ChangePassword")} buttonStyle={{ width: ScreenWidth * 0.28, backgroundColor: "#2D9CDB" }} textStyle={{ color: "#FFFFFF" }} />
                 </Row>
               </Grid>
             </View>
