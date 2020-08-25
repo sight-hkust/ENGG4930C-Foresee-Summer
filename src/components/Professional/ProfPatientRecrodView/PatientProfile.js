@@ -8,6 +8,7 @@ import { ScreenHeight, ScreenWidth } from "../../../../constant/Constant";
 export const PatientProfile = ({ info }) => {
   const AnimatableScrollView = Animatable.createAnimatableComponent(ScrollView);
   const RecordsKey = Object.keys(info.records);
+  //const RecordsKey = info.records ? Object.keys(info.records) : [];
   console.log("info.records: ", info.records);
   const LatestRecordKey = info.records[RecordsKey[RecordsKey.length - 1]];
   const disease = LatestRecordKey.disease;

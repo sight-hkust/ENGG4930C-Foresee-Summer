@@ -57,59 +57,78 @@ export const tutorialContent = [
 ];
 
 const Tutorial = ({ route, navigation }) => {
-  return (
-    <Swiper
-      loop={false}
-      paginationStyle={{ marginBottom: ScreenHeight * 0.05 }}
-      dot={
-        <View
-          style={{
-            backgroundColor: "rgba(0,0,0,.2)",
-            width: 8,
-            height: 8,
-            borderRadius: 4,
-            marginHorizontal: 8,
-          }}
-        />
-      }
-      activeDot={
-        <View
-          style={{
-            backgroundColor: "#007aff",
-            width: 8,
-            height: 8,
-            borderRadius: 4,
-            marginHorizontal: 8,
-          }}
-        />
-      }
-    >
-      {tutorialContent.map((item, index) => {
-        return (
-          <View style={styles.slide1}>
-            <Image style={[styles.image, index % 2 ? { marginRight: ScreenWidth / 7 } : { marginLeft: ScreenWidth / 7 }]} source={item.image} />
-            <View style={{ height: ScreenHeight * 0.1, justifyContent: "center" }}>
-              <Text style={styles.title}>{item.subject}</Text>
-            </View>
-            <Text style={styles.content}>{item.content}</Text>
-            {index == tutorialContent.length - 1 && (
-              <View
-                style={{
-                  position: "absolute",
-                  width: ScreenWidth,
-                  bottom: ScreenHeight * 0.14,
-                  flex: 1,
-                  alignItems: "center",
-                }}
-              >
-                <Button buttonStyle={styles.buttonStyle} titleStyle={{ fontSize: ScreenWidth / 24 }} type="clear" title="開始使用" onPress={() => navigation.navigate("Main")} />
-              </View>
-            )}
-          </View>
-        );
-      })}
-    </Swiper>
-  );
+    return (
+        <Swiper
+            loop={false}
+            paginationStyle={{ marginBottom: ScreenHeight * 0.05 }}
+            dot={
+                <View
+                    style={{
+                        backgroundColor: "rgba(0,0,0,.2)",
+                        width: 8,
+                        height: 8,
+                        borderRadius: 4,
+                        marginHorizontal: 8,
+                    }}
+                />
+            }
+            activeDot={
+                <View
+                    style={{
+                        backgroundColor: "#007aff",
+                        width: 8,
+                        height: 8,
+                        borderRadius: 4,
+                        marginHorizontal: 8,
+                    }}
+                />
+            }
+        >
+            {tutorialContent.map((item, index) => {
+                return (
+                    <View key={index} style={styles.slide1}>
+                        <Image
+                            style={[
+                                styles.image,
+                                index % 2
+                                    ? { marginRight: ScreenWidth / 7 }
+                                    : { marginLeft: ScreenWidth / 7 },
+                            ]}
+                            source={item.image}
+                        />
+                        <View
+                            style={{
+                                height: ScreenHeight * 0.1,
+                                justifyContent: "center",
+                            }}
+                        >
+                            <Text style={styles.title}>{item.subject}</Text>
+                        </View>
+                        <Text style={styles.content}>{item.content}</Text>
+                        {index > /* tutorialContent.length - 1 */ 0 && (
+                            <View
+                                style={{
+                                    position: "absolute",
+                                    width: ScreenWidth,
+                                    bottom: ScreenHeight * 0.14,
+                                    flex: 1,
+                                    alignItems: "center",
+                                }}
+                            >
+                                <Button
+                                    buttonStyle={styles.buttonStyle}
+                                    titleStyle={{ fontSize: ScreenWidth / 24 }}
+                                    type="clear"
+                                    title="開始使用"
+                                    onPress={() => navigation.navigate("Main")}
+                                />
+                            </View>
+                        )}
+                    </View>
+                );
+            })}
+        </Swiper>
+    );
 };
 
 const styles = StyleSheet.create({

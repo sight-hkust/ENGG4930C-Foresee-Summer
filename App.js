@@ -51,6 +51,7 @@ import { Surface } from "react-native-paper";
 import { View } from "react-native-animatable";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 import UpdateProfileScreen from "./Screens/UpdateProfileScreen";
+import ChangePasswordScreen from "./Screens/ChangePasswordScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -133,6 +134,23 @@ function ProfileScreen({ navigation, route }) {
         component={RegistrationForm}
         options={{
           headerTransparent: true,
+          headerLeft: () => (
+            <BackButton
+              onPress={() => {
+                navigation.navigate("ProfileTabMain");
+              }}
+            />
+          ),
+          headerTintColor: "white",
+          title: null,
+        }}
+      />
+      <Stack.Screen
+        name="ChangePassword"
+        component={ChangePasswordScreen}
+        options={{
+          headerTransparent: true,
+          title: "更改密碼",
           headerLeft: () => (
             <BackButton
               onPress={() => {

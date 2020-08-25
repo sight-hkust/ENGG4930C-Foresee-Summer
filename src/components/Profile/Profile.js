@@ -13,14 +13,15 @@ import FamilyListPicker from "../FamilyListPicker/FamilyListPicker";
 import { decryptData } from "../../utils/encryptData";
 import { updateFamilyMembers } from "../../reducers/familyMembers";
 import { watchUserInfoUpdate } from "../../reducers/user";
+import { RoundButton } from "../../../Utils/RoundButton";
 import { displayName } from "../../utils/displayName";
 
 const Profile = ({ navigation, route, userStore }) => {
   const { type } = route.params; //type: "user", "professional";
   const { user } = userStore;
+  console.log(user);
   const familyMembers = useSelector((state) => state.familyMembers);
   const [userData, setUserData] = useState(null);
-  console.log(user.uid);
   const updateUserData = (uid) => {
     database
       .ref("users/" + uid)
@@ -50,7 +51,7 @@ const Profile = ({ navigation, route, userStore }) => {
     if (!userData && type == "professional") {
       setUserData(user);
     }
-  }, [userData]);
+  });
 
   return (
     <MenuScreen>
@@ -70,9 +71,7 @@ const Profile = ({ navigation, route, userStore }) => {
                     <Text style={styles.name}>{userData.lastName != "" ? userData.lastName[0] : userData.givenName[0]}</Text>
                   </View>
                 </Row>
-                <Row style={styles.qrCodeIconContainer}>
-                  {type == "user" && <Icon type="antdesign" name="qrcode" size={40} containerStyle={{ marginRight: 15, marginTop: 10 }} onPress={() => navigation.navigate("QrCode")} />}
-                </Row>
+                <Row style={styles.qrCodeIconContainer}>{type == "user" && <Icon type="antdesign" name="qrcode" size={40} containerStyle={{ marginRight: 15, marginTop: 10 }} onPress={() => navigation.navigate("QrCode")} />}</Row>
 
                 {type == "user" ? (
                   <Row style={[styles.titleContainer]}>
@@ -150,25 +149,14 @@ const Profile = ({ navigation, route, userStore }) => {
                     <Text style={styles.info}>{user["dataEncrypted"] ? decryptData(user).phone : user.phone}</Text>
                   </Col>
                 </Row>
+                <Row style={{ alignItems: "center", justifyContent: "center" }}>
+                  <RoundButton title="更改密碼" onPress={() => navigation.navigate("ChangePassword")} buttonStyle={{ width: ScreenWidth * 0.28, backgroundColor: "#2D9CDB" }} textStyle={{ color: "#FFFFFF" }} />
+                </Row>
               </Grid>
             </View>
             <View style={styles.bottomMenu}>
-              <Button
-                title="詳細設定"
-                type="clear"
-                containerStyle={styles.bottomMenuItemContainer}
-                titleStyle={styles.bottomMenuItemText}
-                TouchableComponent={TouchableOpacity}
-                onPress={() => navigation.navigate("SettingScreen")}
-              />
-              <Button
-                title="程式教學"
-                type="clear"
-                containerStyle={styles.bottomMenuItemContainer}
-                titleStyle={styles.bottomMenuItemText}
-                TouchableComponent={TouchableOpacity}
-                onPress={() => navigation.navigate("Tutorial")}
-              />
+              <Button title="詳細設定" type="clear" containerStyle={styles.bottomMenuItemContainer} titleStyle={styles.bottomMenuItemText} TouchableComponent={TouchableOpacity} onPress={() => navigation.navigate("SettingScreen")} />
+              <Button title="程式教學" type="clear" containerStyle={styles.bottomMenuItemContainer} titleStyle={styles.bottomMenuItemText} TouchableComponent={TouchableOpacity} onPress={() => navigation.navigate("Tutorial")} />
               {type == "user" && (
                 <Button
                   title="創建子帳戶"
