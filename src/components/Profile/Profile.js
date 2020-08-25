@@ -20,7 +20,7 @@ const Profile = ({ navigation, route, userStore }) => {
   const { user } = userStore;
   const familyMembers = useSelector((state) => state.familyMembers);
   const [userData, setUserData] = useState(null);
-
+  console.log(user.uid);
   const updateUserData = (uid) => {
     database
       .ref("users/" + uid)
@@ -36,7 +36,7 @@ const Profile = ({ navigation, route, userStore }) => {
   };
 
   useEffect(() => {
-    if (!userData) {
+    if (!userData && type == "user") {
       updateUserData(familyMembers[0].uid);
     }
   }, [familyMembers]);
@@ -45,6 +45,12 @@ const Profile = ({ navigation, route, userStore }) => {
     const { uid } = member;
     updateUserData(uid);
   };
+
+  useEffect(() => {
+    if (!userData && type == "professional") {
+      setUserData(user);
+    }
+  }, [userData]);
 
   return (
     <MenuScreen>
