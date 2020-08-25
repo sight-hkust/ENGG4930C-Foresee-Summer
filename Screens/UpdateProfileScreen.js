@@ -13,7 +13,7 @@ import { decryptData } from "../src/utils/encryptData";
 
 const UpdateProfileScreen = ({ route, navigation }) => {
   const { user, type } = route.params;
-  console.log(user.dataEncrypted);
+  console.log("user: ", user);
   return (
     <MenuScreen>
       {user && (
@@ -26,12 +26,12 @@ const UpdateProfileScreen = ({ route, navigation }) => {
             chineseNameError: "",
             englishNameError: "",
             gender: "M",
-            birthday: user.birthday ? (user.dataEncrypted ? decryptData(user).birthday : user.birthday) : moment().format("YYYY-MM-DD"),
+            birthday: user.birthday ? user.birthday : moment().format("YYYY-MM-DD"),
             parent: {},
             parentSelectionDisabled: false,
             email: "",
             tel_country_code: "+852",
-            phone: user.dataEncrypted ? decryptData(user).phone : user.phone,
+            phone: user.phone,
             job: user.job ? user.job : "",
             role: "",
             history: user.history ? user.history : "",

@@ -188,7 +188,7 @@ const Profile = ({ navigation, route, userStore }) => {
                 containerStyle={styles.bottomMenuItemContainer}
                 titleStyle={styles.bottomMenuItemText}
                 TouchableComponent={TouchableOpacity}
-                onPress={() => navigation.navigate("UpdateProfile", { user, type })}
+                onPress={() => navigation.navigate("UpdateProfile", { user: userData, type: type })}
               />
 
               <Button
