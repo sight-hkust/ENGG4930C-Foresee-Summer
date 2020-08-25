@@ -8,7 +8,7 @@ import { ScreenHeight, ScreenWidth } from "../../../../constant/Constant";
 export const PatientProfile = ({ info }) => {
   const AnimatableScrollView = Animatable.createAnimatableComponent(ScrollView);
 
-  console.log("info: ", info.records);
+  console.log("info: ", info);
 
   const ListDisease = () => {
     if (info.disease) {
@@ -29,7 +29,7 @@ export const PatientProfile = ({ info }) => {
       <ScrollView>
         <View style={{ flexDirection: "row" }}>
           <Text style={[styles.profileText, styles.infoLabel]}>年齡:</Text>
-          <Text style={[styles.profileText, styles.infoValues]}>{Math.abs(moment(info.birthday).diff(moment(), "years"))}</Text>
+          <Text style={[styles.profileText, styles.infoValues]}>{info.birthday ? Math.abs(moment(info.birthday).diff(moment(), "years")) : "不詳"}</Text>
         </View>
         <View style={{ flexDirection: "row" }}>
           <Text style={[styles.profileText, styles.infoLabel]}>職業:</Text>
