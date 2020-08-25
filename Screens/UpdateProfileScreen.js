@@ -9,10 +9,11 @@ import { Formik } from "formik";
 import { RoundButton } from "../Utils/RoundButton";
 import { database } from "../src/config/config";
 import { updateProfessionalProfileSchema, updatePatientProfileSchema } from "../src/utils/schema";
+import { decryptData } from "../src/utils/encryptData";
 
 const UpdateProfileScreen = ({ route, navigation }) => {
   const { user, type } = route.params;
-
+  console.log(user.dataEncrypted);
   return (
     <MenuScreen>
       {user && (
@@ -25,12 +26,12 @@ const UpdateProfileScreen = ({ route, navigation }) => {
             chineseNameError: "",
             englishNameError: "",
             gender: "M",
-            birthday: user.birthday ? user.birthday : moment().startOf("day").toJSON(),
+            birthday: user.birthday ? (user.dataEncrypted ? decryptData(user).birthday : user.birthday) : moment().format("YYYY-MM-DD"),
             parent: {},
             parentSelectionDisabled: false,
             email: "",
             tel_country_code: "+852",
-            phone: user.phone,
+            phone: user.dataEncrypted ? decryptData(user).phone : user.phone,
             job: user.job ? user.job : "",
             role: "",
             history: user.history ? user.history : "",
@@ -194,7 +195,14 @@ const UpdateProfileFormDetails = ({ formikProps, type }) => {
           }}
         />
       </View>
-      <DateTimePickerModal isVisible={isDatePickerVisible} mode="date" onConfirm={handleConfirm} onCancel={_hideDatePicker} date={moment(formikProps.values["birthday"]).toDate()} maximumDate={new Date()} />
+      <DateTimePickerModal
+        isVisible={isDatePickerVisible}
+        mode="date"
+        onConfirm={handleConfirm}
+        onCancel={_hideDatePicker}
+        date={moment(formikProps.values["birthday"]).toDate()}
+        maximumDate={new Date()}
+      />
     </ScrollView>
   );
 };
