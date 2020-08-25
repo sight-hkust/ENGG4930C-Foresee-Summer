@@ -96,7 +96,6 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
                                   isProfessional: true,
                                   professional_id: auth.currentUser.uid,
                                   patient_id: key,
-                                  //inactive: inactive,
                                 });
                               }}
                             />

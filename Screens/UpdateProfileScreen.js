@@ -44,10 +44,18 @@ const UpdateProfileScreen = ({ route, navigation }) => {
             let updateValue = {};
             if (type == "user") {
               userRef = database.ref("/users/" + user.uid);
-              updateValue = encryptData({ firstName: values.firstName, lastName: values.lastName, birthday: values.birthday, phone: values.phone, job: values.job, disease: values.disease, history: values.history });
+              if (user.dataEncrypted) {
+                updateValue = encryptData({ firstName: values.firstName, lastName: values.lastName, birthday: values.birthday, phone: values.phone, job: values.job, disease: values.disease, history: values.history });
+              } else {
+                updateValue = updateValue = { firstName: values.firstName, lastName: values.lastName, birthday: values.birthday, phone: values.phone, job: values.job, disease: values.disease, history: values.history };
+              }
             } else {
               userRef = database.ref("/professionals/" + user.uid);
-              updateValue = encryptData({ firstName: values.firstName, lastName: values.lastName, birthday: values.birthday, phone: values.phone });
+              if (user.dataEncrypted) {
+                updateValue = encryptData({ firstName: values.firstName, lastName: values.lastName, birthday: values.birthday, phone: values.phone });
+              } else {
+                updateValue = { firstName: values.firstName, lastName: values.lastName, birthday: values.birthday, phone: values.phone };
+              }
             }
             userRef
               .update(updateValue)

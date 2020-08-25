@@ -82,7 +82,6 @@ const writeUserData = ({ uid = null, values, isProfessional, registerPatient = f
           })
         );
       } else {
-        encryptedData["dataEncrypted"] = true;
         database.ref("/professionals/" + uid).set(
           addEncryptDataTag(
             encryptData({
