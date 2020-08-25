@@ -7,18 +7,15 @@ import { ScreenHeight, ScreenWidth } from "../../../../constant/Constant";
 
 export const PatientProfile = ({ info }) => {
   const AnimatableScrollView = Animatable.createAnimatableComponent(ScrollView);
+  const recordsKey = info.records ? Object.keys(info.records) : [];
+  const latestRecordKey = info.records ? info.records[recordsKey[recordsKey.length - 1]] : null;
+  const disease = latestRecordKey && latestRecordKey.disease;
   const ListDisease = () => {
-    if (info.records) {
-      const RecordsKey = info.records ? Object.keys(info.records) : [];
-      const LatestRecordKey = info.records[RecordsKey[RecordsKey.length - 1]];
-      const disease = LatestRecordKey.disease;
-      var list = "";
-      for (var key of disease) {
-        list = list + key + " ";
-      }
-
-      return list;
-    } else return "不適用";
+    var list = "";
+    for (var key of disease) {
+      list = list + key + " ";
+    }
+    return list;
   };
 
   return (
@@ -39,7 +36,7 @@ export const PatientProfile = ({ info }) => {
         </View>
         <View style={{ flexDirection: "row" }}>
           <Text style={[styles.profileText, styles.infoLabel]}>已知眼疾:</Text>
-          <Text style={[styles.profileText, styles.infoValues]}>{ListDisease()}</Text>
+          <Text style={[styles.profileText, styles.infoValues]}>{disease ? ListDisease() : "不適用"}</Text>
         </View>
       </ScrollView>
     </>
