@@ -20,7 +20,8 @@ const Profile = ({ navigation, route, userStore }) => {
   const { user } = userStore;
   const familyMembers = useSelector((state) => state.familyMembers);
   const [userData, setUserData] = useState(null);
-  console.log(user.uid);
+  if (user) console.log(user.uid);
+  else console.log("user undefined");
   const updateUserData = (uid) => {
     database
       .ref("users/" + uid)

@@ -90,7 +90,6 @@ class ProfPatientRecordView extends Component {
         <View style={{ flex: 1, paddingTop: ScreenHeight * 0.045, paddingHorizontal: ScreenWidth * 0.1 }}>
           <View style={styles.patientInfo}>{info && <PatientProfile info={info} />}</View>
           <View style={{ flex: 3, justifyContent: "center", alignItems: "center" }}>
-            <RoundButton title={"登出"} onPress={() => auth.signOut()}></RoundButton>
             {info && (
               <>
                 <View style={styles.boxes}>
@@ -123,14 +122,17 @@ class ProfPatientRecordView extends Component {
                   )}
                 </View>
                 <View style={{ flex: 0.2, alignContent: "center", justifyContent: "center" }}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      this.props.navigation.navigate("AddRecordScreen", { isProfessional: true, professional_id: auth.currentUser.uid, patient_id: key, inactive: inactive });
-                    }}
-                    style={{ backgroundColor: "white", width: 48, height: 48, borderRadius: 24, justifyContent: "center" }}
-                  >
-                    <Icon name="add" size={25} color="#2D9CDB" />
-                  </TouchableOpacity>
+                  <View style={{ flexDirection: "row" }}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        this.props.navigation.navigate("AddRecordScreen", { isProfessional: true, professional_id: auth.currentUser.uid, patient_id: key, inactive: inactive });
+                      }}
+                      style={{ backgroundColor: "white", width: 48, height: 48, borderRadius: 24, justifyContent: "center" }}
+                    >
+                      <Icon name="add" size={25} color="#2D9CDB" />
+                    </TouchableOpacity>
+                    <RoundButton title={"出"} onPress={() => auth.signOut()}></RoundButton>
+                  </View>
                 </View>
               </>
             )}
