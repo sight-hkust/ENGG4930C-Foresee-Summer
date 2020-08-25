@@ -7,10 +7,10 @@ import { userArticleScoreList } from "./userArticleScores";
 import { user } from "./user";
 
 export default combineReducers({
-  patientList,
-  questionList,
-  familyMembers,
-  records,
-  user,
-  userArticleScoreList,
+    patientList,
+    questionList,
+    familyMembers,
+    records,
+    user,
+    userArticleScoreList,
 });

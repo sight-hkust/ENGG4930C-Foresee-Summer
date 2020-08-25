@@ -1,33 +1,33 @@
 {
-  "expo": {
-    "name": "ForeSee",
-    "slug": "foresee",
-    "platforms": ["ios", "android", "web"],
-    "version": "1.0.8",
-    "orientation": "portrait",
-    "icon": "./assets/images/ApplicationLogo.png",
-    "splash": {
-      "image": "./assets/splash.png",
-      "resizeMode": "cover",
-      "backgroundColor": "#ffffff"
-    },
-    "updates": {
-      "fallbackToCacheTimeout": 0
-    },
-    "assetBundlePatterns": ["**/*"],
-    "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "ios",
-      "buildNumber": "1.0.8"
-    },
-    "android": {
-      "package": "hk.ust.sight.foresee",
-      "versionCode": 10
-    },
-    "entryPoint": "node_modules/expo/AppEntry.js",
-    "packagerOpts": {
-      "config": "metro.config.js",
-      "sourceExts": ["js", "jsx", "svg", "svgx"]
+    "expo": {
+        "name": "ForeSee",
+        "slug": "foresee",
+        "platforms": ["ios", "android", "web"],
+        "version": "1.0.8",
+        "orientation": "portrait",
+        "icon": "./assets/images/ApplicationLogo.png",
+        "splash": {
+            "image": "./assets/splash.png",
+            "resizeMode": "cover",
+            "backgroundColor": "#ffffff"
+        },
+        "updates": {
+            "fallbackToCacheTimeout": 0
+        },
+        "assetBundlePatterns": ["**/*"],
+        "ios": {
+            "supportsTablet": true,
+            "bundleIdentifier": "ios",
+            "buildNumber": "1.0.8"
+        },
+        "android": {
+            "package": "hk.ust.sight.foresee",
+            "versionCode": 10
+        },
+        "entryPoint": "node_modules/expo/AppEntry.js",
+        "packagerOpts": {
+            "config": "metro.config.js",
+            "sourceExts": ["js", "jsx", "svg", "svgx"]
+        }
     }
-  }
 }

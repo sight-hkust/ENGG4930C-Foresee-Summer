@@ -22,86 +22,90 @@ import { StyledInput, StyledDatePicker, StyledInputArea } from "./StyledInput";
 }) */
 
 export const RegisterPatient = ({ formikProps, isProfessional }) => {
-  const { setFieldValue, values } = formikProps;
-  const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
+    const { setFieldValue, values } = formikProps;
+    const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
-  const showDatePicker = () => {
-    setDatePickerVisibility(true);
-  };
+    const showDatePicker = () => {
+        setDatePickerVisibility(true);
+    };
 
-  const hideDatePicker = () => {
-    setDatePickerVisibility(false);
-  };
+    const hideDatePicker = () => {
+        setDatePickerVisibility(false);
+    };
 
-  const handleConfirm = (date) => {
-    hideDatePicker();
-    setFieldValue("birthYearsAndMonths", moment(date).format("YYYY-MM-DD"));
-  };
+    const handleConfirm = (date) => {
+        hideDatePicker();
+        setFieldValue("birthYearsAndMonths", moment(date).format("YYYY-MM-DD"));
+    };
 
-  return (
-    <ScrollView style={{ backgroundColor: "white" }}>
-      <StyledInput
-        textWrapperStyle={{ marginTop: ScreenHeight * 0.07 }}
-        label="姓名(全名)"
-        formikKey="name"
-        formikProps={formikProps}
-        autoFocus={false}
-      />
-      <StyledDatePicker
-        label="出生年份"
-        showDatePicker={showDatePicker}
-        formikKey="birthYearsAndMonths"
-        value={values.birthYearsAndMonths}
-        formikProps={formikProps}
-      />
-      <StyledInput
-        label="電子郵件"
-        formikKey="email"
-        formikProps={formikProps}
-      />
-      <StyledInput
-        label="電話號碼"
-        formikKey="phone"
-        formikProps={formikProps}
-        keyboardType={"numeric"}
-      />
-      {isProfessional ? (
-        <View>
-          <StyledInput label="職業" formikKey="job" formikProps={formikProps} />
-          <StyledInputArea
-            label="家庭病史"
-            formikKey="history"
-            formikProps={formikProps}
-          />
-          <StyledInputArea
-            label="已知眼疾"
-            formikKey="disease"
-            formikProps={formikProps}
-          />
-        </View>
-      ) : (
-        <View>
-          <StyledInput
-            label="密碼"
-            formikKey="password"
-            formikProps={formikProps}
-            secureTextEntry={true}
-          />
-          <StyledInput
-            label="確認密碼"
-            formikKey="confirmPassword"
-            formikProps={formikProps}
-            secureTextEntry={true}
-          />
-        </View>
-      )}
-      <DateTimePickerModal
-        isVisible={isDatePickerVisible}
-        mode="date"
-        onConfirm={handleConfirm}
-        onCancel={hideDatePicker}
-        date={moment().toDate()}
-      />
-    </ScrollView>
-  );
+    return (
+        <ScrollView style={{ backgroundColor: "white" }}>
+            <StyledInput
+                textWrapperStyle={{ marginTop: ScreenHeight * 0.07 }}
+                label="姓名(全名)"
+                formikKey="name"
+                formikProps={formikProps}
+                autoFocus={false}
+            />
+            <StyledDatePicker
+                label="出生年份"
+                showDatePicker={showDatePicker}
+                formikKey="birthYearsAndMonths"
+                value={values.birthYearsAndMonths}
+                formikProps={formikProps}
+            />
+            <StyledInput
+                label="電子郵件"
+                formikKey="email"
+                formikProps={formikProps}
+            />
+            <StyledInput
+                label="電話號碼"
+                formikKey="phone"
+                formikProps={formikProps}
+                keyboardType={"numeric"}
+            />
+            {isProfessional ? (
+                <View>
+                    <StyledInput
+                        label="職業"
+                        formikKey="job"
+                        formikProps={formikProps}
+                    />
+                    <StyledInputArea
+                        label="家庭病史"
+                        formikKey="history"
+                        formikProps={formikProps}
+                    />
+                    <StyledInputArea
+                        label="已知眼疾"
+                        formikKey="disease"
+                        formikProps={formikProps}
+                    />
+                </View>
+            ) : (
+                <View>
+                    <StyledInput
+                        label="密碼"
+                        formikKey="password"
+                        formikProps={formikProps}
+                        secureTextEntry={true}
+                    />
+                    <StyledInput
+                        label="確認密碼"
+                        formikKey="confirmPassword"
+                        formikProps={formikProps}
+                        secureTextEntry={true}
+                    />
+                </View>
+            )}
+            <DateTimePickerModal
+                isVisible={isDatePickerVisible}
+                mode="date"
+                onConfirm={handleConfirm}
+                onCancel={hideDatePicker}
+                date={moment().toDate()}
+            />
+        </ScrollView>
+    );
 };

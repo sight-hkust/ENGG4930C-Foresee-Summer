@@ -1,11 +1,13 @@
 import React from "react";
 import { StyleSheet, Text } from "react-native";
-import MaterialCommunityIcon from 'react-native-vector-icons/MaterialCommunityIcons'
+import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { ScreenHeight, ScreenWidth, FontScale } from "../constant/Constant";
 import { StyledInputWrapper } from "./StyledInputWrapper";
-import moment from 'moment';
+import moment from "moment";
 
-const iconDefault = <MaterialCommunityIcon name='eye' size={30} color={'white'} />
+const iconDefault = (
+    <MaterialCommunityIcon name="eye" size={30} color={"white"} />
+);
 
 export const StyledDatePickerModal = ({
     containerStyle,
@@ -16,7 +18,8 @@ export const StyledDatePickerModal = ({
     showDatePicker,
     value,
     hideEmbeddedErrorMessage,
-    ...rest }) => {
+    ...rest
+}) => {
     return (
         <StyledInputWrapper
             containerStyle={containerStyle}
@@ -28,21 +31,22 @@ export const StyledDatePickerModal = ({
             <Text
                 style={styles.textField}
                 onPress={() => showDatePicker()}
-                {...rest}>
-                {value == '' ? '出生日期' : moment(value).format('YYYY-MM-DD')}
+                {...rest}
+            >
+                {value == "" ? "出生日期" : moment(value).format("YYYY-MM-DD")}
             </Text>
         </StyledInputWrapper>
-    )
-}
+    );
+};
 
 const styles = StyleSheet.create({
     textField: {
         flex: 5,
-        textAlign: 'center',
-        textAlignVertical: 'center',
+        textAlign: "center",
+        textAlignVertical: "center",
         fontSize: 18,
         color: "#fff",
-        
+
         paddingRight: ScreenWidth * 0.02,
         /* marginTop: ScreenHeight * 0.01,
         paddingHorizontal: ScreenWidth * 0.02,
@@ -52,4 +56,4 @@ const styles = StyleSheet.create({
         borderRadius: 3,
         textAlignVertical: 'center' */
     },
-})
+});

@@ -15,43 +15,43 @@ export const UPDATE_EYE_TEST_RECORDS = "UPDATE_EYE_TEST_RECORDS";
 }; */
 
 export const updateRecords = (dateList, records) => {
-  return {
-    type: UPDATE_EYE_TEST_RECORDS,
-    payload: {
-      dateList: dateList,
-      records: records,
-    },
-  };
+    return {
+        type: UPDATE_EYE_TEST_RECORDS,
+        payload: {
+            dateList: dateList,
+            records: records,
+        },
+    };
 };
 
 export const getRecordsUpdate = (uid) => {
-  return (dispatch) => {
-    let recordsRef = database.ref("/users/" + uid + "/records");
-    recordsRef.orderByKey().on("value", (snap) => {
-      let date = [];
-      snap.forEach((data) => {
-        date.push(data.key);
-      });
-      dispatch(updateRecords(date, snap.toJSON()));
-    });
-  };
+    return (dispatch) => {
+        let recordsRef = database.ref("/users/" + uid + "/records");
+        recordsRef.orderByKey().on("value", (snap) => {
+            let date = [];
+            snap.forEach((data) => {
+                date.push(data.key);
+            });
+            dispatch(updateRecords(date, snap.toJSON()));
+        });
+    };
 };
 
 const initialState = {};
 export const records = (state = initialState, { type, payload }) => {
-  switch (type) {
-    /* case GET_EYE_TEST_RECORDS:
+    switch (type) {
+        /* case GET_EYE_TEST_RECORDS:
       return {
         records: payload.records,
         uid: payload.uid,
         inactive: payload.inactive,
       }; */
-    case UPDATE_EYE_TEST_RECORDS:
-      return {
-        dateList: payload.dateList,
-        records: payload.records,
-      };
-    default:
-      return state;
-  }
+        case UPDATE_EYE_TEST_RECORDS:
+            return {
+                dateList: payload.dateList,
+                records: payload.records,
+            };
+        default:
+            return state;
+    }
 };

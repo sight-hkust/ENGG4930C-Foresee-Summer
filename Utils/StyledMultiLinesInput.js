@@ -1,6 +1,11 @@
-import React from 'react';
-import { View, StyleSheet, Text, TextInput } from 'react-native';
-import { ScreenHeight, Scale, FontScale, ScreenWidth } from '../constant/Constant';
+import React from "react";
+import { View, StyleSheet, Text, TextInput } from "react-native";
+import {
+    ScreenHeight,
+    Scale,
+    FontScale,
+    ScreenWidth,
+} from "../constant/Constant";
 
 export const StyledMultiLinesInput = ({
     icon,
@@ -8,21 +13,26 @@ export const StyledMultiLinesInput = ({
     formikKey,
     formikProps,
 }) => {
-    return (<View style={styles.container}>
-        <View style={{ flexDirection: 'row', marginBottom: ScreenHeight * 0.01 }}>
-            <View style={{ flex: 1, alignItems: 'center' }}>
-                {icon}
+    return (
+        <View style={styles.container}>
+            <View
+                style={{
+                    flexDirection: "row",
+                    marginBottom: ScreenHeight * 0.01,
+                }}
+            >
+                <View style={{ flex: 1, alignItems: "center" }}>{icon}</View>
+                <Text style={styles.label}>{label}</Text>
             </View>
-            <Text style={styles.label}>{label}</Text>
+            <TextInput
+                style={styles.inputField}
+                textAlignVertical={"top"}
+                multiline
+                onChangeText={formikProps.handleChange(formikKey)}
+            />
         </View>
-        <TextInput
-            style={styles.inputField}
-            textAlignVertical={'top'}
-            multiline
-            onChangeText={formikProps.handleChange(formikKey)}
-        />
-    </View>)
-}
+    );
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -34,17 +44,17 @@ const styles = StyleSheet.create({
         flex: 4,
         fontSize: 18,
         color: "#fff",
-        
-        textAlignVertical: 'center'
+
+        textAlignVertical: "center",
     },
     inputField: {
         flex: 3,
         borderRadius: ScreenHeight * 0.02,
         borderWidth: 1,
-        borderColor: 'white',
+        borderColor: "white",
         padding: ScreenHeight * 0.02,
-        
+
         color: "#fff",
         fontSize: 16,
-    }
-})
+    },
+});

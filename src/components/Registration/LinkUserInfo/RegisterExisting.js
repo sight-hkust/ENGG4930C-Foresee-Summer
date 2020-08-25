@@ -5,13 +5,13 @@ import { Text } from "react-native";
 import { LinearGradientBackground } from "../../Utils/LinearGradientBackground";
 
 export const RegisterExisting = ({ navigation, route }) => {
-  const { uidFound } = route.params;
-  return (
-    <LinearGradientBackground>
-      <ScrollView>
-        <Logo />
-        <Text>{uidFound}</Text>
-      </ScrollView>
-    </LinearGradientBackground>
-  );
+    const { uidFound } = route.params;
+    return (
+        <LinearGradientBackground>
+            <ScrollView>
+                <Logo />
+                <Text>{uidFound}</Text>
+            </ScrollView>
+        </LinearGradientBackground>
+    );
 };

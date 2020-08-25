@@ -26,9 +26,23 @@ const TERMS_AND_CONDITION = `
 <h1 style="text-align: justify;"><span style="color: #ffffff;">If you have any questions or suggestions about our Terms and Conditions, do not hesitate to contact us at sight.foresee@gmail.com</span></h1>`;
 
 export default function TermsAndCondition() {
-  return (
-    <LinearGradientBackground style={{ height: "100%" }} colors={["#2c3e50", "#2980b9"]} start={[1, 1]} end={[0, 0]} locations={[0.2, 0.7]}>
-      <WebView style={{ backgroundColor: "transparent", marginTop: 100, padding: 100 }} originWhitelist={["*"]} source={{ html: TERMS_AND_CONDITION }} />
-    </LinearGradientBackground>
-  );
+    return (
+        <LinearGradientBackground
+            style={{ height: "100%" }}
+            colors={["#2c3e50", "#2980b9"]}
+            start={[1, 1]}
+            end={[0, 0]}
+            locations={[0.2, 0.7]}
+        >
+            <WebView
+                style={{
+                    backgroundColor: "transparent",
+                    marginTop: 100,
+                    padding: 100,
+                }}
+                originWhitelist={["*"]}
+                source={{ html: TERMS_AND_CONDITION }}
+            />
+        </LinearGradientBackground>
+    );
 }
