@@ -20,7 +20,7 @@ const Profile = ({ navigation, route, userStore }) => {
   const { user } = userStore;
   const familyMembers = useSelector((state) => state.familyMembers);
   const [userData, setUserData] = useState(null);
-  console.log(user);
+  console.log(user.uid);
   const updateUserData = (uid) => {
     database
       .ref("users/" + uid)
