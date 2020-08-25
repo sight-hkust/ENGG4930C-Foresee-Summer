@@ -80,7 +80,7 @@ export default function DisplayRecords(props) {
       Con_expiry_date: curRecord.Con_expiry_date || "",
       Con_brand: curRecord.Con_brand || "",
 
-      remark: curRecord.remark || "",
+      remarks: curRecord.remarks || "",
     },
   };
 
@@ -252,7 +252,7 @@ export default function DisplayRecords(props) {
                   <Text style={DisplayRecordsStyle.rowHeader}>備註:</Text>
                 </Col>
                 <Col style={[DisplayRecordsStyle.gridContainer, { flex: 2 }]}>
-                  <Text style={DisplayRecordsStyle.gridText}>{glassTypeData.remark}</Text>
+                  <Text style={DisplayRecordsStyle.gridText}>{glassTypeData.remarks}</Text>
                 </Col>
               </Row>
             </>
@@ -301,7 +301,7 @@ export default function DisplayRecords(props) {
                   <Text style={DisplayRecordsStyle.rowHeader}>備註:</Text>
                 </Col>
                 <Col style={[DisplayRecordsStyle.gridContainer, { flex: 2 }]}>
-                  <Text style={DisplayRecordsStyle.gridText}>{glassTypeData.remark}</Text>
+                  <Text style={DisplayRecordsStyle.gridText}>{glassTypeData.remarks}</Text>
                 </Col>
               </Row>
             </>
@@ -335,7 +335,7 @@ export default function DisplayRecords(props) {
                 <Text style={DisplayRecordsStyle.rowHeader}>備註:</Text>
               </Col>
               <Col style={[DisplayRecordsStyle.gridContainer, { flex: 2 }]}>
-                <Text style={DisplayRecordsStyle.gridText}>{glassTypeData.remark}</Text>
+                <Text style={DisplayRecordsStyle.gridText}>{glassTypeData.remarks}</Text>
               </Col>
             </Row>
           </>
