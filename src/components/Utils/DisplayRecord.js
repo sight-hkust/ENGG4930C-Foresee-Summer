@@ -180,7 +180,7 @@ export default function DisplayRecords(props) {
             <Text style={DisplayRecordsStyle.rowHeader}>備註:</Text>
           </Col>
           <Col style={[DisplayRecordsStyle.gridContainer, { flex: 2 }]}>
-            <Text>{curRecord.remark}</Text>
+            <Text style={DisplayRecordsStyle.gridText}>{curRecord.remarks}</Text>
           </Col>
         </Row>
       </Grid>

@@ -4,15 +4,12 @@ import React from "react";
 import { auth } from "../../config/config";
 import { useEffect } from "react";
 import QRCode from "react-native-qrcode-svg";
-import {
-  ScreenHeight,
-  ScreenWidth,
-  FontScale,
-} from "../../../constant/Constant";
+import { ScreenHeight, ScreenWidth, FontScale } from "../../../constant/Constant";
 import { RoundButton } from "../../../Utils/RoundButton";
 import MenuScreen from "../../../Utils/MenuScreen";
 
 export default function QrCode({ navigation, route }) {
+  // console.log("qr code route: ", route.params.id);
   const handleSignOut = () => {
     auth.signOut();
   };
@@ -31,7 +28,7 @@ export default function QrCode({ navigation, route }) {
         }}
       >
         <QRCode
-          value={auth.currentUser.uid}
+          value={route.params.id} //get child account uid as well!, pass in user id
           size={ScreenWidth * 0.75}
           logoBackgroundColor="transparent"
           backgroundColor="transparent"

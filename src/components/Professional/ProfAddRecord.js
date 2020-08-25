@@ -429,8 +429,6 @@ export default class Form extends Component {
                     // }
                     TouchableComponent={TouchableOpacity}
                   />
-                  {/* {console.log(Object.entries(errors).length)} */}
-                  {console.log(errors)}
                 </View>
               </View>
             )}

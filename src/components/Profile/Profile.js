@@ -1,5 +1,5 @@
-import React, { useState, useEffect, useCallback } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import React, { useState, useEffect } from "react";
+import { View, Text, StyleSheet } from "react-native";
 import { Button, Icon } from "react-native-elements";
 import { Grid, Col, Row } from "react-native-easy-grid";
 import moment from "moment";
@@ -7,12 +7,11 @@ import moment from "moment";
 import { ScreenWidth, ScreenHeight } from "../../../constant/Constant";
 import MenuScreen from "../../../Utils/MenuScreen";
 
-import { auth, database } from "../../config/config";
-import { connect, useSelector } from "react-redux";
-import FamilyListPicker from "../FamilyListPicker/FamilyListPicker";
-import { decryptData } from "../../utils/encryptData";
-import { updateFamilyMembers } from "../../reducers/familyMembers";
+import { connect } from "react-redux";
 import { watchUserInfoUpdate } from "../../reducers/user";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { auth } from "../../config/config";
+import { displayName } from "../../utils/displayName";
 
 const Profile = ({ navigation, route, userStore }) => {
   const { type } = route.params; //type: "normal", "professional";
@@ -60,29 +59,34 @@ const Profile = ({ navigation, route, userStore }) => {
                   }}
                 >
                   <View style={styles.nameContainer}>
-                    <Text style={styles.name}>{userData.lastName != "" ? userData.lastName[0] : userData.givenName[0]}</Text>
+                    <Text style={styles.name}>{user.lastName != "" ? user.lastName : user.givenName[0]}</Text>
                   </View>
                 </Row>
                 <Row style={styles.qrCodeIconContainer}>
-                  <Icon type="antdesign" name="qrcode" size={40} containerStyle={{ marginRight: 15, marginTop: 10 }} onPress={() => navigation.navigate("QrCode")} />
+                  {type == "normal" && <Icon type="antdesign" name="qrcode" size={40} containerStyle={{ marginRight: 15, marginTop: 10 }} onPress={() => navigation.navigate("QrCode")} />}
                 </Row>
-
-                <Row style={[styles.titleContainer]}>
-                  <FamilyListPicker
-                    containerStyle={{
-                      width: "100%",
-                      justifyContent: "center",
-                    }}
-                    textStyle={{
-                      fontSize: ScreenHeight * 0.045,
-                      color: "#1772A6",
-                    }}
-                    onSelectionUpdate={updateSelectedFamilyMember}
-                  />
-                </Row>
+                {type == "normal" ? (
+                  <Row style={[styles.titleContainer]}>
+                    <FamilyListPicker
+                      containerStyle={{
+                        width: "100%",
+                        justifyContent: "center",
+                      }}
+                      textStyle={{
+                        fontSize: ScreenHeight * 0.045,
+                        color: "#1772A6",
+                      }}
+                      onSelectionUpdate={updateSelectedFamilyMember}
+                    />
+                  </Row>
+                ) : (
+                  <Row style={styles.titleContainer}>
+                    <Text style={user.lastName != "" ? styles.title : styles.titleEnglish}>{displayName(user)}</Text>
+                  </Row>
+                )}
 
                 <Row style={{ ...styles.titleContainer, ...{ marginBottom: 7.5 } }}>
-                  <Text style={styles.subtitle}>{userData.birthday.split("T")[0]}</Text>
+                  {type == "normal" ? <Text style={styles.subtitle}>{user.birthday.split("T")[0]}</Text> : <Text style={styles.subtitle}>{user.role == "optometrist" ? "視光師" : "眼科醫生"}</Text>}
                 </Row>
                 <Row style={{ height: 47.5 }}>
                   <Col style={styles.iconContainer}>
@@ -108,9 +112,15 @@ const Profile = ({ navigation, route, userStore }) => {
                 </Row>
                 <Row>
                   <Col style={styles.infoContainer}>
-                    <Text style={styles.info}>
-                      <Text style={{ fontSize: 30 }}>{moment.duration(moment().diff(userData.birthday, "YYYY")).years()}</Text>歲
-                    </Text>
+                    {type == "normal" ? (
+                      <Text style={styles.info}>
+                        <Text style={{ fontSize: 30 }}>{moment.duration(moment().diff(user.birthday, "YYYY")).years()}</Text>歲
+                      </Text>
+                    ) : (
+                      <Text style={styles.info}>
+                        <Text style={{ fontSize: 22 }}>{user.part == "part1" ? "第一部分" : user.part == "part2" ? "第二部分" : user.part == "part3" ? "第三部分" : "第四部分"}</Text>
+                      </Text>
+                    )}
                   </Col>
                   <Col style={styles.infoContainer}>
                     <Text
@@ -134,21 +144,37 @@ const Profile = ({ navigation, route, userStore }) => {
               </Grid>
             </View>
             <View style={styles.bottomMenu}>
-              <Button title="詳細設定" type="clear" containerStyle={styles.bottomMenuItemContainer} titleStyle={styles.bottomMenuItemText} TouchableComponent={TouchableOpacity} onPress={() => navigation.navigate("SettingScreen")} />
-              <Button title="程式教學" type="clear" containerStyle={styles.bottomMenuItemContainer} titleStyle={styles.bottomMenuItemText} TouchableComponent={TouchableOpacity} onPress={() => navigation.navigate("Tutorial")} />
               <Button
-                title="創建子帳戶"
+                title="詳細設定"
                 type="clear"
                 containerStyle={styles.bottomMenuItemContainer}
                 titleStyle={styles.bottomMenuItemText}
                 TouchableComponent={TouchableOpacity}
-                onPress={() =>
-                  navigation.navigate("Register", {
-                    isProfessional: false,
-                    registerChild: true,
-                  })
-                }
+                onPress={() => navigation.navigate("SettingScreen")}
               />
+              <Button
+                title="程式教學"
+                type="clear"
+                containerStyle={styles.bottomMenuItemContainer}
+                titleStyle={styles.bottomMenuItemText}
+                TouchableComponent={TouchableOpacity}
+                onPress={() => navigation.navigate("Tutorial")}
+              />
+              {type == "normal" && (
+                <Button
+                  title="創建子帳戶"
+                  type="clear"
+                  containerStyle={styles.bottomMenuItemContainer}
+                  titleStyle={styles.bottomMenuItemText}
+                  TouchableComponent={TouchableOpacity}
+                  onPress={() =>
+                    navigation.navigate("Register", {
+                      isProfessional: false,
+                      registerChild: true,
+                    })
+                  }
+                />
+              )}
               <Button
                 title="變更個人資料"
                 type="clear"
@@ -179,6 +205,7 @@ const mapStateToProps = (state) => {
     userStore: state.user,
   };
 };
+
 const mapDispatchToProps = (dispatch) => {
   dispatch(watchUserInfoUpdate());
   return {};

@@ -123,6 +123,7 @@ function FaqScreen({ navigation, route }) {
 }
 
 function ProfileScreen({ navigation, route }) {
+  //console.log("here", route.params.type);
   return (
     <Stack.Navigator screenOptions={headerConfig}>
       <Stack.Screen name="ProfileTabMain" component={Profile} options={{ title: "我的檔案" }} initialParams={{ type: route.params.type }} />
