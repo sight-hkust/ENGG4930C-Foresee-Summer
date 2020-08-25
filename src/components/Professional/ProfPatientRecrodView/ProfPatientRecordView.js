@@ -116,23 +116,19 @@ class ProfPatientRecordView extends Component {
                           </TouchableOpacity>
                         )}
                       </View>
-                      <DisplayRecords curRecord={records[dateList[selectedIndex]]} glassType={glassType[this.state.glassTypeIndex]} />
-                      <View style={{ height: 20 }} />
+                      <DisplayRecords curRecord={records[dateList[selectedIndex]]} glassType={glassType[this.state.glassTypeIndex]} isProfessional={true} />
                     </View>
                   )}
                 </View>
                 <View style={{ flex: 0.2, alignContent: "center", justifyContent: "center" }}>
-                  <View style={{ flexDirection: "row" }}>
-                    <TouchableOpacity
-                      onPress={() => {
-                        this.props.navigation.navigate("AddRecordScreen", { isProfessional: true, professional_id: auth.currentUser.uid, patient_id: key, inactive: inactive });
-                      }}
-                      style={{ backgroundColor: "white", width: 48, height: 48, borderRadius: 24, justifyContent: "center" }}
-                    >
-                      <Icon name="add" size={25} color="#2D9CDB" />
-                    </TouchableOpacity>
-                    <RoundButton title={"出"} onPress={() => auth.signOut()}></RoundButton>
-                  </View>
+                  <TouchableOpacity
+                    onPress={() => {
+                      this.props.navigation.navigate("AddRecordScreen", { isProfessional: true, professional_id: auth.currentUser.uid, patient_id: key, inactive: inactive });
+                    }}
+                    style={{ backgroundColor: "white", width: 48, height: 48, borderRadius: 24, justifyContent: "center" }}
+                  >
+                    <Icon name="add" size={25} color="#2D9CDB" />
+                  </TouchableOpacity>
                 </View>
               </>
             )}
@@ -164,8 +160,8 @@ const styles = StyleSheet.create({
     flex: 1,
     borderRadius: 20,
     justifyContent: "center",
-    padding: 10,
-    paddingBottom: 20,
+    paddingHorizontal: 10,
+    paddingVertical: 20,
     width: "100%",
   },
   buttonText: {

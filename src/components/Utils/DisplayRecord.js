@@ -3,7 +3,7 @@ import { StyleSheet, Text, View } from "react-native";
 import { Col, Row, Grid } from "react-native-easy-grid";
 
 export default function DisplayRecords(props) {
-  const { curRecord, glassType } = props;
+  const { curRecord, glassType, isProfessional } = props;
   let glassTypeGeneralData;
 
   switch (glassType) {
@@ -121,13 +121,28 @@ export default function DisplayRecords(props) {
   };
 
   const calAxis = (isLeft) => {
-    if (isLeft) {
-      if (glassTypeData.L_CYL != 0 && glassTypeData.L_CYL != " ") return glassTypeData.L_Axis;
-      else return "NA";
-    } else {
-      if (glassTypeData.R_CYL != 0 && glassTypeData.R_CYL != " ") return glassTypeData.R_Axis;
-      else return "NA";
-    }
+    if (isLeft) return glassTypeData.L_CYL != 0 ? glassTypeData.L_Axis : "-";
+    else return glassTypeData.R_CYL != 0 ? glassTypeData.R_Axis : "-";
+  };
+
+  const calPRISM = (isLeft) => {
+    if (isLeft) return glassTypeData.L_PRISM != 0 ? glassTypeData.L_PRISM : "-";
+    else return glassTypeData.R_PRISM != 0 ? glassTypeData.R_PRISM : "-";
+  };
+
+  const calADD = (isLeft) => {
+    if (isLeft) return glassTypeData.L_ADD != 0 ? glassTypeData.L_ADD : "-";
+    else return glassTypeData.R_ADD != 0 ? glassTypeData.R_ADD : "-";
+  };
+
+  const calConBC = (isLeft) => {
+    if (isLeft) return glassTypeData.Con_L_BC != 0 ? glassTypeData.Con_L_BC : "-";
+    else return glassTypeData.Con_R_BC != 0 ? glassTypeData.Con_R_BC : "-";
+  };
+
+  const calConDia = (isLeft) => {
+    if (isLeft) return glassTypeData.Con_L_Dia != 0 ? glassTypeData.Con_L_Dia : "-";
+    else return glassTypeData.Con_R_Dia != 0 ? glassTypeData.Con_R_Dia : "-";
   };
 
   const calVA = (isLeft) => {
@@ -185,36 +200,146 @@ export default function DisplayRecords(props) {
             <Text style={DisplayRecordsStyle.gridText}>{calAxis(true)}</Text>
           </Col>
         </Row>
-        <Row>
-          <Col style={DisplayRecordsStyle.gridContainer}>
-            <Text style={DisplayRecordsStyle.rowHeader}>VA:</Text>
-          </Col>
-          <Col style={DisplayRecordsStyle.gridContainer}>
-            <Text style={DisplayRecordsStyle.gridText}>{calVA(false)}</Text>
-          </Col>
-          <Col style={DisplayRecordsStyle.gridContainer}>
-            <Text style={DisplayRecordsStyle.gridText}>{calVA(true)}</Text>
-          </Col>
-        </Row>
-        <Row>
-          <Col style={DisplayRecordsStyle.gridContainer}>
-            <Text style={DisplayRecordsStyle.rowHeader}>PD:</Text>
-          </Col>
-          <Col style={DisplayRecordsStyle.gridContainer}>
-            <Text style={DisplayRecordsStyle.gridText}>{calPD(false)}</Text>
-          </Col>
-          <Col style={DisplayRecordsStyle.gridContainer}>
-            <Text style={DisplayRecordsStyle.gridText}>{calPD(true)}</Text>
-          </Col>
-        </Row>
-        <Row>
-          <Col style={DisplayRecordsStyle.gridContainer}>
-            <Text style={DisplayRecordsStyle.rowHeader}>備註:</Text>
-          </Col>
-          <Col style={[DisplayRecordsStyle.gridContainer, { flex: 2 }]}>
-            <Text style={DisplayRecordsStyle.gridText}>{glassTypeData.remark}</Text>
-          </Col>
-        </Row>
+        {isProfessional ? (
+          glassType != "con" ? (
+            <>
+              <Row>
+                <Col style={DisplayRecordsStyle.gridContainer}>
+                  <Text style={DisplayRecordsStyle.rowHeader}>PRISM:</Text>
+                </Col>
+                <Col style={DisplayRecordsStyle.gridContainer}>
+                  <Text style={DisplayRecordsStyle.gridText}>{calPRISM(false)}</Text>
+                </Col>
+                <Col style={DisplayRecordsStyle.gridContainer}>
+                  <Text style={DisplayRecordsStyle.gridText}>{calPRISM(true)}</Text>
+                </Col>
+              </Row>
+              <Row>
+                <Col style={DisplayRecordsStyle.gridContainer}>
+                  <Text style={DisplayRecordsStyle.rowHeader}>ADD:</Text>
+                </Col>
+                <Col style={DisplayRecordsStyle.gridContainer}>
+                  <Text style={DisplayRecordsStyle.gridText}>{calADD(false)}</Text>
+                </Col>
+                <Col style={DisplayRecordsStyle.gridContainer}>
+                  <Text style={DisplayRecordsStyle.gridText}>{calADD(true)}</Text>
+                </Col>
+              </Row>
+              <Row>
+                <Col style={DisplayRecordsStyle.gridContainer}>
+                  <Text style={DisplayRecordsStyle.rowHeader}>VA:</Text>
+                </Col>
+                <Col style={DisplayRecordsStyle.gridContainer}>
+                  <Text style={DisplayRecordsStyle.gridText}>{calVA(false)}</Text>
+                </Col>
+                <Col style={DisplayRecordsStyle.gridContainer}>
+                  <Text style={DisplayRecordsStyle.gridText}>{calVA(true)}</Text>
+                </Col>
+              </Row>
+              <Row>
+                <Col style={DisplayRecordsStyle.gridContainer}>
+                  <Text style={DisplayRecordsStyle.rowHeader}>PD:</Text>
+                </Col>
+                <Col style={DisplayRecordsStyle.gridContainer}>
+                  <Text style={DisplayRecordsStyle.gridText}>{calPD(false)}</Text>
+                </Col>
+                <Col style={DisplayRecordsStyle.gridContainer}>
+                  <Text style={DisplayRecordsStyle.gridText}>{calPD(true)}</Text>
+                </Col>
+              </Row>
+              <Row>
+                <Col style={DisplayRecordsStyle.gridContainer}>
+                  <Text style={DisplayRecordsStyle.rowHeader}>備註:</Text>
+                </Col>
+                <Col style={[DisplayRecordsStyle.gridContainer, { flex: 2 }]}>
+                  <Text style={DisplayRecordsStyle.gridText}>{glassTypeData.remark}</Text>
+                </Col>
+              </Row>
+            </>
+          ) : (
+            <>
+              <Row>
+                <Col style={DisplayRecordsStyle.gridContainer}>
+                  <Text style={DisplayRecordsStyle.rowHeader}>BC:</Text>
+                </Col>
+                <Col style={DisplayRecordsStyle.gridContainer}>
+                  <Text style={DisplayRecordsStyle.gridText}>{calConBC(false)}</Text>
+                </Col>
+                <Col style={DisplayRecordsStyle.gridContainer}>
+                  <Text style={DisplayRecordsStyle.gridText}>{calConBC(true)}</Text>
+                </Col>
+              </Row>
+              <Row>
+                <Col style={DisplayRecordsStyle.gridContainer}>
+                  <Text style={DisplayRecordsStyle.rowHeader}>DIA:</Text>
+                </Col>
+                <Col style={DisplayRecordsStyle.gridContainer}>
+                  <Text style={DisplayRecordsStyle.gridText}>{calConDia(false)}</Text>
+                </Col>
+                <Col style={DisplayRecordsStyle.gridContainer}>
+                  <Text style={DisplayRecordsStyle.gridText}>{calConDia(true)}</Text>
+                </Col>
+              </Row>
+              <Row>
+                <Col style={DisplayRecordsStyle.gridContainer}>
+                  <Text style={DisplayRecordsStyle.rowHeader}>品牌:</Text>
+                </Col>
+                <Col style={[DisplayRecordsStyle.gridContainer, { flex: 2 }]}>
+                  <Text style={DisplayRecordsStyle.gridText}>{glassTypeData.Con_brand}</Text>
+                </Col>
+              </Row>
+              <Row>
+                <Col style={DisplayRecordsStyle.gridContainer}>
+                  <Text style={DisplayRecordsStyle.rowHeader}>到期:</Text>
+                </Col>
+                <Col style={[DisplayRecordsStyle.gridContainer, { flex: 2 }]}>
+                  <Text style={DisplayRecordsStyle.gridText}>{glassTypeData.Con_expiry_date}</Text>
+                </Col>
+              </Row>
+              <Row>
+                <Col style={DisplayRecordsStyle.gridContainer}>
+                  <Text style={DisplayRecordsStyle.rowHeader}>備註:</Text>
+                </Col>
+                <Col style={[DisplayRecordsStyle.gridContainer, { flex: 2 }]}>
+                  <Text style={DisplayRecordsStyle.gridText}>{glassTypeData.remark}</Text>
+                </Col>
+              </Row>
+            </>
+          )
+        ) : (
+          <>
+            <Row>
+              <Col style={DisplayRecordsStyle.gridContainer}>
+                <Text style={DisplayRecordsStyle.rowHeader}>VA:</Text>
+              </Col>
+              <Col style={DisplayRecordsStyle.gridContainer}>
+                <Text style={DisplayRecordsStyle.gridText}>{calVA(false)}</Text>
+              </Col>
+              <Col style={DisplayRecordsStyle.gridContainer}>
+                <Text style={DisplayRecordsStyle.gridText}>{calVA(true)}</Text>
+              </Col>
+            </Row>
+            <Row>
+              <Col style={DisplayRecordsStyle.gridContainer}>
+                <Text style={DisplayRecordsStyle.rowHeader}>PD:</Text>
+              </Col>
+              <Col style={DisplayRecordsStyle.gridContainer}>
+                <Text style={DisplayRecordsStyle.gridText}>{calPD(false)}</Text>
+              </Col>
+              <Col style={DisplayRecordsStyle.gridContainer}>
+                <Text style={DisplayRecordsStyle.gridText}>{calPD(true)}</Text>
+              </Col>
+            </Row>
+            <Row>
+              <Col style={DisplayRecordsStyle.gridContainer}>
+                <Text style={DisplayRecordsStyle.rowHeader}>備註:</Text>
+              </Col>
+              <Col style={[DisplayRecordsStyle.gridContainer, { flex: 2 }]}>
+                <Text style={DisplayRecordsStyle.gridText}>{glassTypeData.remark}</Text>
+              </Col>
+            </Row>
+          </>
+        )}
       </Grid>
     </View>
   );
@@ -223,7 +348,6 @@ export default function DisplayRecords(props) {
 const DisplayRecordsStyle = StyleSheet.create({
   box: {
     flex: 1,
-    marginTop: 10,
   },
   gridContainer: {
     flex: 1,
@@ -239,7 +363,7 @@ const DisplayRecordsStyle = StyleSheet.create({
     textAlign: "left",
     fontSize: 18,
     fontWeight: "bold",
-    paddingLeft: 35,
+    paddingLeft: "25%",
     color: "#2D9CDB",
   },
   gridText: {
