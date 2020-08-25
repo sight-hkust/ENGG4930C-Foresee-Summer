@@ -258,7 +258,7 @@ export const DetailButton = (props) => {
         TouchableComponent={TouchableOpacity}
       />
       <Text style={{ color: "white", fontSize: ScreenHeight / 40 }}>{glassType ? "調整度數" : "真實度數"}</Text>
-      <RenderModal data={data} selectedDate={selectedDate} isVisible={isVisible} toggleModal={toggleModal} glassType={glassType} />
+      <RenderModal data={data} selectedDate={selectedDate} isVisible={isVisible} toggleModal={toggleModal} glassType={glassType ? "adj" : "normal"} />
     </View>
   );
 };
@@ -271,7 +271,8 @@ export const RenderModal = (props) => {
     <BottomModal isVisible={isVisible} toggleModal={toggleModal} style={{ backgroundColor: "#FFFFFF", height: 350 }}>
       <View style={{ backgroundColor: "#1772A6", height: 4, width: 70, alignSelf: "center", marginBottom: 10 }} />
       <Text style={RecordScreenStyle.colHeader}>日期: {selectedDate}</Text>
-      <DisplayRecords curRecord={curRecord} glassType={glassType} />
+      <View style={{ height: 10 }}></View>
+      <DisplayRecords curRecord={curRecord} glassType={glassType} isProfessional={false} />
     </BottomModal>
   );
 };
