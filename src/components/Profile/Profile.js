@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { View, Text, StyleSheet } from "react-native";
+import React, { useState, useEffect, useCallback } from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import { Button, Icon } from "react-native-elements";
 import { Grid, Col, Row } from "react-native-easy-grid";
 import moment from "moment";
@@ -7,10 +7,12 @@ import moment from "moment";
 import { ScreenWidth, ScreenHeight } from "../../../constant/Constant";
 import MenuScreen from "../../../Utils/MenuScreen";
 
-import { connect } from "react-redux";
+import { auth, database } from "../../config/config";
+import { connect, useSelector } from "react-redux";
+import FamilyListPicker from "../FamilyListPicker/FamilyListPicker";
+import { decryptData } from "../../utils/encryptData";
+import { updateFamilyMembers } from "../../reducers/familyMembers";
 import { watchUserInfoUpdate } from "../../reducers/user";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { auth } from "../../config/config";
 import { displayName } from "../../utils/displayName";
 
 const Profile = ({ navigation, route, userStore }) => {
@@ -59,12 +61,13 @@ const Profile = ({ navigation, route, userStore }) => {
                   }}
                 >
                   <View style={styles.nameContainer}>
-                    <Text style={styles.name}>{user.lastName != "" ? user.lastName : user.givenName[0]}</Text>
+                    <Text style={styles.name}>{userData.lastName != "" ? userData.lastName[0] : userData.givenName[0]}</Text>
                   </View>
                 </Row>
                 <Row style={styles.qrCodeIconContainer}>
                   {type == "normal" && <Icon type="antdesign" name="qrcode" size={40} containerStyle={{ marginRight: 15, marginTop: 10 }} onPress={() => navigation.navigate("QrCode")} />}
                 </Row>
+
                 {type == "normal" ? (
                   <Row style={[styles.titleContainer]}>
                     <FamilyListPicker
@@ -86,7 +89,11 @@ const Profile = ({ navigation, route, userStore }) => {
                 )}
 
                 <Row style={{ ...styles.titleContainer, ...{ marginBottom: 7.5 } }}>
-                  {type == "normal" ? <Text style={styles.subtitle}>{user.birthday.split("T")[0]}</Text> : <Text style={styles.subtitle}>{user.role == "optometrist" ? "視光師" : "眼科醫生"}</Text>}
+                  {type == "normal" ? (
+                    <Text style={styles.subtitle}>{userData.birthday.split("T")[0]}</Text>
+                  ) : (
+                    <Text style={styles.subtitle}>{user.role == "optometrist" ? "視光師" : "眼科醫生"}</Text>
+                  )}
                 </Row>
                 <Row style={{ height: 47.5 }}>
                   <Col style={styles.iconContainer}>
@@ -114,7 +121,7 @@ const Profile = ({ navigation, route, userStore }) => {
                   <Col style={styles.infoContainer}>
                     {type == "normal" ? (
                       <Text style={styles.info}>
-                        <Text style={{ fontSize: 30 }}>{moment.duration(moment().diff(user.birthday, "YYYY")).years()}</Text>歲
+                        <Text style={{ fontSize: 30 }}>{moment.duration(moment().diff(userData.birthday, "YYYY")).years()}</Text>歲
                       </Text>
                     ) : (
                       <Text style={styles.info}>
@@ -183,6 +190,7 @@ const Profile = ({ navigation, route, userStore }) => {
                 TouchableComponent={TouchableOpacity}
                 onPress={() => navigation.navigate("UpdateProfile", { user, type })}
               />
+
               <Button
                 title="登出"
                 type="clear"
@@ -205,7 +213,6 @@ const mapStateToProps = (state) => {
     userStore: state.user,
   };
 };
-
 const mapDispatchToProps = (dispatch) => {
   dispatch(watchUserInfoUpdate());
   return {};
