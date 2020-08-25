@@ -16,11 +16,11 @@ import { watchUserInfoUpdate } from "../../reducers/user";
 import { displayName } from "../../utils/displayName";
 
 const Profile = ({ navigation, route, userStore }) => {
-  const { type } = route.params; //type: "normal", "professional";
+  const { type } = route.params; //type: "user", "professional";
   const { user } = userStore;
   const familyMembers = useSelector((state) => state.familyMembers);
   const [userData, setUserData] = useState(null);
-
+  console.log(user.uid);
   const updateUserData = (uid) => {
     database
       .ref("users/" + uid)
@@ -36,7 +36,7 @@ const Profile = ({ navigation, route, userStore }) => {
   };
 
   useEffect(() => {
-    if (!userData) {
+    if (!userData && type == "user") {
       updateUserData(familyMembers[0].uid);
     }
   }, [familyMembers]);
@@ -45,6 +45,12 @@ const Profile = ({ navigation, route, userStore }) => {
     const { uid } = member;
     updateUserData(uid);
   };
+
+  useEffect(() => {
+    if (!userData && type == "professional") {
+      setUserData(user);
+    }
+  }, [userData]);
 
   return (
     <MenuScreen>
@@ -65,10 +71,10 @@ const Profile = ({ navigation, route, userStore }) => {
                   </View>
                 </Row>
                 <Row style={styles.qrCodeIconContainer}>
-                  {type == "normal" && <Icon type="antdesign" name="qrcode" size={40} containerStyle={{ marginRight: 15, marginTop: 10 }} onPress={() => navigation.navigate("QrCode")} />}
+                  {type == "user" && <Icon type="antdesign" name="qrcode" size={40} containerStyle={{ marginRight: 15, marginTop: 10 }} onPress={() => navigation.navigate("QrCode")} />}
                 </Row>
 
-                {type == "normal" ? (
+                {type == "user" ? (
                   <Row style={[styles.titleContainer]}>
                     <FamilyListPicker
                       containerStyle={{
@@ -89,11 +95,7 @@ const Profile = ({ navigation, route, userStore }) => {
                 )}
 
                 <Row style={{ ...styles.titleContainer, ...{ marginBottom: 7.5 } }}>
-                  {type == "normal" ? (
-                    <Text style={styles.subtitle}>{userData.birthday.split("T")[0]}</Text>
-                  ) : (
-                    <Text style={styles.subtitle}>{user.role == "optometrist" ? "視光師" : "眼科醫生"}</Text>
-                  )}
+                  {type == "user" ? <Text style={styles.subtitle}>{userData.birthday.split("T")[0]}</Text> : <Text style={styles.subtitle}>{user.role == "optometrist" ? "視光師" : "眼科醫生"}</Text>}
                 </Row>
                 <Row style={{ height: 47.5 }}>
                   <Col style={styles.iconContainer}>
@@ -119,7 +121,7 @@ const Profile = ({ navigation, route, userStore }) => {
                 </Row>
                 <Row>
                   <Col style={styles.infoContainer}>
-                    {type == "normal" ? (
+                    {type == "user" ? (
                       <Text style={styles.info}>
                         <Text style={{ fontSize: 30 }}>{moment.duration(moment().diff(userData.birthday, "YYYY")).years()}</Text>歲
                       </Text>
@@ -167,7 +169,7 @@ const Profile = ({ navigation, route, userStore }) => {
                 TouchableComponent={TouchableOpacity}
                 onPress={() => navigation.navigate("Tutorial")}
               />
-              {type == "normal" && (
+              {type == "user" && (
                 <Button
                   title="創建子帳戶"
                   type="clear"

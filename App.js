@@ -126,7 +126,7 @@ function ProfileScreen({ navigation, route }) {
   //console.log("here", route.params.type);
   return (
     <Stack.Navigator screenOptions={headerConfig}>
-      <Stack.Screen name="ProfileTabMain" component={Profile} options={{ title: "我的檔案" }} initialParams={{ type: route.params.type }} />
+      <Stack.Screen name="ProfileTabMain" component={Profile} options={{ title: "我的檔案" }} initialParams={{ type: auth.currentUser.displayName }} />
       <Stack.Screen name="QrCode" component={QrCode} options={{ headerShown: false }} />
       <Stack.Screen
         name="Register"
@@ -203,6 +203,7 @@ function Main({ route, navigation }) {
         },
       }}
     >
+      {console.log("auth.currentUser.displayName: ", auth.currentUser.displayName)}
       {auth.currentUser.displayName == "professional" ? (
         <>
           <Tab.Screen
@@ -237,7 +238,7 @@ function Main({ route, navigation }) {
             options={{
               tabBarLabel: "個人檔案",
               tabBarIcon: () => (
-                <TouchableOpacity onPress={() => navigation.navigate("ProfileScreen", { type: "professional" })}>
+                <TouchableOpacity onPress={() => navigation.navigate("ProfileScreen")}>
                   <Image source={require("./assets/images/Profile.png")} style={styles.icon} />
                 </TouchableOpacity>
               ),
@@ -306,7 +307,7 @@ function Main({ route, navigation }) {
             options={{
               tabBarLabel: "個人檔案",
               tabBarIcon: () => (
-                <TouchableOpacity onPress={() => navigation.navigate("ProfileScreen", { type: "normal" })}>
+                <TouchableOpacity onPress={() => navigation.navigate("ProfileScreen")}>
                   <Image source={require("./assets/images/Profile.png")} style={styles.icon} />
                 </TouchableOpacity>
               ),
