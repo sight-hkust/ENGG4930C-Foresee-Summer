@@ -10,6 +10,7 @@ import { PatientProfile } from "./PatientProfile";
 import { connect } from "react-redux";
 import { getRecordsUpdate, records } from "../../../reducers/records";
 import MenuScreen from "../../../../Utils/MenuScreen";
+import { decryptData } from "../../../utils/encryptData";
 
 class ProfPatientRecordView extends Component {
   constructor(props) {
@@ -29,7 +30,8 @@ class ProfPatientRecordView extends Component {
     let userInfo = database.ref("users/" + key);
 
     userInfo.once("value").then((snapshot) => {
-      this.setState({ info: snapshot.val() });
+      const patient = snapshot.val();
+      this.setState({ info: decryptData(patient) });
     });
 
     if (key) {

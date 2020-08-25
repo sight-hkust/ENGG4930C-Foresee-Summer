@@ -71,8 +71,12 @@ export const QRCodeScannerScreen = ({ navigation, route }) => {
     setScanned(true);
     const code = data; //data here is code.
     const regEx = /[ `!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]/g;
+    const child_regEx = /^ch-/g;
+
     const hasSpecialCharacterOrSpace = regEx.test(code);
-    if (hasSpecialCharacterOrSpace) {
+    const isChildAccount = child_regEx.test(code);
+    //console.log("id", data);
+    if (hasSpecialCharacterOrSpace && !isChildAccount) {
       setDoesPatientFound(false);
       showModalMessage("QR Code格式錯誤");
     } else {
@@ -87,10 +91,15 @@ export const QRCodeScannerScreen = ({ navigation, route }) => {
               .set({
                 firstName: patient.firstName,
                 lastName: patient.lastName,
-                phone: patient.phone,
+                surName: patient.surName,
+                givenName: patient.givenName,
+                //phone: patient.phone,
                 uid: code,
+                job: patient.job,
+                disease: patient.disease,
+                history: patient.history,
                 birthday: patient.birthday,
-                activeAccount: true,
+                inactive: patient.inactive,
               })
               .then(() => {
                 setDoesPatientFound(true);

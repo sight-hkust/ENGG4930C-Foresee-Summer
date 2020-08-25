@@ -155,7 +155,16 @@ const FormComponent = ({ navigation, route }) => {
       validateOnBlur={false}
       validateOnChange={false}
     >
-      {(formikProps) => <FormDetails formikProps={formikProps} isProfessional={isProfessional} registerPatient={registerPatient} isLoading={isLoading} errorMessageFromServer={errorMessageFromServer} registerChild={registerChild} />}
+      {(formikProps) => (
+        <FormDetails
+          formikProps={formikProps}
+          isProfessional={isProfessional}
+          registerPatient={registerPatient}
+          isLoading={isLoading}
+          errorMessageFromServer={errorMessageFromServer}
+          registerChild={registerChild}
+        />
+      )}
     </Formik>
   );
 };
@@ -170,7 +179,7 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
   const [isFamilySearchFieldVisible, setFamilySearchFieldVisibility] = useState(false);
   const [isFamilySearchDialogVisible, setFamilySearchDialogVisibility] = useState(false);
 
-  console.log(formikProps.errors);
+  //console.log(formikProps.errors);
 
   const _toggleFamilySearchSwitch = () => setFamilySearchFieldVisibility(!isFamilySearchFieldVisible);
 
@@ -319,7 +328,14 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
                   formikKey={"givenName"}
                   hideEmbbededMessage={true}
                 />
-                <InputTextField label={"Surname"} containerStyle={{ flex: 1, marginBottom: "-2%" }} iconStyle={{ flex: 0.3 }} formikProps={formikProps} formikKey={"surName"} hideEmbbededMessage={true} />
+                <InputTextField
+                  label={"Surname"}
+                  containerStyle={{ flex: 1, marginBottom: "-2%" }}
+                  iconStyle={{ flex: 0.3 }}
+                  formikProps={formikProps}
+                  formikKey={"surName"}
+                  hideEmbbededMessage={true}
+                />
               </View>
             ) : null}
             <View style={{ flexDirection: "row", paddingLeft: ScreenWidth * 0.02 }}>
@@ -398,7 +414,16 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
             <GenderOptionsInput formikKey="gender" formikProps={formikProps} label={"性別"} />
 
             {isProfessional && !registerPatient ? (
-              <InputDialogPicker label={"職業"} icon={jobIcon} onDismiss={() => _hideRoleDialog()} value={values.role} list={roleList} formikKey={"role"} formikProps={formikProps} showDialog={_showRoleDialog} />
+              <InputDialogPicker
+                label={"職業"}
+                icon={jobIcon}
+                onDismiss={() => _hideRoleDialog()}
+                value={values.role}
+                list={roleList}
+                formikKey={"role"}
+                formikProps={formikProps}
+                showDialog={_showRoleDialog}
+              />
             ) : (
               <InputDatePickerModal icon={hourGlassIcon} formikProps={formikProps} formikKey="birthday" showDatePicker={_showDatePicker} value={values.birthday} />
             )}
@@ -536,9 +561,17 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
           />
         </ScrollView>
         {Platform.OS === "android" ? (
-          isDatePickerVisible && <DateTimePicker testID="dateTimePicker" mode="date" display="spinner" value={values.birthday === "" ? new Date() : moment(values.birthday).toDate()} onChange={handleDateChange} />
+          isDatePickerVisible && (
+            <DateTimePicker testID="dateTimePicker" mode="date" display="spinner" value={values.birthday === "" ? new Date() : moment(values.birthday).toDate()} onChange={handleDateChange} />
+          )
         ) : (
-          <DateTimePickerModal date={values.birthday === "" ? new Date() : moment(values.birthday).toDate()} maximumDate={new Date()} isVisible={isDatePickerVisible} onConfirm={handleDateConfirm} onCancel={_hideDatePicker} />
+          <DateTimePickerModal
+            date={values.birthday === "" ? new Date() : moment(values.birthday).toDate()}
+            maximumDate={new Date()}
+            isVisible={isDatePickerVisible}
+            onConfirm={handleDateConfirm}
+            onCancel={_hideDatePicker}
+          />
         )}
       </View>
       <Provider>

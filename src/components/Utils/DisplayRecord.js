@@ -212,7 +212,7 @@ export default function DisplayRecords(props) {
             <Text style={DisplayRecordsStyle.rowHeader}>備註:</Text>
           </Col>
           <Col style={[DisplayRecordsStyle.gridContainer, { flex: 2 }]}>
-            <Text>{glassTypeData.remark}</Text>
+            <Text style={DisplayRecordsStyle.gridText}>{glassTypeData.remark}</Text>
           </Col>
         </Row>
       </Grid>
