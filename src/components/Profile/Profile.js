@@ -11,7 +11,6 @@ import { auth, database } from "../../config/config";
 import { connect, useSelector } from "react-redux";
 import FamilyListPicker from "../FamilyListPicker/FamilyListPicker";
 import { decryptData } from "../../utils/encryptData";
-import { updateFamilyMembers } from "../../reducers/familyMembers";
 import { watchUserInfoUpdate } from "../../reducers/user";
 import { RoundButton } from "../../../Utils/RoundButton";
 import { displayName } from "../../utils/displayName";

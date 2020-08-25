@@ -9,6 +9,7 @@ import { Formik } from "formik";
 import { RoundButton } from "../Utils/RoundButton";
 import { database } from "../src/config/config";
 import { updateProfessionalProfileSchema, updatePatientProfileSchema } from "../src/utils/schema";
+import { encryptData } from "../src/utils/encryptData";
 
 const UpdateProfileScreen = ({ route, navigation }) => {
   const { user, type } = route.params;
@@ -43,23 +44,10 @@ const UpdateProfileScreen = ({ route, navigation }) => {
             let updateValue = {};
             if (type == "user") {
               userRef = database.ref("/users/" + user.uid);
-              updateValue = {
-                firstName: values.firstName,
-                lastName: values.lastName,
-                birthday: values.birthday,
-                phone: values.phone,
-                job: values.job,
-                disease: values.disease,
-                history: values.history,
-              };
+              updateValue = encryptData({ firstName: values.firstName, lastName: values.lastName, birthday: values.birthday, phone: values.phone, job: values.job, disease: values.disease, history: values.history });
             } else {
               userRef = database.ref("/professionals/" + user.uid);
-              updateValue = {
-                firstName: values.firstName,
-                lastName: values.lastName,
-                birthday: values.birthday,
-                phone: values.phone,
-              };
+              updateValue = encryptData({ firstName: values.firstName, lastName: values.lastName, birthday: values.birthday, phone: values.phone });
             }
             userRef
               .update(updateValue)
@@ -195,14 +183,7 @@ const UpdateProfileFormDetails = ({ formikProps, type }) => {
           }}
         />
       </View>
-      <DateTimePickerModal
-        isVisible={isDatePickerVisible}
-        mode="date"
-        onConfirm={handleConfirm}
-        onCancel={_hideDatePicker}
-        date={moment(formikProps.values["birthday"]).toDate()}
-        maximumDate={new Date()}
-      />
+      <DateTimePickerModal isVisible={isDatePickerVisible} mode="date" onConfirm={handleConfirm} onCancel={_hideDatePicker} date={moment(formikProps.values["birthday"]).toDate()} maximumDate={new Date()} />
     </ScrollView>
   );
 };
