@@ -9,11 +9,11 @@ import { Formik } from "formik";
 import { RoundButton } from "../Utils/RoundButton";
 import { database } from "../src/config/config";
 import { updateProfessionalProfileSchema, updatePatientProfileSchema } from "../src/utils/schema";
-import { decryptData } from "../src/utils/encryptData";
 
 const UpdateProfileScreen = ({ route, navigation }) => {
   const { user, type } = route.params;
   console.log("user: ", user);
+  console.log("type: ", type);
   return (
     <MenuScreen>
       {user && (
@@ -41,7 +41,7 @@ const UpdateProfileScreen = ({ route, navigation }) => {
           onSubmit={async (values, { setSubmitting, resetForm, setStatus, setErrors }) => {
             let userRef = "";
             let updateValue = {};
-            if (type == "normal") {
+            if (type == "user") {
               userRef = database.ref("/users/" + user.uid);
               updateValue = {
                 firstName: values.firstName,
@@ -70,7 +70,7 @@ const UpdateProfileScreen = ({ route, navigation }) => {
                 Alert.alert("更新資料錯誤");
               });
           }}
-          validationSchema={type == "normal" ? updatePatientProfileSchema : updateProfessionalProfileSchema}
+          validationSchema={type == "user" ? updatePatientProfileSchema : updateProfessionalProfileSchema}
         >
           {(formikProps) => <UpdateProfileFormDetails formikProps={formikProps} type={type} />}
         </Formik>
@@ -140,7 +140,7 @@ const UpdateProfileFormDetails = ({ formikProps, type }) => {
           keyboardType="phone-pad"
           errorMessage={formikProps.errors["phone"]}
         />
-        {type == "normal" ? (
+        {type == "user" ? (
           <>
             <Input
               label={"職業"}
