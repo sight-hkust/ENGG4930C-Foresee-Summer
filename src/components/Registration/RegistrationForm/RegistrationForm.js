@@ -122,9 +122,10 @@ const FormComponent = ({ navigation, route }) => {
                   setIsLoading(false);
                   navigation.navigate("ProfMainMenu");
                   resetForm({});
+                  setErrorMessageFromServer("");
                   setStatus({ success: true });
                 },
-                setServerError: setServerError,
+                setServerError,
               });
               break;
             default:
@@ -132,7 +133,7 @@ const FormComponent = ({ navigation, route }) => {
                 values,
                 navigation,
                 isProfessional,
-                setServerError: setServerError,
+                setServerError,
                 returnOnComplete: () => {
                   setIsLoading(false);
                   resetForm({});
@@ -351,7 +352,7 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
                   >
                     搜尋病人家屬
                   </Text>
-                  <Switch value={isFamilySearchFieldVisible} onValueChange={_toggleFamilySearchSwitch} color="#FFFFFF" />
+                  <Switch value={isFamilySearchFieldVisible} onValueChange={_toggleFamilySearchSwitch} color={"rgba(255, 255, 255, 0.4)"} ios_backgroundColor={"rgba(255, 255, 255, 0.4)"} />
                 </View>
                 {isFamilySearchFieldVisible && (
                   <View>
@@ -360,13 +361,15 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
                         style={{
                           backgroundColor: "rgba(255, 255, 255, 0.4)",
                           height: ScreenHeight * 0.065,
-                          borderRadius: ScreenHeight * 0.035,
                           fontSize: FontScale * 18,
+                          borderRadius: ScreenHeight * 0.035,
+                          overflow: "hidden",
                           marginBottom: ScreenHeight * 0.01,
                           paddingHorizontal: "10%",
                           color: "#FFFFFF",
                           textAlignVertical: "center",
                           textAlign: "center",
+                          marginHorizontal: "3%",
                         }}
                       >
                         {values.parent ? values.parent["name"] : ""}
