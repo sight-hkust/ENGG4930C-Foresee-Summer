@@ -258,7 +258,7 @@ export const DetailButton = (props) => {
         TouchableComponent={TouchableOpacity}
       />
       <Text style={{ color: "white", fontSize: ScreenHeight / 40 }}>{glassType ? "調整度數" : "真實度數"}</Text>
-      <RenderModal data={data} selectedDate={selectedDate} isVisible={isVisible} toggleModal={toggleModal} glassType={glassType} />
+      <RenderModal data={data} selectedDate={selectedDate} isVisible={isVisible} toggleModal={toggleModal} glassType={glassType ? "adj" : "normal"} />
     </View>
   );
 };

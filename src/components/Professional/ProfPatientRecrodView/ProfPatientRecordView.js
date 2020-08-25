@@ -18,7 +18,7 @@ class ProfPatientRecordView extends Component {
       info: null,
       selectedIndex: -1,
       recordsLen: -1,
-      glassType: 0,
+      glassTypeIndex: 0,
     };
   }
 
@@ -80,6 +80,9 @@ class ProfPatientRecordView extends Component {
     const { records, dateList } = this.props.recordStore;
     const { key, inactive } = this.props.route.params;
 
+    const glassType = ["normal", "adj", "con"];
+    const glassTypeName = ["真實度數", "調整度數", "隱形眼鏡度數"];
+
     return (
       <MenuScreen>
         <View style={{ flex: 1, paddingTop: ScreenHeight * 0.045, paddingHorizontal: ScreenWidth * 0.1 }}>
@@ -95,8 +98,8 @@ class ProfPatientRecordView extends Component {
                       <RoundButton
                         buttonStyle={{ backgroundColor: "#2D9CDB" }}
                         textStyle={{ color: "white" }}
-                        title={this.state.glassType ? "調整度數" : "真實度數"}
-                        onPress={() => this.setState({ glassType: 1 - this.state.glassType })}
+                        title={glassTypeName[this.state.glassTypeIndex]}
+                        onPress={() => this.setState({ glassTypeIndex: (this.state.glassTypeIndex + 1) % glassTypeName.length })}
                       />
                       <View style={styles.datePickerContainer}>
                         {dateList.length < 2 ? null : (
@@ -111,7 +114,7 @@ class ProfPatientRecordView extends Component {
                           </TouchableOpacity>
                         )}
                       </View>
-                      <DisplayRecords curRecord={records[dateList[selectedIndex]]} glassType={this.state.glassType} />
+                      <DisplayRecords curRecord={records[dateList[selectedIndex]]} glassType={glassType[this.state.glassTypeIndex]} />
                       <View style={{ height: 20 }} />
                     </View>
                   )}

@@ -7,7 +7,7 @@ export default function DisplayRecords(props) {
   let glassTypeGeneralData;
 
   switch (glassType) {
-    case 0:
+    case "normal":
       glassTypeGeneralData = {
         L_Myopia: curRecord.L_Myopia,
         L_Hyperopia: curRecord.L_Hyperopia,
@@ -24,7 +24,7 @@ export default function DisplayRecords(props) {
         R_ADD: curRecord.R_ADD || 0,
       };
       break;
-    case 1:
+    case "adj":
       glassTypeGeneralData = {
         L_Myopia: curRecord.Adj_L_Myopia,
         L_Hyperopia: curRecord.Adj_L_Hyperopia,
@@ -39,6 +39,23 @@ export default function DisplayRecords(props) {
         R_Axis: curRecord.Adj_R_Axis,
         R_PRISM: curRecord.Adj_R_PRISM || 0,
         R_ADD: curRecord.Adj_R_ADD || 0,
+      };
+      break;
+    case "con":
+      glassTypeGeneralData = {
+        L_Myopia: curRecord.Con_L_Myopia,
+        L_Hyperopia: curRecord.Con_L_Hyperopia,
+        L_CYL: curRecord.Con_L_CYL,
+        L_Axis: curRecord.Con_L_Axis,
+        //L_PRISM: curRecord.Con_L_PRISM || 0,
+        //L_ADD: curRecord.Con_L_ADD || 0,
+
+        R_Myopia: curRecord.Con_R_Myopia,
+        R_Hyperopia: curRecord.Con_R_Hyperopia,
+        R_CYL: curRecord.Con_R_CYL,
+        R_Axis: curRecord.Con_R_Axis,
+        //R_PRISM: curRecord.Con_R_PRISM || 0,
+        //R_ADD: curRecord.Con_R_ADD || 0,
       };
       break;
   }
