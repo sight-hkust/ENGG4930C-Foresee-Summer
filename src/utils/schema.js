@@ -425,3 +425,28 @@ export const updatePatientProfileSchema = object().shape({
   }),
   phone: phoneValidation,
 });
+
+export const changePasswordSchema = object().shape({
+  passwordValidation: string().test({
+    name: passwordValidation,
+    test: function (val) {
+      const { password, confirmPassword } = this.parent;
+      if (!password) {
+        return this.createError({ message: "請輸入新密碼", path: "passwordError" });
+      }
+
+      if (!confirmPassword) {
+        return this.createError({ message: "請輸入確認密碼", path: "passwordError" });
+      }
+
+      const passwordFormat = /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,15}$/;
+      if (!passwordFormat.test(password)) {
+        return this.createError({ message: "密碼需為 8-16個符號：包含一個數字(0-9)，一個小寫英文(a-z)，及一個大寫字母(A-Z)", path: "passwordError" });
+      }
+      if (password != confirmPassword) {
+        return this.createError({ message: "密碼與確認密碼不相同", path: "passwordError" });
+      }
+      return true;
+    },
+  }),
+});
