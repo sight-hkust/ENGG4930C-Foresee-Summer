@@ -90,6 +90,7 @@ class ProfPatientRecordView extends Component {
         <View style={{ flex: 1, paddingTop: ScreenHeight * 0.045, paddingHorizontal: ScreenWidth * 0.1 }}>
           <View style={styles.patientInfo}>{info && <PatientProfile info={info} />}</View>
           <View style={{ flex: 3, justifyContent: "center", alignItems: "center" }}>
+            <RoundButton title={"登出"} onPress={() => auth.signOut()}></RoundButton>
             {info && (
               <>
                 <View style={styles.boxes}>
