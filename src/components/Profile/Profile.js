@@ -14,6 +14,7 @@ import { decryptData } from "../../utils/encryptData";
 import { updateFamilyMembers } from "../../reducers/familyMembers";
 import { watchUserInfoUpdate } from "../../reducers/user";
 import { RoundButton } from "../../../Utils/RoundButton";
+import { displayName } from "../../utils/displayName";
 
 const Profile = ({ navigation, route, userStore }) => {
   const { type } = route.params; //type: "user", "professional";
