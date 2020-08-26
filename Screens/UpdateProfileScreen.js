@@ -13,7 +13,7 @@ import { encryptData } from "../src/utils/encryptData";
 
 const UpdateProfileScreen = ({ route, navigation }) => {
   const { user, type } = route.params;
-  console.log("user: ", user);
+  console.log("UpdateProfile user: ", user);
   console.log("type: ", type);
   return (
     <MenuScreen>
@@ -60,10 +60,26 @@ const UpdateProfileScreen = ({ route, navigation }) => {
             userRef
               .update(updateValue)
               .then(function () {
-                Alert.alert("更新資料完成");
+                Alert.alert("更新資料完成", null, [
+                  {
+                    text: "OK",
+                    onPress: () => {
+                      console.log("finish change password.");
+                      navigation.navigate("ProfileTabMain");
+                    },
+                  },
+                ]);
               })
               .catch((err) => {
-                Alert.alert("更新資料錯誤");
+                Alert.alert("更新資料錯誤", null, [
+                  {
+                    text: "OK",
+                    onPress: () => {
+                      console.log("finish change password.");
+                      navigation.navigate("ProfileTabMain");
+                    },
+                  },
+                ]);
               });
           }}
           validationSchema={type == "user" ? updatePatientProfileSchema : updateProfessionalProfileSchema}
@@ -158,8 +174,9 @@ const UpdateProfileFormDetails = ({ formikProps, type }) => {
                 marginTop: ScreenHeight * 0.02,
                 paddingVertical: ScreenHeight * 0.025,
                 paddingHorizontal: ScreenHeight * 0.009,
+                alignItems: "flex-start",
               }}
-              inputStyle={[UpdateProfileScreenStyle.inputStyle, { height: "100%" }]}
+              inputStyle={[UpdateProfileScreenStyle.inputStyle, { height: "100%", textAlignVertical: "top" }]}
               defaultValue={formikProps.values["history"]}
               multiline={true}
               onChangeText={formikProps.handleChange("history")}
@@ -176,7 +193,7 @@ const UpdateProfileFormDetails = ({ formikProps, type }) => {
                 paddingVertical: ScreenHeight * 0.025,
                 paddingHorizontal: ScreenHeight * 0.009,
               }}
-              inputStyle={[UpdateProfileScreenStyle.inputStyle, { height: "100%" }]}
+              inputStyle={[UpdateProfileScreenStyle.inputStyle, { height: "100%", textAlignVertical: "top" }]}
               defaultValue={formikProps.values["disease"]}
               multiline={true}
               onChangeText={formikProps.handleChange("disease")}

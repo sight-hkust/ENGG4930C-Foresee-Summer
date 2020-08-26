@@ -50,6 +50,13 @@ const Profile = ({ navigation, route, userStore }) => {
     if (!userData && type == "professional") {
       setUserData(user);
     }
+  });
+
+  useEffect(() => {
+    if (userData && userData.uid == user.uid && type == "professional") {
+      setUserData(user);
+      console.log("LINE 52:", user);
+    }
   }, [user]);
 
   return (
