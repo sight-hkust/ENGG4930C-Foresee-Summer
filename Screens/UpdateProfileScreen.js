@@ -97,7 +97,7 @@ const UpdateProfileFormDetails = ({ formikProps, type }) => {
   const _hideDatePicker = () => setDatePickerVisibility(false);
   const handleConfirm = (date) => {
     _hideDatePicker();
-    formikProps.setFieldValue("birthday", moment(date).toJSON(), false);
+    formikProps.setFieldValue("birthday", moment(date).format("YYYY-MM-DD"), false);
   };
 
   return (
