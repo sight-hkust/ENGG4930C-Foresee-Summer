@@ -77,7 +77,9 @@ const Profile = ({ navigation, route, userStore }) => {
                   </View>
                 </Row>
                 <Row style={styles.qrCodeIconContainer}>
-                  {type == "user" && <Icon type="antdesign" name="qrcode" size={40} containerStyle={{ marginRight: 15, marginTop: 10 }} onPress={() => navigation.navigate("QrCode", { id: userData.uid })} />}
+                  {type == "user" && (
+                    <Icon type="antdesign" name="qrcode" size={40} containerStyle={{ marginRight: 15, marginTop: 10 }} onPress={() => navigation.navigate("QrCode", { id: userData.uid })} />
+                  )}
                 </Row>
 
                 {type == "user" ? (
@@ -129,12 +131,10 @@ const Profile = ({ navigation, route, userStore }) => {
                   <Col style={styles.infoContainer}>
                     {type == "user" ? (
                       <Text style={styles.info}>
-                        <Text style={{ fontSize: 30 }}>{moment.duration(moment().diff(userData.birthday, "YYYY")).years()}</Text>歲
+                        <Text style={{ fontSize: ScreenHeight * 0.038 }}>{moment.duration(moment().diff(userData.birthday, "YYYY")).years()}</Text>歲
                       </Text>
                     ) : (
-                      <Text style={styles.info}>
-                        <Text style={{ fontSize: 22 }}>{user.part == "part1" ? "第一部分" : user.part == "part2" ? "第二部分" : user.part == "part3" ? "第三部分" : "第四部分"}</Text>
-                      </Text>
+                      <Text style={styles.info}>{user.part == "part1" ? "第一部分" : user.part == "part2" ? "第二部分" : user.part == "part3" ? "第三部分" : "第四部分"}</Text>
                     )}
                   </Col>
                   <Col style={styles.infoContainer}>
@@ -143,7 +143,7 @@ const Profile = ({ navigation, route, userStore }) => {
                         ...styles.info,
                         ...{
                           position: "absolute",
-                          top: 50,
+                          top: ScreenHeight * 0.05,
                           width: ScreenWidth,
                           textAlign: "center",
                         },
@@ -157,13 +157,32 @@ const Profile = ({ navigation, route, userStore }) => {
                   </Col>
                 </Row>
                 <Row style={{ alignItems: "center", justifyContent: "center" }}>
-                  <RoundButton title="更改密碼" onPress={() => navigation.navigate("ChangePassword")} buttonStyle={{ width: ScreenWidth * 0.28, backgroundColor: "#2D9CDB" }} textStyle={{ color: "#FFFFFF" }} />
+                  <RoundButton
+                    title="更改密碼"
+                    onPress={() => navigation.navigate("ChangePassword")}
+                    buttonStyle={{ width: ScreenWidth * 0.28, backgroundColor: "#2D9CDB" }}
+                    textStyle={{ color: "#FFFFFF" }}
+                  />
                 </Row>
               </Grid>
             </View>
             <View style={styles.bottomMenu}>
-              <Button title="詳細設定" type="clear" containerStyle={styles.bottomMenuItemContainer} titleStyle={styles.bottomMenuItemText} TouchableComponent={TouchableOpacity} onPress={() => navigation.navigate("SettingScreen")} />
-              <Button title="程式教學" type="clear" containerStyle={styles.bottomMenuItemContainer} titleStyle={styles.bottomMenuItemText} TouchableComponent={TouchableOpacity} onPress={() => navigation.navigate("Tutorial")} />
+              <Button
+                title="詳細設定"
+                type="clear"
+                containerStyle={styles.bottomMenuItemContainer}
+                titleStyle={styles.bottomMenuItemText}
+                TouchableComponent={TouchableOpacity}
+                onPress={() => navigation.navigate("SettingScreen")}
+              />
+              <Button
+                title="程式教學"
+                type="clear"
+                containerStyle={styles.bottomMenuItemContainer}
+                titleStyle={styles.bottomMenuItemText}
+                TouchableComponent={TouchableOpacity}
+                onPress={() => navigation.navigate("Tutorial")}
+              />
               {type == "user" && (
                 <Button
                   title="創建子帳戶"
@@ -292,10 +311,10 @@ const styles = StyleSheet.create({
   },
   info: {
     position: "absolute",
-    top: 4,
+    top: 0,
     color: "#1772A6",
     fontWeight: "bold",
-    fontSize: 18,
+    fontSize: ScreenHeight * 0.026,
   },
   bottomMenu: {
     borderTopWidth: 1,
