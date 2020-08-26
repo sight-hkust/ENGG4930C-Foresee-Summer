@@ -158,8 +158,9 @@ const UpdateProfileFormDetails = ({ formikProps, type }) => {
                 marginTop: ScreenHeight * 0.02,
                 paddingVertical: ScreenHeight * 0.025,
                 paddingHorizontal: ScreenHeight * 0.009,
+                alignItems: "flex-start",
               }}
-              inputStyle={[UpdateProfileScreenStyle.inputStyle, { height: "100%" }]}
+              inputStyle={[UpdateProfileScreenStyle.inputStyle, { height: "100%", textAlignVertical: "top" }]}
               defaultValue={formikProps.values["history"]}
               multiline={true}
               onChangeText={formikProps.handleChange("history")}
@@ -176,7 +177,7 @@ const UpdateProfileFormDetails = ({ formikProps, type }) => {
                 paddingVertical: ScreenHeight * 0.025,
                 paddingHorizontal: ScreenHeight * 0.009,
               }}
-              inputStyle={[UpdateProfileScreenStyle.inputStyle, { height: "100%" }]}
+              inputStyle={[UpdateProfileScreenStyle.inputStyle, { height: "100%", textAlignVertical: "top" }]}
               defaultValue={formikProps.values["disease"]}
               multiline={true}
               onChangeText={formikProps.handleChange("disease")}
