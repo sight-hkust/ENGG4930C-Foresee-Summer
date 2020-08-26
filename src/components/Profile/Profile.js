@@ -145,11 +145,11 @@ const Profile = ({ navigation, route, userStore }) => {
                         },
                       }}
                     >
-                      {user["dataEncrypted"] ? decryptData(user).email : user.email}
+                      {user["dataEncrypted"] ? user.email : user.email}
                     </Text>
                   </Col>
                   <Col style={styles.infoContainer}>
-                    <Text style={styles.info}>{user["dataEncrypted"] ? decryptData(user).phone : user.phone}</Text>
+                    <Text style={styles.info}>{user["dataEncrypted"] ? user.phone : user.phone}</Text>
                   </Col>
                 </Row>
                 <Row style={{ alignItems: "center", justifyContent: "center" }}>

@@ -1,4 +1,5 @@
 import { database, auth } from "../config/config";
+import {decryptData} from '../utils/encryptData'
 
 export const UPDATE_USER_INFO = "UPDATE_USER_INFO";
 
@@ -15,13 +16,25 @@ export const watchUserInfoUpdate = () => {
       database.ref("/users/" + auth.currentUser.uid).on("value", (snap) => {
         //dispatch(updateUserInfo(snap.val()));
         if (snap.val() != null) {
-          dispatch(updateUserInfo(snap.val()));
+          const userData = snap.val();
+          if (userData["dataEncrypted"]) {
+            const decrpytedUserData = decryptData(userData);
+            dispatch(updateUserInfo(decrpytedUserData));
+          } else {
+            dispatch(updateUserInfo(userData));
+          }
         }
       });
       database.ref("/professionals/" + auth.currentUser.uid).on("value", (snap) => {
         //dispatch(updateUserInfo(snap.val()));
         if (snap.val() != null) {
-          dispatch(updateUserInfo(snap.val()));
+          const userData = snap.val();
+          if (userData["dataEncrypted"]) {
+            const decrpytedUserData = decryptData(userData);
+            dispatch(updateUserInfo(decrpytedUserData));
+          } else {
+            dispatch(updateUserInfo(userData));
+          }
         }
       });
       // database.ref("/users/" + auth.currentUser.uid).on("value", (snap) => {
