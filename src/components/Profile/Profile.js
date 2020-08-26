@@ -50,7 +50,7 @@ const Profile = ({ navigation, route, userStore }) => {
     if (!userData && type == "professional") {
       setUserData(user);
     }
-  });
+  },[user]);
 
   return (
     <MenuScreen>
