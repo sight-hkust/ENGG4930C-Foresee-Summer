@@ -50,7 +50,7 @@ const Profile = ({ navigation, route, userStore }) => {
     if (!userData && type == "professional") {
       setUserData(user);
     }
-  },[user]);
+  }, [user]);
 
   return (
     <MenuScreen>
@@ -125,12 +125,10 @@ const Profile = ({ navigation, route, userStore }) => {
                   <Col style={styles.infoContainer}>
                     {type == "user" ? (
                       <Text style={styles.info}>
-                        <Text style={{ fontSize: 30 }}>{moment.duration(moment().diff(userData.birthday, "YYYY")).years()}</Text>歲
+                        <Text style={{ fontSize: ScreenHeight * 0.038 }}>{moment.duration(moment().diff(userData.birthday, "YYYY")).years()}</Text>歲
                       </Text>
                     ) : (
-                      <Text style={styles.info}>
-                        <Text style={{ fontSize: 22 }}>{user.part == "part1" ? "第一部分" : user.part == "part2" ? "第二部分" : user.part == "part3" ? "第三部分" : "第四部分"}</Text>
-                      </Text>
+                      <Text style={styles.info}>{user.part == "part1" ? "第一部分" : user.part == "part2" ? "第二部分" : user.part == "part3" ? "第三部分" : "第四部分"}</Text>
                     )}
                   </Col>
                   <Col style={styles.infoContainer}>
@@ -139,7 +137,7 @@ const Profile = ({ navigation, route, userStore }) => {
                         ...styles.info,
                         ...{
                           position: "absolute",
-                          top: 50,
+                          top: ScreenHeight * 0.05,
                           width: ScreenWidth,
                           textAlign: "center",
                         },
@@ -307,10 +305,10 @@ const styles = StyleSheet.create({
   },
   info: {
     position: "absolute",
-    top: 4,
+    top: 0,
     color: "#1772A6",
     fontWeight: "bold",
-    fontSize: 18,
+    fontSize: ScreenHeight * 0.026,
   },
   bottomMenu: {
     borderTopWidth: 1,
