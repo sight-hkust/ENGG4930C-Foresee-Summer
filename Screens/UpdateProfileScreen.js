@@ -13,7 +13,7 @@ import { encryptData } from "../src/utils/encryptData";
 
 const UpdateProfileScreen = ({ route, navigation }) => {
   const { user, type } = route.params;
-  console.log("user: ", user);
+  console.log("UpdateProfile user: ", user);
   console.log("type: ", type);
   return (
     <MenuScreen>
@@ -60,10 +60,26 @@ const UpdateProfileScreen = ({ route, navigation }) => {
             userRef
               .update(updateValue)
               .then(function () {
-                Alert.alert("更新資料完成");
+                Alert.alert("更新資料完成", null, [
+                  {
+                    text: "OK",
+                    onPress: () => {
+                      console.log("finish change password.");
+                      navigation.navigate("ProfileTabMain");
+                    },
+                  },
+                ]);
               })
               .catch((err) => {
-                Alert.alert("更新資料錯誤");
+                Alert.alert("更新資料錯誤", null, [
+                  {
+                    text: "OK",
+                    onPress: () => {
+                      console.log("finish change password.");
+                      navigation.navigate("ProfileTabMain");
+                    },
+                  },
+                ]);
               });
           }}
           validationSchema={type == "user" ? updatePatientProfileSchema : updateProfessionalProfileSchema}
