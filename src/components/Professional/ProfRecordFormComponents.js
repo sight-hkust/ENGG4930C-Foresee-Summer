@@ -564,7 +564,7 @@ export const CYLInput = (props) => {
     <View style={{ alignSelf: "center" }}>
       {QuestionText()}
       <View style={{ flexDirection: "row", paddingLeft: 5, paddingTop: 10 }}>
-        <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>+</Text>
+        <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>-</Text>
 
         <TextInput onChangeText={TextinputHandler} keyboardType="numeric" style={FormItemStyle.answerInputBox} />
       </View>
