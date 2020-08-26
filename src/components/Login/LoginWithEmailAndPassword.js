@@ -123,8 +123,7 @@ export const LoginWithEmailAndPassword = ({ navigation, route }) => {
          </Text>
         </TouchableOpacity>
        </View>
-       <View
-        style={[styles.registrationNav, { marginBottom: ScreenHeight * 0.2 }]}>
+       <View style={styles.registrationNav}>
         <TouchableOpacity
          onPress={() => {
           navigation.navigate("Forget Password");
@@ -136,6 +135,7 @@ export const LoginWithEmailAndPassword = ({ navigation, route }) => {
        </View>
       </View>
      </KeyboardAvoidingView>
+     <View style={{ marginBottom: ScreenHeight * 0.2 }}></View>
     </ScrollView>
    </LinearGradientBackground>
    <Modal isVisible={isLoading} animationIn={"fadeIn"} animationOut={"fadeOut"}>
