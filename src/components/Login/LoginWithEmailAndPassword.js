@@ -1,4 +1,4 @@
-import { Text, TouchableOpacity, View, KeyboardAvoidingView, ActivityIndicator, StyleSheet, Dimensions } from "react-native";
+import { Text, TouchableOpacity, View, KeyboardAvoidingView, ActivityIndicator, StyleSheet, Dimensions, ScrollView } from "react-native";
 import React, { useState } from "react";
 import Logo from "../Utils/Logo";
 import { auth, config } from "../../config/config";
@@ -56,55 +56,57 @@ export const LoginWithEmailAndPassword = ({ navigation, route }) => {
   return (
     <>
       <LinearGradientBackground>
-        <KeyboardAvoidingView behavior={"position"}>
-          <View style={styles.content}>
-            <Logo />
-            <View
-              style={{
-                marginTop: ScreenHeight * 0.045,
-                marginBottom: ScreenHeight * 0.05,
-              }}
-            >
-              <InputTextField label="電子郵件" icon={MailIcon} defaultValue={emailInput} setValue={setEmailInput} hideEmbeddedErrorMessage={true} />
-              <InputTextField label="密碼" icon={KeyIcon} defaultValue={passwordInput} setValue={setPasswordInput} secureTextEntry={true} hideEmbeddedErrorMessage />
-              <View>
-                {loginErrorMessage !== "" ? (
-                  <Text
-                    style={{
-                      textAlign: "center",
-                      fontSize: FontScale * 18,
-                      fontWeight: "700",
-                      color: "#FFFFFF",
-                      flexWrap: "wrap",
-                    }}
-                  >
-                    {loginErrorMessage}
-                  </Text>
-                ) : null}
+        <ScrollView style={{ flex: 1 }}>
+          <KeyboardAvoidingView behavior={"position"}>
+            <View style={styles.content}>
+              <Logo />
+              <View
+                style={{
+                  marginTop: ScreenHeight * 0.045,
+                  marginBottom: ScreenHeight * 0.05,
+                }}
+              >
+                <InputTextField label="電子郵件" icon={MailIcon} defaultValue={emailInput} setValue={setEmailInput} hideEmbeddedErrorMessage={true} />
+                <InputTextField label="密碼" icon={KeyIcon} defaultValue={passwordInput} setValue={setPasswordInput} secureTextEntry={true} hideEmbeddedErrorMessage />
+                <View>
+                  {loginErrorMessage !== "" ? (
+                    <Text
+                      style={{
+                        textAlign: "center",
+                        fontSize: FontScale * 18,
+                        fontWeight: "700",
+                        color: "#FFFFFF",
+                        flexWrap: "wrap",
+                      }}
+                    >
+                      {loginErrorMessage}
+                    </Text>
+                  ) : null}
+                </View>
+              </View>
+              <RoundButton title={"登入"} onPress={handleLogin} />
+              <View style={styles.registrationNav}>
+                <Text style={styles.registrationNavText}>未有用戶? </Text>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("Register");
+                  }}
+                >
+                  <Text style={[styles.registrationNavText, { color: "#FFFFFF" }]}>登記</Text>
+                </TouchableOpacity>
+              </View>
+              <View style={[styles.registrationNav, { marginBottom: ScreenHeight * 0.2 }]}>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate("Forget Password");
+                  }}
+                >
+                  <Text style={[styles.registrationNavText, { color: "#FFFFFF" }]}>忘記密碼</Text>
+                </TouchableOpacity>
               </View>
             </View>
-            <RoundButton title={"登入"} onPress={handleLogin} />
-            <View style={styles.registrationNav}>
-              <Text style={styles.registrationNavText}>未有用戶? </Text>
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate("Register");
-                }}
-              >
-                <Text style={[styles.registrationNavText, { color: "#FFFFFF" }]}>登記</Text>
-              </TouchableOpacity>
-            </View>
-            <View style={styles.registrationNav}>
-              <TouchableOpacity
-                onPress={() => {
-                  navigation.navigate("Forget Password");
-                }}
-              >
-                <Text style={[styles.registrationNavText, { color: "#FFFFFF" }]}>忘記密碼</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </KeyboardAvoidingView>
+          </KeyboardAvoidingView>
+        </ScrollView>
       </LinearGradientBackground>
       <Modal isVisible={isLoading} animationIn={"fadeIn"} animationOut={"fadeOut"}>
         <ActivityIndicator size={Scale * 30} color="#00acc1" />
