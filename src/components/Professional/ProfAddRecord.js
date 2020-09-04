@@ -353,6 +353,8 @@ export default class Form extends Component {
                   error_R_CYL={errors.R_CYL}
                   error_L_Axis={errors.L_Axis}
                   error_R_Axis={errors.R_Axis}
+                  error_L_PRISM={errors.L_PRISM}
+                  error_R_PRISM={errors.R_PRISM}
                 />
 
                 <RenderCollapseAdj
@@ -363,6 +365,8 @@ export default class Form extends Component {
                   error_R_CYL={errors.Adj_R_CYL}
                   error_L_Axis={errors.Adj_L_Axis}
                   error_R_Axis={errors.Adj_R_Axis}
+                  error_L_PRISM={errors.Adj_L_PRISM}
+                  error_R_PRISM={errors.Adj_R_PRISM}
                 />
 
                 <RenderCollapseVA setFieldValue={setFieldValue} error_L_VA={errors.L_VA} error_R_VA={errors.R_VA} />
@@ -388,6 +392,8 @@ export default class Form extends Component {
                   error_R_CYL={errors.Far_R_CYL}
                   error_L_Axis={errors.Far_L_Axis}
                   error_R_Axis={errors.Far_R_Axis}
+                  error_L_PRISM={errors.Far_L_PRISM}
+                  error_R_PRISM={errors.Far_R_PRISM}
                 />
 
                 <RenderCollapseMid
@@ -398,6 +404,8 @@ export default class Form extends Component {
                   error_R_CYL={errors.Mid_R_CYL}
                   error_L_Axis={errors.Mid_L_Axis}
                   error_R_Axis={errors.Mid_R_Axis}
+                  error_L_PRISM={errors.Mid_L_PRISM}
+                  error_R_PRISM={errors.Mid_R_PRISM}
                 />
 
                 <RenderCollapseNear
@@ -408,6 +416,8 @@ export default class Form extends Component {
                   error_R_CYL={errors.Near_R_CYL}
                   error_L_Axis={errors.Near_L_Axis}
                   error_R_Axis={errors.Near_R_Axis}
+                  error_L_PRISM={errors.Near_L_PRISM}
+                  error_R_PRISM={errors.Near_R_PRISM}
                 />
 
                 <RemarksInput handleChange={handleChange} />
