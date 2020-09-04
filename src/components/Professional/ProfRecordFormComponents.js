@@ -160,7 +160,6 @@ export const RenderCollapseCon = (props) => {
       </TouchableOpacity>
       <Collapsible collapsed={isCollapse}>
         <View style={FormItemStyle.collpaseContainer}>
-          <ExpiryDateInput values={values} setFieldValue={setFieldValue} />
           <BrandInput handleChange={handleChange} />
           <SPHInput setFieldValue={setFieldValue} isLeft={false} mode="con" />
           {error_R_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_R_SPH}</Text>}
