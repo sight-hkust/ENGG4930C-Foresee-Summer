@@ -1,5 +1,5 @@
 import React, { Component, useState } from "react";
-import { StyleSheet, View, ScrollView, Alert, Animated, TouchableOpacity } from "react-native";
+import { StyleSheet, View, ScrollView, Alert, Animated, TouchableOpacity, Text } from "react-native";
 
 import { Formik } from "formik";
 import moment from "moment";
@@ -424,6 +424,7 @@ export default class Form extends Component {
                 {isProfessional && <DiseasesInput setFieldValue={setFieldValue} />}
 
                 <View style={{ paddingTop: 24 }}>
+                  {Object.keys(errors).length != 0 && <Text style={AddRecordScreen.errorMsg}> 無法提交表格，請檢查錯誤提示。 </Text>}
                   <Button
                     title="提交"
                     buttonStyle={AddRecordScreen.submitButton}
@@ -434,9 +435,7 @@ export default class Form extends Component {
                       marginBottom: 200,
                     }}
                     onPress={handleSubmit}
-                    // disabled={
-                    //   need
-                    // }
+                    disabled={Object.keys(errors).length != 0}
                     TouchableComponent={TouchableOpacity}
                   />
                 </View>
@@ -450,6 +449,15 @@ export default class Form extends Component {
 }
 
 const AddRecordScreen = StyleSheet.create({
+  errorMsg: {
+    backgroundColor: "rgba(0,0,0,0.2)",
+    color: "rgba(256,256,256,1)",
+    fontSize: 16,
+    padding: 5,
+    marginBottom: 10,
+    textAlign: "center",
+    borderRadius: 5,
+  },
   background: {
     height: "100%",
     backgroundColor: "white",
