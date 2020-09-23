@@ -65,26 +65,26 @@ export const ExpiryDateInput = (props) => {
 };
 
 export const RenderNormal = (props) => {
-  const { setFieldValue, error_L_SPH, error_R_SPH, error_L_CYL, error_R_CYL, error_L_Axis, error_R_Axis } = props;
+  const { setFieldValue, error_L_SPH, error_R_SPH, error_L_CYL, error_R_CYL, error_L_Axis, error_R_Axis, error_L_PRISM, error_R_PRISM } = props;
   return (
     <>
       <SPHInput setFieldValue={setFieldValue} isLeft={false} mode="normal" />
       {error_R_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_R_SPH}</Text>}
       <CYLInput setFieldValue={setFieldValue} isLeft={false} mode="normal" error_CYL={error_R_CYL} error_Axis={error_R_Axis} />
-      <PRISMInput setFieldValue={setFieldValue} isLeft={false} mode="normal" />
+      <PRISMInput setFieldValue={setFieldValue} isLeft={false} mode="normal" error_PRISM={error_R_PRISM} />
       <ADDInput setFieldValue={setFieldValue} isLeft={false} mode="normal" />
 
       <SPHInput setFieldValue={setFieldValue} isLeft={true} mode="normal" />
       {error_L_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_L_SPH}</Text>}
       <CYLInput setFieldValue={setFieldValue} isLeft={true} mode="normal" error_CYL={error_L_CYL} error_Axis={error_L_Axis} />
-      <PRISMInput setFieldValue={setFieldValue} isLeft={true} mode="normal" />
+      <PRISMInput setFieldValue={setFieldValue} isLeft={true} mode="normal" error_PRISM={error_L_PRISM} />
       <ADDInput setFieldValue={setFieldValue} isLeft={true} mode="normal" />
     </>
   );
 };
 
 export const RenderCollapseAdj = (props) => {
-  const { setFieldValue, error_L_SPH, error_R_SPH, error_L_CYL, error_R_CYL, error_L_Axis, error_R_Axis } = props;
+  const { setFieldValue, error_L_SPH, error_R_SPH, error_L_CYL, error_R_CYL, error_L_Axis, error_R_Axis, error_L_PRISM, error_R_PRISM } = props;
   const [isCollapse, toggleisCollapse] = useState(false);
   return (
     <View>
@@ -96,13 +96,13 @@ export const RenderCollapseAdj = (props) => {
           <SPHInput setFieldValue={setFieldValue} isLeft={false} mode="adj" />
           {error_R_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_R_SPH}</Text>}
           <CYLInput setFieldValue={setFieldValue} isLeft={false} mode="adj" error_CYL={error_R_CYL} error_Axis={error_R_Axis} />
-          <PRISMInput setFieldValue={setFieldValue} isLeft={false} mode="adj" />
+          <PRISMInput setFieldValue={setFieldValue} isLeft={false} mode="adj" error_PRISM={error_R_PRISM} />
           <ADDInput setFieldValue={setFieldValue} isLeft={false} mode="adj" />
 
           <SPHInput setFieldValue={setFieldValue} isLeft={true} mode="adj" />
           {error_L_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_L_SPH}</Text>}
           <CYLInput setFieldValue={setFieldValue} isLeft={true} mode="adj" error_CYL={error_L_CYL} error_Axis={error_L_Axis} />
-          <PRISMInput setFieldValue={setFieldValue} isLeft={true} mode="adj" />
+          <PRISMInput setFieldValue={setFieldValue} isLeft={true} mode="adj" error_PRISM={error_L_PRISM} />
           <ADDInput setFieldValue={setFieldValue} isLeft={true} mode="adj" />
         </View>
       </Collapsible>
@@ -160,7 +160,6 @@ export const RenderCollapseCon = (props) => {
       </TouchableOpacity>
       <Collapsible collapsed={isCollapse}>
         <View style={FormItemStyle.collpaseContainer}>
-          <ExpiryDateInput values={values} setFieldValue={setFieldValue} />
           <BrandInput handleChange={handleChange} />
           <SPHInput setFieldValue={setFieldValue} isLeft={false} mode="con" />
           {error_R_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_R_SPH}</Text>}
@@ -180,7 +179,7 @@ export const RenderCollapseCon = (props) => {
 };
 
 export const RenderCollapseFar = (props) => {
-  const { setFieldValue, error_L_SPH, error_R_SPH, error_L_CYL, error_R_CYL, error_L_Axis, error_R_Axis } = props;
+  const { setFieldValue, error_L_SPH, error_R_SPH, error_L_CYL, error_R_CYL, error_L_Axis, error_R_Axis, error_L_PRISM, error_R_PRISM } = props;
   const [isCollapse, toggleisCollapse] = useState(true);
   return (
     <View>
@@ -192,13 +191,13 @@ export const RenderCollapseFar = (props) => {
           <SPHInput setFieldValue={setFieldValue} isLeft={false} mode="far" />
           {error_R_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_R_SPH}</Text>}
           <CYLInput setFieldValue={setFieldValue} isLeft={false} mode="far" error_CYL={error_R_CYL} error_Axis={error_R_Axis} />
-          <PRISMInput setFieldValue={setFieldValue} isLeft={false} mode="far" />
+          <PRISMInput setFieldValue={setFieldValue} isLeft={false} mode="far" error_PRISM={error_R_PRISM} />
           <ADDInput setFieldValue={setFieldValue} isLeft={false} mode="far" />
 
           <SPHInput setFieldValue={setFieldValue} isLeft={true} mode="far" />
           {error_L_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_L_SPH}</Text>}
           <CYLInput setFieldValue={setFieldValue} isLeft={true} mode="far" error_CYL={error_L_CYL} error_Axis={error_L_Axis} />
-          <PRISMInput setFieldValue={setFieldValue} isLeft={true} mode="far" />
+          <PRISMInput setFieldValue={setFieldValue} isLeft={true} mode="far" error_PRISM={error_L_PRISM} />
           <ADDInput setFieldValue={setFieldValue} isLeft={true} mode="far" />
         </View>
       </Collapsible>
@@ -207,7 +206,7 @@ export const RenderCollapseFar = (props) => {
 };
 
 export const RenderCollapseMid = (props) => {
-  const { setFieldValue, error_L_SPH, error_R_SPH, error_L_CYL, error_R_CYL, error_L_Axis, error_R_Axis } = props;
+  const { setFieldValue, error_L_SPH, error_R_SPH, error_L_CYL, error_R_CYL, error_L_Axis, error_R_Axis, error_L_PRISM, error_R_PRISM } = props;
   const [isCollapse, toggleisCollapse] = useState(true);
   return (
     <View>
@@ -220,13 +219,13 @@ export const RenderCollapseMid = (props) => {
           <SPHInput setFieldValue={setFieldValue} isLeft={false} mode="mid" />
           {error_R_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_R_SPH}</Text>}
           <CYLInput setFieldValue={setFieldValue} isLeft={false} mode="mid" error_CYL={error_R_CYL} error_Axis={error_R_Axis} />
-          <PRISMInput setFieldValue={setFieldValue} isLeft={false} mode="mid" />
+          <PRISMInput setFieldValue={setFieldValue} isLeft={false} mode="mid" error_PRISM={error_R_PRISM} />
           <ADDInput setFieldValue={setFieldValue} isLeft={false} mode="mid" />
 
           <SPHInput setFieldValue={setFieldValue} isLeft={true} mode="mid" />
           {error_L_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_L_SPH}</Text>}
           <CYLInput setFieldValue={setFieldValue} isLeft={true} mode="mid" error_CYL={error_L_CYL} error_Axis={error_L_Axis} />
-          <PRISMInput setFieldValue={setFieldValue} isLeft={true} mode="mid" />
+          <PRISMInput setFieldValue={setFieldValue} isLeft={true} mode="mid" error_PRISM={error_L_PRISM} />
           <ADDInput setFieldValue={setFieldValue} isLeft={true} mode="mid" />
         </View>
       </Collapsible>
@@ -235,7 +234,7 @@ export const RenderCollapseMid = (props) => {
 };
 
 export const RenderCollapseNear = (props) => {
-  const { setFieldValue, error_L_SPH, error_R_SPH, error_L_CYL, error_R_CYL, error_L_Axis, error_R_Axis } = props;
+  const { setFieldValue, error_L_SPH, error_R_SPH, error_L_CYL, error_R_CYL, error_L_Axis, error_R_Axis, error_L_PRISM, error_R_PRISM } = props;
   const [isCollapse, toggleisCollapse] = useState(true);
   return (
     <View>
@@ -248,13 +247,13 @@ export const RenderCollapseNear = (props) => {
           <SPHInput setFieldValue={setFieldValue} isLeft={false} mode="near" />
           {error_R_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_R_SPH}</Text>}
           <CYLInput setFieldValue={setFieldValue} isLeft={false} mode="near" error_CYL={error_R_CYL} error_Axis={error_R_Axis} />
-          <PRISMInput setFieldValue={setFieldValue} isLeft={false} mode="near" />
+          <PRISMInput setFieldValue={setFieldValue} isLeft={false} mode="near" error_PRISM={error_R_PRISM} />
           <ADDInput setFieldValue={setFieldValue} isLeft={false} mode="near" />
 
           <SPHInput setFieldValue={setFieldValue} isLeft={true} mode="near" />
           {error_L_SPH != undefined && <Text style={FormItemStyle.errortext}>{error_L_SPH}</Text>}
           <CYLInput setFieldValue={setFieldValue} isLeft={true} mode="near" error_CYL={error_L_CYL} error_Axis={error_L_Axis} />
-          <PRISMInput setFieldValue={setFieldValue} isLeft={true} mode="near" />
+          <PRISMInput setFieldValue={setFieldValue} isLeft={true} mode="near" error_PRISM={error_L_PRISM} />
           <ADDInput setFieldValue={setFieldValue} isLeft={true} mode="near" />
         </View>
       </Collapsible>
@@ -320,23 +319,29 @@ export const DiaInput = (props) => {
 };
 
 export const PRISMInput = (props) => {
-  const { setFieldValue, isLeft, mode } = props;
+  const { setFieldValue, isLeft, mode, error_PRISM } = props;
+  const [symbol, Togglesymbol] = useState("BI"); //values: BI,BO,BU,BD
+
+  const RadioButtonHandler = (value) => {
+    Togglesymbol(value);
+  };
+
   const TextinputHandler = (value) => {
     switch (mode) {
       case "normal":
-        setFieldValue(isLeft ? "L_PRISM" : "R_PRISM", value);
+        setFieldValue(isLeft ? "L_PRISM" : "R_PRISM", symbol + value);
         break;
       case "adj":
-        setFieldValue(isLeft ? "Adj_L_PRISM" : "Adj_R_PRISM", value);
+        setFieldValue(isLeft ? "Adj_L_PRISM" : "Adj_R_PRISM", symbol + value);
         break;
       case "far":
-        setFieldValue(isLeft ? "Far_L_PRISM" : "Far_R_PRISM", value);
+        setFieldValue(isLeft ? "Far_L_PRISM" : "Far_R_PRISM", symbol + value);
         break;
       case "mid":
-        setFieldValue(isLeft ? "Mid_L_PRISM" : "Mid_R_PRISM", value);
+        setFieldValue(isLeft ? "Mid_L_PRISM" : "Mid_R_PRISM", symbol + value);
         break;
       case "near":
-        setFieldValue(isLeft ? "Near_L_PRISM" : "Near_R_PRISM", value);
+        setFieldValue(isLeft ? "Near_L_PRISM" : "Near_R_PRISM", symbol + value);
         break;
     }
   };
@@ -359,7 +364,52 @@ export const PRISMInput = (props) => {
   return (
     <View style={{ alignSelf: "center" }}>
       {QuestionText()}
-      <TextInput onChangeText={TextinputHandler} keyboardType="numeric" style={FormItemStyle.answerInputBox} />
+      <View style={{ flexDirection: "row", paddingLeft: 10, alignSelf: "center" }}>
+        <TouchableOpacity
+          style={{ flexDirection: "row", marginRight: 20 }}
+          onPress={() => {
+            RadioButtonHandler("BI");
+          }}
+        >
+          <View style={symbol == "BI" ? FormItemStyle.selectedRadioButton : FormItemStyle.unselectedRadioButton} />
+          <Text style={{ fontSize: 20, color: "white", fontWeight: "bold" }}>BI</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{ flexDirection: "row", marginRight: 20 }}
+          onPress={() => {
+            RadioButtonHandler("BO");
+          }}
+        >
+          <View style={symbol == "BO" ? FormItemStyle.selectedRadioButton : FormItemStyle.unselectedRadioButton} />
+          <Text style={{ fontSize: 20, color: "white", fontWeight: "bold" }}>BO</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{ flexDirection: "row", marginRight: 20 }}
+          onPress={() => {
+            RadioButtonHandler("BU");
+          }}
+        >
+          <View style={symbol == "BU" ? FormItemStyle.selectedRadioButton : FormItemStyle.unselectedRadioButton} />
+          <Text style={{ fontSize: 20, color: "white", fontWeight: "bold" }}>BU</Text>
+        </TouchableOpacity>
+
+        <TouchableOpacity
+          style={{ flexDirection: "row", marginRight: 20 }}
+          onPress={() => {
+            RadioButtonHandler("BD");
+          }}
+        >
+          <View style={symbol == "BD" ? FormItemStyle.selectedRadioButton : FormItemStyle.unselectedRadioButton} />
+          <Text style={{ fontSize: 20, color: "white", fontWeight: "bold" }}>BD</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={{ flexDirection: "row", paddingLeft: 5, paddingTop: 10 }}>
+        <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>{symbol}</Text>
+        <TextInput onChangeText={TextinputHandler} keyboardType="numeric" style={FormItemStyle.answerInputBox} />
+      </View>
+      {error_PRISM != undefined && <Text style={FormItemStyle.errortext}>{error_PRISM}</Text>}
     </View>
   );
 };
@@ -564,7 +614,7 @@ export const CYLInput = (props) => {
     <View style={{ alignSelf: "center" }}>
       {QuestionText()}
       <View style={{ flexDirection: "row", paddingLeft: 5, paddingTop: 10 }}>
-        <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>+</Text>
+        <Text style={{ color: "white", fontSize: 20, fontWeight: "bold" }}>−</Text>
 
         <TextInput onChangeText={TextinputHandler} keyboardType="numeric" style={FormItemStyle.answerInputBox} />
       </View>
@@ -696,7 +746,7 @@ export const DiseasesInput = (props) => {
 
   return (
     <View>
-      <Text style={[FormItemStyle.questionText, { marginBottom: 5 }]}>確診眼疾</Text>
+      <Text style={[FormItemStyle.questionText, { marginBottom: 5 }]}>已確診眼疾</Text>
       <MultiSelect
         items={items}
         uniqueKey="id"

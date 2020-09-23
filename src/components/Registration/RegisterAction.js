@@ -17,8 +17,6 @@ const writeUserData = ({ uid = null, values, isProfessional, registerPatient = f
         inactive: true,
         firstName: values.firstName || "",
         lastName: values.lastName || "",
-        surName: values.surName || "",
-        givenName: values.givenName || "",
       });
       database.ref("users/" + patientUid).set(
         encryptData({
@@ -40,8 +38,6 @@ const writeUserData = ({ uid = null, values, isProfessional, registerPatient = f
           inactive: true,
           firstName: values.firstName,
           lastName: values.lastName,
-          givenName: values.givenName,
-          surName: values.surName,
         });
       }
       break;
@@ -61,8 +57,6 @@ const writeUserData = ({ uid = null, values, isProfessional, registerPatient = f
           inactive: true,
           firstName: values.firstName || "",
           lastName: values.lastName || "",
-          surName: values.surName || "",
-          givenName: values.givenName || "",
           birthday: moment(values.birthday).format("YYYY-MM-DD"),
           job: values.job,
           history: values.history,
@@ -82,23 +76,18 @@ const writeUserData = ({ uid = null, values, isProfessional, registerPatient = f
             phone: values.tel_number,
             firstName: values.firstName,
             lastName: values.lastName,
-            givenName: values.givenName,
-            surName: values.surName,
             birthday: moment(values.birthday).format("YYYY-MM-DD"),
             records: {},
             dataEncrypted: true,
           })
         );
       } else {
-        encryptedData["dataEncrypted"] = true;
         database.ref("/professionals/" + uid).set(
           addEncryptDataTag(
             encryptData({
               uid: uid,
               firstName: values.firstName,
               lastName: values.lastName,
-              givenName: values.givenName,
-              surName: values.surName,
               email: values.email,
               tel_code: values.tel_country_code,
               phone: values.tel_number,
@@ -120,17 +109,18 @@ export const registerChildAccount = async ({ values, registerChild, returnOnComp
   returnOnComplete();
 };
 
-export const registerPatientAccount = async ({ values, registerPatient, returnOnComplete }) => {
+export const registerPatientAccount = async ({ values, returnOnComplete, setServerError }) => {
   let createPatientAccount = firebase.functions().httpsCallable("createPatientAccount");
   createPatientAccount({
     email: values.email,
   })
     .then((response) => {
+      console.log(response);
       writeUserData({
         uid: auth.currentUser.uid,
-        values,
         patientUid: response.data.uid,
-        registerPatient,
+        values,
+        registerPatient: true,
       });
       returnOnComplete();
     })

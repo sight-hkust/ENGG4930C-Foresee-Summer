@@ -76,11 +76,7 @@ const FormComponent = ({ navigation, route }) => {
       initialValues={{
         firstName: "",
         lastName: "",
-        surName: "",
-        givenName: "",
-        selectedNameFields: "chi",
-        chineseNameError: "",
-        englishNameError: "",
+        nameError: "",
         gender: "M",
         birthday: "",
         parent: {},
@@ -126,9 +122,10 @@ const FormComponent = ({ navigation, route }) => {
                   setIsLoading(false);
                   navigation.navigate("ProfMainMenu");
                   resetForm({});
+                  setErrorMessageFromServer("");
                   setStatus({ success: true });
                 },
-                setServerError: setServerError,
+                setServerError,
               });
               break;
             default:
@@ -136,7 +133,7 @@ const FormComponent = ({ navigation, route }) => {
                 values,
                 navigation,
                 isProfessional,
-                setServerError: setServerError,
+                setServerError,
                 returnOnComplete: () => {
                   setIsLoading(false);
                   resetForm({});
@@ -161,16 +158,14 @@ const FormComponent = ({ navigation, route }) => {
 };
 
 const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChild, isLoading, errorMessageFromServer }) => {
-  const selectedNameFieldsOnRefresh = (selectedNameFields == selectedNameFields) == "eng" && !formikProps.errors["englishNameError"] && formikProps.errors["chineseNameError"] ? "eng" : "chi";
   const { setFieldValue, values } = formikProps;
-  const [selectedNameFields, setSelectedNameFields] = useState("chi");
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isRoleDialogVisible, setRoleDialogVisibility] = useState(false);
   const [isPartDialogVisible, setPartDialogVisibility] = useState(false);
   const [isFamilySearchFieldVisible, setFamilySearchFieldVisibility] = useState(false);
   const [isFamilySearchDialogVisible, setFamilySearchDialogVisibility] = useState(false);
 
-  console.log(formikProps.errors);
+  //console.log(formikProps.errors);
 
   const _toggleFamilySearchSwitch = () => setFamilySearchFieldVisibility(!isFamilySearchFieldVisible);
 
@@ -279,106 +274,27 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
           )}
 
           <View style={styles.inputFieldsContainer}>
-            {selectedNameFields === "chi" ? (
-              <View
-                style={{
-                  flexDirection: "row",
+            <View
+              style={{
+                flexDirection: "row",
+              }}
+            >
+              <InputTextField
+                label={"姓"}
+                icon={personIcon}
+                containerStyle={{
+                  flex: 1,
+                  marginRight: "3%",
+                  marginBottom: "-2%",
                 }}
-              >
-                <InputTextField
-                  label={"姓"}
-                  icon={personIcon}
-                  containerStyle={{
-                    flex: 1,
-                    marginRight: "3%",
-                    marginBottom: "-2%",
-                  }}
-                  iconStyle={{ flex: 6 }}
-                  formikProps={formikProps}
-                  formikKey={"lastName"}
-                  hideEmbbededMessage={true}
-                />
-                <InputTextField label={"名"} iconStyle={{ flex: 6 }} containerStyle={{ flex: 1, marginBottom: "-2%" }} formikProps={formikProps} formikKey={"firstName"} hideEmbbededMessage={true} />
-              </View>
-            ) : null}
-            {selectedNameFields === "eng" ? (
-              <View
-                style={{
-                  flexDirection: "row",
-                }}
-              >
-                <InputTextField
-                  label={"Given Name"}
-                  containerStyle={{
-                    flex: 1,
-                    marginRight: "3%",
-                    marginBottom: "-2%",
-                  }}
-                  iconStyle={{ flex: 0.3 }}
-                  formikProps={formikProps}
-                  formikKey={"givenName"}
-                  hideEmbbededMessage={true}
-                />
-                <InputTextField label={"Surname"} containerStyle={{ flex: 1, marginBottom: "-2%" }} iconStyle={{ flex: 0.3 }} formikProps={formikProps} formikKey={"surName"} hideEmbbededMessage={true} />
-              </View>
-            ) : null}
-            <View style={{ flexDirection: "row", paddingLeft: ScreenWidth * 0.02 }}>
-              <View
-                style={{
-                  flexDirection: "row",
-                  marginRight: "4%",
-                }}
-              >
-                <Text
-                  style={{
-                    alignSelf: "center",
-                    textAlignVertical: "center",
-                    fontSize: 18,
-                    color: "#FFFFFF",
-                  }}
-                >
-                  中文
-                </Text>
-                <RadioButton
-                  value="chi"
-                  status={selectedNameFields === "chi" ? "checked" : "unchecked"}
-                  onPress={() => {
-                    setFieldValue("givenName", "");
-                    setFieldValue("surName", "");
-                    setSelectedNameFields("chi");
-                    setFieldValue("selectedNameFields", "chi");
-                  }}
-                  color="#FFFFFF"
-                  uncheckedColor="#FFFFFF"
-                />
-              </View>
-              <View style={{ flexDirection: "row" }}>
-                <Text
-                  style={{
-                    alignSelf: "center",
-                    textAlignVertical: "center",
-                    fontSize: 20,
-                    color: "#FFFFFF",
-                  }}
-                >
-                  Eng
-                </Text>
-                <RadioButton
-                  value="eng"
-                  status={selectedNameFields === "eng" ? "checked" : "unchecked"}
-                  onPress={() => {
-                    setFieldValue("firstName", "");
-                    setFieldValue("lastName", "");
-                    setSelectedNameFields("eng");
-                    setFieldValue("selectedNameFields", "eng");
-                  }}
-                  color="#FFFFFF"
-                  uncheckedColor="#FFFFFF"
-                />
-              </View>
+                iconStyle={{ flex: 6 }}
+                formikProps={formikProps}
+                formikKey={"lastName"}
+                hideEmbbededMessage={true}
+              />
+              <InputTextField label={"名"} iconStyle={{ flex: 6 }} containerStyle={{ flex: 1, marginBottom: "-2%" }} formikProps={formikProps} formikKey={"firstName"} hideEmbbededMessage={true} />
             </View>
-
-            {formikProps.errors && (formikProps.errors["chineseNameError"] || formikProps.errors["englishNameError"]) ? (
+            {formikProps.errors && formikProps.errors["nameError"] && (
               <Text
                 adjustsFontSizeToFit={true}
                 style={{
@@ -391,9 +307,9 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
                   flexWrap: "wrap",
                 }}
               >
-                {"* " + (formikProps.errors["chineseNameError"] ? formikProps.errors["chineseNameError"] : formikProps.errors["englishNameError"])}
+                {"* " + formikProps.errors["nameError"]}
               </Text>
-            ) : null}
+            )}
 
             <GenderOptionsInput formikKey="gender" formikProps={formikProps} label={"性別"} />
 
@@ -404,16 +320,7 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
             )}
 
             {isProfessional && !registerPatient && (
-              <InputDialogPicker
-                label={"註冊資格"}
-                icon={jobIcon}
-                onDismiss={() => _hidePartDialog()}
-                value={values.part}
-                list={partList}
-                formikKey={"part"}
-                formikProps={formikProps}
-                showDialog={_showPartDialog}
-              />
+              <InputDialogPicker label={"註冊資格"} icon={jobIcon} onDismiss={() => _hidePartDialog()} value={values.part} list={partList} formikKey={"part"} formikProps={formikProps} showDialog={_showPartDialog} />
             )}
 
             {registerPatient ? (
@@ -445,7 +352,7 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
                   >
                     搜尋病人家屬
                   </Text>
-                  <Switch value={isFamilySearchFieldVisible} onValueChange={_toggleFamilySearchSwitch} color="#FFFFFF" />
+                  <Switch value={isFamilySearchFieldVisible} onValueChange={_toggleFamilySearchSwitch} color={"rgba(255, 255, 255, 0.4)"} ios_backgroundColor={"rgba(255, 255, 255, 0.4)"} />
                 </View>
                 {isFamilySearchFieldVisible && (
                   <View>
@@ -454,13 +361,15 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
                         style={{
                           backgroundColor: "rgba(255, 255, 255, 0.4)",
                           height: ScreenHeight * 0.065,
-                          borderRadius: ScreenHeight * 0.035,
                           fontSize: FontScale * 18,
+                          borderRadius: ScreenHeight * 0.035,
+                          overflow: "hidden",
                           marginBottom: ScreenHeight * 0.01,
                           paddingHorizontal: "10%",
                           color: "#FFFFFF",
                           textAlignVertical: "center",
                           textAlign: "center",
+                          marginHorizontal: "3%",
                         }}
                       >
                         {values.parent ? values.parent["name"] : ""}

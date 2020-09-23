@@ -50,6 +50,8 @@ import { EditUserInfo } from "./src/components/Profile/EditUserInfo";
 import { Surface } from "react-native-paper";
 import { View } from "react-native-animatable";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
+import UpdateProfileScreen from "./Screens/UpdateProfileScreen";
+import ChangePasswordScreen from "./Screens/ChangePasswordScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -122,10 +124,10 @@ function FaqScreen({ navigation, route }) {
 }
 
 function ProfileScreen({ navigation, route }) {
-  console.log("here", route.params.type);
+  //console.log("here", route.params.type);
   return (
     <Stack.Navigator screenOptions={headerConfig}>
-      <Stack.Screen name="ProfileTabMain" component={Profile} options={{ title: "我的檔案" }} initialParams={{ type: route.params.type }} />
+      <Stack.Screen name="ProfileTabMain" component={Profile} options={{ title: "我的檔案" }} initialParams={{ type: auth.currentUser.displayName }} />
       <Stack.Screen name="QrCode" component={QrCode} options={{ headerShown: false }} />
       <Stack.Screen
         name="Register"
@@ -144,11 +146,28 @@ function ProfileScreen({ navigation, route }) {
         }}
       />
       <Stack.Screen
-        name="Edit User Info"
-        component={EditUserInfo}
+        name="ChangePassword"
+        component={ChangePasswordScreen}
         options={{
           headerTransparent: true,
-          title: "個人資料",
+          title: "更改密碼",
+          headerLeft: () => (
+            <BackButton
+              onPress={() => {
+                navigation.navigate("ProfileTabMain");
+              }}
+            />
+          ),
+          headerTintColor: "white",
+          title: null,
+        }}
+      />
+      <Stack.Screen
+        name="UpdateProfile"
+        component={UpdateProfileScreen}
+        options={{
+          headerTransparent: true,
+          title: "更新個人資料",
           headerLeft: () => (
             <BackButton
               onPress={() => {
@@ -202,6 +221,7 @@ function Main({ route, navigation }) {
         },
       }}
     >
+      {console.log("auth.currentUser.displayName: ", auth.currentUser.displayName)}
       {auth.currentUser.displayName == "professional" ? (
         <>
           <Tab.Screen
@@ -209,6 +229,7 @@ function Main({ route, navigation }) {
             component={RegistrationForm}
             initialParams={{ isProfessional: true, registerPatient: true }}
             options={{
+              tabBarLabel: "登記病人",
               tabBarIcon: () => <Icon name="md-add-circle-outline" type="ionicon" color="#23559E" size={32.5} containerStyle={styles.icon} />,
             }}
           />
@@ -235,7 +256,7 @@ function Main({ route, navigation }) {
             options={{
               tabBarLabel: "個人檔案",
               tabBarIcon: () => (
-                <TouchableOpacity onPress={() => navigation.navigate("ProfileScreen", { type: "professional" })}>
+                <TouchableOpacity onPress={() => navigation.navigate("ProfileScreen")}>
                   <Image source={require("./assets/images/Profile.png")} style={styles.icon} />
                 </TouchableOpacity>
               ),
@@ -304,7 +325,7 @@ function Main({ route, navigation }) {
             options={{
               tabBarLabel: "個人檔案",
               tabBarIcon: () => (
-                <TouchableOpacity onPress={() => navigation.navigate("ProfileScreen", { type: "normal" })}>
+                <TouchableOpacity onPress={() => navigation.navigate("ProfileScreen")}>
                   <Image source={require("./assets/images/Profile.png")} style={styles.icon} />
                 </TouchableOpacity>
               ),

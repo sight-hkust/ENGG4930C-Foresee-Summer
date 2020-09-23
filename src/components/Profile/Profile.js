@@ -11,14 +11,16 @@ import { auth, database } from "../../config/config";
 import { connect, useSelector } from "react-redux";
 import FamilyListPicker from "../FamilyListPicker/FamilyListPicker";
 import { decryptData } from "../../utils/encryptData";
-import { updateFamilyMembers } from "../../reducers/familyMembers";
 import { watchUserInfoUpdate } from "../../reducers/user";
+import { RoundButton } from "../../../Utils/RoundButton";
+import { displayName } from "../../utils/displayName";
 
 const Profile = ({ navigation, route, userStore }) => {
+  const { type } = route.params; //type: "user", "professional";
   const { user } = userStore;
+  console.log(user);
   const familyMembers = useSelector((state) => state.familyMembers);
   const [userData, setUserData] = useState(null);
-
   const updateUserData = (uid) => {
     database
       .ref("users/" + uid)
@@ -34,7 +36,7 @@ const Profile = ({ navigation, route, userStore }) => {
   };
 
   useEffect(() => {
-    if (!userData) {
+    if (!userData && type == "user") {
       updateUserData(familyMembers[0].uid);
     }
   }, [familyMembers]);
@@ -43,6 +45,18 @@ const Profile = ({ navigation, route, userStore }) => {
     const { uid } = member;
     updateUserData(uid);
   };
+
+  useEffect(() => {
+    if (!userData && type == "professional") {
+      setUserData(user);
+    }
+  });
+
+  useEffect(() => {
+    if (userData && userData.uid == user.uid) {
+      setUserData(user);
+    }
+  }, [user]);
 
   return (
     <MenuScreen>
@@ -63,25 +77,33 @@ const Profile = ({ navigation, route, userStore }) => {
                   </View>
                 </Row>
                 <Row style={styles.qrCodeIconContainer}>
-                  <Icon type="antdesign" name="qrcode" size={40} containerStyle={{ marginRight: 15, marginTop: 10 }} onPress={() => navigation.navigate("QrCode")} />
+                  {type == "user" && (
+                    <Icon type="antdesign" name="qrcode" size={40} containerStyle={{ marginRight: 15, marginTop: 10 }} onPress={() => navigation.navigate("QrCode", { id: userData.uid })} />
+                  )}
                 </Row>
 
-                <Row style={[styles.titleContainer]}>
-                  <FamilyListPicker
-                    containerStyle={{
-                      width: "100%",
-                      justifyContent: "center",
-                    }}
-                    textStyle={{
-                      fontSize: ScreenHeight * 0.045,
-                      color: "#1772A6",
-                    }}
-                    onSelectionUpdate={updateSelectedFamilyMember}
-                  />
-                </Row>
+                {type == "user" ? (
+                  <Row style={[styles.titleContainer]}>
+                    <FamilyListPicker
+                      containerStyle={{
+                        width: "100%",
+                        justifyContent: "center",
+                      }}
+                      textStyle={{
+                        fontSize: ScreenHeight * 0.045,
+                        color: "#1772A6",
+                      }}
+                      onSelectionUpdate={updateSelectedFamilyMember}
+                    />
+                  </Row>
+                ) : (
+                  <Row style={styles.titleContainer}>
+                    <Text style={user.lastName != "" ? styles.title : styles.titleEnglish}>{displayName(user)}</Text>
+                  </Row>
+                )}
 
                 <Row style={{ ...styles.titleContainer, ...{ marginBottom: 7.5 } }}>
-                  <Text style={styles.subtitle}>{userData.birthday.split("T")[0]}</Text>
+                  {type == "user" ? <Text style={styles.subtitle}>{userData.birthday.split("T")[0]}</Text> : <Text style={styles.subtitle}>{user.role == "optometrist" ? "視光師" : "眼科醫生"}</Text>}
                 </Row>
                 <Row style={{ height: 47.5 }}>
                   <Col style={styles.iconContainer}>
@@ -107,9 +129,13 @@ const Profile = ({ navigation, route, userStore }) => {
                 </Row>
                 <Row>
                   <Col style={styles.infoContainer}>
-                    <Text style={styles.info}>
-                      <Text style={{ fontSize: 30 }}>{moment.duration(moment().diff(userData.birthday, "YYYY")).years()}</Text>歲
-                    </Text>
+                    {type == "user" ? (
+                      <Text style={styles.info}>
+                        <Text style={{ fontSize: ScreenHeight * 0.038 }}>{moment.duration(moment().diff(userData.birthday, "YYYY")).years()}</Text>歲
+                      </Text>
+                    ) : (
+                      <Text style={styles.info}>{user.part == "part1" ? "第一部分" : user.part == "part2" ? "第二部分" : user.part == "part3" ? "第三部分" : "第四部分"}</Text>
+                    )}
                   </Col>
                   <Col style={styles.infoContainer}>
                     <Text
@@ -117,18 +143,26 @@ const Profile = ({ navigation, route, userStore }) => {
                         ...styles.info,
                         ...{
                           position: "absolute",
-                          top: 50,
+                          top: ScreenHeight * 0.05,
                           width: ScreenWidth,
                           textAlign: "center",
                         },
                       }}
                     >
-                      {user["dataEncrypted"] ? decryptData(user).email : user.email}
+                      {user["dataEncrypted"] ? user.email : user.email}
                     </Text>
                   </Col>
                   <Col style={styles.infoContainer}>
-                    <Text style={styles.info}>{user["dataEncrypted"] ? decryptData(user).phone : user.phone}</Text>
+                    <Text style={styles.info}>{user["dataEncrypted"] ? user.phone : user.phone}</Text>
                   </Col>
+                </Row>
+                <Row style={{ alignItems: "center", justifyContent: "center" }}>
+                  <RoundButton
+                    title="更改密碼"
+                    onPress={() => navigation.navigate("ChangePassword")}
+                    buttonStyle={{ width: ScreenWidth * 0.28, backgroundColor: "#2D9CDB" }}
+                    textStyle={{ color: "#FFFFFF" }}
+                  />
                 </Row>
               </Grid>
             </View>
@@ -149,27 +183,30 @@ const Profile = ({ navigation, route, userStore }) => {
                 TouchableComponent={TouchableOpacity}
                 onPress={() => navigation.navigate("Tutorial")}
               />
+              {type == "user" && (
+                <Button
+                  title="創建子帳戶"
+                  type="clear"
+                  containerStyle={styles.bottomMenuItemContainer}
+                  titleStyle={styles.bottomMenuItemText}
+                  TouchableComponent={TouchableOpacity}
+                  onPress={() =>
+                    navigation.navigate("Register", {
+                      isProfessional: false,
+                      registerChild: true,
+                    })
+                  }
+                />
+              )}
               <Button
-                title="創建子帳戶"
-                type="clear"
-                containerStyle={styles.bottomMenuItemContainer}
-                titleStyle={styles.bottomMenuItemText}
-                TouchableComponent={TouchableOpacity}
-                onPress={() =>
-                  navigation.navigate("Register", {
-                    isProfessional: false,
-                    registerChild: true,
-                  })
-                }
-              />
-              {/*  <Button
                 title="變更個人資料"
                 type="clear"
                 containerStyle={styles.bottomMenuItemContainer}
                 titleStyle={styles.bottomMenuItemText}
                 TouchableComponent={TouchableOpacity}
-                onPress={() => navigation.navigate("Edit User Info", { user })}
-              /> */}
+                onPress={() => navigation.navigate("UpdateProfile", { user: userData, type: type })}
+              />
+
               <Button
                 title="登出"
                 type="clear"
@@ -274,10 +311,10 @@ const styles = StyleSheet.create({
   },
   info: {
     position: "absolute",
-    top: 4,
+    top: 0,
     color: "#1772A6",
     fontWeight: "bold",
-    fontSize: 18,
+    fontSize: ScreenHeight * 0.026,
   },
   bottomMenu: {
     borderTopWidth: 1,

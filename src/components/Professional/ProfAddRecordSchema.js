@@ -37,6 +37,10 @@ export const ReviewSchema = object({
       .matches("^[0-9]*$", "請輸入整數"),
     otherwise: string().notRequired(),
   }),
+  L_PRISM: string().max(4, "稜鏡(PRISM)應在2個數字以內").notRequired(),
+
+  R_PRISM: string().max(4, "稜鏡(PRISM)應在2個數字以內").notRequired(),
+
   L_PD: string().matches("^[0-9]*$", "請輸入大於0的整數").max(3, "瞳孔距離(PD)超出合理範圍").notRequired(),
   R_PD: string().matches("^[0-9]*$", "請輸入大於0的整數").max(3, "瞳孔距離(PD)超出合理範圍").notRequired(),
   L_VA: string().matches("^[0-9]+[./]+[0-9]+$", "格式錯誤，請輸入分數(如20/20)或小數(如1.0)"),
@@ -74,6 +78,8 @@ export const ReviewSchema = object({
       .matches("^[0-9]*$", "請輸入整數"),
     otherwise: string().notRequired(),
   }),
+  Adj_L_PRISM: string().max(2, "稜鏡(PRISM)應在2個數字以內").notRequired(),
+  Adj_R_PRISM: string().max(2, "稜鏡(PRISM)應在2個數字以內").notRequired(),
   Far_L_SPH: string()
     .matches("^[0-9]*$", "請輸入大過或等於0的整數")
     .max(4, "球面度數(SPH)應在4個數字以內")
@@ -106,6 +112,8 @@ export const ReviewSchema = object({
       .matches("^[0-9]*$", "請輸入整數"),
     otherwise: string().notRequired(),
   }),
+  Far_L_PRISM: string().max(2, "稜鏡(PRISM)應在2個數字以內").notRequired(),
+  Far_R_PRISM: string().max(2, "稜鏡(PRISM)應在2個數字以內").notRequired(),
   Con_L_SPH: string()
     .matches("^[0-9]*$", "請輸入大過或等於0的整數")
     .max(4, "球面度數(SPH)應在4個數字以內")
@@ -170,6 +178,9 @@ export const ReviewSchema = object({
       .matches("^[0-9]*$", "請輸入整數"),
     otherwise: string().notRequired(),
   }),
+  Mid_L_PRISM: string().max(2, "稜鏡(PRISM)應在2個數字以內").notRequired(),
+  Mid_R_PRISM: string().max(2, "稜鏡(PRISM)應在2個數字以內").notRequired(),
+
   Near_L_SPH: string()
     .matches("^[0-9]*$", "請輸入大過或等於0的整數")
     .max(4, "球面度數(SPH)應在4個數字以內")
@@ -202,4 +213,6 @@ export const ReviewSchema = object({
       .matches("^[0-9]*$", "請輸入整數"),
     otherwise: string().notRequired(),
   }),
+  Near_L_PRISM: string().max(2, "稜鏡(PRISM)應在2個數字以內").notRequired(),
+  Near_R_PRISM: string().max(2, "稜鏡(PRISM)應在2個數字以內").notRequired(),
 });

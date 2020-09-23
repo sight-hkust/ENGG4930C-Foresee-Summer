@@ -7,13 +7,24 @@ import { ScreenHeight, ScreenWidth } from "../../../../constant/Constant";
 
 export const PatientProfile = ({ info }) => {
   const AnimatableScrollView = Animatable.createAnimatableComponent(ScrollView);
+  const recordsKey = info.records ? Object.keys(info.records) : [];
+  const latestRecordKey = info.records ? info.records[recordsKey[recordsKey.length - 1]] : null;
+  const disease = latestRecordKey && latestRecordKey.disease;
+  const ListDisease = () => {
+    var list = "";
+    for (var key of disease) {
+      list = list + key + " ";
+    }
+    return list;
+  };
+
   return (
     <>
       <Text style={styles.patientName}>{displayName(info)}</Text>
       <ScrollView>
         <View style={{ flexDirection: "row" }}>
           <Text style={[styles.profileText, styles.infoLabel]}>年齡:</Text>
-          <Text style={[styles.profileText, styles.infoValues]}>{Math.abs(moment(info.birthday).diff(moment(), "years"))}</Text>
+          <Text style={[styles.profileText, styles.infoValues]}>{info.birthday ? Math.abs(moment(info.birthday).diff(moment(), "years")) : "不詳"}</Text>
         </View>
         <View style={{ flexDirection: "row" }}>
           <Text style={[styles.profileText, styles.infoLabel]}>職業:</Text>
@@ -25,7 +36,7 @@ export const PatientProfile = ({ info }) => {
         </View>
         <View style={{ flexDirection: "row" }}>
           <Text style={[styles.profileText, styles.infoLabel]}>已知眼疾:</Text>
-          <Text style={[styles.profileText, styles.infoValues]}>{info.disease ? info.disease : "不適用"}</Text>
+          <Text style={[styles.profileText, styles.infoValues]}>{disease ? ListDisease() : "不適用"}</Text>
         </View>
       </ScrollView>
     </>

@@ -1,5 +1,5 @@
 import React, { Component, useState } from "react";
-import { StyleSheet, View, ScrollView, Alert, Animated, TouchableOpacity } from "react-native";
+import { StyleSheet, View, ScrollView, Alert, Animated, TouchableOpacity, Text } from "react-native";
 
 import { Formik } from "formik";
 import moment from "moment";
@@ -353,6 +353,8 @@ export default class Form extends Component {
                   error_R_CYL={errors.R_CYL}
                   error_L_Axis={errors.L_Axis}
                   error_R_Axis={errors.R_Axis}
+                  error_L_PRISM={errors.L_PRISM}
+                  error_R_PRISM={errors.R_PRISM}
                 />
 
                 <RenderCollapseAdj
@@ -363,6 +365,8 @@ export default class Form extends Component {
                   error_R_CYL={errors.Adj_R_CYL}
                   error_L_Axis={errors.Adj_L_Axis}
                   error_R_Axis={errors.Adj_R_Axis}
+                  error_L_PRISM={errors.Adj_L_PRISM}
+                  error_R_PRISM={errors.Adj_R_PRISM}
                 />
 
                 <RenderCollapseVA setFieldValue={setFieldValue} error_L_VA={errors.L_VA} error_R_VA={errors.R_VA} />
@@ -388,6 +392,8 @@ export default class Form extends Component {
                   error_R_CYL={errors.Far_R_CYL}
                   error_L_Axis={errors.Far_L_Axis}
                   error_R_Axis={errors.Far_R_Axis}
+                  error_L_PRISM={errors.Far_L_PRISM}
+                  error_R_PRISM={errors.Far_R_PRISM}
                 />
 
                 <RenderCollapseMid
@@ -398,6 +404,8 @@ export default class Form extends Component {
                   error_R_CYL={errors.Mid_R_CYL}
                   error_L_Axis={errors.Mid_L_Axis}
                   error_R_Axis={errors.Mid_R_Axis}
+                  error_L_PRISM={errors.Mid_L_PRISM}
+                  error_R_PRISM={errors.Mid_R_PRISM}
                 />
 
                 <RenderCollapseNear
@@ -408,12 +416,15 @@ export default class Form extends Component {
                   error_R_CYL={errors.Near_R_CYL}
                   error_L_Axis={errors.Near_L_Axis}
                   error_R_Axis={errors.Near_R_Axis}
+                  error_L_PRISM={errors.Near_L_PRISM}
+                  error_R_PRISM={errors.Near_R_PRISM}
                 />
 
                 <RemarksInput handleChange={handleChange} />
                 {isProfessional && <DiseasesInput setFieldValue={setFieldValue} />}
 
                 <View style={{ paddingTop: 24 }}>
+                  {Object.keys(errors).length != 0 && <Text style={AddRecordScreen.errorMsg}> 無法提交表格，請檢查錯誤提示。 </Text>}
                   <Button
                     title="提交"
                     buttonStyle={AddRecordScreen.submitButton}
@@ -424,13 +435,9 @@ export default class Form extends Component {
                       marginBottom: 200,
                     }}
                     onPress={handleSubmit}
-                    // disabled={
-                    //   need
-                    // }
+                    disabled={Object.keys(errors).length != 0}
                     TouchableComponent={TouchableOpacity}
                   />
-                  {/* {console.log(Object.entries(errors).length)} */}
-                  {console.log(errors)}
                 </View>
               </View>
             )}
@@ -442,6 +449,15 @@ export default class Form extends Component {
 }
 
 const AddRecordScreen = StyleSheet.create({
+  errorMsg: {
+    backgroundColor: "rgba(0,0,0,0.2)",
+    color: "rgba(256,256,256,1)",
+    fontSize: 16,
+    padding: 5,
+    marginBottom: 10,
+    textAlign: "center",
+    borderRadius: 5,
+  },
   background: {
     height: "100%",
     backgroundColor: "white",
