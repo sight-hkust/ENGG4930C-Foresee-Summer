@@ -58,13 +58,13 @@ export const LoginWithEmailAndPassword = ({ navigation, route }) => {
    .catch(function onFailure(err) {
     switch (err.code) {
      case "auth/invalid-email":
-      handleLoginError("電子郵件格式無效");
+      handleLoginError(i18n.t('invalid_email'));
       break;
      case "auth/wrong-password":
-      handleLoginError("密碼錯誤");
+      handleLoginError(i18n.t('wrong_password'));
       break;
      case "auth/user-not-found":
-      handleLoginError("帳號不存在，\n該帳戶有可能已被刪除");
+      handleLoginError(i18n.t('user_not_found'));
       break;
      default:
       //console.log(err.code);
@@ -93,7 +93,7 @@ export const LoginWithEmailAndPassword = ({ navigation, route }) => {
          hideEmbeddedErrorMessage={true}
         />
         <InputTextField
-         label="密碼"
+         label={i18n.t('password')}
          icon={KeyIcon}
          defaultValue={passwordInput}
          setValue={setPasswordInput}
@@ -115,15 +115,15 @@ export const LoginWithEmailAndPassword = ({ navigation, route }) => {
          ) : null}
         </View>
        </View>
-       <RoundButton title={"登入"} onPress={handleLogin} />
+       <RoundButton title={i18n.t('login')} onPress={handleLogin} />
        <View style={styles.registrationNav}>
-        <Text style={styles.registrationNavText}>未有用戶? </Text>
+        <Text style={styles.registrationNavText}>{i18n.t('dont_have_an_account')}</Text>
         <TouchableOpacity
          onPress={() => {
           navigation.navigate("Register");
          }}>
          <Text style={[styles.registrationNavText, { color: "#FFFFFF" }]}>
-          登記
+          {i18n.t('register')}
          </Text>
         </TouchableOpacity>
        </View>
@@ -133,7 +133,7 @@ export const LoginWithEmailAndPassword = ({ navigation, route }) => {
           navigation.navigate("Forget Password");
          }}>
          <Text style={[styles.registrationNavText, { color: "#FFFFFF" }]}>
-          忘記密碼
+          {i18n.t('forget_password')}
          </Text>
         </TouchableOpacity>
        </View>
