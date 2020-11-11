@@ -17,9 +17,9 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from "react-nat
 
 import { Surface } from "react-native-paper";
 
-const SPECIAL_TAG_1 = "眼睛疼痛";
-const SPECIAL_TAG_2 = "視力模糊";
-const SPECIAL_TAG_3 = "分泌物";
+const SPECIAL_TAG_1 = i18n.t('special_tag_1');
+const SPECIAL_TAG_2 = i18n.t('special_tag_2');
+const SPECIAL_TAG_3 = i18n.t('special_tag_3');
 
 const SPECIAL_TAG_1_COLOR = "#DFB6FF";
 const SPECIAL_TAG_2_COLOR = "#FFED73";
@@ -27,7 +27,11 @@ const SPECIAL_TAG_3_COLOR = "#94DFC9";
 
 const NORMAL_TAG_COLOR = "#B9C6F4";
 
+import i18n from 'i18n-js';
+import {useLocalization} from "../../strings/Strings";
+
 const AskAnExpertMainScreen = ({ route, navigation, questionListStore }) => {
+  useLocalization();
   let hotTopicCounter = 0;
 
   const { questionList } = questionListStore;
@@ -78,7 +82,7 @@ const AskAnExpertMainScreen = ({ route, navigation, questionListStore }) => {
               <Grid style={{ bottom: ScreenHeight * 0.5, position: "absolute", width: ScreenWidth }}>
                 <Col style={{ paddingLeft: ScreenWidth * 0.1 }}>
                   <Button
-                    title="最新"
+                    title={i18n.t('clear')}
                     type="clear"
                     onPress={() => navigation.navigate("PostQuestion")}
                     titleStyle={{ color: "#24559E", fontWeight: "bold", fontSize: hp("3%") }}
@@ -89,7 +93,7 @@ const AskAnExpertMainScreen = ({ route, navigation, questionListStore }) => {
                 </Col>
                 <Col style={{ paddingLeft: ScreenWidth * 0.1, zIndex: 3 }}>
                   <Button
-                    title="發問"
+                    title={i18n.t('clear_2')}
                     icon={<Icon size={wp("7%")} name="edit" type="ionicons" color="#1772A6" />}
                     type="clear"
                     onPress={() => navigation.navigate("PostQuestion")}
@@ -184,7 +188,7 @@ export const MiniQuestionCard = (props) => {
                 }
               })}
             </View>
-            <Text style={styles.miniQuestionTitle}>{"問。" + props.faq.question_title}</Text>
+            <Text style={styles.miniQuestionTitle}>{i18n.t('mini_question_title') + props.faq.question_title}</Text>
             <Text style={styles.miniQuestionContent}>{props.faq.question_content.length > 34 ? props.faq.question_content.substring(0, 38) + " . . . . " : props.faq.question_content}</Text>
           </View>
         </TouchableOpacity>
@@ -217,7 +221,7 @@ export const QuestionCard = (props) => {
       </Grid>
       <View style={styles.questionCard}>
         <View style={{ padding: 20 }}>
-          <Text style={styles.questionCardTitle}>{"問。\n" + props.faq.question_title}</Text>
+          <Text style={styles.questionCardTitle}>{i18n.t('question_card_title') + props.faq.question_title}</Text>
           <ScrollView>
             <Text style={styles.questionCardContent}>{props.faq.question_content}</Text>
           </ScrollView>

@@ -14,12 +14,16 @@ import { ScreenHeight, ScreenWidth } from "../../../constant/Constant";
 import MenuScreen from "../../../Utils/MenuScreen";
 import { heightPercentageToDP as hp } from "react-native-responsive-screen";
 
+import i18n from 'i18n-js';
+import {useLocalization} from "../../strings/Strings";
+
 const PostQuestionSchema = object({
   title: string().required("此項必填"),
   content: string().required("此項必填"),
 });
 
 const PostQuestionScreen = ({ route, navigation }) => {
+  useLocalization();
   const [isSubmitted, setIsSubmitted] = useState(false);
 
   var yScroll = new Animated.Value(0);
@@ -72,7 +76,7 @@ const PostQuestionScreen = ({ route, navigation }) => {
                 {(formikProps) => (
                   <View style={styles.form}>
                     <Input
-                      label="主題"
+                      label={i18n.t('post_question_label_1')}
                       onChangeText={formikProps.handleChange("title")}
                       maxLength={20}
                       onSubmitEditing={() => {
@@ -86,13 +90,13 @@ const PostQuestionScreen = ({ route, navigation }) => {
                     />
 
                     <Input
-                      label="內容"
+                      label={i18n.t('post_question_label_2')}
                       onChangeText={formikProps.handleChange("content")}
                       maxLength={200}
                       multiline={true}
                       returnKeyLabel="done"
                       returnKeyType={"done"}
-                      placeholder={formikProps.values.content.length == 0 ? "由於我們會在本程式內發佈專家回應，請注意不要留下個人資料" : ""}
+                      placeholder={formikProps.values.content.length == 0 ? i18n.t('post_question_placeholder') : ""}
                       placeholderTextColor="#1772A6"
                       labelStyle={styles.label}
                       inputContainerStyle={styles.contentContainer}
@@ -103,7 +107,7 @@ const PostQuestionScreen = ({ route, navigation }) => {
                     />
                     <Tag formikProps={formikProps} />
                     <CheckBox
-                      title="我同意專家察看我的度數紀錄"
+                      title={i18n.t('post_question_checkbox')}
                       iconType="fontisto"
                       checkedIcon="checkbox-active"
                       checkedColor="#E1EDFF"
@@ -116,16 +120,16 @@ const PostQuestionScreen = ({ route, navigation }) => {
                       checked={formikProps.values.allowInspect}
                     />
 
-                    <RoundButton onPress={() => formikProps.handleSubmit()} title="提交" buttonStyle={{ width: 96 }} textStyle={{ color: "#3CA1B7" }} />
+                    <RoundButton onPress={() => formikProps.handleSubmit()} title={i18n.t('post_question_roundbutton')} buttonStyle={{ width: 96 }} textStyle={{ color: "#3CA1B7" }} />
                   </View>
                 )}
               </Formik>
             ) : (
               <View style={{ justifyContent: "center", height: ScreenHeight * 0.6, width: ScreenWidth * 0.82, top: 60, alignSelf: "center" }}>
-                <Text style={styles.farewellTitle}>謝謝你的提問</Text>
-                <Text style={styles.farewellMessage}>收集問題後，我們的專家會在一星期內回答你的，請耐心等候。如有緊急需要，請聯絡你的眼科醫生。</Text>
+                <Text style={styles.farewellTitle}>{i18n.t('post_question_farewell_title')}</Text>
+                <Text style={styles.farewellMessage}>{i18n.t('post_question_farewell_message')}</Text>
                 <Button
-                  title="返回"
+                  title={i18n.t('post_question_button')}
                   type="clear"
                   containerStyle={{ width: 120, position: "absolute", bottom: 0, right: 15 }}
                   titleStyle={{ color: "white", fontSize: 23 }}
