@@ -24,7 +24,11 @@ import {
 import { KeyIcon, MailIcon } from "../Utils/Icons";
 import Modal from "react-native-modal";
 
+import i18n from 'i18n-js';
+import {useLocalization} from "../../strings/Strings";
+
 export const LoginWithEmailAndPassword = ({ navigation, route }) => {
+ useLocalization();
  useEffect(() => {
   const unsubscribe = auth.onAuthStateChanged((user) => {
    if (user) {
@@ -82,7 +86,7 @@ export const LoginWithEmailAndPassword = ({ navigation, route }) => {
          marginBottom: ScreenHeight * 0.05,
         }}>
         <InputTextField
-         label="電子郵件"
+         label={i18n.t('email')}
          icon={MailIcon}
          defaultValue={emailInput}
          setValue={setEmailInput}
