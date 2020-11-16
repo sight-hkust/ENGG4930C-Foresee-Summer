@@ -46,6 +46,13 @@ let zh_strings = {
     overview_level_8:"中度散光",
     overview_level_9:"深散光",
 
+    // RecordForm
+    record_form_title: "日期 時間",
+    collapse:  "展開",
+    not_collapse: "收起",
+    collapse_text: "輸入調整度數",
+    collapse_text_2: "輸入瞳孔距離(PD)",
+    collapse_text_3: "輸入視力(VA)",
     // COMPONENTS
     // AskAnExpert
     special_tag_1: "眼睛疼痛",

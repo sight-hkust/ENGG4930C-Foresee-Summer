@@ -8,7 +8,11 @@ import MultiSelect from "react-native-multiple-select";
 const DropDown = require("../assets/images/DropDown.png");
 import { ScreenWidth } from "../constant/Constant";
 
+import i18n from 'i18n-js';
+import {useLocalization} from "../src/strings/Strings";
+
 export const DateSelect = (props) => {
+    useLocalization();
   const { values, setFieldValue } = props;
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
@@ -31,7 +35,7 @@ export const DateSelect = (props) => {
           paddingLeft: 5,
         }}
       >
-        日期 時間
+          {i18n.t('record_form_title')}
       </Text>
       <View>
         <TouchableOpacity onPress={showDatePicker} style={FormItemStyle.answerContainer}>
@@ -65,7 +69,7 @@ export const RenderCollapseAdj = (props) => {
   return (
     <View>
       <TouchableOpacity onPress={() => toggleisCollapse(!isCollapse)} style={FormItemStyle.collapseButton}>
-        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? "展開" : "收起"}輸入調整度數</Text>
+        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? i18n.t('collapse'): i18n.t('not_collapse')}{i18n.t('collapse_text')}</Text>
       </TouchableOpacity>
       <Collapsible collapsed={isCollapse}>
         <View style={FormItemStyle.collpaseContainer}>
@@ -86,7 +90,7 @@ export const RenderCollapsePD = (props) => {
   return (
     <View>
       <TouchableOpacity onPress={() => toggleisCollapse(!isCollapse)} style={FormItemStyle.collapseButton}>
-        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? "展開" : "收起"}輸入瞳孔距離(PD)</Text>
+        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? i18n.t('collapse'): i18n.t('not_collapse')}{i18n.t('collapse_text_2')}</Text>
       </TouchableOpacity>
       <Collapsible collapsed={isCollapse}>
         <View style={FormItemStyle.collpaseContainer}>
@@ -116,7 +120,7 @@ export const RenderCollapseVA = (props) => {
   return (
     <View>
       <TouchableOpacity onPress={() => toggleisCollapse(!isCollapse)} style={FormItemStyle.collapseButton}>
-        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? "展開" : "收起"}輸入視力(VA)</Text>
+        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? i18n.t('collapse'): i18n.t('not_collapse')}{i18n.t('collapse_text_3')}</Text>
       </TouchableOpacity>
 
       <Collapsible collapsed={isCollapse}>
