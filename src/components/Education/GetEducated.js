@@ -7,6 +7,9 @@ import FABView from "../../../Utils/FAB";
 import MenuScreen from "../../../Utils/MenuScreen";
 import { LinearGradientBackground } from "../Utils/LinearGradientBackground";
 
+import i18n from 'i18n-js';
+import {useLocalization} from "../../strings/Strings";
+
 function rand(x) {
   return Math.floor(Math.random() * x);
 }
@@ -23,6 +26,7 @@ export default class GetEducated extends Component {
       topArticle: "",
       uid_list: [],
     };
+    useLocalization();
   }
 
   componentDidMount() {

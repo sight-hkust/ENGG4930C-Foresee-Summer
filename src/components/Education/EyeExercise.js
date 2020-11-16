@@ -7,6 +7,9 @@ import FABView from "../../../Utils/FAB";
 import MenuScreen from "../../../Utils/MenuScreen";
 import { useIsFocused } from "@react-navigation/native";
 
+import i18n from 'i18n-js';
+import {useLocalization} from "../../strings/Strings";
+
 // "https://ia600204.us.archive.org/11/items/hamlet_0911_librivox/hamlet_act5_shakespeare.mp3"
 // "https://ia800500.us.archive.org/10/items/VwFantasiaOngreensleevesmarriner/1-01VaughanWilliams_FantasiaOnGreensleeves.mp3",
 // "https://pic.pikbest.com/00/40/38/526888piCCwr.mp3"
@@ -78,6 +81,7 @@ class EyeEx extends Component {
       isBuffering: false,
       playingImage: null,
     };
+    useLocalization();
   }
 
   async getAudio(playWhichOne) {
@@ -163,7 +167,7 @@ class EyeEx extends Component {
           {playingStatus == 0 && (
             <View style={styles.secondaryContainer}>
               <View style={styles.textContain}>
-                <Text style={styles.text}>{"按下「開始」\n讓眼睛離開手機屏幕\n跟隨聲音導航開始護眼運動"}</Text>
+                <Text style={styles.text}>{i18n.t('eye_exercise_1')}</Text>
               </View>
               <View style={{ flex: 1, alignItems: "center" }}>
                 <TouchableOpacity
@@ -182,12 +186,11 @@ class EyeEx extends Component {
               <View style={styles.textContain}>
                 {audioIndex == 0 ? (
                   <Text style={styles.text}>
-                    剛才放鬆了雙眼{"\n"}現在正式開始，{"\n"}總共{audios.length}段的護眼運動
+                    {i18n.t('eye_exercise_2_1')}{audios.length}{i18n.t('eye_exercise_2_2')}
                   </Text>
                 ) : (
                   <Text style={styles.text}>
-                    你已完成{audioIndex}/{audios.length}段護眼運動{"\n"}
-                    想繼續嗎？
+                    {i18n.t('eye_exercise_3_1')}{audioIndex}/{audios.length}{i18n.t('eye_exercise_3_2')}
                   </Text>
                 )}
               </View>
@@ -204,7 +207,7 @@ class EyeEx extends Component {
                     if (this.state.isBuffering == false) PressPlayButton(1);
                   }}
                 >
-                  <Text style={styles.buttonText}>繼續</Text>
+                  <Text style={styles.buttonText}>{i18n.t('eye_exercise_button_1')}</Text>
                 </TouchableOpacity>
                 {audioIndex != 0 && (
                   <TouchableOpacity
@@ -213,7 +216,7 @@ class EyeEx extends Component {
                       if (this.state.isBuffering == false) PressPlayButton(2);
                     }}
                   >
-                    <Text style={styles.buttonText}>完前緩和</Text>
+                    <Text style={styles.buttonText}>{i18n.t('eye_exercise_button_2')}</Text>
                   </TouchableOpacity>
                 )}
               </View>
@@ -222,7 +225,7 @@ class EyeEx extends Component {
           {playingStatus == 2 && (
             <View style={styles.secondaryContainer}>
               <View style={styles.textContain}>
-                <Text style={styles.text}>{"你已完成全部護眼運動\n只差讓眼睛緩和的步驟！"}</Text>
+                <Text style={styles.text}>{i18n.t('eye_exercise_4')}</Text>
               </View>
               <View style={{ flex: 1, alignItems: "center" }}>
                 <TouchableOpacity
@@ -231,7 +234,7 @@ class EyeEx extends Component {
                     if (this.state.isBuffering == false) PressPlayButton(2);
                   }}
                 >
-                  <Text style={styles.buttonText}>完前緩和</Text>
+                  <Text style={styles.buttonText}>{i18n.t('eye_exercise_5')}</Text>
                 </TouchableOpacity>
               </View>
             </View>
@@ -239,11 +242,11 @@ class EyeEx extends Component {
           {playingStatus == 3 && (
             <View style={styles.secondaryContainer}>
               <View style={styles.textContain}>
-                <Text style={styles.text}>你已完成這次的護眼運動！</Text>
+                <Text style={styles.text}>{i18n.t('eye_exercise_6')}</Text>
               </View>
               <View style={{ flex: 1, alignItems: "center" }}>
                 <TouchableOpacity style={styles.boxes} onPress={() => this.setState({ playingStatus: 0, audioIndex: 0 })}>
-                  <Text style={styles.buttonText}>再來一組</Text>
+                  <Text style={styles.buttonText}>{i18n.t('eye_exercise_7')}</Text>
                 </TouchableOpacity>
               </View>
             </View>

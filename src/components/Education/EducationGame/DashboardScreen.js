@@ -9,7 +9,11 @@ import { LinearGradientBackground } from "../../Utils/LinearGradientBackground";
 import { watchUserArticleScore } from "../../../reducers/userArticleScores";
 import { connect } from "react-redux";
 
+import i18n from 'i18n-js';
+import {useLocalization} from "../../../strings/Strings";
+
 const DashboardScreen = ({ route, navigation, userArticleScoreListStore }) => {
+  useLocalization();
   const [articles, setArticles] = useState(route.params?.articles);
   const [userTotalScore, setUserTotalScore] = useState(0);
   const { userArticleScoreList } = userArticleScoreListStore;
@@ -90,7 +94,7 @@ const DashboardScreen = ({ route, navigation, userArticleScoreListStore }) => {
           showsVerticalScrollIndicator={false}
         >
           <View style={styles.container}>
-            <Text style={{ color: "#fff", fontSize: hp("3%"), marginBottom: hp("3%"), fontWeight: "bold" }}> 你已完成了總進度{userTotalScore}%！ </Text>
+            <Text style={{ color: "#fff", fontSize: hp("3%"), marginBottom: hp("3%"), fontWeight: "bold" }}>{i18n.t('dashboard1')}</Text>
             <AnimatedCircularProgress
               tintColor="rgb(255, 204, 0)"
               tintColorSecondary="#00e0ff"
@@ -108,13 +112,13 @@ const DashboardScreen = ({ route, navigation, userArticleScoreListStore }) => {
             </AnimatedCircularProgress>
             <Button
               disabled
-              title="進度一覽"
+              title={i18n.t('dashboard_button_title')}
               type="clear"
               disabledTitleStyle={{ marginLeft: wp("3%"), color: "#fff", fontSize: hp("3%"), marginVertical: hp("3%"), fontWeight: "bold" }}
               icon={<Icon type="font-awesome-5" name="award" color="#fff" size={hp("5%")} />}
             />
 
-            <Text style={{ marginLeft: wp("3%"), color: "#fff", fontSize: hp("2.5%"), marginBottom: hp("3%"), fontWeight: "bold" }}> 完成測驗以解鎖獎勵 ！</Text>
+            <Text style={{ marginLeft: wp("3%"), color: "#fff", fontSize: hp("2.5%"), marginBottom: hp("3%"), fontWeight: "bold" }}>{i18n.t('dashboard2')}</Text>
 
             <View style={styles.progressContainer}>
               {articles.map((item) => {

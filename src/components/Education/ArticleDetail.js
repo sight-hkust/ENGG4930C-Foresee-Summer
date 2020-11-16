@@ -11,6 +11,9 @@ import { WebView } from "react-native-webview";
 import moment from "moment";
 import { actionCounter } from "../../utils/actionCounter";
 
+import i18n from 'i18n-js';
+import {useLocalization} from "../../strings/Strings";
+
 export default class ArticleDetailScreen extends Component {
   constructor(props) {
     super(props);
@@ -32,6 +35,7 @@ export default class ArticleDetailScreen extends Component {
       videoHeight: ScreenWidth * 0.5625,
       startTime: null,
     };
+    useLocalization();
   }
 
   mountVid = (component) => {
@@ -216,7 +220,7 @@ export default class ArticleDetailScreen extends Component {
 
         <View style={{ alignItems: "center", flex: 1, marginTop: ScreenHeight * 0.03 }}>
           {!this.state.isVid && this.state.audio != "" && this.state.audio != null && (
-            <Button title={this.state.play ? "暫停錄音" : "播放錄音"} titleStyle={ArticleDetailStyles.buttonTitle} onPress={() => PressPlayButton()} buttonStyle={ArticleDetailStyles.playButton} />
+            <Button title={this.state.play ?i18n.t('arcticle_detail_button_1') : i18n.t('arcticle_detail_button_2')} titleStyle={ArticleDetailStyles.buttonTitle} onPress={() => PressPlayButton()} buttonStyle={ArticleDetailStyles.playButton} />
           )}
           <View style={{ width: ScreenWidth, flex: 1 }}>
             <WebView style={{ backgroundColor: "transparent" }} originWhitelist={["*"]} source={{ html: this.state.content }} />

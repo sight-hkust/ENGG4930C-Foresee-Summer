@@ -1,6 +1,3 @@
-import {CheckBox, Input} from "react-native-elements";
-import React from "react";
-
 let zh_strings = {
     // LoginWithEmailAndPassword
     email: '電子郵件',
@@ -29,6 +26,27 @@ let zh_strings = {
     post_question_farewell_title:"謝謝你的提問",
     post_question_farewell_message: "收集問題後，我們的專家會在一星期內回答你的，請耐心等候。如有緊急需要，請聯絡你的眼科醫生。",
     post_question_placeholder: "由於我們會在本程式內發佈專家回應，請注意不要留下個人資料",
+    // Education
+    dashboard1: " 你已完成了總進度{userTotalScore}%！ ",
+    dashboard_button_title: "進度一覽",
+    dashboard2: " 完成測驗以解鎖獎勵 ！",
+
+    article_detail_button_1: "暫停錄音",
+    article_detail_button_2: "播放錄音",
+
+    eye_exercise_1: "按下「開始」\n讓眼睛離開手機屏幕\n跟隨聲音導航開始護眼運動",
+    eye_exercise_2_1: "剛才放鬆了雙眼\n現在正式開始，\n總共",
+    eye_exercise_2_2: "段的護眼運動",
+    eye_exercise_3_1: "你已完成",
+    eye_exercise_3_2: "段護眼運動\n想繼續嗎？",
+    eye_exercise_button_1: "繼續",
+    eye_exercise_button_2: "完前緩和",
+    eye_exercise_4: "你已完成全部護眼運動\n只差讓眼睛緩和的步驟！",
+    eye_exercise_5: "完前緩和",
+    eye_exercise_6: "你已完成這次的護眼運動！",
+    eye_exercise_7: "再來一組",
+
+
 };
 
 export default zh_strings;
