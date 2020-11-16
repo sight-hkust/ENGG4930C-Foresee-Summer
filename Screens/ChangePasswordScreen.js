@@ -10,7 +10,11 @@ import { changePasswordSchema } from "../src/utils/schema";
 import * as firebase from "firebase";
 require("firebase/functions");
 
+import i18n from 'i18n-js';
+import {useLocalization} from "../src/strings/Strings";
+
 const ChangePasswordScreen = ({ route, navigation }) => {
+    useLocalization();
   const changeUserPassword = firebase.functions().httpsCallable("changeUserPassword");
   return (
     <MenuScreen>
@@ -32,7 +36,7 @@ const ChangePasswordScreen = ({ route, navigation }) => {
             changeUserPassword({ uid, newPassword })
               .then((response) => {
                 console.log(response);
-                Alert.alert("更改密碼完成", null, [
+                Alert.alert(i18n.t('change_password_alert_title'), null, [
                   {
                     text: "OK",
                     onPress: () => {
@@ -59,7 +63,7 @@ const FormDetails = ({ formikProps }) => {
   return (
     <View style={ChangePasswordScreenStyle.container}>
       <Input
-        label={"請輸入密碼"}
+        label={i18n.t('change_password_input_1')}
         labelStyle={ChangePasswordScreenStyle.labelStyle}
         inputContainerStyle={{ borderBottomColor: "#FFFFFF" }}
         inputStyle={ChangePasswordScreenStyle.inputStyle}
@@ -68,7 +72,7 @@ const FormDetails = ({ formikProps }) => {
         secureTextEntry
       />
       <Input
-        label={"確認密碼"}
+        label={i18n.t('change_password_input_2')}
         labelStyle={ChangePasswordScreenStyle.labelStyle}
         inputContainerStyle={{ borderBottomColor: "#FFFFFF" }}
         inputStyle={ChangePasswordScreenStyle.inputStyle}
@@ -82,7 +86,7 @@ const FormDetails = ({ formikProps }) => {
         </View>
       )}
       <RoundButton
-        title="更改密碼"
+        title={i18n.t('change_password_round_button')}
         onPress={() => {
           Keyboard.dismiss();
           formikProps.handleSubmit();

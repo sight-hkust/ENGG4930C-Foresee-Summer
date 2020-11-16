@@ -15,6 +15,9 @@ import FamilyListPicker from "../src/components/FamilyListPicker/FamilyListPicke
 import { watchFamilyMembersUpdate } from "../src/reducers/familyMembers";
 import { watchUserInfoUpdate } from "../src/reducers/user";
 
+import i18n from 'i18n-js';
+import {useLocalization} from "../src/strings/Strings";
+
 var patient_id;
 auth.onAuthStateChanged((user) => {
   if (user != null) patient_id = user.uid;
@@ -30,6 +33,7 @@ class OverviewScreen extends Component {
       isFamilyListModalVisible: false,
       selectedFamilyUid: null,
     };
+    useLocalization();
   }
 
   componentDidMount() {
@@ -83,14 +87,14 @@ class OverviewScreen extends Component {
               {calDateDifference() ? (
                 <View style={OverviewScreenStyle.reminderContainer}>
                   <Icon name="error-outline" color="#24559E" containerStyle={OverviewScreenStyle.iconstyle} />
-                  <Text style={OverviewScreenStyle.reminderText}>距離上次驗眼已超過一年，建議盡快預約驗眼</Text>
+                  <Text style={OverviewScreenStyle.reminderText}>{i18n.t('overview_1')}</Text>
                 </View>
               ) : null}
             </View>
             <View style={{ flexDirection: "row", flex: 10 }}>
               <View style={{ flex: 1, alignItems: "center" }}>
                 <View style={OverviewScreenStyle.greetingContainer}>
-                  <Text style={OverviewScreenStyle.greetingText}>您好，</Text>
+                  <Text style={OverviewScreenStyle.greetingText}>{i18n.t('overview_greeting')}</Text>
                   <FamilyListPicker onSelectionUpdate={this.updateSelectedFamilyMember} />
                 </View>
                 <View style={{ flex: 2.3, alignSelf: "center" }}>
@@ -104,7 +108,7 @@ class OverviewScreen extends Component {
                   <DisplayDegree data={this.state.data} dateArr={this.state.dateArr} isLeft={false} />
                 </View>
                 <View style={OverviewScreenStyle.nextPageContainer}>
-                  <Text style={OverviewScreenStyle.nextPageText}>詳細度數趨勢/{"\n"}輸入數據</Text>
+                  <Text style={OverviewScreenStyle.nextPageText}>{i18n.t('overview_next_page')}</Text>
                   <Button
                     icon={<Icon name="keyboard-arrow-right" size={40} color="#24559E" />}
                     onPress={() => {
@@ -128,7 +132,7 @@ class OverviewScreen extends Component {
             </View>
             <View style={OverviewScreenStyle.dateContainer}>
               <Text style={OverviewScreenStyle.dateText}>
-                {"最近驗眼日期: "}
+                {i18n.t('overview_2')}
                 {this.state.dateArr == null ? "" : moment(this.state.dateArr[this.state.dateArr.length - 1]).format("YYYY-MM-DD")}
               </Text>
             </View>
@@ -146,10 +150,10 @@ export const DisplayDegree = (props) => {
     return (
       <>
         <View style={OverviewScreenStyle.topContainer}>
-          <Text style={OverviewScreenStyle.topText}>{isLeft ? "左" : "右"}</Text>
+          <Text style={OverviewScreenStyle.topText}>{isLeft ? i18n.t('left') : i18n.t('right')}</Text>
         </View>
         <View>
-          <Text style={OverviewScreenStyle.noRecordText}>暫無數據</Text>
+          <Text style={OverviewScreenStyle.noRecordText}>{i18n.t('overview_no_record')}</Text>
         </View>
       </>
     );
@@ -161,10 +165,10 @@ export const DisplayDegree = (props) => {
     return (
       <>
         <View style={OverviewScreenStyle.topContainer}>
-          <Text style={OverviewScreenStyle.topText}>{isLeft ? "左" : "右"}</Text>
+          <Text style={OverviewScreenStyle.topText}>{isLeft ? i18n.t('left') : i18n.t('right')}</Text>
         </View>
         <View>
-          <Text style={OverviewScreenStyle.noRecordText}>沒有屈光不正</Text>
+          <Text style={OverviewScreenStyle.noRecordText}>{i18n.overview_no_record_2}</Text>
         </View>
       </>
     );
@@ -172,10 +176,10 @@ export const DisplayDegree = (props) => {
     return (
       <>
         <View style={OverviewScreenStyle.topContainer}>
-          <Text style={OverviewScreenStyle.topText}>{isLeft ? "左" : "右"}</Text>
+          <Text style={OverviewScreenStyle.topText}>{isLeft ? i18n.t('left') : i18n.t('right')}</Text>
         </View>
         <View>
-          <Text style={OverviewScreenStyle.noRecordText}>沒有屈光不正</Text>
+          <Text style={OverviewScreenStyle.noRecordText}>{i18n.t('overview_no_record_2')}</Text>
         </View>
       </>
     );
@@ -184,7 +188,7 @@ export const DisplayDegree = (props) => {
   return (
     <View style={{ paddingTop: 10 }}>
       <View style={OverviewScreenStyle.topContainer}>
-        <Text style={OverviewScreenStyle.topText}>{isLeft ? "左" : "右"}</Text>
+        <Text style={OverviewScreenStyle.topText}>{isLeft ? i18n.t('left') : i18n.t('right')}</Text>
       </View>
 
       {(isLeft ? curData.L_Myopia != 0 : curData.R_Myopia != 0) && <RenderItem degree={isLeft ? curData.L_Myopia : curData.R_Myopia} refractive={"M"} />}
@@ -203,7 +207,7 @@ export const RenderItem = (props) => {
       <View style={OverviewScreenStyle.itemContainer}>
         <RenderIndicator degree={degree} refractive={refractive} />
         <Text style={OverviewScreenStyle.degreeText}>{degree}</Text>
-        <Text style={OverviewScreenStyle.unitText}>度</Text>
+        <Text style={OverviewScreenStyle.unitText}>{i18n.t('overview_unit')}</Text>
       </View>
     </View>
   );
@@ -215,20 +219,20 @@ export const RenderIndicator = (props) => {
     case "M":
       return (
         <View style={OverviewScreenStyle.levelTextContatiner}>
-          <Text style={OverviewScreenStyle.levelText}>{degree < 300 ? "淺近視" : degree < 575 ? "中度近視" : "深近視"}</Text>
+          <Text style={OverviewScreenStyle.levelText}>{degree < 300 ? i18n.t('overview_level_1') : degree < 575 ? i18n.t('overview_level_2') : i18n.t('overview_level_3')}</Text>
         </View>
       );
 
     case "H":
       return (
         <View style={OverviewScreenStyle.levelTextContatiner}>
-          <Text style={OverviewScreenStyle.levelText}>{degree < 200 ? "淺遠視" : degree < 500 ? "中度遠視" : "深遠視"}</Text>
+          <Text style={OverviewScreenStyle.levelText}>{degree < 200 ? i18n.t('overview_level_4') : degree < 500 ? i18n.t('overview_level_5') : i18n.t('overview_level_6')}</Text>
         </View>
       );
     case "A":
       return (
         <View style={OverviewScreenStyle.levelTextContatiner}>
-          <Text style={OverviewScreenStyle.levelText}>{degree < 75 ? "淺散光" : degree < 175 ? "中度散光" : "深散光"}</Text>
+          <Text style={OverviewScreenStyle.levelText}>{degree < 75 ? i18n.t('overview_level_7') : degree < 175 ? i18n.t('overview_level_8') : i18n.t('overview_level_9')}</Text>
         </View>
       );
   }

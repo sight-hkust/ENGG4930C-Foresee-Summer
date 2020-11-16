@@ -1,4 +1,5 @@
 let zh_strings = {
+    // SCREENS
     // LoginWithEmailAndPassword
     email: '電子郵件',
     invalid_email: '電子郵件格式無效',
@@ -9,6 +10,43 @@ let zh_strings = {
     dont_have_an_account: '未有用戶? ',
     register: '登記',
     forget_password: '忘記密碼',
+
+    // AddRecord
+    add_record_alert_title: "注意！",
+    add_record_alert_message_1: "數據庫已存在",
+    add_record_alert_message_2: "的資料，再按提交將會覆蓋舊的資料。",
+    cancel: "取消",
+    ok: "提交",
+
+    // ChangePassword
+    change_password_alert_title: "更改密碼完成",
+    change_password_input_1: "請輸入密碼",
+    change_password_input_2: "確認密碼",
+    change_password_round_button: "更改密碼",
+
+    // Overview
+    overview_1: "距離上次驗眼已超過一年，建議盡快預約驗眼",
+    overview_greeting: "您好，",
+    overview_next_page: "詳細度數趨勢/\n輸入數據",
+    overview_2: "最近驗眼日期: ",
+    overview_no_record: "暫無數據",
+    left: "左",
+    right: "右",
+    overview_no_record_2: "沒有屈光不正",
+    overview_unit: "度",
+    overview_level_1: "淺近視",
+    overview_level_2:"中度近視",
+    overview_level_3:"深近視",
+
+    overview_level_4: "淺遠視",
+    overview_level_5:"中度遠視",
+    overview_level_6:"深遠視",
+
+    overview_level_7:"淺散光",
+    overview_level_8:"中度散光",
+    overview_level_9:"深散光",
+
+    // COMPONENTS
     // AskAnExpert
     special_tag_1: "眼睛疼痛",
     special_tag_2: "視力模糊",
@@ -45,6 +83,7 @@ let zh_strings = {
     eye_exercise_5: "完前緩和",
     eye_exercise_6: "你已完成這次的護眼運動！",
     eye_exercise_7: "再來一組",
+
 
 
 };

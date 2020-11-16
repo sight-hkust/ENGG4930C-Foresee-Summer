@@ -11,11 +11,15 @@ import { DateSelect, RenderNormal, RenderCollapseAdj, RemarksInput, DiseasesInpu
 
 import MenuScreen from "../Utils/MenuScreen";
 
+import i18n from 'i18n-js';
+import {useLocalization} from "../src/strings/Strings";
+
 export default class Form extends Component {
   yScroll = new Animated.Value(0);
   constructor(props) {
     super(props);
     this.state = { mode: true, selectedLabel: "" }; //true: slider mode ; false: input box mode
+    useLocalization();
   }
 
   componentDidMount() {
@@ -170,12 +174,12 @@ export default class Form extends Component {
                   this.props.navigation.goBack();
                 } else {
                   Alert.alert(
-                    "注意！",
-                    "數據庫已存在" + values.date + "的資料，再按提交將會覆蓋舊的資料。",
+                    i18n.t('add_record_alert_title'),
+                    i18n.t('add_record_alert_message_1') + values.date + i18n.t('add_record_alert_message_2'),
                     [
-                      { text: "取消", style: "cancel" },
+                      { text: i18n.t('cancel'), style: "cancel" },
                       {
-                        text: "提交",
+                        text: i18n.t('ok'),
                         onPress: () => {
                           database.ref("users/" + patient_id + "/records/" + values.date).set(data, (error) => console.log(error));
                           this.props.navigation.goBack();
