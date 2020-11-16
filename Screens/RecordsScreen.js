@@ -14,6 +14,9 @@ import { RenderDescription } from "../Screens/RenderDescription";
 import { RenderVA } from "../Screens/RenderVA";
 import MenuScreen from "../Utils/MenuScreen";
 
+import i18n from 'i18n-js';
+import {useLocalization} from "../src/strings/Strings";
+
 //const patient_id = auth.currentUser.uid;
 //const patient_id = "002";
 /* var patient_id;
@@ -39,6 +42,7 @@ export default class RecordsScreen extends Component {
       username: "", //first name last name
       isModalVisible: false,
     };
+    useLocalization();
   }
 
   componentDidMount() {
@@ -130,27 +134,27 @@ export default class RecordsScreen extends Component {
       <MenuScreen>
         <View style={RecordScreenStyle.header}>
           <Text style={RecordScreenStyle.title}>
-            {this.state.refractive == "0" ? "近視度數" : this.state.refractive == "1" ? "遠視度數" : this.state.refractive == "2" ? "散光度數" : "視力"}
-            趨勢
+            {this.state.refractive == "0" ? i18n.t('refractive_1') : this.state.refractive == "1" ? i18n.t('refractive_2') : this.state.refractive == "2" ? i18n.t('refractive_3') : i18n.t('refractive_4')}
+            {i18n.t('refractive_text')}
           </Text>
         </View>
 
         <View style={RecordScreenStyle.secondaryContainer}>
           <View style={RecordScreenStyle.refractiveMenu}>
             <TouchableOpacity onPress={() => this.setState({ refractive: "3" })}>
-              <Text style={this.state.refractive == "3" ? RecordScreenStyle.selectedMenuText : RecordScreenStyle.unselectedMenuText}>視力</Text>
+              <Text style={this.state.refractive == "3" ? RecordScreenStyle.selectedMenuText : RecordScreenStyle.unselectedMenuText}>{i18n.t('refractive_short_1')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => this.setState({ refractive: "1" })}>
-              <Text style={this.state.refractive == "1" ? RecordScreenStyle.selectedMenuText : RecordScreenStyle.unselectedMenuText}>遠視</Text>
+              <Text style={this.state.refractive == "1" ? RecordScreenStyle.selectedMenuText : RecordScreenStyle.unselectedMenuText}>{i18n.t('refractive_short_2')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => this.setState({ refractive: "0" })}>
-              <Text style={this.state.refractive == "0" ? RecordScreenStyle.selectedMenuText : RecordScreenStyle.unselectedMenuText}>近視</Text>
+              <Text style={this.state.refractive == "0" ? RecordScreenStyle.selectedMenuText : RecordScreenStyle.unselectedMenuText}>{i18n.t('refractive_short_3')}</Text>
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => this.setState({ refractive: "2" })}>
-              <Text style={this.state.refractive == "2" ? RecordScreenStyle.selectedMenuText : RecordScreenStyle.unselectedMenuText}>散光</Text>
+              <Text style={this.state.refractive == "2" ? RecordScreenStyle.selectedMenuText : RecordScreenStyle.unselectedMenuText}>{i18n.t('refractive_short_4')}</Text>
             </TouchableOpacity>
           </View>
           {data != null && this.state.refractive == "3" && (
@@ -257,7 +261,7 @@ export const DetailButton = (props) => {
         }}
         TouchableComponent={TouchableOpacity}
       />
-      <Text style={{ color: "white", fontSize: ScreenHeight / 40 }}>{glassType ? "調整度數" : "真實度數"}</Text>
+      <Text style={{ color: "white", fontSize: ScreenHeight / 40 }}>{glassType ? i18n.t('records_detail_1') : i18n.t('records_detail_2') }</Text>
       <RenderModal data={data} selectedDate={selectedDate} isVisible={isVisible} toggleModal={toggleModal} glassType={glassType ? "adj" : "normal"} />
     </View>
   );
@@ -270,7 +274,7 @@ export const RenderModal = (props) => {
   return (
     <BottomModal isVisible={isVisible} toggleModal={toggleModal} style={{ backgroundColor: "#FFFFFF", height: 350 }}>
       <View style={{ backgroundColor: "#1772A6", height: 4, width: 70, alignSelf: "center", marginBottom: 10 }} />
-      <Text style={RecordScreenStyle.colHeader}>日期: {selectedDate}</Text>
+      <Text style={RecordScreenStyle.colHeader}>{i18n.t('date')}: {selectedDate}</Text>
       <View style={{ height: 10 }}></View>
       <DisplayRecords curRecord={curRecord} glassType={glassType} isProfessional={false} />
     </BottomModal>
@@ -279,7 +283,7 @@ export const RenderModal = (props) => {
 
 export const RenderLineChart = (props) => {
   const { dataArr, dateArr, refractive, isLeft, subArray, selectedIndex, fits } = props;
-  if (dataArr == null) return <Text style={RecordScreenStyle.noDataText}>暫無數據，請按“+”輸入資料</Text>;
+  if (dataArr == null) return <Text style={RecordScreenStyle.noDataText}>{i18n.t('records_no_data')}</Text>;
   var output = [];
   switch (refractive) {
     case "0": {

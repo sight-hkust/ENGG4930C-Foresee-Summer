@@ -53,6 +53,25 @@ let zh_strings = {
     collapse_text: "輸入調整度數",
     collapse_text_2: "輸入瞳孔距離(PD)",
     collapse_text_3: "輸入視力(VA)",
+
+    // RecordsScreen
+    refractive_1: "近視度數",
+    refractive_2: "遠視度數",
+    refractive_3: "散光度數",
+    refractive_4: "視力",
+    refractive_text: "趨勢",
+
+    refractive_short_1: "視力",
+    refractive_short_2: "遠視",
+    refractive_short_3: "近視",
+    refractive_short_4: "散光",
+
+    records_detail_1: "調整度數",
+    records_detail_2: "真實度數",
+
+    date: "日期",
+    records_no_data: "暫無數據，請按“+”輸入資料",
+
     // COMPONENTS
     // AskAnExpert
     special_tag_1: "眼睛疼痛",
