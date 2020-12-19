@@ -11,7 +11,11 @@ import { database } from "../src/config/config";
 import { updateProfessionalProfileSchema, updatePatientProfileSchema } from "../src/utils/schema";
 import { encryptData } from "../src/utils/encryptData";
 
+import i18n from 'i18n-js';
+import {useLocalization} from "../src/strings/Strings";
+
 const UpdateProfileScreen = ({ route, navigation }) => {
+  useLocalization();
   const { user, type } = route.params;
   console.log("UpdateProfile user: ", user);
   console.log("type: ", type);
@@ -76,7 +80,7 @@ const UpdateProfileScreen = ({ route, navigation }) => {
             userRef
               .update(updateValue)
               .then(function () {
-                Alert.alert("更新資料完成", null, [
+                Alert.alert(i18n.t('updateProfile1'), null, [
                   {
                     text: "OK",
                     onPress: () => {
@@ -87,7 +91,7 @@ const UpdateProfileScreen = ({ route, navigation }) => {
                 ]);
               })
               .catch((err) => {
-                Alert.alert("更新資料錯誤", null, [
+                Alert.alert(i18n.t('updateProfile2'), null, [
                   {
                     text: "OK",
                     onPress: () => {
@@ -121,7 +125,7 @@ const UpdateProfileFormDetails = ({ formikProps, type }) => {
       <View style={{ marginTop: ScreenHeight * 0.2, paddingHorizontal: ScreenWidth * 0.1 }}>
         <View style={{ flexDirection: "row" }}>
           <Input
-            label={"姓"}
+            label={i18n.t('updateProfile3')}
             labelStyle={UpdateProfileScreenStyle.labelStyle}
             inputContainerStyle={{ borderBottomColor: "#FFFFFF" }}
             inputStyle={UpdateProfileScreenStyle.inputStyle}
@@ -130,7 +134,7 @@ const UpdateProfileFormDetails = ({ formikProps, type }) => {
             onChangeText={formikProps.handleChange("lastName")}
           />
           <Input
-            label={"名"}
+            label={i18n.t('updateProfile4')}
             labelStyle={UpdateProfileScreenStyle.labelStyle}
             inputContainerStyle={{ borderBottomColor: "#FFFFFF" }}
             inputStyle={UpdateProfileScreenStyle.inputStyle}
@@ -146,7 +150,7 @@ const UpdateProfileFormDetails = ({ formikProps, type }) => {
         )}
         <View style={{ marginBottom: ScreenHeight * 0.024, marginHorizontal: ScreenWidth * 0.022 }}>
           <View style={{ marginBottom: ScreenHeight * 0.012 }}>
-            <Text style={{ color: "#FFFFFF", fontSize: ScreenWidth * 0.043, fontWeight: "bold" }}>出生日期</Text>
+            <Text style={{ color: "#FFFFFF", fontSize: ScreenWidth * 0.043, fontWeight: "bold" }}>{i18n.t('updateProfile5')}</Text>
           </View>
           <TouchableOpacity onPress={_showDatePicker} style={{}}>
             {/*  <View style={FormItemStyle.dropDownButton}>
@@ -158,7 +162,7 @@ const UpdateProfileFormDetails = ({ formikProps, type }) => {
           </TouchableOpacity>
         </View>
         <Input
-          label={"電話號碼"}
+          label={i18n.t('updateProfile6')}
           labelStyle={UpdateProfileScreenStyle.labelStyle}
           inputContainerStyle={{ borderBottomColor: "#FFFFFF" }}
           inputStyle={UpdateProfileScreenStyle.inputStyle}
@@ -171,7 +175,7 @@ const UpdateProfileFormDetails = ({ formikProps, type }) => {
         {type == "user" ? (
           <>
             <Input
-              label={"職業"}
+              label={i18n.t('updateProfile7')}
               labelStyle={UpdateProfileScreenStyle.labelStyle}
               inputContainerStyle={{ borderBottomColor: "#FFFFFF" }}
               inputStyle={UpdateProfileScreenStyle.inputStyle}
@@ -180,7 +184,7 @@ const UpdateProfileFormDetails = ({ formikProps, type }) => {
               errorMessage={formikProps.erros && formikProps.erros["job"]}
             />
             <Input
-              label={"家族病史"}
+              label={i18n.t('updateProfile8')}
               labelStyle={UpdateProfileScreenStyle.labelStyle}
               inputContainerStyle={{
                 borderColor: "#FFFFFF",
@@ -198,7 +202,7 @@ const UpdateProfileFormDetails = ({ formikProps, type }) => {
               onChangeText={formikProps.handleChange("history")}
             />
             <Input
-              label={"已知眼疾"}
+              label={i18n.t('updateProfile9')}
               labelStyle={UpdateProfileScreenStyle.labelStyle}
               inputContainerStyle={{
                 borderColor: "#FFFFFF",
@@ -217,7 +221,7 @@ const UpdateProfileFormDetails = ({ formikProps, type }) => {
           </>
         ) : null}
         <RoundButton
-          title="更新資料"
+          title={i18n.t('updateProfile')}
           onPress={() => {
             Keyboard.dismiss();
             formikProps.handleSubmit();

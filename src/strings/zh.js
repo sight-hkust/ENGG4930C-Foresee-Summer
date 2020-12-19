@@ -135,6 +135,17 @@ let zh_strings = {
     renderVA3: '不正常視力',
     renderVA4: '稍低於正常視力',
     renderVA5: '正常視力',
+
+    updateProfile1: "更新資料完成",
+    updateProfile2: "更新資料錯誤",
+    updateProfile3: "姓",
+    updateProfile4: "名",
+    updateProfile5: "出生日期",
+    updateProfile6: "電話號碼",
+    updateProfile7: "職業",
+    updateProfile8: "家族病史",
+    updateProfile9: "已知眼疾",
+    updateProfile10: "更新資料"
 };
 
 export default zh_strings;
