@@ -4,9 +4,13 @@ import { ButtonGroup } from "react-native-elements";
 import { ScreenHeight, ScreenWidth } from "../../../constant/Constant";
 import { GenderIcon } from "../Icons";
 
+import i18n from 'i18n-js';
+import {useLocalization} from "../../strings/Strings";
+
 const GenderOptionsInput = ({ containerStyle, iconStyle, labelContainerStyle, hideEmbbededMessage, icon, label, formikKey, formikProps }) => {
+  useLocalization();
   const [selectedGenderIndex, setSelectedGenderIndex] = useState(0);
-  const genderOptions = ["男", "女"];
+  const genderOptions = [i18n.t('gender1'), i18n.t('gender2')];
   const updateSelectedGenderIndex = (selectedIndex) => {
     formikProps.setFieldValue("gender", selectedIndex == 0 ? "M" : "F");
     setSelectedGenderIndex(selectedIndex);
