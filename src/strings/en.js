@@ -81,7 +81,7 @@ let en_strings = {
     updateProfile7: "職業",
     updateProfile8: "家族病史",
     updateProfile9: "已知眼疾",
-    updateProfile10: "更新資料"
+    updateProfile10: "更新資料",
 
     familyList1: "選擇家庭成員",
 

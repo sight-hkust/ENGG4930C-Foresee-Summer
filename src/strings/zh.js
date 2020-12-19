@@ -167,6 +167,23 @@ let zh_strings = {
     login4: "未有用戶? ",
     login5: '登記',
 
+    profAdd1: "注意！",
+    profAdd2: "數據庫已存在",
+    profAdd3: "的資料，再按提交將會覆蓋舊的資料。",
+    profAdd4: "取消",
+    profAdd5: "提交",
+    profAdd6: " 無法提交表格，請檢查錯誤提示。 ",
+
+    profMain1: "尋找病人",
+    profMain2: " 找不到資料 ",
+
+    profRecord1: "請輸入日期時間",
+    profRecord2: "請輸入到期日",
+    profRecord3: "展開",
+    profRecord4: "收起",
+    profRecord5: "輸入調整度數",
+    profRecord6: "請輸入雙眼視力(VA)",
+    profRecord7: "輸入隱形眼鏡度數",
 };
 
 export default zh_strings;

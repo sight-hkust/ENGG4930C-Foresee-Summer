@@ -8,7 +8,11 @@ import MultiSelect from "react-native-multiple-select";
 const DropDown = require("../../../assets/images/DropDown.png");
 import { ScreenWidth } from "../../../constant/Constant";
 
+import i18n from 'i18n-js';
+import {useLocalization} from "../../strings/Strings";
+
 export const DateSelect = (props) => {
+  useLocalization();
   const { values, setFieldValue } = props;
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
@@ -22,7 +26,7 @@ export const DateSelect = (props) => {
 
   return (
     <View>
-      <Text style={FormItemStyle.questionText}>請輸入日期時間</Text>
+      <Text style={FormItemStyle.questionText}>{i18n.t('profRecord1')}</Text>
       <View>
         <TouchableOpacity onPress={showDatePicker} style={FormItemStyle.answerContainer}>
           <View style={FormItemStyle.dropDownButton}>
@@ -37,6 +41,7 @@ export const DateSelect = (props) => {
 };
 
 export const ExpiryDateInput = (props) => {
+  useLocalization();
   const { values, setFieldValue } = props;
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
 
@@ -50,7 +55,7 @@ export const ExpiryDateInput = (props) => {
 
   return (
     <View style={{ alignSelf: "flex-start" }}>
-      <Text style={FormItemStyle.questionText}>請輸入到期日</Text>
+      <Text style={FormItemStyle.questionText}>{i18n.t('profRecord2')}</Text>
       <View>
         <TouchableOpacity onPress={showDatePicker} style={FormItemStyle.answerContainer}>
           <View style={FormItemStyle.dropDownButton}>
@@ -89,7 +94,7 @@ export const RenderCollapseAdj = (props) => {
   return (
     <View>
       <TouchableOpacity onPress={() => toggleisCollapse(!isCollapse)} style={FormItemStyle.collapseButton}>
-        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? "展開" : "收起"}輸入調整度數</Text>
+        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? i18n.t('profRecord3') : i18n.t('profRecord4')}{i18n.t('profRecord5')}</Text>
       </TouchableOpacity>
       <Collapsible collapsed={isCollapse}>
         <View style={FormItemStyle.collpaseContainer}>
@@ -116,7 +121,7 @@ export const RenderCollapsePD = (props) => {
   return (
     <View>
       <TouchableOpacity onPress={() => toggleisCollapse(!isCollapse)} style={FormItemStyle.collapseButton}>
-        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? "展開" : "收起"}輸入瞳孔距離(PD)</Text>
+        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? i18n.t('collapse') : i18n.t('not_collapse')}{i18n.t('collapse_text_2')}</Text>
       </TouchableOpacity>
       <Collapsible collapsed={isCollapse}>
         <View style={FormItemStyle.collpaseContainer}>
@@ -135,14 +140,14 @@ export const RenderCollapseVA = (props) => {
   return (
     <View>
       <TouchableOpacity onPress={() => toggleisCollapse(!isCollapse)} style={FormItemStyle.collapseButton}>
-        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? "展開" : "收起"}輸入視力(VA)</Text>
+        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? i18n.t('profRecord3') : i18n.t('profRecord4')}{i18n.t('collapse_record_3')}</Text>
       </TouchableOpacity>
 
       <Collapsible collapsed={isCollapse}>
         <View style={FormItemStyle.collpaseContainer}>
           <VAInput setFieldValue={setFieldValue} isLeft={false} error={error_R_VA} />
           <VAInput setFieldValue={setFieldValue} isLeft={true} error={error_L_VA} />
-          <Text style={FormItemStyle.questionText}>請輸入雙眼視力(VA)</Text>
+          <Text style={FormItemStyle.questionText}>{i18n.t('profRecord6')}</Text>
           <TextInput onChangeText={(value) => setFieldValue("VA", value)} keyboardType="default" style={FormItemStyle.answerInputBox} />
         </View>
       </Collapsible>
@@ -156,7 +161,7 @@ export const RenderCollapseCon = (props) => {
   return (
     <View>
       <TouchableOpacity onPress={() => toggleisCollapse(!isCollapse)} style={FormItemStyle.collapseButton}>
-        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? "展開" : "收起"}輸入隱形眼鏡度數</Text>
+        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? i18n.t('collapse') : i18n.t('not_collapse')}{i18n.t('profRecord7')}</Text>
       </TouchableOpacity>
       <Collapsible collapsed={isCollapse}>
         <View style={FormItemStyle.collpaseContainer}>
