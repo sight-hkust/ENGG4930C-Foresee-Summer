@@ -6,6 +6,8 @@ import { ScreenWidth, ScreenHeight } from '../constant/Constant';
 //import { ScrollView } from "react-native-gesture-handler";
 import { RenderDateDots } from '../helpers/VAline';
 import BottomModal from '../Utils/BottomModal';
+import i18n from 'i18n-js';
+import {useLocalization} from "../src/strings/Strings";
 
 export const RenderVA = (props) => {
   const { dateArr, data, NextButton, BackButton, index, subArray } = props;
@@ -31,6 +33,7 @@ export const RenderVA = (props) => {
 };
 
 export const RenderContent = (props) => {
+  useLocalization();
   const { data, index, dateArr } = props;
   //console.log(index);
   return (
@@ -44,29 +47,30 @@ export const RenderContent = (props) => {
         paddingBottom: ScreenHeight / 40,
       }}
     >
-      <Text style={RenderVAStyle.VAText}>右眼矯正視力：{data[dateArr[index]].R_VA}</Text>
+      <Text style={RenderVAStyle.VAText}>{i18n.t('renderVA1')}{data[dateArr[index]].R_VA}</Text>
       <RenderRating VA={data[dateArr[index]].R_VA} />
-      <Text style={RenderVAStyle.VAText}>左眼矯正視力：{data[dateArr[index]].L_VA}</Text>
+      <Text style={RenderVAStyle.VAText}>{i18n.t('renderVA2')}{data[dateArr[index]].L_VA}</Text>
       <RenderRating VA={data[dateArr[index]].L_VA} />
     </View>
   );
 };
 
 export const RenderRating = (props) => {
+  useLocalization();
   const { VA } = props;
   var result = '';
   if (parseInt(VA.substring(0, 1)) == 2) {
     //used 20/20
     const L_backNum = parseInt(VA.substring(3));
-    if (L_backNum >= 30) result = '不正常視力';
-    else if (L_backNum >= 25) result = '稍低於正常視力';
-    else result = '正常視力';
+    if (L_backNum >= 30) result = i18n.t('renderVA3');
+    else if (L_backNum >= 25) result = i18n.t('renderVA4');
+    else result = i18n.t('renderVA5');
   } else if (parseInt(VA.substring(0, 1)) == 6) {
     //used 6/6
     const L_backNum = parseInt(VA.substring(2));
-    if (L_backNum >= 9) result = '不正常視力';
-    else if (L_backNum >= 7.5) result = '稍低於正常視力';
-    else result = '正常視力';
+    if (L_backNum >= 9) result = i18n.t('renderVA3');
+    else if (L_backNum >= 7.5) result = i18n.t('renderVA5');
+    else result = i18n.t('renderVA5');
   }
   return <Text style={RenderVAStyle.description}>{result}</Text>;
 };

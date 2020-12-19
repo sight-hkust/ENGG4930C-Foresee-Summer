@@ -12,6 +12,7 @@ const severity = {
 };
 
 export const RenderDescription = (props) => {
+  useLocalization();
   const { isLeft, ddlValue, data, selectedDate, index, dateArr } = props;
   if (data == null) return <Text style={DescriptionStyle.contentText}>{i18n.t('renderDesc1')}</Text>;
   if (ddlValue == "3") return null;
@@ -51,6 +52,7 @@ export const RenderDescription = (props) => {
 };
 
 export const RenderWarning = (props) => {
+  useLocalization();
   const { degree, refractive } = props;
   const sev = severity[refractive];
   //console.log(sev);
@@ -85,6 +87,7 @@ export const RenderWarning = (props) => {
 };
 
 export const RenderAmblyopiaWarning = (props) => {
+  useLocalization();
   const { Ldegree, Rdegree } = props;
   if (Math.abs(Ldegree - Rdegree) >= 300) {
     return <Text style={DescriptionStyle.warningText}>{i18n.t('renderDesc15')}</Text>;
@@ -92,6 +95,7 @@ export const RenderAmblyopiaWarning = (props) => {
 };
 
 export const RenderIncreaseWarning = (props) => {
+  useLocalization();
   const { data, dateArr, index, isLeft, refractive } = props;
   //對比上次紀錄: 近視深了25度，升幅正常/過大。散光度數不變
   if (data == null || index <= 0) {

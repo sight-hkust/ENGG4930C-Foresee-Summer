@@ -129,6 +129,12 @@ let zh_strings = {
     renderDesc17: "近視",
     renderDesc18: "遠視",
     renderDesc19: "散光",
+
+    renderVA1: "右眼矯正視力：",
+    renderVA2: "左眼矯正視力：",
+    renderVA3: '不正常視力',
+    renderVA4: '稍低於正常視力',
+    renderVA5: '正常視力',
 };
 
 export default zh_strings;
