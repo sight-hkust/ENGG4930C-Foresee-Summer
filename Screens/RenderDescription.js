@@ -2,6 +2,9 @@ import React, { Component, useState } from "react";
 import { StyleSheet, Text, View, ScrollView } from "react-native";
 import { ScreenWidth, ScreenHeight } from "../constant/Constant";
 
+import i18n from 'i18n-js';
+import {useLocalization} from "../src/strings/Strings";
+
 const severity = {
   M: { light: 100, medium: 300, severe: 575, chi: "近視" },
   H: { light: 0, medium: 200, severe: 500, chi: "遠視" },
@@ -10,7 +13,7 @@ const severity = {
 
 export const RenderDescription = (props) => {
   const { isLeft, ddlValue, data, selectedDate, index, dateArr } = props;
-  if (data == null) return <Text style={DescriptionStyle.contentText}>暫無數據</Text>;
+  if (data == null) return <Text style={DescriptionStyle.contentText}>{i18n.t('renderDesc1')}</Text>;
   if (ddlValue == "3") return null;
   let refractivechar, datatoshow;
   switch (ddlValue) {
@@ -32,7 +35,7 @@ export const RenderDescription = (props) => {
   if (datatoshow != "0") {
     return (
       <View>
-        <Text style={DescriptionStyle.degreeText}>{datatoshow}度</Text>
+        <Text style={DescriptionStyle.degreeText}>{datatoshow}{i18n.t('renderDesc2')}</Text>
         <RenderWarning degree={datatoshow} refractive={refractivechar} />
         <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft} />
       </View>
@@ -40,7 +43,7 @@ export const RenderDescription = (props) => {
   } else {
     return (
       <View>
-        <Text style={DescriptionStyle.degreeText}>你的左眼沒有{sev.chi}</Text>
+        <Text style={DescriptionStyle.degreeText}>{i18n.t('renderDesc3')}{sev.chi}</Text>
         <RenderIncreaseWarning data={data} dateArr={dateArr} index={index} refractive={ddlValue} isLeft={isLeft} />
       </View>
     );
@@ -54,37 +57,37 @@ export const RenderWarning = (props) => {
   if (degree < sev.light) {
     return (
       <View>
-        <Text style={DescriptionStyle.contentText}>您有很淺的{sev.chi}</Text>
+        <Text style={DescriptionStyle.contentText}>{i18n.t('renderDesc4')}{sev.chi}</Text>
         <Text style={DescriptionStyle.contentText}>
-          距離淺{sev.chi}還有{sev.light - degree}度
+          {i18n.t('renderDesc5')}{sev.chi}{i18n.t('renderDesc6')}{sev.light - degree}{i18n.t('renderDesc7')}
         </Text>
       </View>
     );
   } else if (degree < sev.medium) {
     return (
       <View>
-        <Text style={DescriptionStyle.contentText}>您有淺{sev.chi}</Text>
+        <Text style={DescriptionStyle.contentText}>{i18n.t("renderDesc8")}{sev.chi}</Text>
         <Text style={DescriptionStyle.contentText}>
-          距離中度{sev.chi}還有{sev.medium - degree}度
+          {i18n.t("renderDesc9")}{sev.chi}{i18n.t("renderDesc6")}{sev.medium - degree}{i18n.t("renderDesc11")}
         </Text>
       </View>
     );
   } else if (degree < sev.severe) {
     return (
       <View>
-        <Text style={DescriptionStyle.contentText}>您有中度{sev.chi}</Text>
+        <Text style={DescriptionStyle.contentText}>{i18n.t('renderDesc12')}{sev.chi}</Text>
         <Text style={DescriptionStyle.contentText}>
-          距離深{sev.chi}還有{sev.severe - degree}度
+          {i18n.t('renderDesc13')}{sev.chi}{i18n.t('renderDesc6')}{sev.severe - degree}{i18n.t('renderDesc11')}
         </Text>
       </View>
     );
-  } else return <Text style={DescriptionStyle.contentText}>您有深{sev.chi}</Text>;
+  } else return <Text style={DescriptionStyle.contentText}>{i18n.t('renderDesc14')}{sev.chi}</Text>;
 };
 
 export const RenderAmblyopiaWarning = (props) => {
   const { Ldegree, Rdegree } = props;
   if (Math.abs(Ldegree - Rdegree) >= 300) {
-    return <Text style={DescriptionStyle.warningText}>雙眼近視度數偏差超過300度，有形成弱視的風險! </Text>;
+    return <Text style={DescriptionStyle.warningText}>{i18n.t('renderDesc15')}</Text>;
   } else return null;
 };
 
@@ -108,20 +111,20 @@ export const RenderIncreaseWarning = (props) => {
   if (isLeft) {
     switch (refractive) {
       case "0": //myopia
-        return <Text style={DescriptionStyle.contentText}>對比上次紀錄: 近視{calDiff(curData.L_Myopia, prevData.L_Myopia)}</Text>;
+        return <Text style={DescriptionStyle.contentText}>{i18n.t('renderDesc16')} {i18n.t('renderDesc17')}{calDiff(curData.L_Myopia, prevData.L_Myopia)}</Text>;
       case "1": //hyperopia
-        return <Text style={DescriptionStyle.contentText}>對比上次紀錄: 遠視{calDiff(curData.L_Hyperopia, prevData.L_Hyperopia)}</Text>;
+        return <Text style={DescriptionStyle.contentText}>{i18n.t('renderDesc16')} {i18n.t('renderDesc18')}{calDiff(curData.L_Hyperopia, prevData.L_Hyperopia)}</Text>;
       case "2": //astigmatism
-        return <Text style={DescriptionStyle.contentText}>對比上次紀錄: 散光{calDiff(curData.L_CYL, prevData.L_CYL)}</Text>;
+        return <Text style={DescriptionStyle.contentText}>{i18n.t('renderDesc16')} {i18n.t('renderDesc19')}{calDiff(curData.L_CYL, prevData.L_CYL)}</Text>;
     }
   } else {
     switch (refractive) {
       case "0": //myopia
-        return <Text style={DescriptionStyle.contentText}>對比上次紀錄: 近視{calDiff(curData.R_Myopia, prevData.R_Myopia)}</Text>;
+        return <Text style={DescriptionStyle.contentText}>{i18n.t('renderDesc16')} {i18n.t('renderDesc17')}{calDiff(curData.R_Myopia, prevData.R_Myopia)}</Text>;
       case "1": //hyperopia
-        return <Text style={DescriptionStyle.contentText}>對比上次紀錄: 遠視{calDiff(curData.R_Hyperopia, prevData.R_Hyperopia)}</Text>;
+        return <Text style={DescriptionStyle.contentText}>{i18n.t('renderDesc16')} {i18n.t('renderDesc18')}{calDiff(curData.R_Hyperopia, prevData.R_Hyperopia)}</Text>;
       case "2": //astigmatism
-        return <Text style={DescriptionStyle.contentText}>對比上次紀錄: 散光{calDiff(curData.R_CYL, prevData.R_CYL)}</Text>;
+        return <Text style={DescriptionStyle.contentText}>{i18n.t('renderDesc16')} {i18n.t('renderDesc19')}{calDiff(curData.R_CYL, prevData.R_CYL)}</Text>;
     }
   }
 };

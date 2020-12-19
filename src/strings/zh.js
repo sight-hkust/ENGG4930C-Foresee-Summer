@@ -110,8 +110,25 @@ let zh_strings = {
     eye_exercise_6: "你已完成這次的護眼運動！",
     eye_exercise_7: "再來一組",
 
-
-
+    severity1: "近視",
+    renderDesc1: "暫無數據",
+    renderDesc2: "度",
+    renderDesc3: "你的左眼沒有",
+    renderDesc4: "您有很淺的",
+    renderDesc5: "距離淺",
+    renderDesc6: "還有",
+    renderDesc7: "度",
+    renderDesc8: "您有淺",
+    renderDesc9: "距離中度",
+    renderDesc11: "度",
+    renderDesc12: "您有中度",
+    renderDesc13: "距離深",
+    renderDesc14: "您有深",
+    renderDesc15: "雙眼近視度數偏差超過300度，有形成弱視的風險! ",
+    renderDesc16: "對比上次紀錄:",
+    renderDesc17: "近視",
+    renderDesc18: "遠視",
+    renderDesc19: "散光",
 };
 
 export default zh_strings;
