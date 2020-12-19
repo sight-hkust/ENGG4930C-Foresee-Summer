@@ -35,20 +35,20 @@ let zh_strings = {
     overview_no_record_2: "沒有屈光不正",
     overview_unit: "度",
     overview_level_1: "淺近視",
-    overview_level_2:"中度近視",
-    overview_level_3:"深近視",
+    overview_level_2: "中度近視",
+    overview_level_3: "深近視",
 
     overview_level_4: "淺遠視",
-    overview_level_5:"中度遠視",
-    overview_level_6:"深遠視",
+    overview_level_5: "中度遠視",
+    overview_level_6: "深遠視",
 
-    overview_level_7:"淺散光",
-    overview_level_8:"中度散光",
-    overview_level_9:"深散光",
+    overview_level_7: "淺散光",
+    overview_level_8: "中度散光",
+    overview_level_9: "深散光",
 
     // RecordForm
     record_form_title: "日期 時間",
-    collapse:  "展開",
+    collapse: "展開",
     not_collapse: "收起",
     collapse_text: "輸入調整度數",
     collapse_text_2: "輸入瞳孔距離(PD)",
@@ -85,9 +85,9 @@ let zh_strings = {
     post_question_label_1: "主題",
     post_question_label_2: "內容",
     post_question_checkbox: "我同意專家察看我的度數紀錄",
-    post_question_roundbutton:"提交",
+    post_question_roundbutton: "提交",
     post_question_button: "返回",
-    post_question_farewell_title:"謝謝你的提問",
+    post_question_farewell_title: "謝謝你的提問",
     post_question_farewell_message: "收集問題後，我們的專家會在一星期內回答你的，請耐心等候。如有緊急需要，請聯絡你的眼科醫生。",
     post_question_placeholder: "由於我們會在本程式內發佈專家回應，請注意不要留下個人資料",
     // Education
@@ -150,7 +150,23 @@ let zh_strings = {
     familyList1: "選擇家庭成員",
 
     gender1: "男",
-    gender2: "女"
+    gender2: "女",
+
+    forgetPassword1: ' 請輸入電郵地址並重新設定 ',
+    forgetPassword2: "電子郵箱地址 ： ",
+    forgetPassword3: "發送",
+    forgetPassword4: "請輸入有效的電郵地址",
+    forgetPassword5: "找不到用戶",
+    forgetPassword6: " 已發送重設密碼郵件！ ",
+    forgetPassword7: " 請檢查電子郵箱 ",
+    forgetPassword8: "返回",
+
+    login1: "忘記密碼",
+    login2: "電話號碼",
+    login3: "提取驗證碼",
+    login4: "未有用戶? ",
+    login5: '登記',
+
 };
 
 export default zh_strings;
