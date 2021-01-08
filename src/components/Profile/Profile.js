@@ -73,7 +73,8 @@ const Profile = ({ navigation, route, userStore }) => {
                   }}
                 >
                   <View style={styles.nameContainer}>
-                    <Text style={styles.name}>{userData.lastName != "" ? userData.lastName[0] : userData.givenName[0]}</Text>
+                    {console.log(userData)}
+                    <Text style={styles.name}>{userData.lastName != "" || userData != undefined ? userData.lastName[0] : userData.givenName[0]}</Text>
                   </View>
                 </Row>
                 <Row style={styles.qrCodeIconContainer}>

@@ -102,10 +102,14 @@ const writeUserData = ({ uid = null, values, isProfessional, registerPatient = f
   }
 };
 
-export const registerChildAccount = async ({ values, registerChild, returnOnComplete }) => {
+export const registerChildAccount = async ({ values, registerChild, targetUser_uid = null, returnOnComplete }) => {
   let childUid = await nanoid();
   childUid = "ch-" + childUid;
-  writeUserData({ registerChild, values, childUid, uid: auth.currentUser.uid });
+  if (targetUser_uid) {
+    writeUserData({ registerChild, values, childUid, uid: targetUser_uid });
+  } else {
+    writeUserData({ registerChild, values, childUid, uid: auth.currentUser.uid });
+  }
   returnOnComplete();
 };
 

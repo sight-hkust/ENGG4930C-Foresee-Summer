@@ -5,6 +5,7 @@ import { familyMembers } from "./familyMembers";
 import { records } from "./records";
 import { userArticleScoreList } from "./userArticleScores";
 import { user } from "./user";
+import { languageReducer } from "./language";
 
 export default combineReducers({
   patientList,
@@ -13,4 +14,5 @@ export default combineReducers({
   records,
   user,
   userArticleScoreList,
+  languageReducer,
 });

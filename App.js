@@ -227,7 +227,7 @@ function Main({ route, navigation }) {
           <Tab.Screen
             name="Register"
             component={RegistrationForm}
-            initialParams={{ isProfessional: true, registerPatient: true }}
+            initialParams={{ isProfessional: true, registerPatient: true, profCreateChild: false }}
             options={{
               tabBarLabel: "登記病人",
               tabBarIcon: () => <Icon name="md-add-circle-outline" type="ionicon" color="#23559E" size={32.5} containerStyle={styles.icon} />,

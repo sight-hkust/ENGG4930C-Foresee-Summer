@@ -10,8 +10,8 @@ import { connect } from "react-redux";
 import { watchPatientListUpdate } from "../../reducers/patientList";
 import { displayName } from "../../utils/displayName";
 
-import i18n from 'i18n-js';
-import {useLocalization} from "../../strings/Strings";
+import i18n from "i18n-js";
+import { useLocalization } from "../../strings/Strings";
 
 /**
  * For Local Search.
@@ -57,7 +57,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
           <View>
             <View style={{ marginTop: ScreenHeight * 0.078, height: ScreenHeight * 0.078, width: ScreenWidth, flexDirection: "row", justifyContent: "center", alignItems: "center" }}>
               <SearchBar
-                placeholder={i18n.t('profMain1')}
+                placeholder={i18n.t("profMain1")}
                 onChangeText={(e) => {
                   setSearchContent(e);
                   setSearchingStatus(true);
@@ -76,7 +76,7 @@ const ProfMainMenu = ({ route, navigation, patientListStore }) => {
             </View>
             <ScrollView style={{ height: ScreenHeight * 0.6, width: ScreenWidth * 0.9, backgroundColor: "transparent", alignSelf: "center" }}>
               {showList.length == 0 ? (
-                <Text style={{ textAlign: "center", color: "white", fontSize: 30 }}>{i18n.t('profMain2')}</Text>
+                <Text style={{ textAlign: "center", color: "white", fontSize: 30 }}>{i18n.t("profMain2")}</Text>
               ) : (
                 showList.map((patient, index) => {
                   const key = patient.uid;

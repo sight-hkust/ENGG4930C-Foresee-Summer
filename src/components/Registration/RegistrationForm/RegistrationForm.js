@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Formik } from "formik";
 import { Keyboard, View, Platform, StyleSheet, Picker, Text, TouchableOpacity, Modal, StatusBar } from "react-native";
 import { ScreenHeight, ScreenWidth, FontScale } from "../../../../constant/Constant";
@@ -50,7 +50,7 @@ export const RegistrationForm = ({ navigation, route }) => {
 };
 
 const FormComponent = ({ navigation, route }) => {
-  const { isProfessional, registerPatient, registerChild } = route.params;
+  const { isProfessional, registerPatient, registerChild, profCreateChild, targetUser_uid } = route.params;
   const [isLoading, setIsLoading] = useState(false);
   const [errorMessageFromServer, setErrorMessageFromServer] = useState("");
 
@@ -96,6 +96,26 @@ const FormComponent = ({ navigation, route }) => {
       onSubmit={async (values, { setSubmitting, resetForm, setStatus, setErrors }) => {
         try {
           switch (true) {
+            case profCreateChild:
+              registerChildAccount({
+                values,
+                registerChild,
+                targetUser_uid,
+                returnOnComplete: () => {
+                  setIsLoading(false);
+                  navigation.dispatch(
+                    CommonActions.navigate({
+                      name: "ProfessionalScreen",
+                      params: {
+                        actions: navigation.popToTop(),
+                      },
+                    })
+                  );
+                  resetForm({});
+                  setStatus({ success: true });
+                },
+              });
+              break;
             case registerChild:
               registerChildAccount({
                 values,
@@ -152,12 +172,21 @@ const FormComponent = ({ navigation, route }) => {
       validateOnBlur={false}
       validateOnChange={false}
     >
-      {(formikProps) => <FormDetails formikProps={formikProps} isProfessional={isProfessional} registerPatient={registerPatient} isLoading={isLoading} errorMessageFromServer={errorMessageFromServer} registerChild={registerChild} />}
+      {(formikProps) => (
+        <FormDetails
+          formikProps={formikProps}
+          isProfessional={isProfessional}
+          registerPatient={registerPatient}
+          isLoading={isLoading}
+          errorMessageFromServer={errorMessageFromServer}
+          registerChild={registerChild}
+        />
+      )}
     </Formik>
   );
 };
 
-const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChild, isLoading, errorMessageFromServer }) => {
+const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChild, isLoading, errorMessageFromServer, profCreateChild }) => {
   const { setFieldValue, values } = formikProps;
   const [isDatePickerVisible, setDatePickerVisibility] = useState(false);
   const [isRoleDialogVisible, setRoleDialogVisibility] = useState(false);
@@ -243,7 +272,7 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
           showsVerticalScrollIndicator={false}
           keyboardDismissMode="on-drag"
         >
-          {!registerPatient ? (
+          {!registerPatient || !profCreateChild ? (
             !registerChild ? (
               <Logo style={styles.logoContainer} />
             ) : (
@@ -314,13 +343,31 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
             <GenderOptionsInput formikKey="gender" formikProps={formikProps} label={"性別"} />
 
             {isProfessional && !registerPatient ? (
-              <InputDialogPicker label={"職業"} icon={jobIcon} onDismiss={() => _hideRoleDialog()} value={values.role} list={roleList} formikKey={"role"} formikProps={formikProps} showDialog={_showRoleDialog} />
+              <InputDialogPicker
+                label={"職業"}
+                icon={jobIcon}
+                onDismiss={() => _hideRoleDialog()}
+                value={values.role}
+                list={roleList}
+                formikKey={"role"}
+                formikProps={formikProps}
+                showDialog={_showRoleDialog}
+              />
             ) : (
               <InputDatePickerModal icon={hourGlassIcon} formikProps={formikProps} formikKey="birthday" showDatePicker={_showDatePicker} value={values.birthday} />
             )}
 
             {isProfessional && !registerPatient && (
-              <InputDialogPicker label={"註冊資格"} icon={jobIcon} onDismiss={() => _hidePartDialog()} value={values.part} list={partList} formikKey={"part"} formikProps={formikProps} showDialog={_showPartDialog} />
+              <InputDialogPicker
+                label={"註冊資格"}
+                icon={jobIcon}
+                onDismiss={() => _hidePartDialog()}
+                value={values.part}
+                list={partList}
+                formikKey={"part"}
+                formikProps={formikProps}
+                showDialog={_showPartDialog}
+              />
             )}
 
             {registerPatient ? (
@@ -445,9 +492,17 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
           />
         </ScrollView>
         {Platform.OS === "android" ? (
-          isDatePickerVisible && <DateTimePicker testID="dateTimePicker" mode="date" display="spinner" value={values.birthday === "" ? new Date() : moment(values.birthday).toDate()} onChange={handleDateChange} />
+          isDatePickerVisible && (
+            <DateTimePicker testID="dateTimePicker" mode="date" display="spinner" value={values.birthday === "" ? new Date() : moment(values.birthday).toDate()} onChange={handleDateChange} />
+          )
         ) : (
-          <DateTimePickerModal date={values.birthday === "" ? new Date() : moment(values.birthday).toDate()} maximumDate={new Date()} isVisible={isDatePickerVisible} onConfirm={handleDateConfirm} onCancel={_hideDatePicker} />
+          <DateTimePickerModal
+            date={values.birthday === "" ? new Date() : moment(values.birthday).toDate()}
+            maximumDate={new Date()}
+            isVisible={isDatePickerVisible}
+            onConfirm={handleDateConfirm}
+            onCancel={_hideDatePicker}
+          />
         )}
       </View>
       <Provider>

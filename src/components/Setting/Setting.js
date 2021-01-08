@@ -13,6 +13,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { watchUserInfoUpdate } from "../../reducers/user";
 import moment from "moment";
 import { LinearGradientBackground } from "../Utils/LinearGradientBackground";
+import LanguageSelector from "../Utils/LanguageSelector";
 
 export default function Setting({ route, navigation }) {
   return (
@@ -42,6 +43,7 @@ const SettingContent = ({ route, navigation }) => {
           titleStyle={styles.title}
           rightIcon={<ThemeSwitch />}
         /> */}
+        <LanguageSelector />
         <ListItem Component={TouchableOpacity} title={"程式教學"} containerStyle={styles.listItem} titleStyle={styles.title} chevron={{ size: 30 }} onPress={() => navigation.navigate("Tutorial")} />
         <ListItem
           Component={TouchableOpacity}

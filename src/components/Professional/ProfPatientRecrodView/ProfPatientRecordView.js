@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import { database, auth } from "../../../config/config";
 import { LinearGradientBackground } from "../../Utils/LinearGradientBackground";
-import { Icon } from "react-native-elements";
+import { Icon, Button } from "react-native-elements";
 import DisplayRecords from "../../Utils/DisplayRecord";
 import { RoundButton } from "../../../../Utils/RoundButton";
 import { ScreenHeight, ScreenWidth } from "../../../../constant/Constant";
@@ -11,6 +11,7 @@ import { connect } from "react-redux";
 import { getRecordsUpdate, records } from "../../../reducers/records";
 import MenuScreen from "../../../../Utils/MenuScreen";
 import { decryptData } from "../../../utils/encryptData";
+import { widthPercentageToDP } from "react-native-responsive-screen";
 
 class ProfPatientRecordView extends Component {
   constructor(props) {
@@ -87,7 +88,7 @@ class ProfPatientRecordView extends Component {
 
     return (
       <MenuScreen>
-        <View style={{ flex: 1, paddingTop: ScreenHeight * 0.045, paddingHorizontal: ScreenWidth * 0.1 }}>
+        <View style={{ flex: 1, paddingTop: ScreenHeight * 0.06, paddingHorizontal: ScreenWidth * 0.1 }}>
           <View style={styles.patientInfo}>{info && <PatientProfile info={info} />}</View>
           <View style={{ flex: 3, justifyContent: "center", alignItems: "center" }}>
             {info && (
@@ -120,15 +121,30 @@ class ProfPatientRecordView extends Component {
                     </View>
                   )}
                 </View>
-                <View style={{ flex: 0.2, alignContent: "center", justifyContent: "center" }}>
-                  <TouchableOpacity
+                <View style={{ flexDirection: "row", marginVertical: 20 }}>
+                  <RoundButton
+                    title="新增資料"
+                    containerStyle={{ width: widthPercentageToDP("40%") }}
+                    TouchableComponent={TouchableOpacity}
                     onPress={() => {
                       this.props.navigation.navigate("AddRecordScreen", { isProfessional: true, professional_id: auth.currentUser.uid, patient_id: key, inactive: inactive });
                     }}
-                    style={{ backgroundColor: "white", width: 48, height: 48, borderRadius: 24, justifyContent: "center" }}
-                  >
-                    <Icon name="add" size={25} color="#2D9CDB" />
-                  </TouchableOpacity>
+                  />
+
+                  <RoundButton
+                    title="創建子帳戶"
+                    containerStyle={{ width: widthPercentageToDP("40%") }}
+                    TouchableComponent={TouchableOpacity}
+                    onPress={() =>
+                      this.props.navigation.navigate("Register", {
+                        isProfessional: false,
+                        registerPatient: false,
+                        registerChild: true,
+                        profCreateChild: true,
+                        targetUser_uid: key,
+                      })
+                    }
+                  />
                 </View>
               </>
             )}
