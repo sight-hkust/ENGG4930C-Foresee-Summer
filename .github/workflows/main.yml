@@ -34,6 +34,7 @@ jobs:
           npm install -g turtle-cli expo-cli
           expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
           yarn
+          expo publish
           turtle setup:ios
           turtle build:ios --team-id $EXPO_APPLE_TEAM_ID --dist-p12-path ./expo-project_dist.p12 --provisioning-profile-path ./expo-project.mobileprovision
           
