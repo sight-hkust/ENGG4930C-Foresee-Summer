@@ -30,6 +30,7 @@ jobs:
           echo $EXPO_IOS_PROVISIONING_PROFILE_BASE64 > expo-project.mobileprovision.base64
           base64 --decode expo-project.mobileprovision.base64 > expo-project.mobileprovision
           npm install -g turtle-cli expo-cli
+          expo login -u $EXPO_USERNAME -p $EXPO_PASSWORD
           yarn
           turtle setup:ios
           turtle build:ios --team-id $EXPO_APPLE_TEAM_ID --dist-p12-path ./expo-project_dist.p12 --provisioning-profile-path ./expo-project.mobileprovision
