@@ -1,13 +1,11 @@
 {
   "name": "EXSplashScreen",
-  "version": "0.2.3",
+  "version": "0.8.1",
   "summary": "Provides a module to allow keeping the native Splash Screen visible until you choose to hide it.",
   "description": "Provides a module to allow keeping the native Splash Screen visible until you choose to hide it.",
   "license": "MIT",
-  "authors": {
-    "name": "650 Industries, Inc."
-  },
-  "homepage": "https://github.com/expo/packages/expo-splash-screen",
+  "authors": "650 Industries, Inc.",
+  "homepage": "https://docs.expo.io/versions/latest/sdk/splash-screen/",
   "platforms": {
     "ios": "10.0"
   },
@@ -19,6 +17,9 @@
   "requires_arc": true,
   "dependencies": {
     "UMCore": [
+
+    ],
+    "React-Core": [
 
     ]
   }

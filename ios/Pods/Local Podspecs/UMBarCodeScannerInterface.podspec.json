@@ -1,12 +1,10 @@
 {
   "name": "UMBarCodeScannerInterface",
-  "version": "5.1.0",
+  "version": "5.4.0",
   "summary": "An interface for bar code scanners",
   "description": "An interface for bar code scanners",
   "license": "MIT",
-  "authors": {
-    "name": "650 Industries, Inc."
-  },
+  "authors": "650 Industries, Inc.",
   "homepage": "https://github.com/expo/expo/tree/master/packages/unimodules-barcode-scanner-interface",
   "platforms": {
     "ios": "10.0"

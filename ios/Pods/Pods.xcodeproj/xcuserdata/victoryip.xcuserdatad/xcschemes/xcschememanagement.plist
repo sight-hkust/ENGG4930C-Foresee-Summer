@@ -14,6 +14,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>EXApplication.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>EXBarCodeScanner.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -94,17 +99,17 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>EXSecureStore.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>EXSplashScreen.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
 		</dict>
 		<key>EXUpdates.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>EXWebBrowser.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -174,7 +179,7 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>Pods-foresee.xcscheme</key>
+		<key>Pods-ForeSee.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
@@ -239,6 +244,11 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
+		<key>React-Core-AccessibilityResources.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
 		<key>React-Core.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -290,6 +300,11 @@
 			<false/>
 		</dict>
 		<key>React-RCTVibration.xcscheme</key>
+		<dict>
+			<key>isShown</key>
+			<false/>
+		</dict>
+		<key>React-callinvoker.xcscheme</key>
 		<dict>
 			<key>isShown</key>
 			<false/>
