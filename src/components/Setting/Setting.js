@@ -139,7 +139,7 @@ export const ContactUs = ({ containerStyle, ...props }) => {
             <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}> Instagram</Text>
           </Col>
           <Col style={styles.contactUsRightCol}>
-            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>@foresee_offical</Text>
+            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>@foresee.hkust</Text>
           </Col>
         </Row>
 
@@ -149,7 +149,7 @@ export const ContactUs = ({ containerStyle, ...props }) => {
             <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}> Facebook</Text>
           </Col>
           <Col style={styles.contactUsRightCol}>
-            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>@ForeSee HQ</Text>
+            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>@ForeSee HKUST</Text>
           </Col>
         </Row>
 
