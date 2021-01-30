@@ -155,16 +155,6 @@ export const ContactUs = ({ containerStyle, ...props }) => {
 
         <Row style={styles.contactUsRow}>
           <Col style={styles.contactUsLeftCol}>
-            <Icon type="fontisto" name="whatsapp" color="#3FF961" />
-            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}> Whatsapp</Text>
-          </Col>
-          <Col style={styles.contactUsRightCol}>
-            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}> +85230624700</Text>
-          </Col>
-        </Row>
-
-        <Row style={styles.contactUsRow}>
-          <Col style={styles.contactUsLeftCol}>
             <Icon type="material-icon" name="email" color="#F0886F" />
             <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}> Email</Text>
           </Col>
