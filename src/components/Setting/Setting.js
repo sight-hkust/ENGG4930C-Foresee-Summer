@@ -139,7 +139,7 @@ export const ContactUs = ({ containerStyle, ...props }) => {
             <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}> Instagram</Text>
           </Col>
           <Col style={styles.contactUsRightCol}>
-            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>@foresee_offical</Text>
+            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>@foresee.hkust</Text>
           </Col>
         </Row>
 
@@ -149,17 +149,7 @@ export const ContactUs = ({ containerStyle, ...props }) => {
             <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}> Facebook</Text>
           </Col>
           <Col style={styles.contactUsRightCol}>
-            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>@ForeSee HQ</Text>
-          </Col>
-        </Row>
-
-        <Row style={styles.contactUsRow}>
-          <Col style={styles.contactUsLeftCol}>
-            <Icon type="fontisto" name="whatsapp" color="#3FF961" />
-            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}> Whatsapp</Text>
-          </Col>
-          <Col style={styles.contactUsRightCol}>
-            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}> +85230624700</Text>
+            <Text style={{ ...styles.contactUsTitle, ...props.titleColor }}>@ForeSee HKUST</Text>
           </Col>
         </Row>
 
