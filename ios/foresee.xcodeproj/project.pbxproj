@@ -152,7 +152,7 @@
 				LastUpgradeCheck = 1130;
 				TargetAttributes = {
 					13B07F861A680F5B00A75B9A = {
-						DevelopmentTeam = 69843P697W;
+						DevelopmentTeam = H7QD6Y75EX;
 						LastSwiftMigration = 1120;
 					};
 				};
@@ -330,7 +330,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ForeSee/ios.entitlements;
 				CURRENT_PROJECT_VERSION = 1.0.0;
-				DEVELOPMENT_TEAM = 69843P697W;
+				DEVELOPMENT_TEAM = H7QD6Y75EX;
 				ENABLE_BITCODE = NO;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -346,7 +346,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = hkust.sight.foresee;
+				PRODUCT_BUNDLE_IDENTIFIER = hk.ust.sight.foresee;
 				PRODUCT_NAME = ios;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -363,7 +363,7 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = ForeSee/ios.entitlements;
 				CURRENT_PROJECT_VERSION = 1.0.0;
-				DEVELOPMENT_TEAM = 69843P697W;
+				DEVELOPMENT_TEAM = H7QD6Y75EX;
 				"EXCLUDED_ARCHS[sdk=iphonesimulator*]" = arm64;
 				INFOPLIST_FILE = ForeSee/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 10.0;
@@ -374,7 +374,7 @@
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = hkust.sight.foresee;
+				PRODUCT_BUNDLE_IDENTIFIER = hk.ust.sight.foresee;
 				PRODUCT_NAME = ios;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

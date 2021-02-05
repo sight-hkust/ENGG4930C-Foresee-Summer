@@ -394,7 +394,7 @@ PODS:
     - React
   - RNReanimated (1.13.2):
     - React-Core
-  - RNScreens (2.15.0):
+  - RNScreens (2.15.2):
     - React-Core
   - RNSound (0.11.0):
     - React
@@ -741,7 +741,7 @@ SPEC CHECKSUMS:
   RNDateTimePicker: 3d1931e387248cb8f1d1d33740d4a1a82dfe622a
   RNGestureHandler: 7a5833d0f788dbd107fbb913e09aa0c1ff333c39
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
-  RNScreens: 2ad555d4d9fa10b91bb765ca07fe9b29d59573f0
+  RNScreens: 3d682bcaba69a4f8e55543d90818704f34338db1
   RNSound: da030221e6ac7e8290c6b43f2b5f2133a8e225b0
   RNSoundPlayer: fd4dbbff120c76f22718c4d831a13c40fc5e9efd
   RNSVG: ce9d996113475209013317e48b05c21ee988d42e
@@ -764,4 +764,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 821fc0ddbab56299732abcd3dc65f2a3537b6670
 
-COCOAPODS: 1.10.0
+COCOAPODS: 1.10.1
