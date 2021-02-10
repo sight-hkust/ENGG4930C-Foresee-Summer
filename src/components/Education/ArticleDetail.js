@@ -200,7 +200,7 @@ export default class ArticleDetailScreen extends Component {
                             shadowRadius: 3.84,
                             elevation: 5,
                         }} onPress={() => this.props.navigation.goBack()}>
-                            <Image source={require("../../../assets/images/BackArrow.png")}/>
+                            <Icon name="arrow-left" type="feather" color="#90caf9" size={30} />
                         </TouchableOpacity>
                     </View>
                     {this.state.isVid && (
