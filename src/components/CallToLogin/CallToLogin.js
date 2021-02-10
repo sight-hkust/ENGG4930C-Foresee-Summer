@@ -33,7 +33,6 @@ class CallToL extends Component {
                         </View>
                     </View>
                 </View>
-                <FABView/>
             </MenuScreen>
         );
     }

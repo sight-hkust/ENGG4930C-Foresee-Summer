@@ -19,6 +19,7 @@ import AddRecordScreen from "./Screens/AddRecordScreen";
 import ProfAddRecord from "./src/components/Professional/ProfAddRecord";
 import OverviewScreen from "./Screens/OverviewScreen";
 
+import CallToLogin from "./src/components/CallToLogin/CallToLogin";
 import { Login } from "./src/components/Login/Login";
 import Profile from "./src/components/Profile/Profile";
 import { QRCodeScannerScreen } from "./src/components/QRCodeScannerScreen/QRCodeScannerScreen";
@@ -191,6 +192,18 @@ function ProfessionalScreen({ navigation, route }) {
       <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
     </Stack.Navigator>
   );
+}
+
+function CallToLoginScreen({ navigation, route }) {
+    return (
+        <Stack.Navigator
+            screenOptions={{
+                ...headerConfig,
+            }}
+        >
+            <Stack.Screen name="CallToLoginScreen" component={CallToLogin} options={{ title: "" }} />
+        </Stack.Navigator>
+    );
 }
 
 function Main({ route, navigation }) {
@@ -391,7 +404,7 @@ function MainWithoutLogin({ route, navigation }) {
 
                     <Tab.Screen
                         name="HomeScreen"
-                        component={Login}
+                        component={CallToLoginScreen}
                         options={{
                             tabBarLabel: "眼健康",
                             tabBarIcon: () => (
@@ -404,7 +417,7 @@ function MainWithoutLogin({ route, navigation }) {
 
                     <Tab.Screen
                         name="FaqScreen"
-                        component={Login}
+                        component={CallToLoginScreen}
                         options={{
                             tabBarLabel: "專家解答",
                             tabBarIcon: () => (
@@ -417,7 +430,7 @@ function MainWithoutLogin({ route, navigation }) {
 
                     <Tab.Screen
                         name="ProfileScreen"
-                        component={Login}
+                        component={CallToLoginScreen}
                         options={{
                             tabBarLabel: "個人檔案",
                             tabBarIcon: () => (
