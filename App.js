@@ -480,7 +480,7 @@ export default App = (props) => {
               ) : (
                 <>
                   <Stack.Screen name="MainWithoutLogin" component={MainWithoutLogin} options={{ headerShown: false }} />
-                  <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+                  <Stack.Screen name="Login" component={Login} options={{ headerShown: true, title: "" }} />
                   <Stack.Screen name="Register" component={RegisterNavigator} options={{ headerShown: false }} />
                   <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
                 </>
