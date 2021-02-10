@@ -10,7 +10,7 @@ const LoginStack = createStackNavigator();
 export const Login = (props) => {
   return (
     <LoginStack.Navigator initialRouteName="Login With Email And Password" screenOptions={headerConfig}>
-      <LoginStack.Screen name="Login With Phone" component={LoginWithPhone} options={{ headerShown: true }} />
+      <LoginStack.Screen name="Login With Phone" component={LoginWithPhone} options={{ headerShown: true, title: "" }} />
       <LoginStack.Screen name="Login With Email And Password" component={LoginWithEmailAndPassword} options={{ headerShown: false }} />
       <LoginStack.Screen name="Forget Password" component={ForgetPassword} options={{ headerShown: true, title: "忘記密碼" }} />
     </LoginStack.Navigator>
