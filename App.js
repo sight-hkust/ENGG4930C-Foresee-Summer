@@ -235,7 +235,7 @@ function Main({ route, navigation }) {
             name="ProfessionalScreen"
             component={ProfessionalScreen}
             options={{
-              tabBarLabel: () => "主页",
+              tabBarLabel: () => "主頁",
               tabBarIcon: () => <Icon name="target" type="feather" color="#1565c0" size={30} />,
             }}
           />
