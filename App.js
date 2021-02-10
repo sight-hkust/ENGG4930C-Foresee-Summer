@@ -235,7 +235,7 @@ function Main({ route, navigation }) {
             name="ProfessionalScreen"
             component={ProfessionalScreen}
             options={{
-              tabBarLabel: () => "主頁",
+              tabBarLabel: "主頁",
               tabBarIcon: () => <Icon name="target" type="feather" color="#1565c0" size={30} />,
             }}
           />
@@ -295,7 +295,7 @@ function Main({ route, navigation }) {
             name="HomeScreen"
             component={HomeScreen}
             options={{
-              tabBarLabel: () => "眼健康",
+              tabBarLabel: "眼健康",
               tabBarIcon: () => (
                 <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")}>
                     <Icon name="target" type="feather" color="#1565c0" size={30} />
@@ -393,7 +393,7 @@ function MainWithoutLogin({ route, navigation }) {
                         name="HomeScreen"
                         component={Login}
                         options={{
-                            tabBarLabel: () => "眼健康",
+                            tabBarLabel: "眼健康",
                             tabBarIcon: () => (
                                 <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")}>
                                     <Icon name="target" type="feather" color="#1565c0" size={30} />
