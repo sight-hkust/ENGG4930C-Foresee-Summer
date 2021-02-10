@@ -4,7 +4,7 @@ import { Icon, Button } from "react-native-elements";
 import { Grid, Col } from "react-native-easy-grid";
 import Modal from "react-native-modal";
 
-import { ScreenHeight, ScreenWidth } from "../../../constant/Constant";
+import {FontScale, ScreenHeight, ScreenWidth} from "../../../constant/Constant";
 import { LinearGradientBackground } from "../Utils/LinearGradientBackground";
 import MenuScreen from "../../../Utils/MenuScreen";
 
@@ -202,7 +202,7 @@ export const QuestionCard = (props) => {
       <Grid>
         <Col>
           <TouchableOpacity style={{ position: "absolute", top: hp("3%"), left: wp("5%") }} onPress={() => props.toggleModal(!props.isVisible)}>
-            <Image source={require("../../../assets/images/BackArrow.png")} />
+            <Icon name="arrow-left" type="feather" color="#90caf9" size={30} />
           </TouchableOpacity>
         </Col>
         {/* <Icon

@@ -159,7 +159,6 @@ function ProfileScreen({ navigation, route }) {
             />
           ),
           headerTintColor: "white",
-          title: null,
         }}
       />
       <Stack.Screen
@@ -176,7 +175,6 @@ function ProfileScreen({ navigation, route }) {
             />
           ),
           headerTintColor: "white",
-          title: null,
         }}
       />
     </Stack.Navigator>
@@ -238,7 +236,7 @@ function Main({ route, navigation }) {
             component={ProfessionalScreen}
             options={{
               tabBarLabel: () => null,
-              tabBarIcon: () => <Image source={require("./assets/images/Icon_solid.png")} style={{ ...styles.icon, ...{ width: 55, height: 55 } }} />,
+              tabBarIcon: () => <Icon name="target" type="feather" color="#1565c0" size={30} />,
             }}
           />
           {/* <Tab.Screen
@@ -257,7 +255,7 @@ function Main({ route, navigation }) {
               tabBarLabel: "個人檔案",
               tabBarIcon: () => (
                 <TouchableOpacity onPress={() => navigation.navigate("ProfileScreen")}>
-                  <Image source={require("./assets/images/Profile.png")} style={styles.icon} />
+                    <Icon name="user" type="feather" color="#1565c0" size={30} />
                 </TouchableOpacity>
               ),
             }}
@@ -272,7 +270,7 @@ function Main({ route, navigation }) {
               tabBarLabel: "護眼秘笈",
               tabBarIcon: () => (
                 <TouchableOpacity onPress={() => navigation.navigate("GetEducated")}>
-                  <Image source={require("./assets/images/Articles_dark.png")} style={styles.icon} />
+                    <Icon name="book" type="feather" color="#1565c0" size={30} />
                 </TouchableOpacity>
               ),
             }}
@@ -286,7 +284,7 @@ function Main({ route, navigation }) {
               tabBarIcon: () => (
                 <>
                   <TouchableOpacity onPress={() => navigation.navigate("ExerciseScreen")}>
-                    <Image source={require("./assets/images/Exercise_dark.png")} style={styles.icon} />
+                      <Icon name="clipboard" type="feather" color="#1565c0" size={30} />
                   </TouchableOpacity>
                 </>
               ),
@@ -300,7 +298,7 @@ function Main({ route, navigation }) {
               tabBarLabel: () => null,
               tabBarIcon: () => (
                 <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")}>
-                  <Image source={require("./assets/images/Icon_solid.png")} style={{ ...styles.icon, ...{ width: 50, height: 50 } }} />
+                    <Icon name="target" type="feather" color="#1565c0" size={30} />
                 </TouchableOpacity>
               ),
             }}
@@ -313,7 +311,7 @@ function Main({ route, navigation }) {
               tabBarLabel: "專家解答",
               tabBarIcon: () => (
                 <TouchableOpacity onPress={() => navigation.navigate("FaqScreen")}>
-                  <Image source={require("./assets/images/Qna_dark.png")} style={styles.icon} />
+                    <Icon name="help-circle" type="feather" color="#1565c0" size={30} />
                 </TouchableOpacity>
               ),
             }}
@@ -326,7 +324,7 @@ function Main({ route, navigation }) {
               tabBarLabel: "個人檔案",
               tabBarIcon: () => (
                 <TouchableOpacity onPress={() => navigation.navigate("ProfileScreen")}>
-                  <Image source={require("./assets/images/Profile.png")} style={styles.icon} />
+                    <Icon name="user" type="feather" color="#1565c0" size={30} />
                 </TouchableOpacity>
               ),
             }}
