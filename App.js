@@ -19,6 +19,7 @@ import AddRecordScreen from "./Screens/AddRecordScreen";
 import ProfAddRecord from "./src/components/Professional/ProfAddRecord";
 import OverviewScreen from "./Screens/OverviewScreen";
 
+import CallToLogin from "./src/components/CallToLogin/CallToLogin";
 import { Login } from "./src/components/Login/Login";
 import Profile from "./src/components/Profile/Profile";
 import { QRCodeScannerScreen } from "./src/components/QRCodeScannerScreen/QRCodeScannerScreen";
@@ -193,6 +194,18 @@ function ProfessionalScreen({ navigation, route }) {
   );
 }
 
+function CallToLoginScreen({ navigation, route }) {
+    return (
+        <Stack.Navigator
+            screenOptions={{
+                ...headerConfig,
+            }}
+        >
+            <Stack.Screen name="CallToLoginScreen" component={CallToLogin} options={{ title: "" }} />
+        </Stack.Navigator>
+    );
+}
+
 function Main({ route, navigation }) {
   return (
     <Tab.Navigator
@@ -235,7 +248,7 @@ function Main({ route, navigation }) {
             name="ProfessionalScreen"
             component={ProfessionalScreen}
             options={{
-              tabBarLabel: () => null,
+              tabBarLabel: "主頁",
               tabBarIcon: () => <Icon name="target" type="feather" color="#1565c0" size={30} />,
             }}
           />
@@ -295,7 +308,7 @@ function Main({ route, navigation }) {
             name="HomeScreen"
             component={HomeScreen}
             options={{
-              tabBarLabel: () => null,
+              tabBarLabel: "眼健康",
               tabBarIcon: () => (
                 <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")}>
                     <Icon name="target" type="feather" color="#1565c0" size={30} />
@@ -335,6 +348,102 @@ function Main({ route, navigation }) {
   );
 }
 
+function MainWithoutLogin({ route, navigation }) {
+    return (
+        <Tab.Navigator
+            initialRouteName={"GetEducated"}
+            tabBarOptions={{
+                keyboardHidesTabBar: true,
+                showLabel: true,
+                activeTintColor: "#003973",
+                inactiveTintColor: "#2D9CDB",
+                style: {
+                    position: "absolute",
+                    backgroundColor: "transparent",
+                    height: Platform.OS === "ios" ? hp("9%") : hp("8%"),
+                    borderTopWidth: 0,
+                    borderTopColor: "transparent",
+                    paddingHorizontal: 30,
+                    elevation: 0,
+                    shadowColor: "#BED8FF",
+                    shadowOpacity: 0,
+                    shadowOffset: {
+                        height: 0,
+                    },
+                    shadowRadius: 0,
+                },
+            }}
+        >
+                    <Tab.Screen
+                        name="GetEducated"
+                        component={ArticleScreen}
+                        options={{
+                            tabBarLabel: "護眼秘笈",
+                            tabBarIcon: () => (
+                                <TouchableOpacity onPress={() => navigation.navigate("GetEducated")}>
+                                    <Icon name="book" type="feather" color="#1565c0" size={30} />
+                                </TouchableOpacity>
+                            ),
+                        }}
+                    />
+
+                    <Tab.Screen
+                        name="ExerciseScreen"
+                        component={ExerciseScreen}
+                        options={{
+                            tabBarLabel: "護眼運動",
+                            tabBarIcon: () => (
+                                <>
+                                    <TouchableOpacity onPress={() => navigation.navigate("ExerciseScreen")}>
+                                        <Icon name="clipboard" type="feather" color="#1565c0" size={30} />
+                                    </TouchableOpacity>
+                                </>
+                            ),
+                        }}
+                    />
+
+                    <Tab.Screen
+                        name="HomeScreen"
+                        component={CallToLoginScreen}
+                        options={{
+                            tabBarLabel: "眼健康",
+                            tabBarIcon: () => (
+                                <TouchableOpacity onPress={() => navigation.navigate("HomeScreen")}>
+                                    <Icon name="target" type="feather" color="#1565c0" size={30} />
+                                </TouchableOpacity>
+                            ),
+                        }}
+                    />
+
+                    <Tab.Screen
+                        name="FaqScreen"
+                        component={CallToLoginScreen}
+                        options={{
+                            tabBarLabel: "專家解答",
+                            tabBarIcon: () => (
+                                <TouchableOpacity onPress={() => navigation.navigate("FaqScreen")}>
+                                    <Icon name="help-circle" type="feather" color="#1565c0" size={30} />
+                                </TouchableOpacity>
+                            ),
+                        }}
+                    />
+
+                    <Tab.Screen
+                        name="ProfileScreen"
+                        component={CallToLoginScreen}
+                        options={{
+                            tabBarLabel: "個人檔案",
+                            tabBarIcon: () => (
+                                <TouchableOpacity onPress={() => navigation.navigate("ProfileScreen")}>
+                                    <Icon name="user" type="feather" color="#1565c0" size={30} />
+                                </TouchableOpacity>
+                            ),
+                        }}
+                    />
+        </Tab.Navigator>
+    );
+}
+
 const store = createStore(rootReducer, applyMiddleware(/* logger, */ thunk));
 
 export default App = (props) => {
@@ -370,7 +479,8 @@ export default App = (props) => {
                 </>
               ) : (
                 <>
-                  <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+                  <Stack.Screen name="MainWithoutLogin" component={MainWithoutLogin} options={{ headerShown: false }} />
+                  <Stack.Screen name="Login" component={Login} options={{ headerShown: true, title: "" }} />
                   <Stack.Screen name="Register" component={RegisterNavigator} options={{ headerShown: false }} />
                   <Stack.Screen name="Profile" component={Profile} options={{ headerShown: false }} />
                 </>

@@ -156,12 +156,14 @@ export default class ArticleDetailScreen extends Component {
             views = snap.views;
             if (!views) views = 0;
             database.ref(`contents/articles/${this.state.article_id}`).update({views: views + 1});
-            database.ref(`contents/articles/${this.state.article_id}/viewRecords/${views}`).update({
-                userid: auth.currentUser.uid,
-                startTime: startTime.toJSON(),
-                endTime: endTime.toJSON(),
-                usage_ms: usage_ms,
-            });
+            if(auth.currentUser){
+                database.ref(`contents/articles/${this.state.article_id}/viewRecords/${views}`).update({
+                    userid: auth.currentUser.uid,
+                    startTime: startTime.toJSON(),
+                    endTime: endTime.toJSON(),
+                    usage_ms: usage_ms,
+                });
+            }
         });
     }
 
