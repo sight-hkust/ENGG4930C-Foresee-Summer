@@ -62,6 +62,7 @@ const PostQuestionScreen = ({ route, navigation }) => {
                         createdBy: auth.currentUser.uid,
                         createdDate: moment().format("YYYY-MM-DD HH:mm:ss"),
                         settings: { allowInspect: values.allowInspect },
+                        is_approved: 0
                       })
                       .catch((err) => console.log(err));
 
