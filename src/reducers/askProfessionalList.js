@@ -17,7 +17,7 @@ export const watchQuestionListUpdate = () => {
       .on('value', (snap) => {
         let questionList = [];
         snap.forEach((question) => {
-          if (question.val()['response'] != null) {
+          if (question.val()['response'] != null && question.val()['is_approved'] === 1) {
             questionList.push({
               question_id: question.key,
               tags: question.val()['tags'],
