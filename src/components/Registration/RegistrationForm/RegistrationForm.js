@@ -30,6 +30,8 @@ import GenderOptionsInput from "../../GenderOptionsInput/GenderOptionsInput";
 
 import { schemaRegisterPatient, schemaEnrollPatient, schemaRegisterChild, schemaRegisterProfessional } from "../../../utils/schema";
 
+import * as Linking from 'expo-linking';
+
 export const RegistrationForm = ({ navigation, route }) => {
   const { isProfessional, registerPatient, registerChild } = route.params;
 
@@ -397,6 +399,8 @@ const FormDetails = ({ formikProps, isProfessional, registerPatient, registerChi
                 <InputTextField label={"確認密碼"} icon={KeyIcon} formikProps={formikProps} formikKey="confirmPassword" secureTextEntry />
               </>
             )}
+            <Text style={{color: "#FFF"}}>By continuing you confirm that you have read and accepted
+              <Text onPress={()=>Linking.openURL('https://drive.google.com/file/d/1_nrRZ-DIq6aaoQFHX1dLDN7bCUirICoi/view?usp=sharing')} style={{fontWeight: 'bold'}}> ForeSee End User Licence Agreement.</Text></Text>
 
             {
               //temporarily not using
