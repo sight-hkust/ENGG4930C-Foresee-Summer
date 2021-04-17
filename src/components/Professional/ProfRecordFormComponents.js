@@ -135,14 +135,14 @@ export const RenderCollapseVA = (props) => {
   return (
     <View>
       <TouchableOpacity onPress={() => toggleisCollapse(!isCollapse)} style={FormItemStyle.collapseButton}>
-        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? "展開" : "收起"}輸入視力(VA)</Text>
+        <Text style={FormItemStyle.collapseTitle}>{isCollapse ? "展開" : "收起"}輸入視力(VA) (6/6)</Text>
       </TouchableOpacity>
 
       <Collapsible collapsed={isCollapse}>
         <View style={FormItemStyle.collpaseContainer}>
           <VAInput setFieldValue={setFieldValue} isLeft={false} error={error_R_VA} />
           <VAInput setFieldValue={setFieldValue} isLeft={true} error={error_L_VA} />
-          <Text style={FormItemStyle.questionText}>請輸入雙眼視力(VA)</Text>
+          <Text style={FormItemStyle.questionText}>請輸入雙眼視力(VA) (6/6)</Text>
           <TextInput onChangeText={(value) => setFieldValue("VA", value)} keyboardType="default" style={FormItemStyle.answerInputBox} />
         </View>
       </Collapsible>
@@ -685,7 +685,7 @@ export const VAInput = (props) => {
   return (
     <View>
       <View style={{ alignSelf: "center" }}>
-        <Text style={FormItemStyle.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}視力(VA)</Text>
+        <Text style={FormItemStyle.questionText}>請輸入{isLeft ? "左眼的(O.S.)" : "右眼的(O.D.)"}視力(VA) (6/6)</Text>
         <TextInput onChangeText={TextinputHandler} keyboardType="default" style={FormItemStyle.answerInputBox} />
       </View>
 
