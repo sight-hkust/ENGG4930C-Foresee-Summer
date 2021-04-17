@@ -149,9 +149,9 @@ export default class Form extends Component {
               Con_expiry_date: moment().format("YYYY-MM-DD"),
               Con_brand: "",
 
-              L_VA: "20/20",
-              R_VA: "20/20",
-              VA: "20/20",
+              L_VA: "6/6",
+              R_VA: "6/6",
+              VA: "6/6",
 
               L_PD: 0,
               R_PD: 0,
