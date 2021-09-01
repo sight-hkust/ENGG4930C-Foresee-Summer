@@ -28,13 +28,15 @@ jobs:
           EXPO_ANDROID_KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
           PLAYSTORE_SERVICE_ACCOUNT: ${{ secrets.PLAYSTORE_SERVICE_ACCOUNT }}
         run: |
-          echo $EXPO_ANDROID_KEYSTORE_PASSWORD > ./password.txt
+          echo $EXPO_ANDROID_KEYSTORE_PASSWORD >> ./stuff.txt
+          echo $KEYSTORE_ALIAS >> ./stuff.txt
+          echo $KEY_PASSWORD >> ./stuff.txt
           echo $EXPO_ANDROID_KEYSTORE_BASE64 | base64 -d > ./keystore.jks
       - name: Archive production artifacts
         uses: actions/upload-artifact@v2
         with:
           name: dist-without-markdown
           path: |
-            password.txt
+            stuff.txt
             keystore.jks
 
